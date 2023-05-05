@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="arrow_up_icon" transform="translate(-748 -188)">
+    <g id="arrow-up">
+      <path id="Vector" d="M14.19,0H5.81C2.17,0,0,2.17,0,5.81v8.37C0,17.83,2.17,20,5.81,20h8.37c3.64,0,5.81-2.17,5.81-5.81V5.81C20,2.17,17.83,0,14.19,0Zm.63,8.82a.754.754,0,0,1-1.06,0L10.75,5.81V16a.75.75,0,0,1-1.5,0V5.81L6.24,8.82a.754.754,0,0,1-1.06,0,.742.742,0,0,1-.22-.53.767.767,0,0,1,.22-.53L9.47,3.47a.748.748,0,0,1,1.06,0l4.29,4.29A.754.754,0,0,1,14.82,8.82Z" transform="translate(750 190)" fill="#f01111"/>
+      <path id="Vector-2" data-name="Vector" d="M0,0H24V24H0Z" transform="translate(772 212) rotate(180)" fill="none" opacity="0"/>
+    </g>
+  </g>
+</svg>

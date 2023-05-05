@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+  <g id="card_icon" transform="translate(-492 -508)">
+    <g id="card" transform="translate(492 508)">
+      <path id="Vector" d="M33.333,6.917a2.006,2.006,0,0,1-2,2H2a2.006,2.006,0,0,1-2-2V6.9A6.892,6.892,0,0,1,6.9,0H26.417A6.921,6.921,0,0,1,33.333,6.917Z" transform="translate(3.333 5.667)" fill="#7f22ff"/>
+      <path id="Vector-2" data-name="Vector" d="M0,2v8.35a6.892,6.892,0,0,0,6.9,6.9H26.417a6.921,6.921,0,0,0,6.917-6.917V2a2.006,2.006,0,0,0-2-2H2A2.006,2.006,0,0,0,0,2Zm10,9.667H6.667a1.25,1.25,0,0,1,0-2.5H10a1.25,1.25,0,0,1,0,2.5Zm10.833,0H14.167a1.25,1.25,0,0,1,0-2.5h6.667a1.25,1.25,0,0,1,0,2.5Z" transform="translate(3.333 17.083)" fill="#7f22ff"/>
+      <path id="Vector-3" data-name="Vector" d="M0,0H40V40H0Z" fill="none" opacity="0"/>
+    </g>
+  </g>
+</svg>

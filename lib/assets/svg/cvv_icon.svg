@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="29" height="18" viewBox="0 0 29 18">
+  <g id="cvv_icon" transform="translate(-267 -216.986)">
+    <rect id="Rectangle_2056" data-name="Rectangle 2056" width="29" height="18" rx="4" transform="translate(267 216.986)" fill="#e1e1f6"/>
+    <rect id="Rectangle_2057" data-name="Rectangle 2057" width="29" height="4" transform="translate(267 219.986)" fill="#b1b1d7"/>
+    <rect id="Rectangle_2058" data-name="Rectangle 2058" width="13" height="4" transform="translate(270 226.986)" fill="#fff"/>
+    <g id="Rectangle_2059" data-name="Rectangle 2059" transform="translate(285 226.986)" fill="#fff" stroke="#e0001a" stroke-linecap="round" stroke-linejoin="round" stroke-width="1">
+      <rect width="8" height="4" stroke="none"/>
+      <rect x="0.5" y="0.5" width="7" height="3" fill="none"/>
+    </g>
+  </g>
+</svg>
