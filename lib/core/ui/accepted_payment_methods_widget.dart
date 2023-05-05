@@ -9,27 +9,27 @@ class AcceptedPaymentMethodsWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image.asset(AppAssets.visaLogo, package: 'amwal_pay_sdk'),
+        Image.asset(AppAssets.visaLogo),
         const SizedBox(
           width: 4,
         ),
         Image.asset(
           AppAssets.masterLogo,
-          package: 'amwal_pay_sdk',
+
         ),
         const SizedBox(
           width: 4,
         ),
         Image.asset(
           AppAssets.omanNetLogo,
-          package: 'amwal_pay_sdk',
+
         ),
         const SizedBox(
           width: 4,
         ),
         Image.asset(
           AppAssets.expressLogo,
-          package: 'amwal_pay_sdk',
+
         ),
       ],
     );

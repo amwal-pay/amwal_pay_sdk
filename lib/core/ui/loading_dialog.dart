@@ -10,8 +10,7 @@ class LoadingDialog extends StatelessWidget {
       width: 10,
       height: 10,
       child: Lottie.asset(
-        'lib/assets/json/lottiefiles/app_loader.json',
-        package: 'amwal_pay_sdk',
+        'assets/json/lottiefiles/app_loader.json',
       ),
     );
   }

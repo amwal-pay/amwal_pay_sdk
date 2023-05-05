@@ -1,4 +1,4 @@
-import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
+
 import 'package:amwal_pay_sdk/features/card/presentation/sale_by_card_manual_screen.dart';
 import 'package:amwal_pay_sdk/features/wallet/presentation/screen/sale_by_wallet_paying_options.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
@@ -9,7 +9,10 @@ import 'color/colors.dart';
 
 class AmwalPayScreen extends StatelessWidget {
   final AmwalSdkArguments arguments;
-  const AmwalPayScreen({Key? key, required this.arguments}) : super(key: key);
+  const AmwalPayScreen({
+    Key? key,
+    required this.arguments,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +23,7 @@ class AmwalPayScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: primaryColor,
           centerTitle: true,
-          leading: InkWell(
-            onTap: AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop,
-            child: const Icon(
-              Icons.arrow_back_ios_rounded,
-            ),
-          ),
+
           title: const Text('Amwal Pay'),
           bottom: TabBar(tabs: [
             Tab(
@@ -34,7 +32,7 @@ class AmwalPayScreen extends StatelessWidget {
             Tab(
               text: 'card'.translate(context),
             ),
-          ]),
+          ],),
         ),
         body: TabBarView(
           children: [

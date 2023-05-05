@@ -98,7 +98,7 @@ class DropDownListWidget<T> extends StatelessWidget {
               ),
               child: Container(
                 height: 48,
-                padding: EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                   horizontal: 8,
                 ),
                 decoration: BoxDecoration(
@@ -125,7 +125,7 @@ class DropDownListWidget<T> extends StatelessWidget {
                           ),
                           SvgPicture.asset(
                             AppAssets.downArrowIcon,
-                            package: 'amwal_pay_sdk',
+
                           )
                         ],
                       );

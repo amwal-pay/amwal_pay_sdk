@@ -70,7 +70,7 @@ class InputFieldWidget extends StatelessWidget {
                 width: 2,
               ),
               if (widgetTitleIcon != null)
-                SvgPicture.asset(widgetTitleIcon!, package: 'amwal_pay_sdk',)
+                SvgPicture.asset(widgetTitleIcon!,)
               else
                 const SizedBox(),
             ],

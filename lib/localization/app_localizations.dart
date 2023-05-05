@@ -21,7 +21,7 @@ class AppLocalizations {
 
   Future<void> load() async {
     String jsonString = await rootBundle.loadString(
-      'packages/amwal_pay_sdk/lib/assets/lang/${locale.languageCode}.json',
+      'assets/lang/${locale.languageCode}.json',
     );
     Map<String, dynamic> jsonMap = json.decode(jsonString);
 

@@ -74,8 +74,8 @@ class CardUtils {
         break;
     }
     return Image.asset(
-      'lib/assets/images/$img',
-      package: 'amwal_pay_sdk',
+      'assets/images/$img',
+
     );
   }
 

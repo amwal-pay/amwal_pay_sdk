@@ -89,7 +89,7 @@ class TransactionStatusDialog extends StatelessWidget {
                   DirectionalWidget(
                     child: Image.asset(
                       AppAssets.divCircleLeft,
-                      package: 'amwal_pay_sdk',
+
                       color: greyColor,
                     ),
                   ),
@@ -105,7 +105,7 @@ class TransactionStatusDialog extends StatelessWidget {
                   DirectionalWidget(
                     child: Image.asset(
                       AppAssets.divCircleRight,
-                      package: 'amwal_pay_sdk',
+
                       color: greyColor,
                     ),
                   ),
@@ -151,12 +151,12 @@ extension TransactionX on TransactionStatus {
     if (this == TransactionStatus.success) {
       return SvgPicture.asset(
         AppAssets.successIcon,
-        package: 'amwal_pay_sdk',
+
       );
     } else {
       return SvgPicture.asset(
         AppAssets.errorIcon,
-        package: 'amwal_pay_sdk',
+
       );
     }
   }

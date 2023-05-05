@@ -12,6 +12,7 @@ abstract class IAmwalSdkSettings {
   final bool isMocked;
   final String amount;
   final String currency;
+  final BuildContext? context;
 
   const IAmwalSdkSettings({
     required this.token,
@@ -22,6 +23,7 @@ abstract class IAmwalSdkSettings {
     required this.transactionRefNo,
     required this.currency,
     required this.amount,
+    required this.context,
     this.locale = const Locale('en'),
     this.is3DS = false,
     this.isMocked = false,
@@ -37,6 +39,7 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
     required super.transactionRefNo,
     required super.currency,
     required super.amount,
+    required super.context,
     super.locale,
     super.is3DS,
     super.isMocked,
@@ -53,6 +56,7 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
     required super.currency,
     required super.amount,
     required this.terminalId,
+    super.context,
     super.locale,
     super.isMocked,
     super.is3DS,
@@ -60,4 +64,37 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
           requestSourceId: '7',
           terminalIds: [terminalId],
         );
+
+  AmwalSdkSettings copyWith({
+    BuildContext? context,
+  }) {
+    return AmwalSdkSettings(
+      terminalId: terminalId,
+      context: context ?? this.context,
+      token: token,
+      locale: locale,
+      is3DS: is3DS,
+      isMocked: isMocked,
+      currency: currency,
+      amount: amount,
+      merchantId: merchantId,
+      secureHashValue: secureHashValue,
+      transactionRefNo: transactionRefNo,
+    );
+  }
+
+  factory AmwalSdkSettings.fromArgs(List<String> args) {
+    return AmwalSdkSettings(
+      token: args[0],
+      secureHashValue: args[1],
+      merchantId: args[2],
+      currency: args[3],
+      amount: args[4],
+      terminalId: args[5],
+      isMocked: args[6] == '1',
+      is3DS: args[7] == '1',
+      transactionRefNo: args[8],
+
+    );
+  }
 }
