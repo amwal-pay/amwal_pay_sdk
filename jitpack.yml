@@ -1,0 +1,4 @@
+android:
+  publish: true
+  release:
+    - ./build/outputs/repo/com/amwal/amwal_pay/flutter_release/1.0/*.aar
