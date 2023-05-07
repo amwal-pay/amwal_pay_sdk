@@ -12,6 +12,11 @@ Amwal Pay SDK built in flutter makes online payment easier.
 ## Requirements
 - Put the sdk navigator observer in the navigatorObservers in the material app
 
+
+![alt text](https://github.com/amwal-pay/amwal_pay_sdk/blob/main/screen_shot/example.jpeg?raw=true)
+![alt text](https://github.com/amwal-pay/amwal_pay_sdk/blob/main/screen_shot/view.jpeg?raw=true)
+
+
 ```sh
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -94,5 +99,8 @@ If you would like to contribute to the package, please read the [Contributing Gu
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
-   
+
+[Example]: <https://github.com/amwal-pay/amwal_pay_sdk/-/tree/master/example>
+[the GitlLb issue tracker]: <https://github.com/amwal-pay/amwal_pay_sdk/-/issues>
+[Contributing Guidelines]: <https://github.com/amwal-pay/amwal_pay_sdk/-/blob/master/CHANGELOG.md>
 
