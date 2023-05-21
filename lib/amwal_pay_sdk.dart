@@ -10,10 +10,9 @@ import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
 import 'package:amwal_pay_sdk/sdk_builder/network_service_builder.dart';
 import 'package:amwal_pay_sdk/sdk_builder/sdk_builder.dart';
 import 'package:flutter/material.dart';
-
 import 'localization/app_localizations_setup.dart';
-
 export 'package:amwal_pay_sdk/navigator/sdk_navigator.dart';
+export 'package:amwal_pay_sdk/features/receipt/receipt_handler.dart';
 
 class AmwalPaySdk {
   const AmwalPaySdk._();
@@ -24,12 +23,25 @@ class AmwalPaySdk {
     required AmwalSdkSettings settings,
   }) async {
     await SdkBuilder.instance.initCacheStorage();
-    await CacheStorageHandler.instance.write('token', settings.token);
-    await CacheStorageHandler.instance.write('terminal', settings.terminalIds);
+    await CacheStorageHandler.instance.write(
+      CacheKeys.token,
+      settings.token,
+    );
+    await CacheStorageHandler.instance.write(
+      CacheKeys.terminals,
+      settings.terminalIds,
+    );
+    await CacheStorageHandler.instance.write(
+      CacheKeys.merchantId,
+      settings.merchantId,
+    );
+    await CacheStorageHandler.instance.write(
+      CacheKeys.merchantName,
+      settings.merchantName,
+    );
     final networkService = NetworkServiceBuilder.instance.setupNetworkService(
       settings.isMocked,
       settings.secureHashValue,
-      settings.requestSourceId,
       settings.token,
     );
     SdkBuilder.instance.initSdkModules(networkService);
@@ -44,7 +56,6 @@ class AmwalPaySdk {
     final networkService = NetworkServiceBuilder.instance.setupNetworkService(
       settings.isMocked,
       settings.secureHashValue,
-      settings.requestSourceId,
       settings.token,
     );
     return await AmwalWalletSdk.instance.init(
@@ -52,11 +63,11 @@ class AmwalPaySdk {
       merchantId: settings.merchantId,
       terminalIds: settings.terminalIds,
       secureHashValue: settings.secureHashValue,
-      requestSourceId: settings.requestSourceId,
-      transactionRefNo: settings.transactionRefNo,
+      transactionRefNo: settings.transactionId,
       isMocked: settings.isMocked,
       service: networkService,
       locale: settings.locale,
+      merchantName: settings.merchantName,
     );
   }
 
@@ -66,7 +77,6 @@ class AmwalPaySdk {
     final networkService = NetworkServiceBuilder.instance.setupNetworkService(
       settings.isMocked,
       settings.secureHashValue,
-      settings.requestSourceId,
       settings.token,
     );
     return await AmwalCardSdk.instance.init(
@@ -74,11 +84,11 @@ class AmwalPaySdk {
       merchantId: settings.merchantId,
       terminalIds: settings.terminalIds,
       secureHashValue: settings.secureHashValue,
-      requestSourceId: settings.requestSourceId,
-      transactionRefNo: settings.transactionRefNo,
+      transactionRefNo: settings.transactionId,
       isMocked: settings.isMocked,
       service: networkService,
       locale: settings.locale,
+      merchantName: settings.merchantName,
     );
   }
 
@@ -92,9 +102,7 @@ class AmwalPaySdk {
   Future<void> openCardScreen(AmwalInAppSdkSettings settings) async {
     final cardSdk = await _initCardSdk(settings: settings);
     await cardSdk.navigateToCard(
-      settings.locale,
-      settings.is3DS,
-    );
+        settings.locale, settings.is3DS, settings.transactionId);
   }
 
   Future<void> _openAmwalSdkScreen(AmwalSdkSettings settings) async {
@@ -114,7 +122,9 @@ class AmwalPaySdk {
                 amount: settings.amount,
                 terminalId: settings.terminalIds.single,
                 currency: settings.currency,
+                transactionId: settings.transactionId,
                 currencyId: 512,
+                merchantId: int.parse(settings.merchantId),
               ),
             ),
           );

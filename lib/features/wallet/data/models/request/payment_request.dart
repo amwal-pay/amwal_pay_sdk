@@ -1,62 +1,69 @@
+import 'package:uuid/uuid.dart';
+
 class WalletPaymentRequest {
-  final int transactionMethodId;
-  final String orderKey;
+  final int? transactionMethodId;
+  final String? orderKey;
+  final String? id;
   final String processingCode;
   final int currencyId;
-  final String id;
   final num amount;
   final String terminalId;
   final String? mobileNumber;
   final String? aliasName;
+  final int merchantId;
 
   const WalletPaymentRequest({
-    required this.transactionMethodId,
-    required this.orderKey,
     required this.processingCode,
     required this.currencyId,
-    required this.id,
     required this.amount,
     required this.terminalId,
+    required this.merchantId,
+    this.id,
+    this.transactionMethodId,
     this.mobileNumber,
     this.aliasName,
+    this.orderKey,
   });
 
   Map<String, dynamic> payWithMobileNumber() {
     return {
-      'TransactionMethodId': transactionMethodId,
-      'OrderKey': orderKey,
+      'TransactionMethodId': 5,
       'ProcessingCode': processingCode,
-      'CurrencyId': currencyId,
-      'Id': id,
-      'Amount': amount,
-      'TerminalId': terminalId,
       'MobileNumber': mobileNumber,
+      'CurrencyId': currencyId,
+      'MerchantId': merchantId,
+      'TerminalId': terminalId,
+      'Id': id,
+      'UniqueNotificationId': const Uuid().v1(),
+      'OrderKey': orderKey,
+      'Amount': amount,
     };
   }
 
   Map<String, dynamic> payWithAliasName() {
     return {
-      'TransactionMethodId': transactionMethodId,
-      'OrderKey': orderKey,
+      'TransactionMethodId': 6,
       'ProcessingCode': processingCode,
       'CurrencyId': currencyId,
-      'Id': id,
-      'Amount': amount,
       'TerminalId': terminalId,
+      'MerchantId': merchantId,
+      'Id': id,
       'AliasName': aliasName,
+      'OrderKey': orderKey,
+      'Amount': amount,
     };
   }
 
   Map<String, dynamic> payWithQrCode() {
     return {
-      'TransactionMethodId': transactionMethodId,
-      'OrderKey': orderKey,
+      'requestDateTime': DateTime.now().toIso8601String(),
       'ProcessingCode': processingCode,
       'CurrencyId': currencyId,
-      'Id': id,
-      'Amount': amount,
       'TerminalId': terminalId,
-      'AliasName': aliasName,
+      'MerchantId': merchantId,
+      'Id': id,
+      'dataProvider': 1,
+      'Amount': amount,
     };
   }
 }

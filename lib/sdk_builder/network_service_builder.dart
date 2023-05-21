@@ -10,14 +10,12 @@ class NetworkServiceBuilder {
   DioClient _initDioClientWithInterceptors(
       bool isMocked,
       String secureHashValue,
-      String requestSourceId,
       String token,
       ) {
     final tokenInterceptor = TokenInjectorInterceptor(token);
     final mockupInterceptor = MockupInterceptor(isMocked);
     final secureHashInterceptor = SecureHashInterceptor(
       secureHashValue: secureHashValue,
-      requestSourceId: requestSourceId,
     );
     return DioClient(
       mockupInterceptor,
@@ -29,13 +27,11 @@ class NetworkServiceBuilder {
   NetworkService setupNetworkService(
       bool isMocked,
       String secureHashValue,
-      String requestSourceId,
       String token,
       ) =>
       NetworkService(_initDioClientWithInterceptors(
         isMocked,
         secureHashValue,
-        requestSourceId,
         token,
       ));
 

@@ -23,16 +23,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
   final String amount;
   final String terminalId;
+  final int merchantId;
   final String currency;
   final int currencyId;
   final bool showAppBar;
+  final String? transactionId;
   final String Function(String)? translator;
-  const SaleByWalletPayingOptions({
+    SaleByWalletPayingOptions({
     Key? key,
     required this.amount,
     required this.terminalId,
     required this.currency,
     required this.currencyId,
+    required this.merchantId,
+      this.transactionId,
     this.showAppBar = true,
     this.translator,
   }) : super(key: key);
@@ -42,6 +46,8 @@ class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
     final paymentArgument = PaymentArguments(
       amount: amount,
       terminalId: terminalId,
+      merchantId: merchantId,
+      transactionId: transactionId,
       currencyData: CurrencyData(
         idN: currencyId,
         id: currency.toString(),
@@ -123,7 +129,7 @@ class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
                           padding: const EdgeInsets.symmetric(horizontal: 20.0),
                           child: _saleByWalletOptions(
                             state.page,
-                            paymentArgument.terminalId,
+                            paymentArgument,
                             translator,
                           ),
                         );
@@ -156,7 +162,7 @@ class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
 
 Widget _saleByWalletOptions(
   int pageNum,
-  String terminalId,
+  PaymentArguments paymentArguments,
   String Function(String)? globalTranslator,
 ) {
   if (pageNum == 0) {
@@ -165,7 +171,7 @@ Widget _saleByWalletOptions(
     return AliasPayWidget(globalTranslator: globalTranslator);
   } else if (pageNum == 2) {
     return ScanQrToPayWidget(
-      terminalId: terminalId,
+      paymentArguments: paymentArguments,
       globalTranslator: globalTranslator,
     );
   } else {

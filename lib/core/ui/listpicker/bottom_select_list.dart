@@ -11,6 +11,7 @@ class BottomSelectList<T> extends StatefulWidget {
     required this.onClicked,
     required this.onDone,
     required this.onCancel,
+    required this.name,
     this.initialItemIndex,
   }) : super(key: key);
 
@@ -22,6 +23,7 @@ class BottomSelectList<T> extends StatefulWidget {
   final void Function() onCancel;
   static const double _itemHeight = 50;
   final int? initialItemIndex;
+  final String? name;
 
   @override
   State<BottomSelectList<T>> createState() => _BottomSelectListState<T>();
@@ -141,20 +143,26 @@ class _BottomSelectListState<T> extends State<BottomSelectList<T>> {
                               flex: 7,
                               child: Center(
                                 child: FittedBox(
-                                  child: Text(
-                                    widget.nameMapper(
-                                      widget.listItems[index],
-                                    ),
-                                    style: TextStyle(
-                                      color: selectedIndex == index
-                                          ? blackColor
-                                          : greyColor,
-                                      fontSize:
-                                          selectedIndex == index ? 16 : 14,
-                                      fontWeight: selectedIndex == index
-                                          ? FontWeight.bold
-                                          : FontWeight.normal,
-                                    ),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        widget.name != ''
+                                            ? '${widget.name} - ${widget.nameMapper(widget.listItems[index])}'
+                                            : widget.nameMapper(
+                                                widget.listItems[index],
+                                              ),
+                                        style: TextStyle(
+                                          color: selectedIndex == index
+                                              ? blackColor
+                                              : greyColor,
+                                          fontSize:
+                                              selectedIndex == index ? 16 : 14,
+                                          fontWeight: selectedIndex == index
+                                              ? FontWeight.bold
+                                              : FontWeight.normal,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),

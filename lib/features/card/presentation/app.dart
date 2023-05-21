@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 class CardSdkApp extends StatelessWidget {
   final bool is3DS;
   final Locale? locale;
-  const CardSdkApp({Key? key, required this.locale, required this.is3DS})
+  String? transactionId;
+    CardSdkApp({Key? key, this.transactionId ,required this.locale, required this.is3DS})
       : super(key: key);
 
   @override
@@ -18,7 +19,7 @@ class CardSdkApp extends StatelessWidget {
       supportedLocales: AppLocalizationsSetup.supportedLocales,
       localeResolutionCallback: AppLocalizationsSetup.localeResolutionCallback,
       locale: locale ?? const Locale('en'),
-      home: SaleByCardScreen(is3DS: is3DS),
+      home: SaleByCardScreen(is3DS: is3DS,transactionId:transactionId),
       theme: ThemeData(
         scaffoldBackgroundColor: whiteColor,
         appBarTheme: const AppBarTheme(

@@ -1,3 +1,4 @@
+import 'package:amwal_pay_sdk/core/merchant_store/merchant_store.dart';
 import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
 
@@ -10,6 +11,7 @@ class SaleCardFeatureCommonWidgets {
     PaymentArguments paymentArgs, {
     String Function(String)? translator,
   }) {
+    final merchantName = MerchantStore.instance.getMerchantName();
     return Card(
       elevation: 5.0,
       shape: RoundedRectangleBorder(
@@ -41,10 +43,7 @@ class SaleCardFeatureCommonWidgets {
                     height: 6,
                   ),
                   Text(
-                    'merchant_name_label'.translate(
-                      context,
-                      globalTranslator: translator,
-                    ),
+                    merchantName??'Merchant Name',
                     style: const TextStyle(
                       color: blackColor,
                       fontSize: 20,

@@ -1,4 +1,4 @@
-
+import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
 import 'package:amwal_pay_sdk/core/apiview/api_view.dart';
 import 'package:amwal_pay_sdk/core/base_state/base_cubit_state.dart';
 import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
@@ -13,6 +13,7 @@ import 'package:amwal_pay_sdk/features/card/data/models/response/purchase_respon
 import 'package:amwal_pay_sdk/features/card/presentation/widgets/otp_dialog.dart';
 import 'package:amwal_pay_sdk/features/currency_field/data/models/response/currency_response.dart';
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
+import 'package:amwal_pay_sdk/features/receipt/receipt_handler.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' hide WatchContext;
@@ -23,7 +24,10 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit> {
   final int currencyId;
   final String currency;
   final String terminalId;
+  final int merchantId;
   final bool showAppBar;
+  final bool is3DS;
+  final String? transactionId;
   final String Function(String)? translator;
 
   const SaleByCardManualScreen({
@@ -32,6 +36,9 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit> {
     required this.currencyId,
     required this.currency,
     required this.terminalId,
+    required this.merchantId,
+    required this.is3DS,
+    this.transactionId,
     this.showAppBar = true,
     this.translator,
   }) : super(key: key);
@@ -39,8 +46,11 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit> {
   @override
   Widget build(BuildContext context) {
     final args = PaymentArguments(
+      is3DS: is3DS,
       terminalId: terminalId,
       amount: amount,
+      merchantId: merchantId,
+      transactionId: transactionId,
       currencyData: CurrencyData(
         idN: currencyId,
         name: currency,
@@ -61,39 +71,55 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit> {
     }
 
     Future<PurchaseData?> onPurchaseStepTwo(String otp) async {
+      print(args.transactionId);
       return await cubit.purchaseOtpStepTwo(
         args.amount,
         args.terminalId,
+        args.currencyData!.idN,
+        args.merchantId,
+        args.transactionId,
         otp,
       );
     }
 
     Future<void> showTransactionDialog(PurchaseData purchaseData) async {
-      await Navigator.of(context).push(DialogRoute(
+      await ReceiptHandler.instance.showCardReceipt(
         context: context,
-        builder: (_) {
-          final details = {
-            'transaction_id': purchaseData.hostResponseData.transactionId,
-            'payment_id': purchaseData.hostResponseData.paymentId,
-            'stan': purchaseData.hostResponseData.stan,
-            'track_id': purchaseData.hostResponseData.trackId,
-            'rrn': purchaseData.hostResponseData.rrn,
-          };
-          return TransactionStatusDialog(
-            transactionStatus: TransactionStatus.success,
-            details: details,
-            globalTranslator: translator,
-          );
-        },
-      ));
+        cardPurchaseData: purchaseData,
+        globalTranslator: translator,
+      );
+      // await Navigator.of(context).push(DialogRoute(
+      //   context: context,
+      //   builder: (_) {
+      //     final details = {
+      //       'transaction_id': purchaseData.hostResponseData.transactionId,
+      //       'payment_id': purchaseData.hostResponseData.paymentId,
+      //       'stan': purchaseData.hostResponseData.stan,
+      //       'track_id': purchaseData.hostResponseData.trackId,
+      //       'rrn': purchaseData.hostResponseData.rrn,
+      //     };
+      //     return TransactionStatusDialog(
+      //       transactionStatus: TransactionStatus.success,
+      //       details: details,
+      //       globalTranslator: translator,
+      //     );
+      //   },
+      // ));
     }
 
     Future<void> onPurchaseWith3DS() async {
       String? otpOrNull;
-      await cubit.purchaseOtpStepOne(
+      var originalTransactionId = await cubit.purchaseOtpStepOne(
         args.amount,
         args.terminalId,
+        args.currencyData!.idN,
+        args.merchantId,
+        args.transactionId,
       );
+      if (originalTransactionId == null) {
+        return;
+      }
+
       otpOrNull = await showOtpDialog();
       if (otpOrNull == null) {
         return;
@@ -109,28 +135,42 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit> {
       final purchaseDataOrNull = await cubit.purchase(
         args.amount,
         args.terminalId,
+        args.currencyData!.idN,
+        args.merchantId,
+        args.transactionId,
       );
       if (purchaseDataOrNull != null && context.mounted) {
-        await Navigator.of(context).push(
-          DialogRoute(
-            context: context,
-            builder: (_) {
-              final details = {
-                'transaction_id':
-                    purchaseDataOrNull.hostResponseData.transactionId,
-                'payment_id': purchaseDataOrNull.hostResponseData.paymentId,
-                'stan': purchaseDataOrNull.hostResponseData.stan,
-                'track_id': purchaseDataOrNull.hostResponseData.trackId,
-                'rrn': purchaseDataOrNull.hostResponseData.rrn,
-              };
-              return TransactionStatusDialog(
-                transactionStatus: TransactionStatus.success,
-                details: details,
-                globalTranslator: translator,
-              );
-            },
-          ),
+        cubit.formKey.currentState?.reset();
+        await ReceiptHandler.instance.showCardReceipt(
+          context: context,
+          cardPurchaseData: purchaseDataOrNull,
+          globalTranslator: translator,
         );
+        // await Navigator.of(context).push(
+        //   DialogRoute(
+        //     context: context,
+        //     builder: (_) {
+        //       final details = {
+        //         'transaction_id':
+        //             purchaseDataOrNull.hostResponseData.transactionId,
+        //         'payment_id': purchaseDataOrNull.hostResponseData.paymentId,
+        //         'stan': purchaseDataOrNull.hostResponseData.stan,
+        //         'track_id': purchaseDataOrNull.hostResponseData.trackId,
+        //         'rrn': purchaseDataOrNull.hostResponseData.rrn,
+        //       };
+        //       return TransactionStatusDialog(
+        //         transactionStatus: TransactionStatus.success,
+        //         details: details,
+        //         globalTranslator: translator,
+        //         onClose: () {
+        //           Navigator.pop(_);
+        //           Navigator.pop(_);
+        //           AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+        //         },
+        //       );
+        //     },
+        //   ),
+        // );
       }
     }
 
@@ -191,7 +231,7 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit> {
                     key: const Key('confirmButton'),
                     onPressed: () async {
                       if (cubit.formKey.currentState!.validate()) {
-                        if (!args.is3DS) {
+                        if (args.is3DS) {
                           await onPurchaseWith3DS();
                         } else {
                           await purchaseWithOut3DS();

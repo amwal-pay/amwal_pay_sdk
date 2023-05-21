@@ -12,6 +12,8 @@ class CardUtils {
     if (input.length < 8) {
       return "invalid_card".translate(context);
     }
+    return null;
+
     int sum = 0;
     int length = input.length;
     for (var i = 0; i < length; i++) {

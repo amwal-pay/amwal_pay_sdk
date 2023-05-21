@@ -54,6 +54,7 @@ class PhoneInputField extends StatelessWidget {
                 Expanded(
                   flex: 2,
                   child: DropDownListWidget<String>(
+                    name: '',
                     hintText: '+968',
                     cubit: DropDownListCubit(),
                     onDone: () {},

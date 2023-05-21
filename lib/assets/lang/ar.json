@@ -11,6 +11,7 @@
   "channel": "القناة",
   "type": "النوع",
   "terminal": "الجهاز",
+  "choose-terminal": "من فضلك اختر الجهاز",
   "copy_rights_reserved": "جميع الحقوق محفوظة لدى أموال باي © 2023",
   "total_sales": "إجمالي المبيعات",
   "transactions": "المعاملات",
@@ -135,6 +136,12 @@
   "redirect_url": "رابط إعادة التوجيه",
   "redirect_url_hint": "Https://",
   "number_of_usage": "عدد مرات الاستخدام",
-  "card": "كارد"
+  "card": "كارد",
+  "transaction_id": "TransactionId",
+  "rrn": "RRN",
+  "payment_id": "PaymentId",
+  "track_id": "TrackId",
+  "stan": "Stan",
+  "invalid-month": "قيمة غير صحيحة"
 }
 

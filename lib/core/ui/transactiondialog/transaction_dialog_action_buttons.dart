@@ -11,7 +11,9 @@ abstract class TransactionDialogAction extends StatelessWidget {
   const TransactionDialogAction({super.key});
 
   factory TransactionDialogAction.build(
-    bool isTransactionDetails, {
+    bool isTransactionDetails,
+      void Function() share,
+      {
     OnCloseCallback onClose,
     bool? isSettled,
     bool? isCaptured,
@@ -27,11 +29,13 @@ abstract class TransactionDialogAction extends StatelessWidget {
         isCredit: isCredit,
         isSettled: isSettled,
         globalTranslator: globalTranslator,
+        share: share,
       );
     } else {
       return TransactionDialogActionButtons(
         onClose: onClose,
         globalTranslator: globalTranslator,
+        share: share,
       );
     }
   }
@@ -40,8 +44,10 @@ abstract class TransactionDialogAction extends StatelessWidget {
 class TransactionDialogActionButtons extends TransactionDialogAction {
   final void Function()? onClose;
   final String Function(String)? globalTranslator;
+  final void Function() share;
   const TransactionDialogActionButtons({
     Key? key,
+    required this.share,
     this.onClose,
     this.globalTranslator,
   }) : super(key: key);
@@ -66,7 +72,7 @@ class TransactionDialogActionButtons extends TransactionDialogAction {
                         ),
                       ),
                     ),
-                    onPressed: () => Share.share('share text'),
+                    onPressed: share,
                     child: Text(
                       'share_btn'.translate(
                         context,
@@ -114,6 +120,7 @@ class TransactionDialogActionButtonsForTransaction
   final bool? isRefunded;
   final bool? isCredit;
   final String Function(String)? globalTranslator;
+  final void Function() share;
 
   const TransactionDialogActionButtonsForTransaction({
     Key? key,
@@ -123,6 +130,7 @@ class TransactionDialogActionButtonsForTransaction
     this.isRefunded,
     this.isCredit,
     this.globalTranslator,
+    required this.share,
   }) : super(key: key);
 
   @override
@@ -220,7 +228,7 @@ class TransactionDialogActionButtonsForTransaction
                         ),
                       ),
                     ),
-                    onPressed: () => Share.share('share text'),
+                    onPressed: share,
                     child: Text(
                       'share_btn'.translate(
                         context,

@@ -1,7 +1,7 @@
 name: amwal_pay_sdk
 description: amwal pay sdk
-version: 0.0.2
-homepage: "https://github.com/AmrSaied/hive_ui"
+version: 0.0.17
+homepage: "https://github.com/amwal-pay/amwal_pay_sdk"
 
 environment:
   sdk: '>=2.19.6 <3.0.0'
@@ -13,12 +13,12 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^8.1.2
   get_storage: ^2.1.1
-  intl: ^0.17.0
+  intl: ^0.18.0
   flutter_localizations:
     sdk: flutter
   dio: ^5.1.1
-  flutter_form_builder: ^7.8.0
-  form_builder_validators: ^8.6.1
+  flutter_form_builder: ^9.0.0
+  form_builder_validators: ^9.0.0
   currency_text_input_formatter: ^2.1.8
   qr_flutter: ^4.0.0
   freezed_annotation: ^2.2.0
@@ -31,6 +31,11 @@ dependencies:
   auto_size_text: ^3.0.0
   clickable_list_wheel_view: ^0.2.0
   circular_countdown_timer: ^0.2.3
+  crypto: ^3.0.2
+  convert: ^3.1.1
+  uuid: ^3.0.7
+  chucker_flutter: ^1.5.1
+  screenshot: ^2.1.0
 
 dev_dependencies:
   flutter_test:

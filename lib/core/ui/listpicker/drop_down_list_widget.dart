@@ -16,6 +16,7 @@ class DropDownListWidget<T> extends StatelessWidget {
   final List<T> dropDownListItems;
   final DropDownListCubit<T> cubit;
   final String hintText;
+  final String? name;
   final Border? border;
   final BorderRadius? borderRadius;
   final void Function()? onCancel;
@@ -29,6 +30,7 @@ class DropDownListWidget<T> extends StatelessWidget {
     required this.cubit,
     required this.hintText,
     required this.onDone,
+    required this.name,
     this.onCancel,
     this.border,
     this.borderRadius = const BorderRadius.all(Radius.circular(8)),
@@ -76,7 +78,9 @@ class DropDownListWidget<T> extends StatelessWidget {
                     initialItemIndex: initialIndex,
                     onDone: () {
                       Navigator.of(context).pop();
-                      // onSelected(dropDownListItems.first);
+                      if (cubit.state == null) {
+                        onSelected(dropDownListItems.first);
+                      }
                       onDone();
                     },
                     onCancel: () {
@@ -93,12 +97,13 @@ class DropDownListWidget<T> extends StatelessWidget {
                       cubit.updateState(item);
                     },
                     listItems: dropDownListItems,
+                    name: name,
                   );
                 },
               ),
               child: Container(
                 height: 48,
-                padding: EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                   horizontal: 8,
                 ),
                 decoration: BoxDecoration(

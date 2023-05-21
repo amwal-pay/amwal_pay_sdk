@@ -48,31 +48,32 @@ class AliasPayWidget extends StatelessWidget {
             minLength: 3,
           ),
           BlocBuilder<SaleByWalletCubit, SaleByWalletState>(
-              bloc: walletCubit,
-              builder: (_, state) {
-                if (walletCubit.state.verified) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Row(
-                      children: const [
-                        Icon(
-                          Icons.done,
-                          color: successColor,
+            bloc: walletCubit,
+            builder: (_, state) {
+              if (walletCubit.state.verified) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Row(
+                    children: const [
+                      Icon(
+                        Icons.done,
+                        color: successColor,
+                      ),
+                      Text(
+                        'AZE#####AFIQ',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
                         ),
-                        Text(
-                          'AZE#####AFIQ',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        )
-                      ],
-                    ),
-                  );
-                } else {
-                  return const SizedBox();
-                }
-              }),
+                      )
+                    ],
+                  ),
+                );
+              } else {
+                return const SizedBox();
+              }
+            },
+          ),
         ],
       ),
     );

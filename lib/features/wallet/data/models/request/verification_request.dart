@@ -1,14 +1,13 @@
+import 'package:uuid/uuid.dart';
+
 class WalletMobileVerificationRequest {
   final String mobileNumber;
   final String alias;
   final num amount;
   final int currencyId;
   final String terminalId;
-  final String merchantOrderId;
-  final String messageIdentificationCode;
-  final String instructingAlias;
-  final String instructingMobile;
-  final String id;
+  final int merchantId;
+  final String? id;
 
 //<editor-fold desc="Data Methods">
 
@@ -18,11 +17,8 @@ class WalletMobileVerificationRequest {
     required this.amount,
     required this.currencyId,
     required this.terminalId,
-    required this.merchantOrderId,
-    required this.messageIdentificationCode,
-    required this.instructingAlias,
-    required this.instructingMobile,
-    required this.id,
+    required this.merchantId,
+      this.id,
   });
 
 // {
@@ -36,22 +32,17 @@ class WalletMobileVerificationRequest {
           amount == other.amount &&
           currencyId == other.currencyId &&
           terminalId == other.terminalId &&
-          merchantOrderId == other.merchantOrderId &&
-          messageIdentificationCode == other.messageIdentificationCode &&
-          instructingAlias == other.instructingAlias &&
-          instructingMobile == other.instructingMobile);
+          merchantId == other.merchantId);
 
 // "MobileNumber": "23 123456@override
+  @override
   int get hashCode =>
       mobileNumber.hashCode ^
       alias.hashCode ^
       amount.hashCode ^
       currencyId.hashCode ^
       terminalId.hashCode ^
-      merchantOrderId.hashCode ^
-      messageIdentificationCode.hashCode ^
-      instructingAlias.hashCode ^
-      instructingMobile.hashCode;
+      merchantId.hashCode;
 
   WalletMobileVerificationRequest copyWith({
     String? mobileNumber,
@@ -60,10 +51,6 @@ class WalletMobileVerificationRequest {
     int? currencyId,
     int? merchantId,
     String? terminalId,
-    String? merchantOrderId,
-    String? messageIdentificationCode,
-    String? instructingAlias,
-    String? instructingMobile,
     String? id,
   }) {
     return WalletMobileVerificationRequest(
@@ -72,26 +59,20 @@ class WalletMobileVerificationRequest {
       amount: amount ?? this.amount,
       currencyId: currencyId ?? this.currencyId,
       terminalId: terminalId ?? this.terminalId,
-      merchantOrderId: merchantOrderId ?? this.merchantOrderId,
-      messageIdentificationCode:
-          messageIdentificationCode ?? this.messageIdentificationCode,
-      instructingAlias: instructingAlias ?? this.instructingAlias,
-      instructingMobile: instructingMobile ?? this.instructingMobile,
-      id: id ?? this.id,
+      merchantId: merchantId ?? this.merchantId,
+      id: id??this.id,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'MobileNumber': mobileNumber,
-      'Alias': alias,
+      if (mobileNumber.isNotEmpty) 'MobileNumber': mobileNumber,
+      if (alias.isNotEmpty) 'Alias': alias,
       'amount': amount,
       'currencyId': currencyId,
       'terminalId': terminalId,
-      'MerchantOrderId': merchantOrderId,
-      'MessageIdentificationCode': messageIdentificationCode,
-      'InstructingAlias': instructingAlias,
-      'InstructingMobile': instructingMobile,
+      'merchantId': merchantId,
+      'uniqueNotificationId': id,
     };
   }
 }

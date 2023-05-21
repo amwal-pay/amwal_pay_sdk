@@ -6,6 +6,9 @@ class CustomLogInterceptor extends Interceptor {
   void onError(DioError err, ErrorInterceptorHandler handler) {
     if (kDebugMode) {
       print('ERROR=> ${err.error}');
+      print('ERROR=> ${err.response}');
+      print('ERROR=> ${err.message}');
+      print('ERROR=> ${err.stackTrace}');
     }
     super.onError(err, handler);
   }
@@ -24,6 +27,7 @@ class CustomLogInterceptor extends Interceptor {
       print('Request Uri => ${options.uri}');
       print('Request Method => ${options.method}');
       print('Request body => ${options.data}');
+      print('Request header => ${options.headers}');
     }
     super.onRequest(options, handler);
   }

@@ -6,10 +6,14 @@ class PaymentArguments {
   final String terminalId;
   final CurrencyData? currencyData;
   final bool is3DS;
+  final int merchantId;
+    String? transactionId;
 
-  const PaymentArguments({
+    PaymentArguments({
     required this.amount,
     required this.terminalId,
+    required this.merchantId,
+      this.transactionId,
     this.currencyData,
     this.is3DS = false,
   });
@@ -18,6 +22,7 @@ class PaymentArguments {
     return {
       'amount': amount,
       'terminalId': terminalId,
+      'transactionId': transactionId,
       'currencyData': currencyData?.toJson(),
     };
   }
@@ -26,7 +31,9 @@ class PaymentArguments {
     return PaymentArguments(
       amount: map['amount'] as String,
       terminalId: map['terminalId'] as String,
+      merchantId: map['merchantId'] as int,
       currencyData: CurrencyData.fromJson(map['currencyData']),
+      transactionId: map['transactionId'],
     );
   }
 }

@@ -7,9 +7,11 @@ import 'package:amwal_pay_sdk/features/card/data/models/response/purchase_respon
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 
 class SaleByCardManualCubit extends ICubit<PurchaseResponse>
-    with UiState<PurchaseResponse>{
+    with UiState<PurchaseResponse> {
   final IUseCase<PurchaseResponse, PurchaseRequest> _purchaseUseCase;
   final IUseCase<PurchaseResponse, PurchaseRequest> _purchaseOtpStepOneUseCase;
   final IUseCase<PurchaseResponse, PurchaseRequest> _purchaseOtpStepTwoUseCase;
@@ -28,68 +30,92 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
   String? expirationDateMonth;
   String? expirationDateYear;
   String? email;
+  String? originalTransactionId;
 
-  Future<PurchaseData?> purchase(String amount, String terminalId) async {
+  Future<PurchaseData?> purchase(
+    String amount,
+    String terminalId,
+    int currencyId,
+    int merchantId,
+    String? transactionId,
+  ) async {
     emit(const ICubitState.loading());
     final purchaseRequest = PurchaseRequest(
-      pan: cardNo!,
+      pan: cardNo!.replaceAll(' ', ''),
       amount: num.parse(amount),
       terminalId: int.parse(terminalId),
-      merchantId: 0,
+      merchantId: merchantId,
       cardHolderName: cardHolderName!,
+      transactionId: transactionId,
       cvV2: cvV2!,
-      dateExpiration: '$expirationDateMonth/$expirationDateYear',
-      requestDateTime: DateTime.now().toString(),
+      dateExpiration: '$expirationDateMonth$expirationDateYear',
+      requestDateTime: DateFormat('yyyy-MM-ddTHH:mm:ss').format(DateTime.now()),
       orderCustomerEmail: email!,
       clientMail: email!,
+      currencyCode: currencyId.toString(),
     );
     final networkState = await _purchaseUseCase.invoke(purchaseRequest);
     final state = mapNetworkState(networkState);
     emit(state);
-    formKey.currentState?.reset();
     return state.mapOrNull(success: (value) => value.uiModel.data);
   }
 
-  Future<void> purchaseOtpStepOne(String amount, String terminalId) async {
+  Future<String?> purchaseOtpStepOne(
+    String amount,
+    String terminalId,
+    int currencyId,
+    int merchantId,
+    String? transactionId,
+  ) async {
     emit(const ICubitState.loading());
     final purchaseRequest = PurchaseRequest(
-      pan: cardNo!,
+      pan: cardNo!.replaceAll(' ', ''),
       amount: num.parse(amount),
       terminalId: int.parse(terminalId),
-      merchantId: 0,
+      merchantId: merchantId,
       cardHolderName: cardHolderName!,
       cvV2: cvV2!,
-      dateExpiration: '$expirationDateMonth/$expirationDateYear',
-      requestDateTime: DateTime.now().toString(),
+      dateExpiration: '$expirationDateMonth$expirationDateYear',
+      requestDateTime: DateFormat('yyyy-MM-ddTHH:mm:ss').format(DateTime.now()),
       orderCustomerEmail: email!,
+      transactionId: transactionId,
       clientMail: email!,
+      currencyCode: currencyId.toString(),
     );
     final networkState = await _purchaseOtpStepOneUseCase.invoke(
       purchaseRequest,
     );
     final state = mapNetworkState(networkState);
-    formKey.currentState?.reset();
+    originalTransactionId =
+        state.mapOrNull(success: (value) => value.uiModel.data?.transactionId);
     emit(state);
+    return originalTransactionId;
   }
 
   Future<PurchaseData?> purchaseOtpStepTwo(
     String amount,
     String terminalId,
+    int currencyId,
+    int merchantId,
+    String? transactionId,
     String otp,
   ) async {
     emit(const ICubitState.loading());
     final purchaseRequest = PurchaseRequest(
-      pan: cardNo!,
+      pan: cardNo!.replaceAll(' ', ''),
       amount: num.parse(amount),
       terminalId: int.parse(terminalId),
-      merchantId: 0,
+      merchantId: merchantId,
       cardHolderName: cardHolderName!,
       cvV2: cvV2!,
       otp: otp,
-      dateExpiration: '$expirationDateMonth/$expirationDateYear',
-      requestDateTime: DateTime.now().toString(),
+      dateExpiration: '$expirationDateMonth$expirationDateYear',
+      requestDateTime: DateFormat('yyyy-MM-ddTHH:mm:ss').format(DateTime.now()),
       orderCustomerEmail: email!,
       clientMail: email!,
+      currencyCode: currencyId.toString(),
+      originalTransactionIdentifierValue: transactionId,
+      transactionId:transactionId
     );
     final networkState =
         await _purchaseOtpStepTwoUseCase.invoke(purchaseRequest);

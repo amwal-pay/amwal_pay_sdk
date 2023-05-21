@@ -12,6 +12,7 @@ import 'package:amwal_pay_sdk/features/payment_argument.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:amwal_pay_sdk/navigator/sdk_navigator.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class SaleByWalletScreen extends StatefulWidget {
   const SaleByWalletScreen({Key? key}) : super(key: key);
@@ -23,7 +24,9 @@ class SaleByWalletScreen extends StatefulWidget {
 class _SaleByWalletScreenState extends State<SaleByWalletScreen> {
   late MerchantStore merchantStore;
   late List<String> terminals;
+  late int merchantId;
   String? _terminal;
+  late String merchantName;
   bool _validateInputs() => _terminal != null;
   late AmountCurrencyWidgetCubit amountCubit;
 
@@ -33,6 +36,8 @@ class _SaleByWalletScreenState extends State<SaleByWalletScreen> {
     amountCubit = AmountCurrencyWidgetCubit();
     merchantStore = MerchantStore.instance;
     terminals = merchantStore.getTerminal();
+    merchantName = merchantStore.getMerchantName() ?? '';
+    merchantId = int.parse(merchantStore.getMerchantId());
     if (terminals.length == 1) {
       _terminal = terminals.single;
     }
@@ -53,6 +58,7 @@ class _SaleByWalletScreenState extends State<SaleByWalletScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: lightGeryColor,
       appBar: AppBar(
         backgroundColor: whiteColor,
@@ -83,7 +89,8 @@ class _SaleByWalletScreenState extends State<SaleByWalletScreen> {
             AmountCurrencyWidget(cubit: amountCubit),
             if (terminals.length != 1)
               DropDownListWidget<String>(
-                hintText: 'terminal'.translate(context),
+                name: merchantName,
+                hintText: 'choose-terminal'.translate(context),
                 cubit: DropDownListCubit(
                   initialValue: _terminal,
                 ),
@@ -115,10 +122,11 @@ class _SaleByWalletScreenState extends State<SaleByWalletScreen> {
                 onPressed: () async {
                   if (amountCubit.validateAmountInput() && _validateInputs()) {
                     final args = PaymentArguments(
-                      amount: amountCubit.amountValue,
-                      terminalId: _terminal ?? '',
-                      currencyData: amountCubit.currencyData,
-                    );
+                        amount: amountCubit.amountValue,
+                        terminalId: _terminal ?? '',
+                        currencyData: amountCubit.currencyData,
+                        merchantId: merchantId,
+                        transactionId: const Uuid().v1());
                     await _navigateToSaleByWalletOptions(args);
                   } else if (terminals.length != 1) {
                     final snackBar = SnackBar(

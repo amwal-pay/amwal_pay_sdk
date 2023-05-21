@@ -23,7 +23,7 @@ class PurchaseResponse extends BaseResponse<PurchaseData> {
 class PurchaseData {
   final String txnResponseCode;
   final String transactionNo;
-  final String systemTraceNr;
+  final String? systemTraceNr;
   final String approvalCode;
   final String actionCode;
   final String message;
@@ -134,7 +134,7 @@ class PurchaseData {
     return PurchaseData(
       txnResponseCode: map['txnResponseCode'] as String,
       transactionNo: map['transactionNo'] as String,
-      systemTraceNr: map['systemTraceNr'] as String,
+      systemTraceNr: map['systemTraceNr'] as String?,
       approvalCode: map['approvalCode'] as String,
       actionCode: map['actionCode'] as String,
       message: map['message'] as String,
@@ -153,7 +153,7 @@ class PurchaseData {
 class HostResponseData {
   final String transactionId;
   final String rrn;
-  final String stan;
+  final String? stan;
   final String trackId;
   final String paymentId;
 
@@ -215,7 +215,7 @@ class HostResponseData {
     return HostResponseData(
       transactionId: map['TransactionId'] as String,
       rrn: map['Rrn'] as String,
-      stan: map['Stan'] as String,
+      stan: map['Stan'] as String?,
       trackId: map['TrackId'] as String,
       paymentId: map['PaymentId'] as String,
     );

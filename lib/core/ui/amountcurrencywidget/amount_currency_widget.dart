@@ -41,7 +41,7 @@ class AmountCurrencyWidget extends StatelessWidget {
                   validator: FormBuilderValidators.compose(
                     [
                       FormBuilderValidators.numeric(),
-                      FormBuilderValidators.maxLength(9,
+                      FormBuilderValidators.maxLength(7,
                           errorText: 'invalid_input_field'.translate(context)),
                       FormBuilderValidators.minLength(3,
                           errorText: 'invalid_input_field'.translate(context)),

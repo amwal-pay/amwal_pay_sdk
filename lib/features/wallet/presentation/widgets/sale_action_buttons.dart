@@ -52,8 +52,9 @@ class SaleActionButtons extends ApiView<SaleByWalletCubit>
         BlocListener<SaleByWalletPayCubit, ICubitState<WalletPayResponse>>(
           bloc: payCubit,
           listener: (_, state) async {
-            final walletPayData =
-                state.mapOrNull(success: (value) => value.uiModel.data);
+            final walletPayData = state.mapOrNull(
+              success: (value) => value.uiModel.data,
+            );
             if (walletPayData != null) {
               await showCountingDialog(
                 context,

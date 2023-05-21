@@ -5,8 +5,10 @@ class AmwalSdkArguments {
   final bool is3DS;
   final String amount;
   final String terminalId;
+  final String? transactionId;
   final String currency;
   final int currencyId;
+  final int merchantId;
 
   AmwalSdkArguments({
     this.locale = const Locale('en'),
@@ -15,5 +17,7 @@ class AmwalSdkArguments {
     required this.terminalId,
     required this.currency,
     required this.currencyId,
+    required this.merchantId,
+    this.transactionId,
   });
 }

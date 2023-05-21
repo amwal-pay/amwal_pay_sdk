@@ -1,4 +1,3 @@
-
 import 'package:amwal_pay_sdk/core/apiview/api_view.dart';
 import 'package:amwal_pay_sdk/core/resources/assets/app_assets_paths.dart';
 import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
@@ -57,7 +56,7 @@ class _CardInfoFormWidgetState extends State<CardInfoFormWidget> {
           validator: (input) => CardUtils.validateCardNum(input, context),
           inputFormatters: [
             FilteringTextInputFormatter.digitsOnly,
-            LengthLimitingTextInputFormatter(19),
+            LengthLimitingTextInputFormatter(16),
             CardNumberInputFormatter(),
           ],
           decoration: InputDecoration(
@@ -121,6 +120,7 @@ class _CardInfoFormWidgetState extends State<CardInfoFormWidget> {
                     globalTranslator: widget.globalTranslator),
                 maxLength: 2,
                 isNumber: true,
+                isMonth: true,
                 onChange: (value) => widget.cubit.expirationDateMonth = value,
               ),
             ),
@@ -143,6 +143,7 @@ class _CardInfoFormWidgetState extends State<CardInfoFormWidget> {
                     globalTranslator: widget.globalTranslator),
                 maxLength: 2,
                 isNumber: true,
+                isYear: true,
                 onChange: (value) => widget.cubit.expirationDateYear = value,
               ),
             ),

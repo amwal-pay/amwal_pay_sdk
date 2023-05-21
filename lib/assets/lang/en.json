@@ -5,6 +5,7 @@
   "channel": "Channel",
   "type": "Type",
   "terminal": "Terminal",
+  "choose-terminal": "Please select your terminal",
   "copy_rights_reserved": "© 2023 Amwal Pay. All Rights Reserved.",
   "total_sales": "Total Sales",
   "transactions": "Transactions",
@@ -124,6 +125,11 @@
   "notification_method":"Notification Method",
   "sms": "SMS",
   "email": "Email",
-  "card": "Card"
-
+  "card": "Card",
+  "transaction_id": "TransactionId",
+  "rrn": "RRN",
+  "payment_id": "PaymentId",
+  "track_id": "TrackId",
+  "stan": "Stan",
+  "invalid-month": "Invalid entry"
 }

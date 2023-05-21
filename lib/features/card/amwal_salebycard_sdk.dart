@@ -15,20 +15,30 @@ export 'dependency/injector.dart';
 
 class AmwalCardSdk {
   const AmwalCardSdk._();
+
   static AmwalCardSdk get instance => const AmwalCardSdk._();
 
   Future<void> _sdkInitialization(
     String token,
     List<String> terminalIds,
     String secureHashValue,
-    String requestSourceId,
+    String merchantId,
     bool isMocked,
     NetworkService service, {
     Locale? locale,
+    String? merchantName,
   }) async {
     await SdkBuilder.instance.initCacheStorage();
-    await CacheStorageHandler.instance.write('token', token);
-    await CacheStorageHandler.instance.write('terminal', terminalIds);
+    await CacheStorageHandler.instance.write(CacheKeys.token, token);
+    await CacheStorageHandler.instance.write(CacheKeys.terminals, terminalIds);
+    await CacheStorageHandler.instance.write(
+      CacheKeys.merchantId,
+      merchantId,
+    );
+    await CacheStorageHandler.instance.write(
+      CacheKeys.merchantName,
+      merchantName,
+    );
     SdkBuilder.instance.initCardModules(service);
   }
 
@@ -37,9 +47,9 @@ class AmwalCardSdk {
     required String merchantId,
     required List<String> terminalIds,
     required String secureHashValue,
-    required String requestSourceId,
     required String transactionRefNo,
     required NetworkService service,
+    String? merchantName,
     bool isMocked = false,
     bool is3DS = false,
     Locale? locale,
@@ -49,10 +59,11 @@ class AmwalCardSdk {
         token,
         terminalIds,
         secureHashValue,
-        requestSourceId,
+        merchantId,
         isMocked,
         service,
         locale: locale,
+        merchantName: merchantName,
       ),
     );
     return this;
@@ -61,10 +72,12 @@ class AmwalCardSdk {
   Future<void> navigateToCard(
     Locale locale,
     bool is3DS,
+    String transactionId,
   ) async {
     await AmwalSdkNavigator.instance.toCardScreen(
       is3DS: is3DS,
       locale: locale,
+      transactionId: transactionId,
     );
   }
 }

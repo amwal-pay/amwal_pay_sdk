@@ -15,11 +15,8 @@ mixin SaleByWalletVerifyMixin on SaleByWalletActionsMixin {
       amount: num.parse(paymentArguments.amount),
       currencyId: paymentArguments.currencyData?.idN ?? 512,
       terminalId: paymentArguments.terminalId,
-      id: '13',
-      merchantOrderId: '',
-      messageIdentificationCode: '',
-      instructingAlias: '',
-      instructingMobile: '',
+      merchantId: paymentArguments.merchantId,
+      id: paymentArguments.transactionId,
     );
     return request;
   }

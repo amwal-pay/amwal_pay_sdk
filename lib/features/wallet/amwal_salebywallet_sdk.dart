@@ -23,14 +23,24 @@ class AmwalWalletSdk {
     String token,
     List<String> terminalIds,
     String secureHashValue,
-    String requestSourceId,
+    String merchantId,
     bool isMocked,
       service,{
-    Locale? locale,
+        String? merchantName,
+
+        Locale? locale,
   }) async {
     await SdkBuilder.instance.initCacheStorage();
-    await CacheStorageHandler.instance.write('token', token);
-    await CacheStorageHandler.instance.write('terminal', terminalIds);
+    await CacheStorageHandler.instance.write(CacheKeys.token, token);
+    await CacheStorageHandler.instance.write(CacheKeys.terminals, terminalIds);
+    await CacheStorageHandler.instance.write(
+      CacheKeys.merchantId,
+     merchantId,
+    );
+    await CacheStorageHandler.instance.write(
+      CacheKeys.merchantName,
+      merchantName,
+    );
     SdkBuilder.instance.initWalletModules(service);
   }
 
@@ -39,9 +49,9 @@ class AmwalWalletSdk {
     required String merchantId,
     required List<String> terminalIds,
     required String secureHashValue,
-    required String requestSourceId,
     required String transactionRefNo,
     required NetworkService service,
+    String? merchantName,
     bool isMocked = false,
     Locale? locale,
   }) async {
@@ -50,10 +60,11 @@ class AmwalWalletSdk {
         token,
         terminalIds,
         secureHashValue,
-        requestSourceId,
+        merchantId,
         isMocked,
         service,
         locale: locale,
+        merchantName: merchantName,
       ),
     );
     return this;
@@ -76,7 +87,6 @@ class AmwalWalletSettings {
   final String token;
   final List<String> terminalIds;
   final String secureHashValue;
-  final String requestSourceId;
   final bool isMocked;
   final Locale locale;
   final NavigatorObserver navigatorObserver;
@@ -85,7 +95,6 @@ class AmwalWalletSettings {
     required this.token,
     required this.terminalIds,
     required this.secureHashValue,
-    required this.requestSourceId,
     required this.isMocked,
     required this.locale,
     required this.navigatorObserver,

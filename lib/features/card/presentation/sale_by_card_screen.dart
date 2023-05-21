@@ -15,11 +15,15 @@ import 'package:amwal_pay_sdk/features/payment_argument.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class SaleByCardScreen extends StatefulApiView<SaleByCardManualCubit> {
   final bool is3DS;
-  const SaleByCardScreen({
+  String? transactionId;
+
+  SaleByCardScreen({
     Key? key,
+    this.transactionId,
     required this.is3DS,
   }) : super(key: key);
 
@@ -30,13 +34,18 @@ class SaleByCardScreen extends StatefulApiView<SaleByCardManualCubit> {
 class _SaleByCardScreenState extends State<SaleByCardScreen> {
   String? terminal;
   late List<String> _terminals;
+  late int merchantId;
+  late String merchantName;
 
   bool _validateInputs() => terminal != null;
+
   @override
   void initState() {
     super.initState();
     final merchantStore = MerchantStore.instance;
+    merchantId = int.parse(merchantStore.getMerchantId());
     _terminals = merchantStore.getTerminal();
+    merchantName = merchantStore.getMerchantName() ?? '';
     if (_terminals.length == 1) {
       terminal = _terminals.single;
     }
@@ -77,7 +86,8 @@ class _SaleByCardScreenState extends State<SaleByCardScreen> {
             AmountCurrencyWidget(cubit: amountCurrencyWidgetCubit),
             if (_terminals.length != 1)
               DropDownListWidget<String>(
-                hintText: 'terminal'.translate(context),
+                name: merchantName,
+                hintText: 'choose-terminal'.translate(context),
                 cubit: DropDownListCubit(
                   initialValue: terminal,
                 ),
@@ -99,14 +109,16 @@ class _SaleByCardScreenState extends State<SaleByCardScreen> {
                     terminalId: terminal!,
                     currencyData: amountCurrencyWidgetCubit.currencyData,
                     is3DS: widget.is3DS,
+                    merchantId: merchantId,
+                    transactionId: widget.transactionId,
                   );
                   await AmwalSdkNavigator.instance.toCardOptionScreen(
                     RouteSettings(arguments: paymentArguments),
                     context,
                   );
                 } else if (_terminals.length != 1) {
-                  const snackBar = SnackBar(
-                    content: Text('select terminal'),
+                  final snackBar = SnackBar(
+                    content: Text('choose-terminal'.translate(context)),
                     backgroundColor: redColor,
                   );
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);

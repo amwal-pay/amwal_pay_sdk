@@ -48,18 +48,22 @@ class _CurrencyFieldState extends State<CurrencyField> {
       bloc: cubit,
       listener: (_, state) {
         state.whenOrNull(success: (value) {
-          _defaultCurrency = value.data?.first;
+          _defaultCurrency =
+              value.data?.where((element) => element.idN == 512).first;
           widget.onChanged(_defaultCurrency);
         });
       },
       builder: (_, state) {
         final currencies = state.mapOrNull(
-          success: (value) => value.uiModel.data,
+          success: (value) => value.uiModel.data
+              ?.where((element) => element.idN == 512)
+              .toList(),
         );
         return SizedBox(
           width: widget.width,
           height: widget.height,
           child: DropDownListWidget<CurrencyData>(
+            name: '',
             widgetTitle: 'currency_label'.translate(context),
             hintText: 'OMR',
             cubit: DropDownListCubit(

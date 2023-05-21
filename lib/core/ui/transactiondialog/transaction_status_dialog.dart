@@ -8,8 +8,10 @@ import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
 
-class TransactionStatusDialog extends StatelessWidget {
+class TransactionStatusDialog extends StatefulWidget {
   final TransactionStatus transactionStatus;
   final Map<String, dynamic>? details;
   final bool? isRefunded;
@@ -32,7 +34,38 @@ class TransactionStatusDialog extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  State<TransactionStatusDialog> createState() =>
+      _TransactionStatusDialogState();
+}
+
+class _TransactionStatusDialogState extends State<TransactionStatusDialog> {
+  late ScreenshotController _screenshotController;
+  bool _isSharing = false;
+  @override
+  void initState() {
+    super.initState();
+    _screenshotController = ScreenshotController();
+  }
+
+  Future<void> _share() async {
+    setState(() => _isSharing = true);
+    final screenshotData = await _screenshotController.capture();
+    setState(() => _isSharing = false);
+    if (screenshotData != null) {
+      final file = XFile.fromData(
+        screenshotData,
+        mimeType: 'jpg',
+      );
+      await Share.shareXFiles(
+        [
+          file,
+        ],
+      );
+    }
+  }
+
+  Widget dialog({bool forShare = false}) {
+    final size = MediaQuery.of(context).size;
     return Dialog(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
@@ -44,7 +77,7 @@ class TransactionStatusDialog extends StatelessWidget {
           top: 40,
           bottom: 20,
         ),
-        width: MediaQuery.of(context).size.width * 0.8,
+        width: size.width * 0.8,
         decoration: BoxDecoration(
           color: whiteColor,
           borderRadius: BorderRadius.circular(
@@ -54,13 +87,15 @@ class TransactionStatusDialog extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              transactionStatus.transactionStatusImage,
+              widget.transactionStatus.transactionStatusImage,
               const SizedBox(
                 height: 10,
               ),
               Text(
-                transactionStatus.transactionStatusTitle
-                    .translate(context, globalTranslator: globalTranslator),
+                widget.transactionStatus.transactionStatusTitle.translate(
+                  context,
+                  globalTranslator: widget.globalTranslator,
+                ),
                 style: const TextStyle(
                   color: blackColor,
                   fontSize: 16,
@@ -73,7 +108,7 @@ class TransactionStatusDialog extends StatelessWidget {
               Text(
                 'transaction_type'.translate(
                   context,
-                  globalTranslator: globalTranslator,
+                  globalTranslator: widget.globalTranslator,
                 ),
                 style: const TextStyle(
                   color: greyColor,
@@ -96,7 +131,7 @@ class TransactionStatusDialog extends StatelessWidget {
                   Expanded(
                     child: Center(
                       child: Dash(
-                        length: MediaQuery.of(context).size.width * .72,
+                        length: size.width * .72,
                         direction: Axis.horizontal,
                         dashColor: greyColor,
                       ),
@@ -112,9 +147,9 @@ class TransactionStatusDialog extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 10),
-              ...details?.keys.map<Widget>(
+              ...widget.details?.keys.map<Widget>(
                     (title) {
-                      final value = details![title].toString();
+                      final value = widget.details![title].toString();
                       return TransactionDetailWidget(
                         title: title,
                         value: value,
@@ -125,22 +160,34 @@ class TransactionStatusDialog extends StatelessWidget {
               const SizedBox(
                 height: 27,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                ),
-                child: TransactionDialogAction.build(
-                  isTransactionDetails,
-                  onClose: onClose,
-                  isRefunded: isRefunded,
-                  isCaptured: isCaptured,
-                  isSettled: isSettled,
-                  globalTranslator: globalTranslator,
-                ),
-              )
+              if (!forShare)
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                  ),
+                  child: TransactionDialogAction.build(
+                    widget.isTransactionDetails,
+                    _share,
+                    onClose: widget.onClose,
+                    isRefunded: widget.isRefunded,
+                    isCaptured: widget.isCaptured,
+                    isSettled: widget.isSettled,
+                    globalTranslator: widget.globalTranslator,
+                  ),
+                )
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Screenshot(
+      controller: _screenshotController,
+      child: dialog(
+        forShare: _isSharing
       ),
     );
   }
