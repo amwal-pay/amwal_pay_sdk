@@ -7,6 +7,7 @@ import 'package:amwal_pay_sdk/core/ui/buttons/app_button.dart';
 import 'package:amwal_pay_sdk/core/ui/cardinfoform/card_info_form_widget.dart';
 import 'package:amwal_pay_sdk/core/ui/sale_card_feature_common_widgets.dart';
 import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction.dart';
+import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_details_settings.dart';
 import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_status_dialog.dart';
 import 'package:amwal_pay_sdk/features/card/cubit/sale_by_card_manual_cubit.dart';
 import 'package:amwal_pay_sdk/features/card/data/models/response/purchase_response.dart';
@@ -71,7 +72,6 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit> {
     }
 
     Future<PurchaseData?> onPurchaseStepTwo(String otp) async {
-      print(args.transactionId);
       return await cubit.purchaseOtpStepTwo(
         args.amount,
         args.terminalId,
@@ -83,28 +83,15 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit> {
     }
 
     Future<void> showTransactionDialog(PurchaseData purchaseData) async {
+      const transactionSettings = TransactionDetailsSettings(
+        transactionStatus: TransactionStatus.success,
+        transactionType: 'temp value',
+        isTransactionDetails: false,
+      );
       await ReceiptHandler.instance.showCardReceipt(
         context: context,
-        cardPurchaseData: purchaseData,
-        globalTranslator: translator,
+        settings: transactionSettings,
       );
-      // await Navigator.of(context).push(DialogRoute(
-      //   context: context,
-      //   builder: (_) {
-      //     final details = {
-      //       'transaction_id': purchaseData.hostResponseData.transactionId,
-      //       'payment_id': purchaseData.hostResponseData.paymentId,
-      //       'stan': purchaseData.hostResponseData.stan,
-      //       'track_id': purchaseData.hostResponseData.trackId,
-      //       'rrn': purchaseData.hostResponseData.rrn,
-      //     };
-      //     return TransactionStatusDialog(
-      //       transactionStatus: TransactionStatus.success,
-      //       details: details,
-      //       globalTranslator: translator,
-      //     );
-      //   },
-      // ));
     }
 
     Future<void> onPurchaseWith3DS() async {
@@ -141,36 +128,15 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit> {
       );
       if (purchaseDataOrNull != null && context.mounted) {
         cubit.formKey.currentState?.reset();
+        const transactionSettings = TransactionDetailsSettings(
+          transactionStatus: TransactionStatus.success,
+          transactionType: 'temp value',
+          isTransactionDetails: false,
+        );
         await ReceiptHandler.instance.showCardReceipt(
           context: context,
-          cardPurchaseData: purchaseDataOrNull,
-          globalTranslator: translator,
+          settings: transactionSettings,
         );
-        // await Navigator.of(context).push(
-        //   DialogRoute(
-        //     context: context,
-        //     builder: (_) {
-        //       final details = {
-        //         'transaction_id':
-        //             purchaseDataOrNull.hostResponseData.transactionId,
-        //         'payment_id': purchaseDataOrNull.hostResponseData.paymentId,
-        //         'stan': purchaseDataOrNull.hostResponseData.stan,
-        //         'track_id': purchaseDataOrNull.hostResponseData.trackId,
-        //         'rrn': purchaseDataOrNull.hostResponseData.rrn,
-        //       };
-        //       return TransactionStatusDialog(
-        //         transactionStatus: TransactionStatus.success,
-        //         details: details,
-        //         globalTranslator: translator,
-        //         onClose: () {
-        //           Navigator.pop(_);
-        //           Navigator.pop(_);
-        //           AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
-        //         },
-        //       );
-        //     },
-        //   ),
-        // );
       }
     }
 

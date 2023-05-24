@@ -1,6 +1,7 @@
 import 'package:amwal_pay_sdk/core/apiview/api_view.dart';
 import 'package:amwal_pay_sdk/core/base_state/base_cubit_state.dart';
 import 'package:amwal_pay_sdk/core/ui/buttons/app_button.dart';
+import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_details_settings.dart';
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
 import 'package:amwal_pay_sdk/features/wallet/cubit/sale_by_wallet_cubit.dart';
 import 'package:amwal_pay_sdk/features/wallet/cubit/sale_by_wallet_pay_cubit.dart';
@@ -25,10 +26,12 @@ class SaleActionButtons extends ApiView<SaleByWalletCubit>
         SaleByWalletPayMixin {
   const SaleActionButtons({
     Key? key,
+    required  this.onMessage,
     required this.paymentArguments,
     this.globalTranslator,
   }) : super(key: key);
   final PaymentArguments paymentArguments;
+  final OnWalletNotificationReceived onMessage;
   final String Function(String)? globalTranslator;
 
   @override
@@ -58,8 +61,8 @@ class SaleActionButtons extends ApiView<SaleByWalletCubit>
             if (walletPayData != null) {
               await showCountingDialog(
                 context,
-                walletPayData,
                 globalTranslator,
+                onMessage,
               );
             }
           },

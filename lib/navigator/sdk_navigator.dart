@@ -2,6 +2,7 @@ import 'package:amwal_pay_sdk/features/card/presentation/app.dart';
 import 'package:amwal_pay_sdk/features/card/presentation/sale_by_card_manual_screen.dart';
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
 import 'package:amwal_pay_sdk/features/wallet/presentation/screen/sale_by_wallet_paying_options.dart';
+import 'package:amwal_pay_sdk/features/wallet/presentation/widgets/sale_by_wallet_mixins/sale_by_wallet_action_mixin.dart';
 import 'package:flutter/material.dart';
 
 class AmwalSdkNavigator {
@@ -14,11 +15,13 @@ class AmwalSdkNavigator {
   Future<void> toWalletOptionsScreen(
     BuildContext context,
     RouteSettings settings,
+    OnWalletNotificationReceived onWalletNotificationReceived,
   ) async {
     final args = settings.arguments as PaymentArguments;
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => SaleByWalletPayingOptions(
+          onMessage: onWalletNotificationReceived,
           amount: args.amount,
           terminalId: args.terminalId,
           merchantId: args.merchantId,

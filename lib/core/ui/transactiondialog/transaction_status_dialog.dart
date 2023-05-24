@@ -3,6 +3,7 @@ import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
 import 'package:amwal_pay_sdk/core/ui/directional_widget/directional_widget.dart';
 import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction.dart';
 import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_detail_widget.dart';
+import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_details_settings.dart';
 import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_dialog_action_buttons.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:flutter/material.dart';
@@ -12,25 +13,11 @@ import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
 class TransactionStatusDialog extends StatefulWidget {
-  final TransactionStatus transactionStatus;
-  final Map<String, dynamic>? details;
-  final bool? isRefunded;
-  final bool? isCaptured;
-  final bool? isSettled;
-  final void Function()? onClose;
-  final bool isTransactionDetails;
-  final String Function(String)? globalTranslator;
+  final TransactionDetailsSettings settings;
 
   const TransactionStatusDialog({
     Key? key,
-    required this.transactionStatus,
-    this.details,
-    this.onClose,
-    this.isCaptured,
-    this.isSettled,
-    this.isRefunded,
-    this.isTransactionDetails = false,
-    this.globalTranslator,
+   required this.settings,
   }) : super(key: key);
 
   @override
@@ -40,6 +27,7 @@ class TransactionStatusDialog extends StatefulWidget {
 
 class _TransactionStatusDialogState extends State<TransactionStatusDialog> {
   late ScreenshotController _screenshotController;
+  TransactionDetailsSettings get settings => widget.settings;
   bool _isSharing = false;
   @override
   void initState() {
@@ -87,14 +75,14 @@ class _TransactionStatusDialogState extends State<TransactionStatusDialog> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              widget.transactionStatus.transactionStatusImage,
+              settings.transactionStatus.transactionStatusImage,
               const SizedBox(
                 height: 10,
               ),
               Text(
-                widget.transactionStatus.transactionStatusTitle.translate(
+                settings.transactionStatus.transactionStatusTitle.translate(
                   context,
-                  globalTranslator: widget.globalTranslator,
+                  globalTranslator: settings.globalTranslator,
                 ),
                 style: const TextStyle(
                   color: blackColor,
@@ -106,10 +94,7 @@ class _TransactionStatusDialogState extends State<TransactionStatusDialog> {
                 height: 5,
               ),
               Text(
-                'transaction_type'.translate(
-                  context,
-                  globalTranslator: widget.globalTranslator,
-                ),
+                settings.transactionType,
                 style: const TextStyle(
                   color: greyColor,
                   fontSize: 14,
@@ -147,9 +132,9 @@ class _TransactionStatusDialogState extends State<TransactionStatusDialog> {
                 ],
               ),
               const SizedBox(height: 10),
-              ...widget.details?.keys.map<Widget>(
+              ...settings.details?.keys.map<Widget>(
                     (title) {
-                      final value = widget.details![title].toString();
+                      final value = settings.details![title].toString();
                       return TransactionDetailWidget(
                         title: title,
                         value: value,
@@ -166,13 +151,13 @@ class _TransactionStatusDialogState extends State<TransactionStatusDialog> {
                     horizontal: 12,
                   ),
                   child: TransactionDialogAction.build(
-                    widget.isTransactionDetails,
+                    settings.isTransactionDetails,
                     _share,
-                    onClose: widget.onClose,
-                    isRefunded: widget.isRefunded,
-                    isCaptured: widget.isCaptured,
-                    isSettled: widget.isSettled,
-                    globalTranslator: widget.globalTranslator,
+                    onClose: settings.onClose,
+                    isRefunded: settings.isRefunded,
+                    isCaptured: settings.isCaptured,
+                    isSettled: settings.isSettled,
+                    globalTranslator: settings.globalTranslator,
                   ),
                 )
             ],

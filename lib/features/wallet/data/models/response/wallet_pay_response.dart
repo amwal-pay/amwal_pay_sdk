@@ -23,7 +23,7 @@ class WalletPayResponse extends BaseResponse<WalletPayData> {
 class WalletPayData {
   final String id;
   final int idN;
-  final String from;
+  final String? from;
   final String? to;
   final int merchantRefId;
   final int terminalNodeId;
@@ -39,7 +39,7 @@ class WalletPayData {
   final int transactionTypeId;
   final String externalTransactionId;
   final String? originalExternalTransactionId;
-  final String senderMobileNo;
+  final String? senderMobileNo;
   final String? receiverMobileNo;
   final int transactionMethodId;
   final int? originalTransactionId;
@@ -68,7 +68,7 @@ class WalletPayData {
   const WalletPayData({
     required this.id,
     required this.idN,
-    required this.from,
+     this.from,
     this.to,
     required this.merchantRefId,
     required this.terminalNodeId,
@@ -84,7 +84,7 @@ class WalletPayData {
     required this.transactionTypeId,
     required this.externalTransactionId,
     this.originalExternalTransactionId,
-    required this.senderMobileNo,
+     this.senderMobileNo,
     this.receiverMobileNo,
     required this.transactionMethodId,
     this.originalTransactionId,
@@ -353,7 +353,7 @@ class WalletPayData {
     return WalletPayData(
       id: map['id'] as String,
       idN: map['idN'] as int,
-      from: map['from'] as String,
+      from: map['from'] as String?,
       to: map['to'] as String?,
       merchantRefId: map['merchantRefId'] as int,
       terminalNodeId: map['terminalNodeId'] as int,
@@ -370,7 +370,7 @@ class WalletPayData {
       externalTransactionId: map['externalTransactionId'] as String,
       originalExternalTransactionId:
           map['originalExternalTransactionId'] as String?,
-      senderMobileNo: map['senderMobileNo'] as String,
+      senderMobileNo: map['senderMobileNo'] as String?,
       receiverMobileNo: map['receiverMobileNo'] as String?,
       transactionMethodId: map['transactionMethodId'] as int,
       originalTransactionId: map['originalTransactionId'] as int?,

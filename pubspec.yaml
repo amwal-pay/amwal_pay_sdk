@@ -1,6 +1,6 @@
 name: amwal_pay_sdk
 description: amwal pay sdk
-version: 0.0.17
+version: 0.0.21
 homepage: "https://github.com/amwal-pay/amwal_pay_sdk"
 
 environment:
@@ -20,13 +20,13 @@ dependencies:
   flutter_form_builder: ^9.0.0
   form_builder_validators: ^9.0.0
   currency_text_input_formatter: ^2.1.8
-  qr_flutter: ^4.0.0
+  qr_flutter: ^4.1.0
   freezed_annotation: ^2.2.0
   get_it: ^7.4.0
   pinput: ^2.2.31
   flutter_svg: ^2.0.5
   lottie: ^2.3.2
-  share_plus: ^6.3.2
+  share_plus:
   flutter_dash: ^1.0.0
   auto_size_text: ^3.0.0
   clickable_list_wheel_view: ^0.2.0

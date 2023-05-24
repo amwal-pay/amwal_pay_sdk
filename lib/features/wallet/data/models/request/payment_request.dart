@@ -2,7 +2,6 @@ import 'package:uuid/uuid.dart';
 
 class WalletPaymentRequest {
   final int? transactionMethodId;
-  final String? orderKey;
   final String? id;
   final String processingCode;
   final int currencyId;
@@ -22,7 +21,6 @@ class WalletPaymentRequest {
     this.transactionMethodId,
     this.mobileNumber,
     this.aliasName,
-    this.orderKey,
   });
 
   Map<String, dynamic> payWithMobileNumber() {
@@ -35,7 +33,6 @@ class WalletPaymentRequest {
       'TerminalId': terminalId,
       'Id': id,
       'UniqueNotificationId': const Uuid().v1(),
-      'OrderKey': orderKey,
       'Amount': amount,
     };
   }
@@ -49,8 +46,8 @@ class WalletPaymentRequest {
       'MerchantId': merchantId,
       'Id': id,
       'AliasName': aliasName,
-      'OrderKey': orderKey,
       'Amount': amount,
+      'UniqueNotificationId': const Uuid().v1(),
     };
   }
 

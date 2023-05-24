@@ -8,6 +8,7 @@ import 'package:amwal_pay_sdk/core/ui/listpicker/drop_down_list_widget.dart';
 import 'package:amwal_pay_sdk/features/wallet/cubit/sale_by_wallet_cubit.dart';
 import 'package:amwal_pay_sdk/features/wallet/dependency/injector.dart';
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
+import 'package:amwal_pay_sdk/features/wallet/presentation/widgets/sale_by_wallet_mixins/sale_by_wallet_action_mixin.dart';
 
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:amwal_pay_sdk/navigator/sdk_navigator.dart';
@@ -15,7 +16,8 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 class SaleByWalletScreen extends StatefulWidget {
-  const SaleByWalletScreen({Key? key}) : super(key: key);
+  final OnWalletNotificationReceived onWalletNotificationReceived;
+  const SaleByWalletScreen({Key? key, required this.onWalletNotificationReceived, }) : super(key: key);
 
   @override
   State<SaleByWalletScreen> createState() => _SaleByWalletScreenState();
@@ -29,6 +31,7 @@ class _SaleByWalletScreenState extends State<SaleByWalletScreen> {
   late String merchantName;
   bool _validateInputs() => _terminal != null;
   late AmountCurrencyWidgetCubit amountCubit;
+
 
   @override
   void initState() {
@@ -51,6 +54,7 @@ class _SaleByWalletScreenState extends State<SaleByWalletScreen> {
     await AmwalSdkNavigator.instance.toWalletOptionsScreen(
       context,
       RouteSettings(arguments: arguments),
+        widget.onWalletNotificationReceived
     );
   }
 

@@ -9,7 +9,9 @@ import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
 import 'package:amwal_pay_sdk/sdk_builder/network_service_builder.dart';
 import 'package:amwal_pay_sdk/sdk_builder/sdk_builder.dart';
+
 import 'package:flutter/material.dart';
+
 import 'localization/app_localizations_setup.dart';
 export 'package:amwal_pay_sdk/navigator/sdk_navigator.dart';
 export 'package:amwal_pay_sdk/features/receipt/receipt_handler.dart';
@@ -44,6 +46,7 @@ class AmwalPaySdk {
       settings.secureHashValue,
       settings.token,
     );
+
     SdkBuilder.instance.initSdkModules(networkService);
     await _openAmwalSdkScreen(
       settings,
@@ -96,6 +99,7 @@ class AmwalPaySdk {
     final walletSdk = await _initWalletSdk(settings: settings);
     await walletSdk.navigateToWallet(
       settings.locale,
+      settings.onMessage ?? (_) {},
     );
   }
 
@@ -119,6 +123,7 @@ class AmwalPaySdk {
             locale: settings.locale,
             home: AmwalPayScreen(
               arguments: AmwalSdkArguments(
+                onMessage: settings.onMessage ?? (_) {},
                 amount: settings.amount,
                 terminalId: settings.terminalIds.single,
                 currency: settings.currency,

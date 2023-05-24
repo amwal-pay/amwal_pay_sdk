@@ -17,7 +17,6 @@ mixin SaleByWalletPayMixin on SaleByWalletActionsMixin {
       id: paymentArguments.transactionId,
       mobileNumber: mobileNumber,
       processingCode: '300000',
-      orderKey: '5US8E01N98',
       aliasName: alias,
     );
     return request;

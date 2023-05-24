@@ -45,7 +45,7 @@ class CountDownDialog extends StatelessWidget {
               child: CircularCountDownTimer(
                 width: 110,
                 height: 110,
-                duration: 5,
+                duration: 30,
                 fillColor: whiteColor,
                 ringColor: whiteColor,
                 isReverse: true,
