@@ -3,6 +3,7 @@ import 'package:amwal_pay_sdk/features/card/presentation/sale_by_card_manual_scr
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
 import 'package:amwal_pay_sdk/features/wallet/presentation/screen/sale_by_wallet_paying_options.dart';
 import 'package:amwal_pay_sdk/features/wallet/presentation/widgets/sale_by_wallet_mixins/sale_by_wallet_action_mixin.dart';
+import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:flutter/material.dart';
 
 class AmwalSdkNavigator {
@@ -15,13 +16,15 @@ class AmwalSdkNavigator {
   Future<void> toWalletOptionsScreen(
     BuildContext context,
     RouteSettings settings,
-    OnWalletNotificationReceived onWalletNotificationReceived,
+    OnPayCallback onPay,
+    OnPayCallback onCountComplete,
   ) async {
     final args = settings.arguments as PaymentArguments;
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => SaleByWalletPayingOptions(
-          onMessage: onWalletNotificationReceived,
+          onCountComplete: onCountComplete,
+          onPay: onPay,
           amount: args.amount,
           terminalId: args.terminalId,
           merchantId: args.merchantId,
@@ -33,14 +36,19 @@ class AmwalSdkNavigator {
     );
   }
 
-  Future<void> toCardScreen(
-          {Locale? locale, String? transactionId, required bool is3DS}) async =>
+  Future<void> toCardScreen({
+    Locale? locale,
+    String? transactionId,
+    required bool is3DS,
+    required OnPayCallback onPay,
+  }) async =>
       await amwalNavigatorObserver.navigator!.push(
         MaterialPageRoute(
           builder: (_) => CardSdkApp(
             locale: locale,
             is3DS: is3DS,
             transactionId: transactionId,
+            onPay: onPay,
           ),
         ),
       );
@@ -48,11 +56,15 @@ class AmwalSdkNavigator {
   Future<void> toCardOptionScreen(
     RouteSettings settings,
     BuildContext context,
+    Locale locale,
+    OnPayCallback onPay,
   ) async {
     final arguments = settings.arguments as PaymentArguments;
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => SaleByCardManualScreen(
+          onPay: onPay,
+          locale: locale,
           currency: arguments.currencyData!.name,
           currencyId: arguments.currencyData!.idN,
           terminalId: arguments.terminalId,

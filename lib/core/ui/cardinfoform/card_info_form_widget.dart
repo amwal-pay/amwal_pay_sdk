@@ -56,7 +56,7 @@ class _CardInfoFormWidgetState extends State<CardInfoFormWidget> {
           validator: (input) => CardUtils.validateCardNum(input, context),
           inputFormatters: [
             FilteringTextInputFormatter.digitsOnly,
-            LengthLimitingTextInputFormatter(16),
+            LengthLimitingTextInputFormatter(19),
             CardNumberInputFormatter(),
           ],
           decoration: InputDecoration(

@@ -17,7 +17,7 @@ class TransactionStatusDialog extends StatefulWidget {
 
   const TransactionStatusDialog({
     Key? key,
-   required this.settings,
+    required this.settings,
   }) : super(key: key);
 
   @override
@@ -107,6 +107,7 @@ class _TransactionStatusDialogState extends State<TransactionStatusDialog> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   DirectionalWidget(
+                    locale: settings.locale,
                     child: Image.asset(
                       AppAssets.divCircleLeft,
                       package: 'amwal_pay_sdk',
@@ -123,6 +124,7 @@ class _TransactionStatusDialogState extends State<TransactionStatusDialog> {
                     ),
                   ),
                   DirectionalWidget(
+                    locale: settings.locale,
                     child: Image.asset(
                       AppAssets.divCircleRight,
                       package: 'amwal_pay_sdk',
@@ -153,6 +155,13 @@ class _TransactionStatusDialogState extends State<TransactionStatusDialog> {
                   child: TransactionDialogAction.build(
                     settings.isTransactionDetails,
                     _share,
+                    isSuccess: settings.isSuccess,
+                    onVoid: settings.onVoid,
+                    canCapture: settings.canCapture,
+                    canRefund: settings.canRefund,
+                    canVoid: settings.canVoid,
+                    onRefund: settings.onRefund,
+                    onCapture: settings.onCapture,
                     onClose: settings.onClose,
                     isRefunded: settings.isRefunded,
                     isCaptured: settings.isCaptured,
@@ -171,9 +180,7 @@ class _TransactionStatusDialogState extends State<TransactionStatusDialog> {
   Widget build(BuildContext context) {
     return Screenshot(
       controller: _screenshotController,
-      child: dialog(
-        forShare: _isSharing
-      ),
+      child: dialog(forShare: _isSharing),
     );
   }
 }

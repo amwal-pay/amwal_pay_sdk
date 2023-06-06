@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class AppMainButton extends StatelessWidget {
-  const AppMainButton(
-      {Key? key,
-      required this.buttonIcon,
-      required this.buttonText,
-      required this.onClicked})
-      : super(key: key);
+  const AppMainButton({
+    Key? key,
+    required this.buttonIcon,
+    required this.buttonText,
+    required this.onClicked,
+  }) : super(key: key);
 
   final String buttonIcon;
   final String buttonText;
@@ -32,7 +32,10 @@ class AppMainButton extends StatelessWidget {
           ),
         ),
         onPressed: onClicked,
-        icon: SvgPicture.asset(buttonIcon),
+        icon: SvgPicture.asset(
+          buttonIcon,
+          package: 'amwal_pay_sdk',
+        ),
         label: Text(
           buttonText,
           style: const TextStyle(

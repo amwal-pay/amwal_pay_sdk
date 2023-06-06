@@ -15,6 +15,7 @@ import 'package:amwal_pay_sdk/features/wallet/presentation/widgets/sale_by_walle
 import 'package:amwal_pay_sdk/features/wallet/state/sale_by_wallet_state.dart';
 
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
+import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,12 +27,14 @@ class SaleActionButtons extends ApiView<SaleByWalletCubit>
         SaleByWalletPayMixin {
   const SaleActionButtons({
     Key? key,
-    required  this.onMessage,
+    required this.onPay,
+    required this.onCountComplete,
     required this.paymentArguments,
     this.globalTranslator,
   }) : super(key: key);
   final PaymentArguments paymentArguments;
-  final OnWalletNotificationReceived onMessage;
+  final OnPayCallback onPay;
+  final OnPayCallback onCountComplete;
   final String Function(String)? globalTranslator;
 
   @override
@@ -44,13 +47,11 @@ class SaleActionButtons extends ApiView<SaleByWalletCubit>
         BlocListener<SaleByWalletVerifyCubit,
             ICubitState<VerifyCustomerResponse>>(
           bloc: verifyCubit,
-          listener: (_, state) {
-            state.whenOrNull(success: (value) {
-              if (value.success) {
-                cubit.verified();
-              }
-            });
-          },
+          listener: (_, state) => state.whenOrNull(success: (value) {
+            if (value.success) {
+              cubit.verified();
+            }
+          }),
         ),
         BlocListener<SaleByWalletPayCubit, ICubitState<WalletPayResponse>>(
           bloc: payCubit,
@@ -62,7 +63,13 @@ class SaleActionButtons extends ApiView<SaleByWalletCubit>
               await showCountingDialog(
                 context,
                 globalTranslator,
-                onMessage,
+                onPay,
+                onCountComplete,
+                walletPayData,
+                paymentArguments.currencyData!.name.translate(
+                  context,
+                  globalTranslator: globalTranslator,
+                ),
               );
             }
           },

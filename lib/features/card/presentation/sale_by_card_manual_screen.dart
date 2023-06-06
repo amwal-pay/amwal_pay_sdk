@@ -6,9 +6,7 @@ import 'package:amwal_pay_sdk/core/ui/accepted_payment_methods_widget.dart';
 import 'package:amwal_pay_sdk/core/ui/buttons/app_button.dart';
 import 'package:amwal_pay_sdk/core/ui/cardinfoform/card_info_form_widget.dart';
 import 'package:amwal_pay_sdk/core/ui/sale_card_feature_common_widgets.dart';
-import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction.dart';
-import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_details_settings.dart';
-import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_status_dialog.dart';
+
 import 'package:amwal_pay_sdk/features/card/cubit/sale_by_card_manual_cubit.dart';
 import 'package:amwal_pay_sdk/features/card/data/models/response/purchase_response.dart';
 import 'package:amwal_pay_sdk/features/card/presentation/widgets/otp_dialog.dart';
@@ -16,6 +14,7 @@ import 'package:amwal_pay_sdk/features/currency_field/data/models/response/curre
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
 import 'package:amwal_pay_sdk/features/receipt/receipt_handler.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
+import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' hide WatchContext;
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -30,6 +29,8 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit> {
   final bool is3DS;
   final String? transactionId;
   final String Function(String)? translator;
+  final Locale locale;
+  final OnPayCallback onPay;
 
   const SaleByCardManualScreen({
     Key? key,
@@ -39,6 +40,8 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit> {
     required this.terminalId,
     required this.merchantId,
     required this.is3DS,
+    required this.locale,
+    required this.onPay,
     this.transactionId,
     this.showAppBar = true,
     this.translator,
@@ -82,18 +85,6 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit> {
       );
     }
 
-    Future<void> showTransactionDialog(PurchaseData purchaseData) async {
-      const transactionSettings = TransactionDetailsSettings(
-        transactionStatus: TransactionStatus.success,
-        transactionType: 'temp value',
-        isTransactionDetails: false,
-      );
-      await ReceiptHandler.instance.showCardReceipt(
-        context: context,
-        settings: transactionSettings,
-      );
-    }
-
     Future<void> onPurchaseWith3DS() async {
       String? otpOrNull;
       var originalTransactionId = await cubit.purchaseOtpStepOne(
@@ -114,7 +105,12 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit> {
       final purchaseDataOrNull = await onPurchaseStepTwo(otpOrNull);
 
       if (purchaseDataOrNull != null && context.mounted) {
-        await showTransactionDialog(purchaseDataOrNull);
+        onPay((settings) async {
+          await ReceiptHandler.instance.showCardReceipt(
+            context: context,
+            settings: settings,
+          );
+        });
       }
     }
 
@@ -128,23 +124,18 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit> {
       );
       if (purchaseDataOrNull != null && context.mounted) {
         cubit.formKey.currentState?.reset();
-        const transactionSettings = TransactionDetailsSettings(
-          transactionStatus: TransactionStatus.success,
-          transactionType: 'temp value',
-          isTransactionDetails: false,
-        );
-        await ReceiptHandler.instance.showCardReceipt(
-          context: context,
-          settings: transactionSettings,
-        );
+        onPay((settings) async {
+          await ReceiptHandler.instance.showCardReceipt(
+            context: context,
+            settings: settings,
+          );
+        });
       }
     }
 
     return BlocListener<SaleByCardManualCubit, ICubitState<PurchaseResponse>>(
       bloc: cubit,
-      listener: (_, state) {
-        final record = state.mapOrNull(success: (value) => value.uiModel.data);
-      },
+      listener: (_, state) {},
       child: Scaffold(
         backgroundColor: lightGeryColor,
         appBar: !showAppBar
@@ -196,7 +187,8 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit> {
                   AppButton(
                     key: const Key('confirmButton'),
                     onPressed: () async {
-                      if (cubit.formKey.currentState!.validate()) {
+                      final isValid = cubit.formKey.currentState!.validate();
+                      if (isValid) {
                         if (args.is3DS) {
                           await onPurchaseWith3DS();
                         } else {

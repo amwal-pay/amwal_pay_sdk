@@ -1,4 +1,6 @@
+import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
 import 'package:amwal_pay_sdk/features/currency_field/data/models/response/currency_response.dart';
+import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -10,9 +12,32 @@ class AmountCurrencyWidgetCubit extends Cubit {
   CurrencyData? currencyData;
   final formKey = GlobalKey<FormBuilderState>();
 
-  bool validateAmountInput() {
-    return amountValue.isNotEmpty &&
-        currencyData != null &&
-        formKey.currentState!.validate();
+
+  String? validateFields({
+    required BuildContext context,
+    required String? terminal,
+  }) {
+    if (amountValue.isEmpty) {
+      return 'enter_amount'.translate(context);
+    } else if (currencyData == null) {
+      return 'select_currency'.translate(context);
+    } else if (terminal == null) {
+      return 'choose-terminal'.translate(context);
+    } else {
+      return null;
+    }
+  }
+
+  void showErrorSnackBar({
+    required BuildContext context,
+    required String message,
+  }) {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    scaffoldMessenger.hideCurrentSnackBar();
+    final snackBar = SnackBar(
+      content: Text(message),
+      backgroundColor: redColor,
+    );
+    scaffoldMessenger.showSnackBar(snackBar);
   }
 }

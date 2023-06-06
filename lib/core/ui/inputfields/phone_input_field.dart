@@ -1,20 +1,23 @@
 import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
 import 'package:amwal_pay_sdk/core/ui/listpicker/drop_down_list_cubit.dart';
 import 'package:amwal_pay_sdk/core/ui/listpicker/drop_down_list_widget.dart';
+import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 class PhoneInputField extends StatelessWidget {
-  const PhoneInputField(
-      {Key? key,
-      required this.widgetTitle,
-      required this.widgetHint,
-      this.onChange})
-      : super(key: key);
+  const PhoneInputField({
+    Key? key,
+    required this.widgetTitle,
+    required this.widgetHint,
+    required this.globalTranslator,
+    this.onChange,
+  }) : super(key: key);
 
   final String widgetTitle;
   final String widgetHint;
+  final String Function(String)? globalTranslator;
   final void Function(String)? onChange;
   @override
   Widget build(BuildContext context) {
@@ -92,10 +95,19 @@ class PhoneInputField extends StatelessWidget {
                     validator: FormBuilderValidators.compose(
                       [
                         FormBuilderValidators.numeric(),
-                        FormBuilderValidators.minLength(7,
-                            errorText: "invalid_phone_number"),
+                        FormBuilderValidators.minLength(
+                          7,
+                          errorText: "invalid_phone_number".translate(
+                            context,
+                            globalTranslator: globalTranslator,
+                          ),
+                        ),
                         FormBuilderValidators.required(
-                            errorText: 'required_field'),
+                          errorText: 'required_field'.translate(
+                            context,
+                            globalTranslator: globalTranslator,
+                          ),
+                        ),
                       ],
                     ),
                     keyboardType: TextInputType.phone,

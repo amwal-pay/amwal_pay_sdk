@@ -1,6 +1,9 @@
 import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_details_settings.dart';
 import 'package:flutter/material.dart';
 
+
+typedef OnPayCallback = void Function(void Function(TransactionDetailsSettings) listener);
+
 class AmwalSdkArguments {
   final Locale locale;
   final bool is3DS;
@@ -10,10 +13,12 @@ class AmwalSdkArguments {
   final String currency;
   final int currencyId;
   final int merchantId;
-  final void Function(void Function(TransactionDetailsSettings) listener) onMessage;
+  final OnPayCallback onPay;
+  final OnPayCallback? onCountComplete;
 
   AmwalSdkArguments({
-    required this.onMessage,
+    required this.onPay,
+    this.onCountComplete,
     this.locale = const Locale('en'),
     this.is3DS = false,
     required this.amount,

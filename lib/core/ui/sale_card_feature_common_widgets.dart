@@ -43,7 +43,7 @@ class SaleCardFeatureCommonWidgets {
                     height: 6,
                   ),
                   Text(
-                    merchantName??'Merchant Name',
+                    merchantName ?? 'Merchant Name',
                     style: const TextStyle(
                       color: blackColor,
                       fontSize: 20,
@@ -89,7 +89,10 @@ class SaleCardFeatureCommonWidgets {
                         width: 8,
                       ),
                       Text(
-                        paymentArgs.currencyData!.name,
+                        paymentArgs.currencyData!.name.translate(
+                          context,
+                          globalTranslator: translator,
+                        ),
                         style: const TextStyle(
                           color: greyColor,
                           fontSize: 14,

@@ -137,11 +137,13 @@
   "redirect_url_hint": "Https://",
   "number_of_usage": "عدد مرات الاستخدام",
   "card": "كارد",
-  "transaction_id": "TransactionId",
+  "transaction_id": "رقم المعاملة",
   "rrn": "RRN",
   "payment_id": "PaymentId",
   "track_id": "TrackId",
   "stan": "Stan",
-  "invalid-month": "قيمة غير صحيحة"
+  "invalid-month": "قيمة غير صحيحة",
+  "enter_amount": "ادخل المبلغ",
+  "select_currency": "اختر العملة"
 }
 

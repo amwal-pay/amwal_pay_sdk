@@ -5,30 +5,42 @@ import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
-typedef OnCloseCallback = void Function()?;
+typedef NullableVoidCallback = void Function()?;
 
 abstract class TransactionDialogAction extends StatelessWidget {
   const TransactionDialogAction({super.key});
 
   factory TransactionDialogAction.build(
     bool isTransactionDetails,
-      void Function() share,
-      {
-    OnCloseCallback onClose,
+    void Function() share, {
+    bool isSuccess = false,
+    bool canRefund = false,
+    bool canVoid = false,
+    bool canCapture = false,
+    NullableVoidCallback onRefund,
+    NullableVoidCallback onCapture,
+    NullableVoidCallback onVoid,
+    NullableVoidCallback onClose,
     bool? isSettled,
     bool? isCaptured,
     bool? isRefunded,
     bool? isCredit,
     String Function(String)? globalTranslator,
   }) {
-    if (isTransactionDetails) {
+    if (isTransactionDetails && isSuccess) {
       return TransactionDialogActionButtonsForTransaction(
-        onClose: onClose,
+        globalTranslator: globalTranslator,
         isRefunded: isRefunded,
         isCaptured: isCaptured,
-        isCredit: isCredit,
+        canCapture: canCapture,
+        onCapture: onCapture,
         isSettled: isSettled,
-        globalTranslator: globalTranslator,
+        canRefund: canRefund,
+        onRefund: onRefund,
+        isCredit: isCredit,
+        canVoid: canVoid,
+        onClose: onClose,
+        onVoid: onVoid,
         share: share,
       );
     } else {
@@ -114,17 +126,29 @@ class TransactionDialogActionButtons extends TransactionDialogAction {
 
 class TransactionDialogActionButtonsForTransaction
     extends TransactionDialogAction {
-  final void Function()? onClose;
+  final NullableVoidCallback onClose;
+  final NullableVoidCallback onRefund;
+  final NullableVoidCallback onCapture;
+  final NullableVoidCallback onVoid;
   final bool? isSettled;
   final bool? isCaptured;
   final bool? isRefunded;
   final bool? isCredit;
+  final bool canRefund;
+  final bool canVoid;
+  final bool canCapture;
   final String Function(String)? globalTranslator;
   final void Function() share;
 
   const TransactionDialogActionButtonsForTransaction({
     Key? key,
+    this.canRefund = false,
+    this.canVoid = false,
+    this.canCapture = false,
+    this.onVoid,
     this.onClose,
+    this.onRefund,
+    this.onCapture,
     this.isSettled,
     this.isCaptured,
     this.isRefunded,
@@ -136,11 +160,12 @@ class TransactionDialogActionButtonsForTransaction
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            if (isRefunded == false)
+            if (canRefund)
               Expanded(
                 child: SizedBox(
                   height: 55,
@@ -153,7 +178,7 @@ class TransactionDialogActionButtonsForTransaction
                         ),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: onRefund,
                     child: FittedBox(
                       child: Text(
                         'refund'.translate(
@@ -170,8 +195,8 @@ class TransactionDialogActionButtonsForTransaction
                   ),
                 ),
               ),
-            const SizedBox(width: 8),
-            if (isCaptured == false)
+            if (canRefund) const SizedBox(width: 8),
+            if (canCapture)
               Expanded(
                 child: SizedBox(
                   height: 55,
@@ -194,6 +219,7 @@ class TransactionDialogActionButtonsForTransaction
                             actionButtonColor: primaryColor,
                             globalTranslator: globalTranslator,
                             actionButtonFn: () {
+                              onCapture?.call();
                               Navigator.of(context).pop();
                               Navigator.of(context).pop();
                             },
@@ -215,7 +241,38 @@ class TransactionDialogActionButtonsForTransaction
                       )),
                 ),
               ),
-            const SizedBox(width: 8),
+            if (canCapture) const SizedBox(width: 8),
+            if (canVoid)
+              Expanded(
+                child: SizedBox(
+                  height: 55,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: greyColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          10,
+                        ),
+                      ),
+                    ),
+                    onPressed: onVoid,
+                    child: FittedBox(
+                      child: Text(
+                        'void'.translate(
+                          context,
+                          globalTranslator: globalTranslator,
+                        ),
+                        style: const TextStyle(
+                          color: whiteColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            if (canVoid) const SizedBox(width: 8),
             Expanded(
               child: SizedBox(
                 height: 55,

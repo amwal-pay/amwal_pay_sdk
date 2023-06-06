@@ -1,4 +1,5 @@
 import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
+import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:clickable_list_wheel_view/clickable_list_wheel_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -63,15 +64,15 @@ class _BottomSelectListState<T> extends State<BottomSelectList<T>> {
               children: [
                 InkWell(
                   onTap: widget.onCancel,
-                  child: Text(
-                    'cancel',
+                  child:  Text(
+                    'cancel'.translate(context),
                   ),
                 ),
                 InkWell(
                   onTap: widget.onDone,
-                  child: Text(
-                    'done',
-                    style: TextStyle(
+                  child:  Text(
+                    'done'.translate(context),
+                    style: const TextStyle(
                       color: blueColor,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,

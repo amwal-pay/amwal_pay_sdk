@@ -40,18 +40,20 @@ class AmwalPayScreen extends StatelessWidget {
         body: TabBarView(
           children: [
             SaleByWalletPayingOptions(
-              onMessage: arguments.onMessage,
+              onPay: arguments.onPay,
+              onCountComplete: arguments.onCountComplete ?? (_) {},
               amount: arguments.amount,
               terminalId: arguments.terminalId,
               currency: arguments.currency,
               currencyId: arguments.currencyId,
               merchantId: arguments.merchantId,
               transactionId: arguments.transactionId,
-
               showAppBar: false,
               translator: (txt) => txt.translate(context),
             ),
             SaleByCardManualScreen(
+              onPay: arguments.onPay,
+              locale: arguments.locale,
               amount: arguments.amount,
               terminalId: arguments.terminalId,
               currency: arguments.currency,

@@ -65,9 +65,9 @@ class _CurrencyFieldState extends State<CurrencyField> {
           child: DropDownListWidget<CurrencyData>(
             name: '',
             widgetTitle: 'currency_label'.translate(context),
-            hintText: 'OMR',
+            hintText: 'currency_label'.translate(context),
             cubit: DropDownListCubit(
-              initialValue: _currencyData ?? _defaultCurrency,
+              initialValue: _currencyData??_defaultCurrency,
             ),
             nameMapper: (item) {
               return item!.name;
@@ -77,7 +77,8 @@ class _CurrencyFieldState extends State<CurrencyField> {
             ),
             onCancel: () => setState(() {
               _currencyData = null;
-              widget.onChanged(_defaultCurrency);
+              _defaultCurrency = null;
+              widget.onChanged(null);
             }),
             onSelected: (item) => _currencyData = item,
             dropDownListItems: currencies ?? const [],

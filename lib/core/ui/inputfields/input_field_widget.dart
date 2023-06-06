@@ -24,6 +24,7 @@ class InputFieldWidget extends StatelessWidget {
     this.minLength = 0,
     this.onChange,
     this.decoration,
+
   }) : super(key: key);
 
   final String widgetTitle;
@@ -112,6 +113,7 @@ class InputFieldWidget extends StatelessWidget {
             textInputAction: TextInputAction.next,
             keyboardType: isNumber ? TextInputType.number : null,
             inputFormatters: [
+
               if (isNumber == true) FilteringTextInputFormatter.digitsOnly,
               LengthLimitingTextInputFormatter(maxLength),
               if (isEnglish)

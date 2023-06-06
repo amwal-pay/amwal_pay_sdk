@@ -51,10 +51,10 @@ class AliasPayWidget extends StatelessWidget {
             bloc: walletCubit,
             builder: (_, state) {
               if (walletCubit.state.verified) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                return const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.0),
                   child: Row(
-                    children: const [
+                    children: [
                       Icon(
                         Icons.done,
                         color: successColor,

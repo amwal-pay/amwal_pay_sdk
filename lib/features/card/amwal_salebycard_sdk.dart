@@ -7,6 +7,7 @@ import 'package:amwal_pay_sdk/core/networking/network_service.dart';
 import 'package:amwal_pay_sdk/core/networking/secure_hash_interceptor.dart';
 import 'package:amwal_pay_sdk/core/networking/token_interceptor.dart';
 import 'package:amwal_pay_sdk/features/card/dependency/injector.dart';
+import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:amwal_pay_sdk/sdk_builder/sdk_builder.dart';
 
 import 'package:flutter/material.dart';
@@ -73,11 +74,13 @@ class AmwalCardSdk {
     Locale locale,
     bool is3DS,
     String transactionId,
+      OnPayCallback onPay,
   ) async {
     await AmwalSdkNavigator.instance.toCardScreen(
       is3DS: is3DS,
       locale: locale,
       transactionId: transactionId,
+      onPay: onPay,
     );
   }
 }

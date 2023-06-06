@@ -18,6 +18,7 @@ import 'package:amwal_pay_sdk/features/wallet/presentation/widgets/scan_qr_to_pa
 import 'package:amwal_pay_sdk/features/wallet/state/sale_by_wallet_state.dart';
 
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
+import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,17 +31,20 @@ class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
   final int currencyId;
   final bool showAppBar;
   final String? transactionId;
-  final OnWalletNotificationReceived onMessage;
+  final OnPayCallback onPay;
+  final OnPayCallback onCountComplete;
   final String Function(String)? translator;
-    SaleByWalletPayingOptions({
+
+  const SaleByWalletPayingOptions({
     Key? key,
-      required this.onMessage,
+    required this.onPay,
+    required this.onCountComplete,
     required this.amount,
     required this.terminalId,
     required this.currency,
     required this.currencyId,
     required this.merchantId,
-      this.transactionId,
+    this.transactionId,
     this.showAppBar = true,
     this.translator,
   }) : super(key: key);
@@ -143,7 +147,8 @@ class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
                       child: SizedBox(),
                     ),
                     SaleActionButtons(
-                      onMessage: onMessage,
+                      onPay: onPay,
+                      onCountComplete: onCountComplete,
                       paymentArguments: paymentArgument,
                       globalTranslator: translator,
                     ),

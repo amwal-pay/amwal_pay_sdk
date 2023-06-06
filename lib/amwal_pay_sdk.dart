@@ -99,14 +99,20 @@ class AmwalPaySdk {
     final walletSdk = await _initWalletSdk(settings: settings);
     await walletSdk.navigateToWallet(
       settings.locale,
-      settings.onMessage ?? (_) {},
+      settings.onPay,
+      settings.onCountComplete ?? (_) {},
+      settings.transactionId,
     );
   }
 
   Future<void> openCardScreen(AmwalInAppSdkSettings settings) async {
     final cardSdk = await _initCardSdk(settings: settings);
     await cardSdk.navigateToCard(
-        settings.locale, settings.is3DS, settings.transactionId);
+      settings.locale,
+      settings.is3DS,
+      settings.transactionId,
+      settings.onPay,
+    );
   }
 
   Future<void> _openAmwalSdkScreen(AmwalSdkSettings settings) async {
@@ -123,7 +129,7 @@ class AmwalPaySdk {
             locale: settings.locale,
             home: AmwalPayScreen(
               arguments: AmwalSdkArguments(
-                onMessage: settings.onMessage ?? (_) {},
+                onPay: settings.onPay,
                 amount: settings.amount,
                 terminalId: settings.terminalIds.single,
                 currency: settings.currency,

@@ -1,4 +1,6 @@
 import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction.dart';
+import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_dialog_action_buttons.dart';
+import 'package:flutter/material.dart';
 
 class TransactionDetailsSettings {
   final TransactionStatus transactionStatus;
@@ -10,17 +12,33 @@ class TransactionDetailsSettings {
   final void Function()? onClose;
   final bool isTransactionDetails;
   final String Function(String)? globalTranslator;
+  final Locale locale;
+  final NullableVoidCallback onCapture;
+  final NullableVoidCallback onRefund;
+  final NullableVoidCallback onVoid;
+  final bool canRefund;
+  final bool canVoid;
+  final bool canCapture;
+  final bool isSuccess;
 
   const TransactionDetailsSettings({
+    required this.isTransactionDetails,
     required this.transactionStatus,
     required this.transactionType,
-    this.details,
+    required this.isSuccess,
+    this.locale = const Locale('en'),
+    this.globalTranslator,
     this.isRefunded,
     this.isCaptured,
     this.isSettled,
+    this.onCapture,
+    this.onRefund,
+    this.details,
     this.onClose,
-    required this.isTransactionDetails,
-    this.globalTranslator,
+    this.onVoid,
+    this.canCapture = false,
+    this.canRefund = false,
+    this.canVoid = false,
   });
 
   TransactionDetailsSettings copyWith({
@@ -44,6 +62,7 @@ class TransactionDetailsSettings {
       onClose: onClose ?? this.onClose,
       isTransactionDetails: isTransactionDetails ?? this.isTransactionDetails,
       globalTranslator: globalTranslator ?? this.globalTranslator,
+      isSuccess: isSuccess,
     );
   }
 }

@@ -72,7 +72,6 @@ class DropDownListWidget<T> extends StatelessWidget {
                       initialIndex = index;
                     }
                   }
-
                   return BottomSelectList<T>(
                     nameMapper: nameMapper,
                     initialItemIndex: initialIndex,

@@ -32,10 +32,12 @@ class PurchaseData {
   final bool? signatureRequired;
   final String? mwActionCode;
   final String? mwMessage;
+  final int terminalId;
   final HostResponseData hostResponseData;
 
 //<editor-fold desc="Data Methods">
   const PurchaseData({
+    required this.terminalId,
     required this.txnResponseCode,
     required this.transactionNo,
     required this.systemTraceNr,
@@ -96,8 +98,10 @@ class PurchaseData {
     String? mwActionCode,
     String? mwMessage,
     HostResponseData? hostResponseData,
+    int? terminalId,
   }) {
     return PurchaseData(
+      terminalId: terminalId?? this.terminalId,
       txnResponseCode: txnResponseCode ?? this.txnResponseCode,
       transactionNo: transactionNo ?? this.transactionNo,
       systemTraceNr: systemTraceNr ?? this.systemTraceNr,
@@ -115,6 +119,7 @@ class PurchaseData {
 
   Map<String, dynamic> toMap() {
     return {
+      'terminalId': terminalId,
       'txnResponseCode': txnResponseCode,
       'transactionNo': transactionNo,
       'systemTraceNr': systemTraceNr,
@@ -132,6 +137,7 @@ class PurchaseData {
 
   factory PurchaseData.fromMap(Map<String, dynamic> map) {
     return PurchaseData(
+      terminalId: map['terminalId'],
       txnResponseCode: map['txnResponseCode'] as String,
       transactionNo: map['transactionNo'] as String,
       systemTraceNr: map['systemTraceNr'] as String?,

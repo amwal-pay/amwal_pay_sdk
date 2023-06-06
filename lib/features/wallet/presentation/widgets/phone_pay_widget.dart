@@ -34,8 +34,11 @@ class PhonePayWidget extends StatelessWidget {
             height: 12,
           ),
           PhoneInputField(
-            widgetTitle: 'wallet_mobile_number'
-                .translate(context, globalTranslator: globalTranslator),
+            globalTranslator: globalTranslator,
+            widgetTitle: 'wallet_mobile_number'.translate(
+              context,
+              globalTranslator: globalTranslator,
+            ),
             widgetHint: 'phone_number'.translate(
               context,
               globalTranslator: globalTranslator,
@@ -43,10 +46,10 @@ class PhonePayWidget extends StatelessWidget {
             onChange: (value) => walletCubit.phoneNumber = value,
           ),
           if (walletCubit.state.verified)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
               child: Row(
-                children: const [
+                children: [
                   Icon(
                     Icons.done,
                     color: successColor,

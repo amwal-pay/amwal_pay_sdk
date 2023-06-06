@@ -79,6 +79,8 @@ class TransactionWidget extends StatelessWidget {
               child: Divider(
                 height: 1,
                 color: lightGreyColor,
+                // indent: 25,
+                endIndent: 25,
               ),
             ),
           ],

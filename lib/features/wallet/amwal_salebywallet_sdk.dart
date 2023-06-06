@@ -7,18 +7,15 @@ import 'package:amwal_pay_sdk/core/networking/network_service.dart';
 import 'package:amwal_pay_sdk/features/wallet/dependency/injector.dart';
 import 'package:amwal_pay_sdk/features/wallet/presentation/app.dart';
 import 'package:amwal_pay_sdk/features/wallet/presentation/widgets/sale_by_wallet_mixins/sale_by_wallet_action_mixin.dart';
-
+import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 
 import 'package:flutter/material.dart';
 
 import '../../sdk_builder/sdk_builder.dart';
 
-
-
 class AmwalWalletSdk {
   const AmwalWalletSdk._();
   static AmwalWalletSdk get instance => const AmwalWalletSdk._();
-
 
   Future<void> _sdkInitialization(
     String token,
@@ -26,17 +23,16 @@ class AmwalWalletSdk {
     String secureHashValue,
     String merchantId,
     bool isMocked,
-      service,{
-        String? merchantName,
-
-        Locale? locale,
+    service, {
+    String? merchantName,
+    Locale? locale,
   }) async {
     await SdkBuilder.instance.initCacheStorage();
     await CacheStorageHandler.instance.write(CacheKeys.token, token);
     await CacheStorageHandler.instance.write(CacheKeys.terminals, terminalIds);
     await CacheStorageHandler.instance.write(
       CacheKeys.merchantId,
-     merchantId,
+      merchantId,
     );
     await CacheStorageHandler.instance.write(
       CacheKeys.merchantName,
@@ -73,13 +69,17 @@ class AmwalWalletSdk {
 
   Future<void> navigateToWallet(
     Locale locale,
-      OnWalletNotificationReceived onWalletNotificationReceived,
+    OnPayCallback onPay,
+    OnPayCallback onCountComplete,
+      String transactionId
   ) async {
     await AmwalSdkNavigator.amwalNavigatorObserver.navigator!.push(
       MaterialPageRoute(
         builder: (_) => WalletSdkApp(
           locale: locale,
-          onWalletNotificationReceived: onWalletNotificationReceived,
+          onPay: onPay,
+          onCountComplete: onCountComplete,
+          transactionId: transactionId,
         ),
       ),
     );

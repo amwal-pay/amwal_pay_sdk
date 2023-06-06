@@ -12,12 +12,20 @@ import 'package:amwal_pay_sdk/features/wallet/presentation/widgets/sale_by_walle
 
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:amwal_pay_sdk/navigator/sdk_navigator.dart';
+import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 class SaleByWalletScreen extends StatefulWidget {
-  final OnWalletNotificationReceived onWalletNotificationReceived;
-  const SaleByWalletScreen({Key? key, required this.onWalletNotificationReceived, }) : super(key: key);
+  final OnPayCallback onPayCallback;
+  final OnPayCallback onCountComplete;
+  final String transactionId;
+  const SaleByWalletScreen({
+    Key? key,
+    required this.onPayCallback,
+    required this.onCountComplete,
+    required this.transactionId,
+  }) : super(key: key);
 
   @override
   State<SaleByWalletScreen> createState() => _SaleByWalletScreenState();
@@ -29,9 +37,9 @@ class _SaleByWalletScreenState extends State<SaleByWalletScreen> {
   late int merchantId;
   String? _terminal;
   late String merchantName;
-  bool _validateInputs() => _terminal != null;
   late AmountCurrencyWidgetCubit amountCubit;
 
+  final _hideKeyboard = FocusManager.instance.primaryFocus?.unfocus;
 
   @override
   void initState() {
@@ -54,8 +62,15 @@ class _SaleByWalletScreenState extends State<SaleByWalletScreen> {
     await AmwalSdkNavigator.instance.toWalletOptionsScreen(
       context,
       RouteSettings(arguments: arguments),
-        widget.onWalletNotificationReceived
+      widget.onPayCallback,
+      widget.onCountComplete,
     );
+  }
+
+  @override
+  void dispose() {
+    amountCubit.close();
+    super.dispose();
   }
 
   @override
@@ -124,22 +139,26 @@ class _SaleByWalletScreenState extends State<SaleByWalletScreen> {
                   ),
                 ),
                 onPressed: () async {
-                  if (amountCubit.validateAmountInput() && _validateInputs()) {
-                    final args = PaymentArguments(
-                        amount: amountCubit.amountValue,
-                        terminalId: _terminal ?? '',
-                        currencyData: amountCubit.currencyData,
-                        merchantId: merchantId,
-                        transactionId: const Uuid().v1());
-                    await _navigateToSaleByWalletOptions(args);
-                  } else if (terminals.length != 1) {
-                    final snackBar = SnackBar(
-                      content:
-                          Text('select_terminal_id_label'.translate(context)),
-                      backgroundColor: redColor,
+                  _hideKeyboard?.call();
+                  final validation = amountCubit.validateFields(
+                    context: context,
+                    terminal: _terminal,
+                  );
+                  if (validation != null) {
+                    amountCubit.showErrorSnackBar(
+                      context: context,
+                      message: validation,
                     );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    return;
                   }
+                  final args = PaymentArguments(
+                    amount: amountCubit.amountValue,
+                    terminalId: _terminal ?? '',
+                    currencyData: amountCubit.currencyData,
+                    merchantId: merchantId,
+                    transactionId: widget.transactionId,
+                  );
+                  await _navigateToSaleByWalletOptions(args);
                 },
                 child: Text(
                   'btn_next'.translate(context),
