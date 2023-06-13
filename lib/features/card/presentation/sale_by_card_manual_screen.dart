@@ -1,6 +1,7 @@
 import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
 import 'package:amwal_pay_sdk/core/apiview/api_view.dart';
 import 'package:amwal_pay_sdk/core/base_state/base_cubit_state.dart';
+import 'package:amwal_pay_sdk/core/loader_mixin.dart';
 import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
 import 'package:amwal_pay_sdk/core/ui/accepted_payment_methods_widget.dart';
 import 'package:amwal_pay_sdk/core/ui/buttons/app_button.dart';
@@ -19,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' hide WatchContext;
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
-class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit> {
+class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit> with LoaderMixin {
   final String amount;
   final int currencyId;
   final String currency;
@@ -115,6 +116,7 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit> {
     }
 
     Future<void> purchaseWithOut3DS() async {
+      showLoader(context);
       final purchaseDataOrNull = await cubit.purchase(
         args.amount,
         args.terminalId,
@@ -129,7 +131,10 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit> {
             context: context,
             settings: settings,
           );
+          if(context.mounted) dismissDialog(context);
         });
+      }else{
+        dismissDialog(context);
       }
     }
 

@@ -17,7 +17,8 @@ class AmountCurrencyWidgetCubit extends Cubit {
     required BuildContext context,
     required String? terminal,
   }) {
-    if (amountValue.isEmpty) {
+
+    if (amountValue.isEmpty||amountValue== "00.00") {
       return 'enter_amount'.translate(context);
     } else if (currencyData == null) {
       return 'select_currency'.translate(context);

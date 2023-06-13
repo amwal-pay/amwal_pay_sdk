@@ -39,7 +39,6 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
     int merchantId,
     String? transactionId,
   ) async {
-    emit(const ICubitState.loading());
     final purchaseRequest = PurchaseRequest(
       pan: cardNo!.replaceAll(' ', ''),
       amount: num.parse(amount),

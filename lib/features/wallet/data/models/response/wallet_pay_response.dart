@@ -25,23 +25,23 @@ class WalletPayData {
   final int idN;
   final String? from;
   final String? to;
-  final int merchantRefId;
-  final int terminalNodeId;
-  final int bankId;
+  final int? merchantRefId;
+  final int? terminalNodeId;
+  final int? bankId;
   final num amount;
   final int currencyId;
-  final String createdDateTime;
-  final String maxResponseDatetime;
+  final String? createdDateTime;
+  final String? maxResponseDatetime;
   final String? aggregatorId;
-  final int merchantAccountTypeId;
-  final String status;
+  final int? merchantAccountTypeId;
+  final String? status;
   final String? transactionSource;
-  final int transactionTypeId;
-  final String externalTransactionId;
+  final int? transactionTypeId;
+  final String? externalTransactionId;
   final String? originalExternalTransactionId;
   final String? senderMobileNo;
   final String? receiverMobileNo;
-  final int transactionMethodId;
+  final int? transactionMethodId;
   final int? originalTransactionId;
   final int? originalDigitalTransactionId;
   final String? senderName;
@@ -53,8 +53,8 @@ class WalletPayData {
   final String? refundReason;
   final String? refundSource;
   final String? refundCreatorId;
-  final String transactionIdentifier;
-  final String orderId;
+  final String? transactionIdentifier;
+  final String? orderId;
   final String? transactionId;
   final String? merchantBranchId;
   final String? transactionViewModel;
@@ -360,19 +360,19 @@ class WalletPayData {
       bankId: map['bankId'] as int,
       amount: map['amount'] as num,
       currencyId: map['currencyId'] as int,
-      createdDateTime: map['createdDatetime'] as String,
-      maxResponseDatetime: map['maxResponseDatetime'] as String,
+      createdDateTime: map['createdDatetime'] as String?,
+      maxResponseDatetime: map['maxResponseDatetime'] as String?,
       aggregatorId: map['aggregatorId'] as String?,
-      merchantAccountTypeId: map['merchantAccountTypeId'] as int,
-      status: map['status'] as String,
+      merchantAccountTypeId: map['merchantAccountTypeId'] as int?,
+      status: map['status'] as String?,
       transactionSource: map['transactionSource'] as String?,
       transactionTypeId: map['transactionTypeId'] as int,
-      externalTransactionId: map['externalTransactionId'] as String,
+      externalTransactionId: map['externalTransactionId'] as String?,
       originalExternalTransactionId:
           map['originalExternalTransactionId'] as String?,
       senderMobileNo: map['senderMobileNo'] as String?,
       receiverMobileNo: map['receiverMobileNo'] as String?,
-      transactionMethodId: map['transactionMethodId'] as int,
+      transactionMethodId: map['transactionMethodId'] as int?,
       originalTransactionId: map['originalTransactionId'] as int?,
       originalDigitalTransactionId: map['originalDigitalTransactionId'] as int?,
       senderName: map['senderName'] as String?,
@@ -384,8 +384,8 @@ class WalletPayData {
       refundReason: map['refundReason'] as String?,
       refundSource: map['refundSource'] as String?,
       refundCreatorId: map['refundCreatorId'] as String?,
-      transactionIdentifier: map['transactionIdentifier'] as String,
-      orderId: map['orderId'] as String,
+      transactionIdentifier: map['transactionIdentifier'] as String?,
+      orderId: map['orderId'] as String?,
       transactionId: map['transactionId'] as String?,
       merchantBranchId: map['merchantBranchId'] as String?,
       transactionViewModel: map['transactionViewModel'] as String?,

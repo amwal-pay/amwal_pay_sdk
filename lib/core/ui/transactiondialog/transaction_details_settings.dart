@@ -6,6 +6,7 @@ class TransactionDetailsSettings {
   final TransactionStatus transactionStatus;
   final String transactionType;
   final Map<String, dynamic>? details;
+  final num? dueAmount;
   final bool? isRefunded;
   final bool? isCaptured;
   final bool? isSettled;
@@ -26,6 +27,7 @@ class TransactionDetailsSettings {
     required this.transactionStatus,
     required this.transactionType,
     required this.isSuccess,
+    this.dueAmount,
     this.locale = const Locale('en'),
     this.globalTranslator,
     this.isRefunded,

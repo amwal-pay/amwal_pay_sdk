@@ -28,11 +28,26 @@ class TransactionStatusDialog extends StatefulWidget {
 class _TransactionStatusDialogState extends State<TransactionStatusDialog> {
   late ScreenshotController _screenshotController;
   TransactionDetailsSettings get settings => widget.settings;
+  late Map<String, dynamic> dialogDetails;
+   Map<String, dynamic>? dueAmount;
   bool _isSharing = false;
   @override
   void initState() {
     super.initState();
     _screenshotController = ScreenshotController();
+    extractDueAmount();
+
+  }
+
+
+  void extractDueAmount(){
+    final dueAmountKey = 'due_amount'.translate(context,globalTranslator: settings.globalTranslator);
+   final containsDueAmount =  settings.details!.containsKey(dueAmountKey);
+   dialogDetails = settings.details!;
+   if(containsDueAmount){
+     dueAmount = {dueAmountKey: dialogDetails[dueAmountKey]};
+     dialogDetails.remove(dueAmountKey);
+   }
   }
 
   Future<void> _share() async {
@@ -144,8 +159,30 @@ class _TransactionStatusDialogState extends State<TransactionStatusDialog> {
                     },
                   ).toList() ??
                   const [],
+              if (dueAmount != null) const Divider(
+                endIndent: 20,
+                indent: 20,
+                height: 1,
+                thickness: 0.8,
+              ),
+              const SizedBox(height: 16),
+              if (dueAmount != null)
+                TransactionDetailWidget(
+                  title: dueAmount!.keys.first,
+                  value: dueAmount!.values.first,
+                  titleStyle:  const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900,
+                    color: darkBlue,
+                  ),
+                  valueStyle:  const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900,
+                    color: darkBlue,
+                  ),
+                ),
               const SizedBox(
-                height: 27,
+                height: 12,
               ),
               if (!forShare)
                 Padding(

@@ -6,10 +6,14 @@ import 'package:flutter/material.dart';
 class TransactionDetailWidget extends StatelessWidget {
   final String title;
   final String value;
+  final TextStyle? titleStyle;
+  final TextStyle? valueStyle;
   const TransactionDetailWidget({
     Key? key,
     required this.title,
     required this.value,
+    this.titleStyle,
+    this.valueStyle,
   }) : super(key: key);
 
   @override
@@ -23,21 +27,25 @@ class TransactionDetailWidget extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                title.translate(context),
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: lightGreyColor,
+              Expanded(
+                child: Text(
+                  title.translate(context),
+                  style: titleStyle??const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: lightGreyColor,
+                  ),
                 ),
               ),
-              AutoSizeText(
-                value,
-                maxLines: 1,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: darkBlue,
+              Expanded(
+                child: AutoSizeText(
+                  value,
+                  maxLines: 1,
+                  style: valueStyle?? const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: darkBlue,
+                  ),
                 ),
               ),
             ],

@@ -9,19 +9,29 @@ class CardUtils {
       return "required_field".translate(context);
     }
     input = getCleanedNumber(input);
-    if (input.length < 8) {
+
+    if (input.length < 12 || input.length > 19) {
       return "invalid_card".translate(context);
+
     }
+
     int sum = 0;
-    int length = input.length;
-    for (var i = 0; i < length; i++) {
-      // get digits in reverse order
-      int digit = int.parse(input[length - i - 1]);
-   // every 2nd number multiply with 2
-      if (i % 2 == 1) {
+    bool doubleDigit = false;
+
+    // Iterate over each digit in reverse order
+    for (int i = input.length - 1; i >= 0; i--) {
+      int digit = int.parse(input[i]);
+
+      if (doubleDigit) {
         digit *= 2;
+
+        if (digit > 9) {
+          digit -= 9;
+        }
       }
-      sum += digit > 9 ? (digit - 9) : digit;
+
+      sum += digit;
+      doubleDigit = !doubleDigit;
     }
     if (sum % 10 == 0) {
       return null;
