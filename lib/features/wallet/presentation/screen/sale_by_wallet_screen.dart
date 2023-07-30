@@ -8,13 +8,11 @@ import 'package:amwal_pay_sdk/core/ui/listpicker/drop_down_list_widget.dart';
 import 'package:amwal_pay_sdk/features/wallet/cubit/sale_by_wallet_cubit.dart';
 import 'package:amwal_pay_sdk/features/wallet/dependency/injector.dart';
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
-import 'package:amwal_pay_sdk/features/wallet/presentation/widgets/sale_by_wallet_mixins/sale_by_wallet_action_mixin.dart';
 
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:amwal_pay_sdk/navigator/sdk_navigator.dart';
 import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 
 class SaleByWalletScreen extends StatefulWidget {
   final OnPayCallback onPayCallback;

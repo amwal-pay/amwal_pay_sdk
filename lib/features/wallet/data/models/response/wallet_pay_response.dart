@@ -56,7 +56,6 @@ class WalletPayData {
   final String? transactionIdentifier;
   final String? orderId;
   final String? transactionId;
-  final String? merchantBranchId;
   final String? transactionViewModel;
   final String? digitalTransactionEnquiryViewModel;
   final int merchantId;
@@ -101,7 +100,6 @@ class WalletPayData {
     required this.transactionIdentifier,
     required this.orderId,
     this.transactionId,
-    this.merchantBranchId,
     this.transactionViewModel,
     this.digitalTransactionEnquiryViewModel,
     required this.merchantId,
@@ -151,7 +149,6 @@ class WalletPayData {
           transactionIdentifier == other.transactionIdentifier &&
           orderId == other.orderId &&
           transactionId == other.transactionId &&
-          merchantBranchId == other.merchantBranchId &&
           transactionViewModel == other.transactionViewModel &&
           digitalTransactionEnquiryViewModel ==
               other.digitalTransactionEnquiryViewModel &&
@@ -197,7 +194,6 @@ class WalletPayData {
       transactionIdentifier.hashCode ^
       orderId.hashCode ^
       transactionId.hashCode ^
-      merchantBranchId.hashCode ^
       transactionViewModel.hashCode ^
       digitalTransactionEnquiryViewModel.hashCode ^
       merchantId.hashCode ^
@@ -241,7 +237,6 @@ class WalletPayData {
     String? transactionIdentifier,
     String? orderId,
     String? transactionId,
-    String? merchantBranchId,
     String? transactionViewModel,
     String? digitalTransactionEnquiryViewModel,
     int? merchantId,
@@ -291,7 +286,6 @@ class WalletPayData {
           transactionIdentifier ?? this.transactionIdentifier,
       orderId: orderId ?? this.orderId,
       transactionId: transactionId ?? this.transactionId,
-      merchantBranchId: merchantBranchId ?? this.merchantBranchId,
       transactionViewModel: transactionViewModel ?? this.transactionViewModel,
       digitalTransactionEnquiryViewModel: digitalTransactionEnquiryViewModel ??
           this.digitalTransactionEnquiryViewModel,
@@ -339,7 +333,6 @@ class WalletPayData {
       'transactionIdentifier': transactionIdentifier,
       'orderId': orderId,
       'transactionId': transactionId,
-      'merchantBranchId': merchantBranchId,
       'transactionViewModel': transactionViewModel,
       'digitalTransactionEnquiryViewModel': digitalTransactionEnquiryViewModel,
       'merchantId': merchantId,
@@ -387,7 +380,6 @@ class WalletPayData {
       transactionIdentifier: map['transactionIdentifier'] as String?,
       orderId: map['orderId'] as String?,
       transactionId: map['transactionId'] as String?,
-      merchantBranchId: map['merchantBranchId'] as String?,
       transactionViewModel: map['transactionViewModel'] as String?,
       digitalTransactionEnquiryViewModel:
           map['digitalTransactionEnquiryViewModel'] as String?,

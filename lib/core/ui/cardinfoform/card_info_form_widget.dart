@@ -100,7 +100,7 @@ class _CardInfoFormWidgetState extends State<CardInfoFormWidget> {
           widgetHint: 'email_hint'
               .translate(context, globalTranslator: widget.globalTranslator),
           isEmail: true,
-          maxLength: 100,
+          maxLength: 40,
           onChange: (value) {
             widget.cubit.email = value;
           },
@@ -119,6 +119,7 @@ class _CardInfoFormWidgetState extends State<CardInfoFormWidget> {
                 widgetHint: 'mm_date'.translate(context,
                     globalTranslator: widget.globalTranslator),
                 maxLength: 2,
+                minLength: 2,
                 isNumber: true,
                 isMonth: true,
                 onChange: (value) => widget.cubit.expirationDateMonth = value,

@@ -114,6 +114,7 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
       clientMail: email!,
       currencyCode: currencyId.toString(),
       originalTransactionIdentifierValue: transactionId,
+      originalTransactionIdentifierType: 2,
       transactionId:transactionId
     );
     final networkState =

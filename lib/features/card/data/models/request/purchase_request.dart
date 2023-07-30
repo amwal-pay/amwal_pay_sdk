@@ -230,7 +230,7 @@ class PurchaseRequest {
     'currencyCode': currencyCode,
     'transactionId': transactionId,
     'originalTransactionIdentifierType':originalTransactionIdentifierType,
-    'originalTransactionIdentifierValue':0,
+    'originalTransactionIdentifierValue':originalTransactionIdentifierValue,
   };
 
 

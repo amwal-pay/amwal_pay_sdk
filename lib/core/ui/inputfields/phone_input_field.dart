@@ -95,6 +95,12 @@ class PhoneInputField extends StatelessWidget {
                     validator: FormBuilderValidators.compose(
                       [
                         FormBuilderValidators.numeric(),
+                        FormBuilderValidators.match(
+                            r'^((\+|00)?968)?[279]\d{7}$',
+                            errorText: 'invalid_phone_number'.translate(
+                              context,
+                              globalTranslator: globalTranslator,
+                            )),
                         FormBuilderValidators.minLength(
                           7,
                           errorText: "invalid_phone_number".translate(

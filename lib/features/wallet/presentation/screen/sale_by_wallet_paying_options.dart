@@ -139,6 +139,7 @@ class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
                             state.page,
                             paymentArgument,
                             translator,
+                            onPay,
                           ),
                         );
                       },
@@ -174,6 +175,7 @@ Widget _saleByWalletOptions(
   int pageNum,
   PaymentArguments paymentArguments,
   String Function(String)? globalTranslator,
+    OnPayCallback onPay,
 ) {
   if (pageNum == 0) {
     return PhonePayWidget(globalTranslator: globalTranslator);
@@ -183,6 +185,7 @@ Widget _saleByWalletOptions(
     return ScanQrToPayWidget(
       paymentArguments: paymentArguments,
       globalTranslator: globalTranslator,
+      onPay: onPay,
     );
   } else {
     return const SizedBox();

@@ -6,6 +6,7 @@ import 'package:amwal_pay_sdk/features/wallet/data/models/response/qr_response.d
 import 'package:amwal_pay_sdk/features/wallet/dependency/injector.dart';
 
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
+import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -13,9 +14,11 @@ import 'package:qr_flutter/qr_flutter.dart';
 class ScanQrToPayWidget extends StatefulWidget {
   final PaymentArguments paymentArguments;
   final String Function(String)? globalTranslator;
+  final OnPayCallback onPay;
   const ScanQrToPayWidget({
     Key? key,
     required this.paymentArguments,
+    required this.onPay,
     this.globalTranslator,
   }) : super(key: key);
 
@@ -27,19 +30,24 @@ class _ScanQrToPayWidgetState extends State<ScanQrToPayWidget> {
   late SaleByQrCubit cubit;
   PaymentArguments get payArgs => widget.paymentArguments;
 
-  Future<void> _generateQrCode() async =>
-      await cubit.payWithQr(
+  Future<void> _generateQrCode() async {
+    await cubit.payWithQr(
         merchantId: payArgs.merchantId,
         amount: num.parse(payArgs.amount),
         terminalId: int.parse(payArgs.terminalId),
         currencyId: payArgs.currencyData!.idN,
       );
+    widget.onPay((settings){
+
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     cubit = WalletInjector.instance.get<SaleByQrCubit>();
     _generateQrCode();
+
   }
 
   @override
