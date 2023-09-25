@@ -1,11 +1,11 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=C:\src\flutter"
-export "FLUTTER_APPLICATION_PATH=E:\Amwal sdks\amwal_pay_sdk"
+export "FLUTTER_ROOT=/Users/amrsaied/Documents/Flutter/flutter"
+export "FLUTTER_APPLICATION_PATH=/Users/amrsaied/Documents/Flutter/Amwal/amwal_pay_sdk_amwal"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
-export "FLUTTER_BUILD_NAME=0.0.1"
-export "FLUTTER_BUILD_NUMBER=0.0.1"
+export "FLUTTER_BUILD_NAME=0.0.27"
+export "FLUTTER_BUILD_NUMBER=0.0.27"
 export "DART_OBFUSCATION=false"
 export "TRACK_WIDGET_CREATION=true"
 export "TREE_SHAKE_ICONS=false"

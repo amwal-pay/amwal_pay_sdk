@@ -269,7 +269,7 @@ class PurchaseRequest {
       processingCode: map['processingCode'] as String,
       messageTypeId: map['messageTypeId'] as String,
       amount: map['amount'] as num,
-      systemTraceNr: map['systemTraceNr'] as String,
+      systemTraceNr: map['systemTraceNr'] as String?,
       track2Data: map['track2Data'] as String,
       posEntryMode: map['posEntryMode'] as String,
       terminalId: map['terminalId'] as int,
