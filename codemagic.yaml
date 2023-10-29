@@ -1,27 +1,12 @@
 workflows:
-  build-aar:
-    name: Build AAR
-    script:
-      - name: Install Flutter
-        script: |
-          flutter --version
-          flutter channel stable
-          flutter upgrade
-          flutter pub get
+  my-workflow:
+    environment:
+      flutter: stable
+    scripts:
+      - name: Build Android AAR
+        script: flutter build aar
+    artifacts:
+      - app/build/outputs/**/**/*.aar
 
-      - name: Build AAR
-        script: |
-          cd amwal_pay_sdk
-          flutter build aar
 
-      - name: Copy AAR to Output Directory
-        script: |
-          mkdir -p $FCI_BUILD_DIR/outputs/aar
-          cp amwal_pay_sdk/build/outputs/flutter_aar/release/flutter-debug.aar $FCI_BUILD_DIR/outputs/aar/
 
-artifacts:
-  - path: $FCI_BUILD_DIR/outputs/aar/
-    destination: aar/
-
-after_script:
-  - echo "Build completed"
