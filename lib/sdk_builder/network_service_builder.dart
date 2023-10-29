@@ -8,12 +8,12 @@ class NetworkServiceBuilder {
   const NetworkServiceBuilder._();
   static NetworkServiceBuilder get instance => const NetworkServiceBuilder._();
   DioClient _initDioClientWithInterceptors(
-      bool isMocked,
-      String secureHashValue,
-      String requestSourceId,
-      String token,
-      ) {
-    final tokenInterceptor = TokenInjectorInterceptor(token);
+    bool isMocked,
+    String secureHashValue,
+    String requestSourceId,
+    String apiKey,
+  ) {
+    final tokenInterceptor = TokenInjectorInterceptor(apiKey);
     final mockupInterceptor = MockupInterceptor(isMocked);
     final secureHashInterceptor = SecureHashInterceptor(
       secureHashValue: secureHashValue,
@@ -27,16 +27,15 @@ class NetworkServiceBuilder {
   }
 
   NetworkService setupNetworkService(
-      bool isMocked,
-      String secureHashValue,
-      String requestSourceId,
-      String token,
-      ) =>
+    bool isMocked,
+    String secureHashValue,
+    String requestSourceId,
+    String apiKey,
+  ) =>
       NetworkService(_initDioClientWithInterceptors(
         isMocked,
         secureHashValue,
         requestSourceId,
-        token,
+        apiKey,
       ));
-
 }

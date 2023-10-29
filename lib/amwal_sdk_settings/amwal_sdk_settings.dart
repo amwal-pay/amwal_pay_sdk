@@ -1,29 +1,33 @@
 import 'package:flutter/material.dart';
 
 abstract class IAmwalSdkSettings {
-  final String token;
+  final String apiKey;
   final String requestSourceId;
   final String secureHashValue;
   final String merchantId;
   final List<String> terminalIds;
-  final String transactionRefNo;
+  final String? transactionRefNo;
   final Locale locale;
   final bool is3DS;
   final bool isMocked;
   final String amount;
   final String currency;
+  final int currencyId;
+  final String merchantName;
   final BuildContext? context;
 
   const IAmwalSdkSettings({
-    required this.token,
+    required this.apiKey,
     required this.secureHashValue,
     required this.requestSourceId,
     required this.merchantId,
     required this.terminalIds,
-    required this.transactionRefNo,
+    this.transactionRefNo,
     required this.currency,
     required this.amount,
     required this.context,
+    required this.merchantName,
+    required this.currencyId,
     this.locale = const Locale('en'),
     this.is3DS = false,
     this.isMocked = false,
@@ -32,7 +36,7 @@ abstract class IAmwalSdkSettings {
 
 class AmwalInAppSdkSettings extends IAmwalSdkSettings {
   const AmwalInAppSdkSettings({
-    required super.token,
+    required super.apiKey,
     required super.secureHashValue,
     required super.merchantId,
     required super.terminalIds,
@@ -40,6 +44,8 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
     required super.currency,
     required super.amount,
     required super.context,
+    required super.merchantName,
+    required super.currencyId,
     super.locale,
     super.is3DS,
     super.isMocked,
@@ -49,13 +55,15 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
 class AmwalSdkSettings extends IAmwalSdkSettings {
   final String terminalId;
   AmwalSdkSettings({
-    required super.token,
+    required super.apiKey,
     required super.secureHashValue,
     required super.merchantId,
-    required super.transactionRefNo,
+    super.transactionRefNo,
     required super.currency,
     required super.amount,
     required this.terminalId,
+    required super.merchantName,
+    required super.currencyId,
     super.context,
     super.locale,
     super.isMocked,
@@ -71,7 +79,7 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
     return AmwalSdkSettings(
       terminalId: terminalId,
       context: context ?? this.context,
-      token: token,
+      apiKey: apiKey,
       locale: locale,
       is3DS: is3DS,
       isMocked: isMocked,
@@ -80,21 +88,22 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
       merchantId: merchantId,
       secureHashValue: secureHashValue,
       transactionRefNo: transactionRefNo,
+      merchantName: merchantName,
+      currencyId: currencyId,
     );
   }
 
   factory AmwalSdkSettings.fromArgs(List<String> args) {
     return AmwalSdkSettings(
-      token: args[0],
+      apiKey: args[0],
       secureHashValue: args[1],
       merchantId: args[2],
       currency: args[3],
-      amount: args[4],
-      terminalId: args[5],
-      isMocked: args[6] == '1',
-      is3DS: args[7] == '1',
-      transactionRefNo: args[8],
-
+      currencyId: int.parse(args[4]),
+      amount: args[5],
+      terminalId: args[6],
+      isMocked: args[7] == '1',
+      merchantName: args[8],
     );
   }
 }

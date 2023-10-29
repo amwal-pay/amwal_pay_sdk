@@ -7,17 +7,13 @@ import 'package:amwal_pay_sdk/core/networking/network_service.dart';
 import 'package:amwal_pay_sdk/features/wallet/dependency/injector.dart';
 import 'package:amwal_pay_sdk/features/wallet/presentation/app.dart';
 
-
 import 'package:flutter/material.dart';
 
 import '../../sdk_builder/sdk_builder.dart';
 
-
-
 class AmwalWalletSdk {
   const AmwalWalletSdk._();
   static AmwalWalletSdk get instance => const AmwalWalletSdk._();
-
 
   Future<void> _sdkInitialization(
     String token,
@@ -25,7 +21,7 @@ class AmwalWalletSdk {
     String secureHashValue,
     String requestSourceId,
     bool isMocked,
-      service,{
+    service, {
     Locale? locale,
   }) async {
     await SdkBuilder.instance.initCacheStorage();
@@ -35,19 +31,19 @@ class AmwalWalletSdk {
   }
 
   Future<AmwalWalletSdk> init({
-    required String token,
+    required String apiKey,
     required String merchantId,
     required List<String> terminalIds,
     required String secureHashValue,
     required String requestSourceId,
-    required String transactionRefNo,
     required NetworkService service,
+    String? transactionRefNo,
     bool isMocked = false,
     Locale? locale,
   }) async {
     await WalletInjector.instance.onSdkInit(
       () async => await _sdkInitialization(
-        token,
+        apiKey,
         terminalIds,
         secureHashValue,
         requestSourceId,

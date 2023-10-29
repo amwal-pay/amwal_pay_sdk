@@ -60,7 +60,7 @@ class _ScanQrToPayWidgetState extends State<ScanQrToPayWidget> {
                   success: (value) => value.uiModel.data?.qrCode,
                 ) ??
                 '';
-            return QrImage(
+            return QrImageView(
               data: qrCodeString,
               size: 200,
             );

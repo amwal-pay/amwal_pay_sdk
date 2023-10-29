@@ -8,8 +8,10 @@ import 'amwal_sdk_settings/amwal_sdk_settings.dart';
 import 'localization/app_localizations_setup.dart';
 
 void main(List<String> args) {
- final settings = AmwalSdkSettings.fromArgs(args);
-  runApp( MyApp(settings: settings,));
+  final settings = AmwalSdkSettings.fromArgs(args);
+  runApp(MyApp(
+    settings: settings,
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -58,7 +60,7 @@ class _MyAppState extends State<MyApp> {
               arguments: AmwalSdkArguments(
                 amount: _settings.amount,
                 currency: _settings.currency,
-                currencyId: 512,
+                currencyId: _settings.currencyId,
                 terminalId: _settings.terminalId,
                 locale: _settings.locale,
                 is3DS: _settings.is3DS,

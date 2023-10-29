@@ -18,7 +18,7 @@ class AmwalCardSdk {
   static AmwalCardSdk get instance => const AmwalCardSdk._();
 
   Future<void> _sdkInitialization(
-    String token,
+    String apiKey,
     List<String> terminalIds,
     String secureHashValue,
     String requestSourceId,
@@ -27,26 +27,26 @@ class AmwalCardSdk {
     Locale? locale,
   }) async {
     await SdkBuilder.instance.initCacheStorage();
-    await CacheStorageHandler.instance.write('token', token);
+    await CacheStorageHandler.instance.write('apiKey', apiKey);
     await CacheStorageHandler.instance.write('terminal', terminalIds);
     SdkBuilder.instance.initCardModules(service);
   }
 
   Future<AmwalCardSdk> init({
-    required String token,
+    required String apiKey,
     required String merchantId,
     required List<String> terminalIds,
     required String secureHashValue,
     required String requestSourceId,
-    required String transactionRefNo,
     required NetworkService service,
+    String? transactionRefNo,
     bool isMocked = false,
     bool is3DS = false,
     Locale? locale,
   }) async {
     await CardInjector.instance.onSdkInit(
       () async => await _sdkInitialization(
-        token,
+        apiKey,
         terminalIds,
         secureHashValue,
         requestSourceId,

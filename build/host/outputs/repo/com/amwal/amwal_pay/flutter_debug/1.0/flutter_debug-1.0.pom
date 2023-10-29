@@ -15,42 +15,36 @@
     <dependency>
       <groupId>io.flutter</groupId>
       <artifactId>flutter_embedding_debug</artifactId>
-      <version>1.0.0-ec975089acb540fc60752606a3d3ba809dd1528b</version>
+      <version>1.0.0-1ac611c64eadbd93c5f5aba5494b8fc3b35ee952</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>io.flutter</groupId>
       <artifactId>armeabi_v7a_debug</artifactId>
-      <version>1.0.0-ec975089acb540fc60752606a3d3ba809dd1528b</version>
+      <version>1.0.0-1ac611c64eadbd93c5f5aba5494b8fc3b35ee952</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>io.flutter</groupId>
       <artifactId>arm64_v8a_debug</artifactId>
-      <version>1.0.0-ec975089acb540fc60752606a3d3ba809dd1528b</version>
+      <version>1.0.0-1ac611c64eadbd93c5f5aba5494b8fc3b35ee952</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>io.flutter</groupId>
       <artifactId>x86_64_debug</artifactId>
-      <version>1.0.0-ec975089acb540fc60752606a3d3ba809dd1528b</version>
+      <version>1.0.0-1ac611c64eadbd93c5f5aba5494b8fc3b35ee952</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>io.flutter</groupId>
       <artifactId>x86_debug</artifactId>
-      <version>1.0.0-ec975089acb540fc60752606a3d3ba809dd1528b</version>
+      <version>1.0.0-1ac611c64eadbd93c5f5aba5494b8fc3b35ee952</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>dev.fluttercommunity.plus.share</groupId>
       <artifactId>share_plus_debug</artifactId>
-      <version>1.0</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.flutter.plugins.urllauncher</groupId>
-      <artifactId>url_launcher_android_debug</artifactId>
       <version>1.0</version>
       <scope>compile</scope>
     </dependency>
