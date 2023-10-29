@@ -48,6 +48,7 @@ class _CardInfoFormWidgetState extends State<CardInfoFormWidget> {
           key: const Key('cardNum'),
           textInputAction: TextInputAction.next,
           textDirection: TextDirection.ltr,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           onChanged: (value) {
             setState(() => cardType = CardUtils.getCardTypeFrmNumber(value));
             widget.cubit.cardNo = value;
@@ -122,7 +123,9 @@ class _CardInfoFormWidgetState extends State<CardInfoFormWidget> {
                 minLength: 2,
                 isNumber: true,
                 isMonth: true,
-                onChange: (value) => widget.cubit.expirationDateMonth = value,
+                onChange: (value) {
+                  widget.cubit.expirationDateMonth = value;
+                },
               ),
             ),
             const SizedBox(
@@ -145,7 +148,9 @@ class _CardInfoFormWidgetState extends State<CardInfoFormWidget> {
                 maxLength: 2,
                 isNumber: true,
                 isYear: true,
-                onChange: (value) => widget.cubit.expirationDateYear = value,
+                onChange: (value) {
+                  widget.cubit.expirationDateYear = value;
+                },
               ),
             ),
             const SizedBox(
@@ -159,8 +164,11 @@ class _CardInfoFormWidgetState extends State<CardInfoFormWidget> {
                 widgetHint: 'digits'.translate(context,
                     globalTranslator: widget.globalTranslator),
                 maxLength: 3,
+                minLength: 3,
                 isNumber: true,
-                onChange: (value) => widget.cubit.cvV2 = value,
+                onChange: (value) {
+                  widget.cubit.cvV2 = value;
+                },
               ),
             ),
           ],

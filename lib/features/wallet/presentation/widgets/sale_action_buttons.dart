@@ -1,7 +1,6 @@
 import 'package:amwal_pay_sdk/core/apiview/api_view.dart';
 import 'package:amwal_pay_sdk/core/base_state/base_cubit_state.dart';
 import 'package:amwal_pay_sdk/core/ui/buttons/app_button.dart';
-import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_details_settings.dart';
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
 import 'package:amwal_pay_sdk/features/wallet/cubit/sale_by_wallet_cubit.dart';
 import 'package:amwal_pay_sdk/features/wallet/cubit/sale_by_wallet_pay_cubit.dart';
@@ -13,10 +12,8 @@ import 'package:amwal_pay_sdk/features/wallet/presentation/widgets/sale_by_walle
 import 'package:amwal_pay_sdk/features/wallet/presentation/widgets/sale_by_wallet_mixins/sale_by_wallet_pay_mixin.dart';
 import 'package:amwal_pay_sdk/features/wallet/presentation/widgets/sale_by_wallet_mixins/sale_by_wallet_verify_mixin.dart';
 import 'package:amwal_pay_sdk/features/wallet/state/sale_by_wallet_state.dart';
-
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -49,6 +46,7 @@ class SaleActionButtons extends ApiView<SaleByWalletCubit>
           bloc: verifyCubit,
           listener: (_, state) => state.whenOrNull(success: (value) {
             if (value.success) {
+              cubit.customerNameFromApi = value.data?.customerName ?? "";
               cubit.verified();
             }
           }),
@@ -56,16 +54,15 @@ class SaleActionButtons extends ApiView<SaleByWalletCubit>
         BlocListener<SaleByWalletPayCubit, ICubitState<WalletPayResponse>>(
           bloc: payCubit,
           listener: (_, state) async {
-            final walletPayData = state.mapOrNull(
-              success: (value) => value.uiModel.data,
+            final isSuccess = state.mapOrNull(
+              success: (value) => true,
             );
-            if (walletPayData != null) {
+            if (isSuccess == true) {
               await showCountingDialog(
                 context,
                 globalTranslator,
                 onPay,
                 onCountComplete,
-                walletPayData,
                 paymentArguments.currencyData!.name.translate(
                   context,
                   globalTranslator: globalTranslator,

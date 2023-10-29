@@ -46,7 +46,7 @@ class PhonePayWidget extends StatelessWidget {
             onChange: (value) => walletCubit.phoneNumber = value,
           ),
           if (walletCubit.state.verified)
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(vertical: 8.0),
               child: Row(
                 children: [
@@ -55,7 +55,7 @@ class PhonePayWidget extends StatelessWidget {
                     color: successColor,
                   ),
                   Text(
-                    'AZE#####AFIQ',
+                    walletCubit.customerNameFromApi,
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,

@@ -7,7 +7,6 @@ import 'package:amwal_pay_sdk/core/ui/accepted_payment_methods_widget.dart';
 import 'package:amwal_pay_sdk/core/ui/buttons/app_button.dart';
 import 'package:amwal_pay_sdk/core/ui/cardinfoform/card_info_form_widget.dart';
 import 'package:amwal_pay_sdk/core/ui/sale_card_feature_common_widgets.dart';
-
 import 'package:amwal_pay_sdk/features/card/cubit/sale_by_card_manual_cubit.dart';
 import 'package:amwal_pay_sdk/features/card/data/models/response/purchase_response.dart';
 import 'package:amwal_pay_sdk/features/card/presentation/widgets/otp_dialog.dart';
@@ -19,8 +18,10 @@ import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' hide WatchContext;
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:uuid/uuid.dart';
 
-class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit> with LoaderMixin {
+class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit>
+    with LoaderMixin {
   final String amount;
   final int currencyId;
   final String currency;
@@ -67,7 +68,17 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit> with LoaderM
       if (context.mounted) {
         final otpOrNull = await showDialog<String?>(
           context: context,
-          builder: (_) => const OTPEntryDialog(),
+          barrierDismissible: false,
+          builder: (_) => OTPEntryDialog(
+            otpVerificationString: 'otp_verification'.translate(
+              context,
+              globalTranslator: translator,
+            ),
+            verifyString: 'verify'.translate(
+              context,
+              globalTranslator: translator,
+            ),
+          ),
         );
         return otpOrNull;
       } else {
@@ -75,20 +86,25 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit> with LoaderM
       }
     }
 
-    Future<PurchaseData?> onPurchaseStepTwo(String otp) async {
+    Future<PurchaseData?> onPurchaseStepTwo(
+      String otp,
+      String transactionId,
+      String originTransactionId,
+    ) async {
       return await cubit.purchaseOtpStepTwo(
         args.amount,
         args.terminalId,
         args.currencyData!.idN,
         args.merchantId,
-        args.transactionId,
+        transactionId,
         otp,
+        originTransactionId,
       );
     }
 
     Future<void> onPurchaseWith3DS() async {
       String? otpOrNull;
-      var originalTransactionId = await cubit.purchaseOtpStepOne(
+      final originalTransactionId = await cubit.purchaseOtpStepOne(
         args.amount,
         args.terminalId,
         args.currencyData!.idN,
@@ -100,18 +116,27 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit> with LoaderM
       }
 
       otpOrNull = await showOtpDialog();
-      if (otpOrNull == null) {
+      if (otpOrNull == null || otpOrNull.isEmpty) {
         return;
       }
-      final purchaseDataOrNull = await onPurchaseStepTwo(otpOrNull);
-
+      final transactionId = const Uuid().v1();
+      final purchaseDataOrNull = await onPurchaseStepTwo(
+        otpOrNull,
+        transactionId,
+        originalTransactionId,
+      );
       if (purchaseDataOrNull != null && context.mounted) {
-        onPay((settings) async {
-          await ReceiptHandler.instance.showCardReceipt(
-            context: context,
-            settings: settings,
-          );
-        });
+        cubit.showLoader();
+        onPay(
+          (settings) async {
+            cubit.initial();
+            await ReceiptHandler.instance.showCardReceipt(
+              context: context,
+              settings: settings,
+            );
+          },
+          purchaseDataOrNull.transactionId,
+        );
       }
     }
 
@@ -131,10 +156,10 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit> with LoaderM
             context: context,
             settings: settings,
           );
-          if(context.mounted) dismissDialog(context);
+          if (context.mounted) dismissDialog(context);
         });
-      }else{
-        dismissDialog(context);
+      } else {
+        if (context.mounted) dismissDialog(context);
       }
     }
 

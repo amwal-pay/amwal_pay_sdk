@@ -61,6 +61,8 @@ class DropDownListWidget<T> extends StatelessWidget {
               onTap: () async => await showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
+                enableDrag: false,
+                isDismissible: false,
                 constraints: BoxConstraints(
                   maxHeight: mediaQuerySize.height * 0.45,
                 ),
@@ -100,40 +102,43 @@ class DropDownListWidget<T> extends StatelessWidget {
                   );
                 },
               ),
-              child: Container(
-                height: 48,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                ),
-                decoration: BoxDecoration(
-                  color: whiteColor,
-                  border: border,
-                  borderRadius: borderRadius,
-                ),
-                child: BlocBuilder<DropDownListCubit<T?>, T?>(
-                    bloc: cubit,
-                    builder: (context, state) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: AutoSizeText(
-                              state != null ? nameMapper(state) : hintText,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                color: blackColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
+              child: WillPopScope(
+                onWillPop: () async => false,
+                child: Container(
+                  height: 48,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: whiteColor,
+                    border: border,
+                    borderRadius: borderRadius,
+                  ),
+                  child: BlocBuilder<DropDownListCubit<T?>, T?>(
+                      bloc: cubit,
+                      builder: (context, state) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: AutoSizeText(
+                                state != null ? nameMapper(state) : hintText,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  color: blackColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
                               ),
                             ),
-                          ),
-                          SvgPicture.asset(
-                            AppAssets.downArrowIcon,
-                            package: 'amwal_pay_sdk',
-                          )
-                        ],
-                      );
-                    }),
+                            SvgPicture.asset(
+                              AppAssets.downArrowIcon,
+                              package: 'amwal_pay_sdk',
+                            )
+                          ],
+                        );
+                      }),
+                ),
               ),
             ),
           ],

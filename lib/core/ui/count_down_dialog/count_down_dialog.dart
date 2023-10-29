@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
@@ -18,13 +20,25 @@ class CountDownDialog extends StatefulWidget {
 
 class _CountDownDialogState extends State<CountDownDialog> {
   late CountDownController _countDownController;
+  Timer? _timer;
   @override
   void initState() {
     super.initState();
     _countDownController = CountDownController();
-
   }
 
+  void _onStart() {
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 20), (timer) {
+      widget.onComplete();
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +82,8 @@ class _CountDownDialogState extends State<CountDownDialog> {
                   fontSize: 50,
                   fontWeight: FontWeight.bold,
                 ),
-                onComplete: (){
-                  widget.onComplete();
+                onStart: _onStart,
+                onComplete: () {
                   _countDownController.restart();
                 },
               ),

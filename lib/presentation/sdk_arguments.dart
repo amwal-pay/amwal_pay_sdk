@@ -1,8 +1,9 @@
 import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_details_settings.dart';
 import 'package:flutter/material.dart';
 
-
-typedef OnPayCallback = void Function(void Function(TransactionDetailsSettings) listener);
+typedef OnPayCallback = void Function(
+    void Function(TransactionDetailsSettings) listener,
+    [String? transactionId]);
 
 class AmwalSdkArguments {
   final Locale locale;

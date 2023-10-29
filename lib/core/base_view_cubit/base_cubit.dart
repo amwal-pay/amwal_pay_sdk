@@ -39,7 +39,7 @@ abstract class ICubit<G> extends Cubit<ICubitState<G>> {
             context: AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context,
             builder: (_) => ErrorDialog(
               title: err ?? '',
-              message: msgList?.join(',') ?? '',
+              message: (msgList?.join(',') ?? err.toString()),
               resetState: _resetState,
             ),
           );

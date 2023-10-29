@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/amwal_pay_sdk_amwal.iml" filepath="$PROJECT_DIR$/.idea/amwal_pay_sdk_amwal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/amwal_pay_sdk_flutter.iml" filepath="$PROJECT_DIR$/.idea/amwal_pay_sdk_flutter.iml" />
     </modules>
   </component>
 </project>

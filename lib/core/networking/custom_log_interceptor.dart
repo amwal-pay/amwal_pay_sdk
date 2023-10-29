@@ -2,8 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
 class CustomLogInterceptor extends Interceptor {
+  static String language = 'en-US';
   @override
-  void onError(DioError err, ErrorInterceptorHandler handler) {
+  void onError(DioException err, ErrorInterceptorHandler handler) {
     if (kDebugMode) {
       print('ERROR=> ${err.error}');
       print('ERROR=> ${err.response}');
@@ -23,6 +24,7 @@ class CustomLogInterceptor extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    options.headers['Accept-Language'] = language;
     if (kDebugMode) {
       print('Request Uri => ${options.uri}');
       print('Request Method => ${options.method}');

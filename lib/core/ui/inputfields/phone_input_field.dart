@@ -108,6 +108,13 @@ class PhoneInputField extends StatelessWidget {
                             globalTranslator: globalTranslator,
                           ),
                         ),
+                        FormBuilderValidators.maxLength(
+                          15,
+                          errorText: "invalid_phone_number".translate(
+                            context,
+                            globalTranslator: globalTranslator,
+                          ),
+                        ),
                         FormBuilderValidators.required(
                           errorText: 'required_field'.translate(
                             context,

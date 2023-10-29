@@ -98,29 +98,33 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
     int merchantId,
     String? transactionId,
     String otp,
+    String originTransactionId,
   ) async {
     emit(const ICubitState.loading());
     final purchaseRequest = PurchaseRequest(
-      pan: cardNo!.replaceAll(' ', ''),
-      amount: num.parse(amount),
-      terminalId: int.parse(terminalId),
-      merchantId: merchantId,
-      cardHolderName: cardHolderName!,
-      cvV2: cvV2!,
-      otp: otp,
-      dateExpiration: '$expirationDateMonth$expirationDateYear',
-      requestDateTime: DateFormat('yyyy-MM-ddTHH:mm:ss').format(DateTime.now()),
-      orderCustomerEmail: email!,
-      clientMail: email!,
-      currencyCode: currencyId.toString(),
-      originalTransactionIdentifierValue: transactionId,
-      originalTransactionIdentifierType: 2,
-      transactionId:transactionId
-    );
+        pan: cardNo!.replaceAll(' ', ''),
+        amount: num.parse(amount),
+        terminalId: int.parse(terminalId),
+        merchantId: merchantId,
+        cardHolderName: cardHolderName!,
+        cvV2: cvV2!,
+        otp: otp,
+        dateExpiration: '$expirationDateMonth$expirationDateYear',
+        requestDateTime:
+            DateFormat('yyyy-MM-ddTHH:mm:ss').format(DateTime.now()),
+        orderCustomerEmail: email!,
+        clientMail: email!,
+        currencyCode: currencyId.toString(),
+        transactionIdentifierValue: originalTransactionId,
+        transactionIdentifierType: 2,
+        transactionId: transactionId);
     final networkState =
         await _purchaseOtpStepTwoUseCase.invoke(purchaseRequest);
     final state = mapNetworkState(networkState);
     emit(state);
     return state.mapOrNull(success: (value) => value.uiModel.data);
   }
+
+  void showLoader() => emit(const ICubitState.loading());
+  void initial() => emit(const ICubitState.initial());
 }

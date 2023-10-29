@@ -1,4 +1,3 @@
-import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_details_settings.dart';
 import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +15,8 @@ abstract class IAmwalSdkSettings {
   final String? merchantName;
   final OnPayCallback onPay;
   final OnPayCallback? onCountComplete;
+  final void Function(Object e, StackTrace stack)? onError;
+  final Future<String?> Function()? onTokenExpired;
 
   const IAmwalSdkSettings({
     required this.token,
@@ -26,11 +27,13 @@ abstract class IAmwalSdkSettings {
     required this.currency,
     required this.amount,
     required this.onPay,
+    this.onError,
     this.onCountComplete,
     this.merchantName,
     this.locale = const Locale('en'),
     this.is3DS = false,
     this.isMocked = false,
+    this.onTokenExpired,
   });
 }
 
@@ -47,6 +50,8 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
     super.locale,
     super.is3DS,
     super.isMocked,
+    super.onError,
+    super.onTokenExpired,
   }) : super(
           amount: '',
           currency: '',
@@ -69,5 +74,7 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
     super.locale,
     super.isMocked,
     super.is3DS,
-  }) : super(terminalIds: [terminalId], onPay: (_) {});
+    super.onError,
+    super.onTokenExpired,
+  }) : super(terminalIds: [terminalId], onPay: (_, [__]) {});
 }

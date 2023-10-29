@@ -3,6 +3,7 @@ import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_dialog_actio
 import 'package:flutter/material.dart';
 
 class TransactionDetailsSettings {
+  final String transactionDisplayName;
   final TransactionStatus transactionStatus;
   final String transactionType;
   final Map<String, dynamic>? details;
@@ -23,6 +24,7 @@ class TransactionDetailsSettings {
   final bool isSuccess;
 
   const TransactionDetailsSettings({
+    required this.transactionDisplayName,
     required this.isTransactionDetails,
     required this.transactionStatus,
     required this.transactionType,
@@ -55,6 +57,7 @@ class TransactionDetailsSettings {
     String Function(String)? globalTranslator,
   }) {
     return TransactionDetailsSettings(
+      transactionDisplayName: transactionDisplayName,
       transactionStatus: transactionStatus ?? this.transactionStatus,
       transactionType: transactionType ?? this.transactionType,
       details: details ?? this.details,

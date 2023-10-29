@@ -1,14 +1,10 @@
 library amwal_pay_sdk;
 
 import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
-
 import 'package:amwal_pay_sdk/core/networking/network_service.dart';
-
 import 'package:amwal_pay_sdk/features/wallet/dependency/injector.dart';
 import 'package:amwal_pay_sdk/features/wallet/presentation/app.dart';
-import 'package:amwal_pay_sdk/features/wallet/presentation/widgets/sale_by_wallet_mixins/sale_by_wallet_action_mixin.dart';
 import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
-
 import 'package:flutter/material.dart';
 
 import '../../sdk_builder/sdk_builder.dart';
@@ -71,7 +67,7 @@ class AmwalWalletSdk {
     Locale locale,
     OnPayCallback onPay,
     OnPayCallback onCountComplete,
-      String transactionId
+    String transactionId,
   ) async {
     await AmwalSdkNavigator.amwalNavigatorObserver.navigator!.push(
       MaterialPageRoute(

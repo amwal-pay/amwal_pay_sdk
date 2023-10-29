@@ -71,7 +71,7 @@ import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
 You can see a full example of how to use the package in the [Example] example directory.
 
 ## Issues
-If you encounter any issues while using the package, please file a bug report in [the GitLab issue tracker].
+If you encounter any issues while using the package, please file a bug report in [the Github issue tracker].
 
 
 ## Contributing
@@ -101,6 +101,6 @@ If you would like to contribute to the package, please read the [Contributing Gu
 
 
 [Example]: <https://github.com/amwal-pay/amwal_pay_sdk/-/tree/master/example>
-[the GitlLb issue tracker]: <https://github.com/amwal-pay/amwal_pay_sdk/-/issues>
+[the Github issue tracker]: <https://github.com/amwal-pay/amwal_pay_sdk/-/issues>
 [Contributing Guidelines]: <https://github.com/amwal-pay/amwal_pay_sdk/-/blob/master/CHANGELOG.md>
 

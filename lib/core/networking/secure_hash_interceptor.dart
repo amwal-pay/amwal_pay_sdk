@@ -5,7 +5,10 @@ import 'package:amwal_pay_sdk/features/card/domain/sale_by_card_constants.dart';
 import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
+
+import 'EncryptionUtil.dart';
 
 class SecureHashInterceptor extends Interceptor {
   final String secureHashValue;
@@ -18,6 +21,18 @@ class SecureHashInterceptor extends Interceptor {
   Map<String, dynamic> _voidHandleTerminalId(RequestOptions options) {
     final data = options.data as Map<String, dynamic>;
     return data;
+  }
+
+  @override
+  Future<void> onResponse(
+      Response response, ResponseInterceptorHandler handler) async {
+    String contentType = response.headers['content-type']?.first ?? 'unknown';
+    if (contentType == "application/jose") {
+      final dncryptedData =
+      await EncryptionUtil.makeDecryptOfJson(response.data);
+      response.data = dncryptedData;
+    }
+    super.onResponse(response, handler);
   }
 
   @override
@@ -37,7 +52,16 @@ class SecureHashInterceptor extends Interceptor {
     });
     // 'merchantRefId': merchantId,
 
-    final interceptedOptions = options.copyWith(data: data);
+
+    if (true) {
+      final interceptedOptions = options.copyWith(data: data);
+      super.onRequest(interceptedOptions, handler);
+      return;
+    }
+
+    final encryptedData = EncryptionUtil.makeEncryptOfJson(data);
+
+    final interceptedOptions = options.copyWith(data: encryptedData);
     super.onRequest(interceptedOptions, handler);
   }
 

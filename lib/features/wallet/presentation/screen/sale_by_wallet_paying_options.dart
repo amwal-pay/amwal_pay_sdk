@@ -4,7 +4,6 @@ import 'package:amwal_pay_sdk/core/tablayout/tab_layout_cubit.dart';
 import 'package:amwal_pay_sdk/core/tablayout/tab_layout_generic_widget.dart';
 import 'package:amwal_pay_sdk/core/ui/accepted_payment_methods_widget.dart';
 import 'package:amwal_pay_sdk/core/ui/sale_card_feature_common_widgets.dart';
-import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_details_settings.dart';
 import 'package:amwal_pay_sdk/features/currency_field/data/models/response/currency_response.dart';
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
 import 'package:amwal_pay_sdk/features/wallet/cubit/sale_by_wallet_cubit.dart';
@@ -13,13 +12,10 @@ import 'package:amwal_pay_sdk/features/wallet/dependency/injector.dart';
 import 'package:amwal_pay_sdk/features/wallet/presentation/widgets/alias_pay_widget.dart';
 import 'package:amwal_pay_sdk/features/wallet/presentation/widgets/phone_pay_widget.dart';
 import 'package:amwal_pay_sdk/features/wallet/presentation/widgets/sale_action_buttons.dart';
-import 'package:amwal_pay_sdk/features/wallet/presentation/widgets/sale_by_wallet_mixins/sale_by_wallet_action_mixin.dart';
 import 'package:amwal_pay_sdk/features/wallet/presentation/widgets/scan_qr_to_pay.dart';
 import 'package:amwal_pay_sdk/features/wallet/state/sale_by_wallet_state.dart';
-
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -175,7 +171,7 @@ Widget _saleByWalletOptions(
   int pageNum,
   PaymentArguments paymentArguments,
   String Function(String)? globalTranslator,
-    OnPayCallback onPay,
+  OnPayCallback onPay,
 ) {
   if (pageNum == 0) {
     return PhonePayWidget(globalTranslator: globalTranslator);

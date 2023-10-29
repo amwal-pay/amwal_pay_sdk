@@ -124,14 +124,15 @@ class _DemoScreenState extends State<DemoScreen> {
                 onPressed: () async {
                   await AmwalPaySdk.instance.initSdk(
                     settings: AmwalSdkSettings(
+                      merchantName: 'Merchant Name',
                       token: _tokenController.text,
                       currency: _currencyController.text,
                       amount: _amountController.text,
-                      transactionRefNo: _transactionRefNoController.text,
+                      transactionId: _transactionRefNoController.text,
                       merchantId: _merchantIdController.text,
                       secureHashValue: _secureHashController.text,
                       terminalId: _terminalController.text,
-                      isMocked: true,
+                      isMocked: false,
                       is3DS: _is3DS,
                     ),
                   );

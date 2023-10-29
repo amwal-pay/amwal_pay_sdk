@@ -1,20 +1,20 @@
 library amwal_pay_sdk;
 
+import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
 import 'package:amwal_pay_sdk/amwal_sdk_settings/amwal_sdk_settings.dart';
 import 'package:amwal_pay_sdk/features/card/amwal_salebycard_sdk.dart';
 import 'package:amwal_pay_sdk/features/wallet/amwal_salebywallet_sdk.dart';
 import 'package:amwal_pay_sdk/navigator/sdk_navigator.dart';
 import 'package:amwal_pay_sdk/presentation/amwal_pay_screen.dart';
 import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
-import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
 import 'package:amwal_pay_sdk/sdk_builder/network_service_builder.dart';
 import 'package:amwal_pay_sdk/sdk_builder/sdk_builder.dart';
-
 import 'package:flutter/material.dart';
 
 import 'localization/app_localizations_setup.dart';
-export 'package:amwal_pay_sdk/navigator/sdk_navigator.dart';
+
 export 'package:amwal_pay_sdk/features/receipt/receipt_handler.dart';
+export 'package:amwal_pay_sdk/navigator/sdk_navigator.dart';
 
 class AmwalPaySdk {
   const AmwalPaySdk._();
@@ -45,6 +45,7 @@ class AmwalPaySdk {
       settings.isMocked,
       settings.secureHashValue,
       settings.token,
+      settings.locale.languageCode,
     );
 
     SdkBuilder.instance.initSdkModules(networkService);
@@ -56,10 +57,14 @@ class AmwalPaySdk {
   Future<AmwalWalletSdk> _initWalletSdk({
     required IAmwalSdkSettings settings,
   }) async {
+    print(settings.token);
     final networkService = NetworkServiceBuilder.instance.setupNetworkService(
       settings.isMocked,
       settings.secureHashValue,
       settings.token,
+      settings.locale.languageCode,
+      onError: settings.onError,
+      onTokenExpired: settings.onTokenExpired,
     );
     return await AmwalWalletSdk.instance.init(
       token: settings.token,
@@ -81,6 +86,9 @@ class AmwalPaySdk {
       settings.isMocked,
       settings.secureHashValue,
       settings.token,
+      settings.locale.languageCode,
+      onError: settings.onError,
+      onTokenExpired: settings.onTokenExpired,
     );
     return await AmwalCardSdk.instance.init(
       token: settings.token,
@@ -100,7 +108,7 @@ class AmwalPaySdk {
     await walletSdk.navigateToWallet(
       settings.locale,
       settings.onPay,
-      settings.onCountComplete ?? (_) {},
+      settings.onCountComplete ?? (_, [__]) {},
       settings.transactionId,
     );
   }

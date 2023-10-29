@@ -1,20 +1,24 @@
-import 'package:dio/dio.dart';
-
-import 'dio_client.dart';
-import 'network_state.dart';
-
 import 'dart:convert';
 
+import 'package:amwal_pay_sdk/core/networking/token_interceptor.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
+
+import 'EncryptionUtil.dart';
 import 'dio_client.dart';
 import 'network_state.dart';
-import 'dart:io';
-import 'package:flutter/services.dart' show rootBundle;
 
 class NetworkService {
   final DioClient _dioClient;
+  final void Function(Object e, StackTrace stack)? onError;
+  final Future<String?> Function()? onTokenExpired;
 
-  NetworkService(this._dioClient);
+  NetworkService(
+    this._dioClient, {
+    this.onError,
+    this.onTokenExpired,
+  });
 
   Future<Response> _httpMethodHandler({
     required String endpoint,
@@ -92,24 +96,44 @@ class NetworkService {
               .toList(),
         );
       }
-    } on DioError catch (e) {
-      print(e);
+    } on DioException catch (e, stack) {
+      debugPrint(e.toString());
+      onError?.call(e, stack);
+      if (e.response?.statusCode == 401) {
+        final token = await onTokenExpired?.call();
+        if (token != null) {
+          TokenInjectorInterceptor.token = token;
+        }
+        return const NetworkState.error(
+          message: "UnAuthorized",
+        );
+      }
+      String contentType =
+          e.response?.headers['content-type']?.first ?? 'unknown';
+
+      if (contentType == "application/jose") {
+        final decryptedData =
+            await EncryptionUtil.makeDecryptOfJson(e.response?.data);
+        e.response?.data = decryptedData;
+      }
+
       try {
         return NetworkState<T>.error(
-          message: e.response?.data['message'],
-          errorList: (e.response?.data['errorList'] as List?)
+          message: (e.response?.data?['message'] ?? e.message),
+          errorList: (e.response?.data?['errorList'] as List?)
               ?.map((e) => e.toString())
               .toList(),
         );
-      } catch (s) {
+      } catch (e, stack) {
+        debugPrint(e.toString());
+        onError?.call(e, stack);
         return NetworkState<T>.error(
-          message: e.message,
+          message: e.toString(),
         );
       }
-    } catch (e, stackTrace) {
-      print(e);
-      print(stackTrace);
-
+    } catch (e, stack) {
+      debugPrint(e.toString());
+      onError?.call(e, stack);
       return NetworkState<T>.error(
         message: e.toString(),
       );

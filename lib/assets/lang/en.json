@@ -99,7 +99,7 @@
   "log_out": "LOG OUT",
   "log_out_confirm_txt": "Are you sure to log out from your account?",
   "warning": "Warning",
-  "successful_transaction": "Transaction in progress... You shall receive a response within moments.",
+  "successful_transaction": "our transaction is being processed... You shall receive a response within moments.",
   "count_down": "Count Down",
   "refund": "REFUND",
   "capture": "CAPTURE",
@@ -133,5 +133,6 @@
   "stan": "Stan",
   "invalid-month": "Invalid entry",
   "enter_amount": "Please, Enter Amount",
-  "select_currency": "Please, Select Currency"
+  "select_currency": "Please, Select Currency",
+  "otp_verification": "OTP Verification"
 }

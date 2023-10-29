@@ -5,10 +5,9 @@ import 'package:amwal_pay_sdk/core/ui/amountcurrencywidget/amount_currency_widge
 import 'package:amwal_pay_sdk/core/ui/amountcurrencywidget/amount_currency_widget_cubit.dart';
 import 'package:amwal_pay_sdk/core/ui/listpicker/drop_down_list_cubit.dart';
 import 'package:amwal_pay_sdk/core/ui/listpicker/drop_down_list_widget.dart';
+import 'package:amwal_pay_sdk/features/payment_argument.dart';
 import 'package:amwal_pay_sdk/features/wallet/cubit/sale_by_wallet_cubit.dart';
 import 'package:amwal_pay_sdk/features/wallet/dependency/injector.dart';
-import 'package:amwal_pay_sdk/features/payment_argument.dart';
-
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:amwal_pay_sdk/navigator/sdk_navigator.dart';
 import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
@@ -18,6 +17,7 @@ class SaleByWalletScreen extends StatefulWidget {
   final OnPayCallback onPayCallback;
   final OnPayCallback onCountComplete;
   final String transactionId;
+
   const SaleByWalletScreen({
     Key? key,
     required this.onPayCallback,
@@ -106,10 +106,12 @@ class _SaleByWalletScreenState extends State<SaleByWalletScreen> {
             AmountCurrencyWidget(cubit: amountCubit),
             if (terminals.length != 1)
               DropDownListWidget<String>(
-                name: merchantName,
+                name: 'Wallet Terminal',
                 hintText: 'choose-terminal'.translate(context),
                 cubit: DropDownListCubit(
-                  initialValue: _terminal,
+                  initialValue: _terminal == null
+                      ? _terminal
+                      : 'Wallet Terminal - $_terminal',
                 ),
                 nameMapper: (item) => item!,
                 onDone: () => setState(() {}),

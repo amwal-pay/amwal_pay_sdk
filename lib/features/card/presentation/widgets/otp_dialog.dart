@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 
 class OTPEntryDialog extends StatefulWidget {
-  const OTPEntryDialog({super.key});
+  final String verifyString;
+  final String otpVerificationString;
+
+  const OTPEntryDialog(
+      {super.key,
+      required this.verifyString,
+      required this.otpVerificationString});
 
   @override
   State<OTPEntryDialog> createState() => _FourBoxOTPEntryDialogState();
@@ -31,7 +37,23 @@ class _FourBoxOTPEntryDialogState extends State<OTPEntryDialog> {
         mainAxisSize: MainAxisSize.min,
         children: [
           const SizedBox(height: 16),
-          const Text('Otp Verification'),
+          Row(
+            children: [
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  widget.otpVerificationString,
+                ),
+              ),
+              Align(
+                alignment: AlignmentDirectional.centerEnd,
+                child: IconButton(
+                  onPressed: Navigator.of(context).pop,
+                  icon: const Icon(Icons.clear),
+                ),
+              ),
+            ],
+          ),
           const SizedBox(height: 32),
           Pinput(
             key: const Key('saleByCardPinPut'),
@@ -44,9 +66,11 @@ class _FourBoxOTPEntryDialogState extends State<OTPEntryDialog> {
               children: [
                 ElevatedButton(
                   key: const Key('saleByCardOtbVerify'),
-                  onPressed: () =>
-                      Navigator.pop(context, _pinPutController.text),
-                  child: const Text('Verify'),
+                  onPressed: () => Navigator.pop(
+                    context,
+                    _pinPutController.text,
+                  ),
+                  child: Text(widget.verifyString),
                 )
               ],
             ),

@@ -1,3 +1,4 @@
+import 'package:amwal_pay_sdk/core/networking/custom_log_interceptor.dart';
 import 'package:amwal_pay_sdk/core/networking/dio_client.dart';
 import 'package:amwal_pay_sdk/core/networking/mockup_interceptor.dart';
 import 'package:amwal_pay_sdk/core/networking/network_service.dart';
@@ -8,15 +9,22 @@ class NetworkServiceBuilder {
   const NetworkServiceBuilder._();
   static NetworkServiceBuilder get instance => const NetworkServiceBuilder._();
   DioClient _initDioClientWithInterceptors(
-      bool isMocked,
-      String secureHashValue,
-      String token,
-      ) {
-    final tokenInterceptor = TokenInjectorInterceptor(token);
+    bool isMocked,
+    String secureHashValue,
+    String token,
+    String language,
+  ) {
+    final tokenInterceptor = TokenInjectorInterceptor();
+    TokenInjectorInterceptor.token = token;
     final mockupInterceptor = MockupInterceptor(isMocked);
     final secureHashInterceptor = SecureHashInterceptor(
       secureHashValue: secureHashValue,
     );
+    if (language == 'ar') {
+      CustomLogInterceptor.language = 'ar-EG';
+    } else {
+      CustomLogInterceptor.language = 'en-US';
+    }
     return DioClient(
       mockupInterceptor,
       secureHashInterceptor,
@@ -25,14 +33,21 @@ class NetworkServiceBuilder {
   }
 
   NetworkService setupNetworkService(
-      bool isMocked,
-      String secureHashValue,
-      String token,
-      ) =>
-      NetworkService(_initDioClientWithInterceptors(
-        isMocked,
-        secureHashValue,
-        token,
-      ));
-
+    bool isMocked,
+    String secureHashValue,
+    String token,
+    String language, {
+    void Function(Object e, StackTrace stack)? onError,
+    Future<String?> Function()? onTokenExpired,
+  }) =>
+      NetworkService(
+        _initDioClientWithInterceptors(
+          isMocked,
+          secureHashValue,
+          token,
+          language,
+        ),
+        onError: onError,
+        onTokenExpired: onTokenExpired,
+      );
 }

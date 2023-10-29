@@ -25,5 +25,11 @@ migrate_working_dir/
 /pubspec.lock
 **/doc/api/
 .dart_tool/
+.idea/
 .packages
 build/
+.idea
+android/local.properties
+linux/flutter/ephemeral/.plugin_symlinks
+.flutter-plugins
+.flutter-plugins-dependencies

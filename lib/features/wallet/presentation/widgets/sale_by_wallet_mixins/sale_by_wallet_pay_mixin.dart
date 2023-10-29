@@ -16,8 +16,7 @@ mixin SaleByWalletPayMixin on SaleByWalletActionsMixin {
       terminalId: paymentArguments.terminalId,
       id: paymentArguments.transactionId,
       mobileNumber: mobileNumber,
-      processingCode: '300000',
-      aliasName: alias,
+       aliasName: alias,
     );
     return request;
   }

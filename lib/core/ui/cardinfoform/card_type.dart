@@ -1,6 +1,7 @@
 enum CardType {
   master,
   visa,
+  omanNetCard,
   verve,
   discover,
   americanExpress,

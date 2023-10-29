@@ -34,24 +34,29 @@ class AliasPayWidget extends StatelessWidget {
           const SizedBox(
             height: 12,
           ),
-          InputFieldWidget(
-            widgetTitle: 'alis_tab'.translate(
-              context,
-              globalTranslator: globalTranslator,
-            ),
-            widgetHint: 'alias_name'.translate(
-              context,
-              globalTranslator: globalTranslator,
-            ),
-            onChange: (value) => walletCubit.aliasName = value,
-            maxLength: 35,
-            minLength: 3,
-          ),
+          BlocBuilder<SaleByWalletCubit, SaleByWalletState>(
+              bloc: walletCubit,
+              builder: (_, state) {
+                return InputFieldWidget(
+                  widgetTitle: 'alis_tab'.translate(
+                    context,
+                    globalTranslator: globalTranslator,
+                  ),
+                  widgetHint: 'alias_name'.translate(
+                    context,
+                    globalTranslator: globalTranslator,
+                  ),
+                  readOnly: walletCubit.state.verified,
+                  onChange: (value) => walletCubit.aliasName = value,
+                  maxLength: 40,
+                  minLength: 3,
+                );
+              }),
           BlocBuilder<SaleByWalletCubit, SaleByWalletState>(
             bloc: walletCubit,
             builder: (_, state) {
               if (walletCubit.state.verified) {
-                return const Padding(
+                return  Padding(
                   padding: EdgeInsets.symmetric(vertical: 8.0),
                   child: Row(
                     children: [
@@ -60,7 +65,7 @@ class AliasPayWidget extends StatelessWidget {
                         color: successColor,
                       ),
                       Text(
-                        'AZE#####AFIQ',
+                          walletCubit.customerNameFromApi ,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,

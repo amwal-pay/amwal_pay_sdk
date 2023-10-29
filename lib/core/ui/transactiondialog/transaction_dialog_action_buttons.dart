@@ -210,7 +210,7 @@ class TransactionDialogActionButtonsForTransaction
                         ),
                       ),
                       onPressed: () async {
-                        await showDialog(
+                        final confirmed = await showDialog(
                           context: context,
                           builder: (context) => AppAlertDialog(
                             title: 'capture',
@@ -219,12 +219,13 @@ class TransactionDialogActionButtonsForTransaction
                             actionButtonColor: primaryColor,
                             globalTranslator: globalTranslator,
                             actionButtonFn: () {
-                              onCapture?.call();
-                              Navigator.of(context).pop();
-                              Navigator.of(context).pop();
+                              Navigator.of(context).pop(true);
                             },
                           ),
                         );
+                        if(confirmed == true) {
+                          onCapture?.call();
+                        }
                       },
                       child: FittedBox(
                         child: Text(

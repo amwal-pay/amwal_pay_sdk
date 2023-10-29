@@ -4,7 +4,6 @@ import 'package:amwal_pay_sdk/features/wallet/presentation/screen/sale_by_wallet
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 
 import 'color/colors.dart';
 
@@ -41,7 +40,7 @@ class AmwalPayScreen extends StatelessWidget {
           children: [
             SaleByWalletPayingOptions(
               onPay: arguments.onPay,
-              onCountComplete: arguments.onCountComplete ?? (_) {},
+              onCountComplete: arguments.onCountComplete ?? (_, [__]) {},
               amount: arguments.amount,
               terminalId: arguments.terminalId,
               currency: arguments.currency,

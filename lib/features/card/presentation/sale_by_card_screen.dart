@@ -14,9 +14,7 @@ import 'package:amwal_pay_sdk/features/card/dependency/injector.dart';
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
-
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 
 class SaleByCardScreen extends StatefulApiView<SaleByCardManualCubit> {
   final bool is3DS;
@@ -43,7 +41,7 @@ class _SaleByCardScreenState extends State<SaleByCardScreen> {
   late String merchantName;
   late AmountCurrencyWidgetCubit _amountCurrencyWidgetCubit;
 
- final _hideKeyboard = FocusManager.instance.primaryFocus?.unfocus;
+  final _hideKeyboard = FocusManager.instance.primaryFocus?.unfocus;
 
   @override
   void initState() {
@@ -92,14 +90,16 @@ class _SaleByCardScreenState extends State<SaleByCardScreen> {
             AmountCurrencyWidget(cubit: _amountCurrencyWidgetCubit),
             if (_terminals.length != 1)
               DropDownListWidget<String>(
-                name: merchantName,
+                name: "Web Terminal",
                 hintText: 'choose-terminal'.translate(context),
                 cubit: DropDownListCubit(
-                  initialValue: terminal,
+                  initialValue:
+                      terminal == null ? terminal : 'Web Terminal - $terminal',
                 ),
                 nameMapper: (item) => item!,
                 onDone: () => setState(() {}),
                 onSelected: (item) => terminal = item,
+                onCancel: () => terminal = null,
                 dropDownListItems: _terminals,
               ),
             const SizedBox(height: 60),

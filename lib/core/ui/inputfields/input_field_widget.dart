@@ -24,7 +24,7 @@ class InputFieldWidget extends StatelessWidget {
     this.minLength = 0,
     this.onChange,
     this.decoration,
-
+    this.readOnly = false,
   }) : super(key: key);
 
   final String widgetTitle;
@@ -38,6 +38,7 @@ class InputFieldWidget extends StatelessWidget {
   final bool isYear;
   final int maxLength;
   final int minLength;
+  final bool readOnly;
   final void Function(String)? onChange;
   final InputDecoration? decoration;
 
@@ -89,7 +90,9 @@ class InputFieldWidget extends StatelessWidget {
             height: 5,
           ),
           TextFormField(
+            readOnly: readOnly,
             onChanged: onChange,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: FormBuilderValidators.compose([
               if (isRequired)
                 FormBuilderValidators.required(
@@ -113,7 +116,6 @@ class InputFieldWidget extends StatelessWidget {
             textInputAction: TextInputAction.next,
             keyboardType: isNumber ? TextInputType.number : null,
             inputFormatters: [
-
               if (isNumber == true) FilteringTextInputFormatter.digitsOnly,
               LengthLimitingTextInputFormatter(maxLength),
               if (isEnglish)

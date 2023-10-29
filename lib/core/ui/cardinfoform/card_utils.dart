@@ -10,9 +10,8 @@ class CardUtils {
     }
     input = getCleanedNumber(input);
 
-    if (input.length < 12 || input.length > 19) {
+    if (input.length != 16 && input.length != 19) {
       return "invalid_card".translate(context);
-
     }
 
     int sum = 0;
@@ -56,6 +55,8 @@ class CardUtils {
       cardType = CardType.dinersClub;
     } else if (input.startsWith(RegExp(r'(352[89]|35[3-8][0-9])'))) {
       cardType = CardType.jcb;
+    } else if (input.startsWith(RegExp('9512'))) {
+      cardType = CardType.omanNetCard;
     } else if (input.length <= 8) {
       cardType = CardType.others;
     } else {
@@ -69,6 +70,9 @@ class CardUtils {
     switch (cardType) {
       case CardType.master:
         img = 'mastercard.png';
+        break;
+      case CardType.omanNetCard:
+        img = 'oman_net_card.png';
         break;
       case CardType.visa:
         img = 'visa.png';
@@ -86,6 +90,8 @@ class CardUtils {
     return Image.asset(
       'lib/assets/images/$img',
       package: 'amwal_pay_sdk',
+      width: 24,
+      height: 24,
     );
   }
 

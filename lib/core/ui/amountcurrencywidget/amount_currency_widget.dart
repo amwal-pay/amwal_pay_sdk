@@ -38,28 +38,41 @@ class AmountCurrencyWidget extends StatelessWidget {
                 child: TextFormField(
                   onChanged: (value) => cubit.amountValue = value,
                   maxLines: 1,
+                  maxLength: 7,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: FormBuilderValidators.compose(
                     [
                       FormBuilderValidators.numeric(),
                       FormBuilderValidators.maxLength(
                         7,
-                        errorText: 'invalid_input_field'.translate(context),
+                        errorText: 'invalid_input_field'.translate(
+                          context,
+                        ),
                       ),
                       FormBuilderValidators.minLength(
                         3,
-                        errorText: 'invalid_input_field'.translate(context),
+                        errorText: 'invalid_input_field'.translate(
+                          context,
+                        ),
                       ),
-                      FormBuilderValidators.match('^(?!.*^(00)).*\$'),
+                      FormBuilderValidators.match(
+                        '^(?!.*^(000.00)).*\$',
+                        errorText: 'invalid_input_field'.translate(
+                          context,
+                        ),
+                      ),
                       FormBuilderValidators.required(
-                          errorText: 'required_field'.translate(context)),
-
+                        errorText: 'required_field'.translate(
+                          context,
+                        ),
+                      ),
                     ],
                   ),
                   inputFormatters: [
                     CurrencyTextInputFormatter(
-                      decimalDigits: 2,
+                      decimalDigits: 3,
                       symbol: '',
-                      customPattern: '00.00',
+                      customPattern: '000.000',
                       enableNegative: false,
                     ),
                   ],
@@ -69,8 +82,9 @@ class AmountCurrencyWidget extends StatelessWidget {
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-                    hintText: '00.00',
+                    hintText: '000.000',
                     focusColor: whiteColor,
+                    counterText: '',
                     enabledBorder: UnderlineInputBorder(
                       borderSide: const BorderSide(color: Colors.white),
                       borderRadius: BorderRadius.circular(8),

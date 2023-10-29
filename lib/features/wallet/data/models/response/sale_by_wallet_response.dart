@@ -3,7 +3,6 @@ import 'package:amwal_pay_sdk/core/base_response/base_response.dart';
 class SaleByWalletResponse extends BaseResponse<SaleByWalletData> {
   SaleByWalletResponse({
     required super.success,
-    super.responseCode,
     super.message,
     super.data,
   });
@@ -11,7 +10,6 @@ class SaleByWalletResponse extends BaseResponse<SaleByWalletData> {
   factory SaleByWalletResponse.fromJson(dynamic json) {
     return SaleByWalletResponse(
       success: json['success'],
-      responseCode: json['responseCode'],
       message: json['message'],
       data:
           json['data'] != null ? SaleByWalletData.fromMap(json['data']) : null,
