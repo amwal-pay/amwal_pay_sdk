@@ -2,10 +2,8 @@ workflows:
   my-workflow:
     environment:
       flutter: stable
-  
     scripts:
       - name: Build Android AAR
-        working_directory: android
         script: flutter build aar
     artifacts:
       - app/build/outputs/**/**/*.aar
