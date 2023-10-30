@@ -6,8 +6,9 @@ workflows:
       - name: Build Android AAR
         script: flutter build aar
     artifacts:
-      - build/host/outputs/repo/**/**/*.aar
       - build/host/outputs/repo/**/**/*.pom
+      - build/host/outputs/repo/**/**/*.aar
+     
 
 
 
