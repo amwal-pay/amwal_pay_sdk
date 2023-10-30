@@ -11,10 +11,19 @@ workflows:
     scripts:
       - name: Build Android AAR
         script: flutter build aar
-      - name: List Artifacts
-        script: |
-          # List the contents of the current directory
-          ls -R
+    publishing:
+    scripts:
+    - name: unzip
+      script: |
+        aarPath=$(find build -name "*.aar")
+        echo 'path${aarPath}'
+    - name: Report build status
+      script: | 
+        if [  -f ~/SUCCESS ] ; then
+           # build successful
+        else
+           # build failed
+        fi
       # - name: Post-Publish Script
       #   script: |
       #      # Clone the target repository with authentication using a personal access token
