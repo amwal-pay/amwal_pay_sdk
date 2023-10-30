@@ -11,14 +11,14 @@ workflows:
     scripts:
       - name: Build Android AAR
         script: flutter build aar
-  publishing:
-    scripts:
-    - name: unzip
-      script: |
-       # build successful
-        echo 'something here'
-        aarPath=$(find build -name "*.aar")
-        echo 'path${aarPath}'
+publishing:
+  scripts:
+    - name: Report build status
+      script: | 
+        if [  -f ~/SUCCESS ] ; then
+           # build successful
+        else
+           # build failed
         fi
   
       # - name: Post-Publish Script
