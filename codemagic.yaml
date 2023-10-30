@@ -17,8 +17,8 @@ workflows:
           mkdir -p /flattened-artifacts
 
           # Copy .aar and .pom files to the flattened directory
-          cp -r /path/to/code-magic-artifacts/**/*.aar /flattened-artifacts
-          cp -r /path/to/code-magic-artifacts/**/*.pom /flattened-artifacts
+          cp -r build/host/outputs/repo/**/**/*.aar /flattened-artifacts
+          cp -r /build/host/outputs/repo/**/**/*.pom /flattened-artifacts
 
           # Clean up the original directory
           rm -rf /path/to/code-magic-artifacts
