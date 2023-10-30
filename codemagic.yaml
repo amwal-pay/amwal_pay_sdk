@@ -11,17 +11,10 @@ workflows:
     scripts:
       - name: Build Android AAR
         script: flutter build aar
-      - name: Flatten Artifacts
+      - name: List Artifacts
         script: |
-          # Create a directory for flattened artifacts
-          mkdir -p /flattened-artifacts
-
-          # Copy .aar and .pom files to the flattened directory
-          cp -r build/host/outputs/repo/**/**/*.aar /flattened-artifacts
-          cp -r /build/host/outputs/repo/**/**/*.pom /flattened-artifacts
-
-          # Clean up the original directory
-          rm -rf /path/to/code-magic-artifacts
+          # List the contents of the current directory
+          ls -R
       # - name: Post-Publish Script
       #   script: |
       #      # Clone the target repository with authentication using a personal access token
