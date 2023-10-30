@@ -11,24 +11,35 @@ workflows:
     scripts:
       - name: Build Android AAR
         script: flutter build aar
-      - name: Post-Publish Script
+      - name: Flatten Artifacts
         script: |
-           # Clone the target repository with authentication using a personal access token
-           git clone https://github.com/amwal-pay/amwal_pay_android_sdk.git
-           cd amwal_pay_android_sdk
+          # Create a directory for flattened artifacts
+          mkdir -p /flattened-artifacts
 
-           # Set up Git configuration for the user and use the personal access token
-           git config --global user.email "amr.elskaan@hotmail.com"
-           git config --global user.name "Amr Saied"
-           git config credential.helper "store --file=/tmp/git-credentials"  # Store the credentials
+          # Copy .aar and .pom files to the flattened directory
+          cp -r /path/to/code-magic-artifacts/**/*.aar /flattened-artifacts
+          cp -r /path/to/code-magic-artifacts/**/*.pom /flattened-artifacts
+
+          # Clean up the original directory
+          rm -rf /path/to/code-magic-artifacts
+      # - name: Post-Publish Script
+      #   script: |
+      #      # Clone the target repository with authentication using a personal access token
+      #      git clone https://github.com/amwal-pay/amwal_pay_android_sdk.git
+      #      cd amwal_pay_android_sdk
+
+      #      # Set up Git configuration for the user and use the personal access token
+      #      git config --global user.email "amr.elskaan@hotmail.com"
+      #      git config --global user.name "Amr Saied"
+      #      git config credential.helper "store --file=/tmp/git-credentials"  # Store the credentials
            
-           # Create a new branch and commit the changes
-           git checkout -b sdk_${BUILD_NUMBER}
-           git add .
-           git commit -m "Add flattened .pom files from CodeMagic build artifacts"
+      #      # Create a new branch and commit the changes
+      #      git checkout -b sdk_${BUILD_NUMBER}
+      #      git add .
+      #      git commit -m "Add flattened .pom files from CodeMagic build artifacts"
 
-           # Push the branch to the repository, using the personal access token for authentication
-           git push https://AmrElskaan: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@github.com/amwal-pay/amwal_pay_android_sdk.git sdk_${BUILD_NUMBER}
+      #      # Push the branch to the repository, using the personal access token for authentication
+      #      git push https://AmrElskaan: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@github.com/amwal-pay/amwal_pay_android_sdk.git sdk_${BUILD_NUMBER}
 
 
 
