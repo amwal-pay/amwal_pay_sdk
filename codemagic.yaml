@@ -2,13 +2,44 @@ workflows:
   my-workflow:
     environment:
       flutter: stable
+    artifacts:
+      - build/host/outputs/repo/**/**/*.pom
+      - build/host/outputs/repo/**/**/*.aar
     scripts:
       - name: Build Android AAR
         script: flutter build aar
-    artifacts:
-      - build/host/outputs/repo/**/**/**/*.pom
-      - build/host/outputs/repo/**/**/*.aar
-     
+      - name: Unzip and Flatten
+        script: |
+          # Unzip the folder containing artifacts
+          unzip /amwal_pay_sdk_${CM_BUILD_NUMBER}_artifacts.zip -d /unzipped-folder
+          
+          # Flatten the contents of the unzipped folder
+          find /unzipped-folder -type f -exec mv {} /destination-directory \;
+
+
+    
+
+#      - name: Post-Publish Script
+#          script: |
+#            # Clone the target repository with authentication using a personal access token
+#            git clone https://github.com/amwal-pay/amwal_pay_android_sdk.git
+#            cd amwal_pay_android_sdk
+#
+#            # Set up Git configuration for the user and use the personal access token
+#            git config --global user.email "amr.elskaan@hotmail.com"
+#            git config --global user.name "Amr Saied"
+#            git config credential.helper "store --file=/tmp/git-credentials"  # Store the credentials
+#
+#            # Copy .pom files from the CodeMagic environment and flatten the directory structure
+#            find /path/to/code-magic-artifacts -name "*.pom" -exec cp {} . \;
+#
+#            # Create a new branch and commit the changes
+#            git checkout -b new-branch
+#            git add .
+#            git commit -m "Add flattened .pom files from CodeMagic build artifacts"
+#
+#            # Push the branch to the repository, using the personal access token for authentication
+#            git push https://yourusername:${{ secrets.PAT_TOKEN }}@github.com/yourusername/target-repo.git new-branch
 
 
 
