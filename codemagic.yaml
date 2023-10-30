@@ -2,6 +2,7 @@ workflows:
   my-workflow:
     environment:
       flutter: stable
+    instance_type: windows_x2    
     cache:
       cache_paths:
         - $FLUTTER_ROOT/.pub-cache  
