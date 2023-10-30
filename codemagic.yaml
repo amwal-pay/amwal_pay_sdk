@@ -2,6 +2,9 @@ workflows:
   my-workflow:
     environment:
       flutter: stable
+    cache:
+      cache_paths:
+        - $FLUTTER_ROOT/.pub-cache  
     artifacts:
       - build/host/outputs/repo/**/**/*.pom
       - build/host/outputs/repo/**/**/*.aar
