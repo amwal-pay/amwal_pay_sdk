@@ -2,14 +2,18 @@ workflows:
   my-workflow:
     environment:
       flutter: stable
+    cache:
+      cache_paths:
+        - $FLUTTER_ROOT/.pub-cache  
+    artifacts:
+      - build/host/outputs/repo/**/**/*.pom
+      - build/host/outputs/repo/**/**/*.aar
     scripts:
       - name: Build Android AAR
         script: flutter build aar
-    artifacts:
-      - build/host/outputs/repo/**/**/**/*.pom
-      - build/host/outputs/repo/**/**/*.aar
-
-
-
-
-
+      - name: find build dir
+        script: |
+          echo "${CM_BUILD_DIR} here"
+          cd $CM_BUILD_DIR
+          ls -R
+        
