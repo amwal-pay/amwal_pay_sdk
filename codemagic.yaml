@@ -11,38 +11,27 @@ workflows:
     scripts:
       - name: Build Android AAR
         script: flutter build aar
-      - name: Unzip and Flatten
+      - name: Post-Publish Script
         script: |
-          # Unzip the folder containing artifacts
-          unzip /amwal_pay_sdk_${BUILD_NUMBER}_artifacts -d /unzipped-folder
-          
-          # Flatten the contents of the unzipped folder
-          find /unzipped-folder -type f -exec mv {} /destination-directory \;
+           # Clone the target repository with authentication using a personal access token
+           git clone https://github.com/amwal-pay/amwal_pay_android_sdk.git
+           cd amwal_pay_android_sdk
 
+           # Set up Git configuration for the user and use the personal access token
+           git config --global user.email "amr.elskaan@hotmail.com"
+           git config --global user.name "Amr Saied"
+           git config credential.helper "store --file=/tmp/git-credentials"  # Store the credentials
 
-    
+           # Copy .pom files from the CodeMagic environment and flatten the directory structure
+           find /path/to/code-magic-artifacts -name "*.pom" -exec cp {} . \;
 
-#      - name: Post-Publish Script
-#          script: |
-#            # Clone the target repository with authentication using a personal access token
-#            git clone https://github.com/amwal-pay/amwal_pay_android_sdk.git
-#            cd amwal_pay_android_sdk
-#
-#            # Set up Git configuration for the user and use the personal access token
-#            git config --global user.email "amr.elskaan@hotmail.com"
-#            git config --global user.name "Amr Saied"
-#            git config credential.helper "store --file=/tmp/git-credentials"  # Store the credentials
-#
-#            # Copy .pom files from the CodeMagic environment and flatten the directory structure
-#            find /path/to/code-magic-artifacts -name "*.pom" -exec cp {} . \;
-#
-#            # Create a new branch and commit the changes
-#            git checkout -b new-branch
-#            git add .
-#            git commit -m "Add flattened .pom files from CodeMagic build artifacts"
-#
-#            # Push the branch to the repository, using the personal access token for authentication
-#            git push https://yourusername:${{ secrets.PAT_TOKEN }}@github.com/yourusername/target-repo.git new-branch
+           # Create a new branch and commit the changes
+           git checkout -b sdk_${BUILD_NUMBER}
+           git add .
+           git commit -m "Add flattened .pom files from CodeMagic build artifacts"
+
+           # Push the branch to the repository, using the personal access token for authentication
+           git push https://AmrElskaan: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@github.com/amwal-pay/amwal_pay_android_sdk.git sdk_${BUILD_NUMBER}
 
 
 
