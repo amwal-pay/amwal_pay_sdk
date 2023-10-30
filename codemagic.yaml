@@ -7,6 +7,7 @@ workflows:
         script: flutter build aar
     artifacts:
       - build/host/outputs/repo/**/**/*.aar
+      - build/host/outputs/repo/**/**/*.pom
 
 
 
