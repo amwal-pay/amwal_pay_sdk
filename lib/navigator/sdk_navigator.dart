@@ -11,9 +11,9 @@ class AmwalSdkNavigator {
   static NavigatorObserver amwalNavigatorObserver = NavigatorObserver();
 
   Future<void> toWalletOptionsScreen(
-      BuildContext context,
-      RouteSettings settings,
-      ) async {
+    BuildContext context,
+    RouteSettings settings,
+  ) async {
     final args = settings.arguments as PaymentArguments;
     await Navigator.of(context).push(
       MaterialPageRoute(
@@ -22,6 +22,7 @@ class AmwalSdkNavigator {
           terminalId: args.terminalId,
           currencyId: args.currencyData!.idN,
           currency: args.currencyData!.name,
+          merchantName: args.merchantName,
         ),
       ),
     );
@@ -38,9 +39,9 @@ class AmwalSdkNavigator {
       );
 
   Future<void> toCardOptionScreen(
-      RouteSettings settings,
-      BuildContext context,
-      ) async {
+    RouteSettings settings,
+    BuildContext context,
+  ) async {
     final arguments = settings.arguments as PaymentArguments;
     await Navigator.of(context).push(
       MaterialPageRoute(
@@ -49,6 +50,7 @@ class AmwalSdkNavigator {
           currencyId: arguments.currencyData!.idN,
           terminalId: arguments.terminalId,
           amount: arguments.amount,
+          merchantName: arguments.merchantName,
         ),
         settings: settings,
       ),

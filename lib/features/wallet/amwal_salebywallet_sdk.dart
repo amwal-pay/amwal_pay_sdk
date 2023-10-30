@@ -16,7 +16,6 @@ class AmwalWalletSdk {
   static AmwalWalletSdk get instance => const AmwalWalletSdk._();
 
   Future<void> _sdkInitialization(
-    String token,
     List<String> terminalIds,
     String secureHashValue,
     String requestSourceId,
@@ -25,13 +24,12 @@ class AmwalWalletSdk {
     Locale? locale,
   }) async {
     await SdkBuilder.instance.initCacheStorage();
-    await CacheStorageHandler.instance.write('token', token);
+    // await CacheStorageHandler.instance.write('token', token);
     await CacheStorageHandler.instance.write('terminal', terminalIds);
     SdkBuilder.instance.initWalletModules(service);
   }
 
   Future<AmwalWalletSdk> init({
-    required String apiKey,
     required String merchantId,
     required List<String> terminalIds,
     required String secureHashValue,
@@ -43,7 +41,6 @@ class AmwalWalletSdk {
   }) async {
     await WalletInjector.instance.onSdkInit(
       () async => await _sdkInitialization(
-        apiKey,
         terminalIds,
         secureHashValue,
         requestSourceId,

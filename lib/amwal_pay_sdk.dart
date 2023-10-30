@@ -30,10 +30,8 @@ class AmwalPaySdk {
       settings.isMocked,
       settings.secureHashValue,
       settings.requestSourceId,
-      settings.apiKey,
     );
     return await AmwalWalletSdk.instance.init(
-      apiKey: settings.apiKey,
       merchantId: settings.merchantId,
       terminalIds: settings.terminalIds,
       secureHashValue: settings.secureHashValue,
@@ -52,11 +50,11 @@ class AmwalPaySdk {
       settings.isMocked,
       settings.secureHashValue,
       settings.requestSourceId,
-      settings.apiKey,
+      // settings.apiKey,
     );
 
     return await AmwalCardSdk.instance.init(
-      apiKey: settings.apiKey,
+      // apiKey: settings.apiKey,
       merchantId: settings.merchantId,
       terminalIds: settings.terminalIds,
       secureHashValue: settings.secureHashValue,

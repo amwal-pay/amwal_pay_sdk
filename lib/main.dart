@@ -58,6 +58,7 @@ class _MyAppState extends State<MyApp> {
       home: isInitialized
           ? AmwalPayScreen(
               arguments: AmwalSdkArguments(
+                merchantName: _settings.merchantName,
                 amount: _settings.amount,
                 currency: _settings.currency,
                 currencyId: _settings.currencyId,

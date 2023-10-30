@@ -115,6 +115,7 @@ class _SaleByWalletScreenState extends State<SaleByWalletScreen> {
                 onPressed: () async {
                   if (amountCubit.validateAmountInput() && _validateInputs()) {
                     final args = PaymentArguments(
+                      merchantName: 'merchant_name',
                       amount: amountCubit.amountValue,
                       terminalId: _terminal ?? '',
                       currencyData: amountCubit.currencyData,

@@ -1,4 +1,3 @@
-
 import 'package:amwal_pay_sdk/features/card/presentation/sale_by_card_manual_screen.dart';
 import 'package:amwal_pay_sdk/features/wallet/presentation/screen/sale_by_wallet_paying_options.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
@@ -23,20 +22,22 @@ class AmwalPayScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: primaryColor,
           centerTitle: true,
-
           title: const Text('Amwal Pay'),
-          bottom: TabBar(tabs: [
-            Tab(
-              text: 'wallet_label'.translate(context),
-            ),
-            Tab(
-              text: 'card'.translate(context),
-            ),
-          ],),
+          bottom: TabBar(
+            tabs: [
+              Tab(
+                text: 'wallet_label'.translate(context),
+              ),
+              Tab(
+                text: 'card'.translate(context),
+              ),
+            ],
+          ),
         ),
         body: TabBarView(
           children: [
             SaleByWalletPayingOptions(
+              merchantName: arguments.merchantName,
               amount: arguments.amount,
               terminalId: arguments.terminalId,
               currency: arguments.currency,
@@ -45,6 +46,7 @@ class AmwalPayScreen extends StatelessWidget {
               translator: (txt) => txt.translate(context),
             ),
             SaleByCardManualScreen(
+              merchantName: arguments.merchantName,
               amount: arguments.amount,
               terminalId: arguments.terminalId,
               currency: arguments.currency,

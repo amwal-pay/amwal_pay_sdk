@@ -4,26 +4,25 @@ import 'package:amwal_pay_sdk/core/networking/secure_hash_interceptor.dart';
 import 'package:amwal_pay_sdk/core/networking/token_interceptor.dart';
 import 'package:dio/dio.dart';
 
-
 import 'constants.dart';
 
 class DioClient {
   late final Dio _dio;
   final MockupInterceptor _mockupInterceptor;
   final SecureHashInterceptor _secureHashInterceptor;
-  final TokenInjectorInterceptor _tokenInjectorInterceptor;
+  // final TokenInjectorInterceptor _tokenInjectorInterceptor;
 
   DioClient(
     this._mockupInterceptor,
     this._secureHashInterceptor,
-    this._tokenInjectorInterceptor,
+    // this._tokenInjectorInterceptor,
   ) {
     _dio = Dio(
       BaseOptions(
         baseUrl: NetworkConstants.baseUrl,
       ),
     )..interceptors.addAll([
-        _tokenInjectorInterceptor,
+        // _tokenInjectorInterceptor,
         _secureHashInterceptor,
         _mockupInterceptor,
         CustomLogInterceptor(),

@@ -95,6 +95,7 @@ class _SaleByCardScreenState extends State<SaleByCardScreen> {
                 if (amountCurrencyWidgetCubit.validateAmountInput() &&
                     _validateInputs()) {
                   final paymentArguments = PaymentArguments(
+                    merchantName: 'merchant_name',
                     amount: amountCurrencyWidgetCubit.amountValue,
                     terminalId: terminal!,
                     currencyData: amountCurrencyWidgetCubit.currencyData,

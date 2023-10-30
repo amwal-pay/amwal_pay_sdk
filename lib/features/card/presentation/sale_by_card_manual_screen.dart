@@ -1,4 +1,3 @@
-
 import 'package:amwal_pay_sdk/core/apiview/api_view.dart';
 import 'package:amwal_pay_sdk/core/base_state/base_cubit_state.dart';
 import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
@@ -25,9 +24,11 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit> {
   final String terminalId;
   final bool showAppBar;
   final String Function(String)? translator;
+  final String merchantName;
 
   const SaleByCardManualScreen({
     Key? key,
+    required this.merchantName,
     required this.amount,
     required this.currencyId,
     required this.currency,
@@ -39,6 +40,7 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit> {
   @override
   Widget build(BuildContext context) {
     final args = PaymentArguments(
+      merchantName: merchantName,
       terminalId: terminalId,
       amount: amount,
       currencyData: CurrencyData(

@@ -1,4 +1,3 @@
-
 import 'package:amwal_pay_sdk/features/currency_field/data/models/response/currency_response.dart';
 
 class PaymentArguments {
@@ -6,10 +5,12 @@ class PaymentArguments {
   final String terminalId;
   final CurrencyData? currencyData;
   final bool is3DS;
+  final String merchantName;
 
   const PaymentArguments({
     required this.amount,
     required this.terminalId,
+    required this.merchantName,
     this.currencyData,
     this.is3DS = false,
   });
@@ -19,6 +20,7 @@ class PaymentArguments {
       'amount': amount,
       'terminalId': terminalId,
       'currencyData': currencyData?.toJson(),
+      'merchantName': merchantName,
     };
   }
 
@@ -27,6 +29,7 @@ class PaymentArguments {
       amount: map['amount'] as String,
       terminalId: map['terminalId'] as String,
       currencyData: CurrencyData.fromJson(map['currencyData']),
+      merchantName: map['merchantName'],
     );
   }
 }

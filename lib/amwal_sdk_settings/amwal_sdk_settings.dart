@@ -1,7 +1,7 @@
+import 'package:amwal_pay_sdk/core/networking/constants.dart';
 import 'package:flutter/material.dart';
 
 abstract class IAmwalSdkSettings {
-  final String apiKey;
   final String requestSourceId;
   final String secureHashValue;
   final String merchantId;
@@ -17,7 +17,6 @@ abstract class IAmwalSdkSettings {
   final BuildContext? context;
 
   const IAmwalSdkSettings({
-    required this.apiKey,
     required this.secureHashValue,
     required this.requestSourceId,
     required this.merchantId,
@@ -36,7 +35,6 @@ abstract class IAmwalSdkSettings {
 
 class AmwalInAppSdkSettings extends IAmwalSdkSettings {
   const AmwalInAppSdkSettings({
-    required super.apiKey,
     required super.secureHashValue,
     required super.merchantId,
     required super.terminalIds,
@@ -55,7 +53,6 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
 class AmwalSdkSettings extends IAmwalSdkSettings {
   final String terminalId;
   AmwalSdkSettings({
-    required super.apiKey,
     required super.secureHashValue,
     required super.merchantId,
     super.transactionRefNo,
@@ -79,7 +76,6 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
     return AmwalSdkSettings(
       terminalId: terminalId,
       context: context ?? this.context,
-      apiKey: apiKey,
       locale: locale,
       is3DS: is3DS,
       isMocked: isMocked,
@@ -95,15 +91,13 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
 
   factory AmwalSdkSettings.fromArgs(List<String> args) {
     return AmwalSdkSettings(
-      apiKey: args[0],
-      secureHashValue: args[1],
-      merchantId: args[2],
-      currency: args[3],
-      currencyId: int.parse(args[4]),
-      amount: args[5],
-      terminalId: args[6],
-      isMocked: args[7] == '1',
-      merchantName: args[8],
-    );
+        merchantId: args[0],
+        currency: args[1],
+        currencyId: int.parse(args[2]),
+        amount: args[3],
+        terminalId: args[4],
+        isMocked: args[5] == '1',
+        merchantName: args[6],
+        secureHashValue: args[7]);
   }
 }

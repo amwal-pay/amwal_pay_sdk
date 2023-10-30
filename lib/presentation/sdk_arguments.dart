@@ -7,6 +7,7 @@ class AmwalSdkArguments {
   final String terminalId;
   final String currency;
   final int currencyId;
+  final String merchantName;
 
   AmwalSdkArguments({
     this.locale = const Locale('en'),
@@ -15,5 +16,6 @@ class AmwalSdkArguments {
     required this.terminalId,
     required this.currency,
     required this.currencyId,
+    required this.merchantName,
   });
 }

@@ -41,10 +41,7 @@ class SaleCardFeatureCommonWidgets {
                     height: 6,
                   ),
                   Text(
-                    'merchant_name_label'.translate(
-                      context,
-                      globalTranslator: translator,
-                    ),
+                    paymentArgs.merchantName,
                     style: const TextStyle(
                       color: blackColor,
                       fontSize: 20,

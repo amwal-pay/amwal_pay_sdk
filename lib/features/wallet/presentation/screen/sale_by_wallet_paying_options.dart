@@ -26,9 +26,11 @@ class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
   final String currency;
   final int currencyId;
   final bool showAppBar;
+  final String merchantName;
   final String Function(String)? translator;
   const SaleByWalletPayingOptions({
     Key? key,
+    required this.merchantName,
     required this.amount,
     required this.terminalId,
     required this.currency,
@@ -40,6 +42,7 @@ class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
   @override
   Widget build(BuildContext context) {
     final paymentArgument = PaymentArguments(
+      merchantName: merchantName,
       amount: amount,
       terminalId: terminalId,
       currencyData: CurrencyData(
