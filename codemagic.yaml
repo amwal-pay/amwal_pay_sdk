@@ -11,7 +11,7 @@ workflows:
     scripts:
       - name: Build Android AAR
         script: flutter build aar
-    publishing:
+  publishing:
     scripts:
     - name: unzip
       script: |
