@@ -15,15 +15,12 @@ workflows:
     scripts:
     - name: unzip
       script: |
+       # build successful
+        echo 'something here'
         aarPath=$(find build -name "*.aar")
         echo 'path${aarPath}'
-    - name: Report build status
-      script: | 
-        if [  -f ~/SUCCESS ] ; then
-           # build successful
-        else
-           # build failed
         fi
+  
       # - name: Post-Publish Script
       #   script: |
       #      # Clone the target repository with authentication using a personal access token
