@@ -21,10 +21,7 @@ workflows:
            git config --global user.email "amr.elskaan@hotmail.com"
            git config --global user.name "Amr Saied"
            git config credential.helper "store --file=/tmp/git-credentials"  # Store the credentials
-
-           # Copy .pom files from the CodeMagic environment and flatten the directory structure
-           find /path/to/code-magic-artifacts -name "*.pom" -exec cp {} . \;
-
+           
            # Create a new branch and commit the changes
            git checkout -b sdk_${BUILD_NUMBER}
            git add .
