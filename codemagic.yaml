@@ -11,7 +11,7 @@ workflows:
       - name: Unzip and Flatten
         script: |
           # Unzip the folder containing artifacts
-          unzip /amwal_pay_sdk_*_artifacts -d /unzipped-folder
+          unzip /amwal_pay_sdk_${BUILD_NUMBER}_artifacts -d /unzipped-folder
           
           # Flatten the contents of the unzipped folder
           find /unzipped-folder -type f -exec mv {} /destination-directory \;
