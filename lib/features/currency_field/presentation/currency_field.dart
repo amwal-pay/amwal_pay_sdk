@@ -73,7 +73,7 @@ class _CurrencyFieldState extends State<CurrencyField> {
               return item!.name;
             },
             onDone: () => setState(
-              () => widget.onChanged(_currencyData),
+              () => widget.onChanged(_currencyData ?? _defaultCurrency),
             ),
             onCancel: () => setState(() {
               _currencyData = null;

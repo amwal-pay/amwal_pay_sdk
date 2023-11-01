@@ -103,6 +103,13 @@ class NetworkService {
         final token = await onTokenExpired?.call();
         if (token != null) {
           TokenInjectorInterceptor.token = token;
+          return await invokeRequest(
+            endpoint: endpoint,
+            method: method,
+            converter: converter,
+            data: data,
+            queryParams: queryParams,
+          );
         }
         return const NetworkState.error(
           message: "UnAuthorized",

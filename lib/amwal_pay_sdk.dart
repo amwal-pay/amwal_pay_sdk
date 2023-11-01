@@ -57,7 +57,6 @@ class AmwalPaySdk {
   Future<AmwalWalletSdk> _initWalletSdk({
     required IAmwalSdkSettings settings,
   }) async {
-    print(settings.token);
     final networkService = NetworkServiceBuilder.instance.setupNetworkService(
       settings.isMocked,
       settings.secureHashValue,
