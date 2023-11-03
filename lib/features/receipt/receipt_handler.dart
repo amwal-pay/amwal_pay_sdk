@@ -3,6 +3,8 @@ import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction.dart';
 import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_details_settings.dart';
 import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_status_dialog.dart';
 import 'package:amwal_pay_sdk/features/card/data/models/response/purchase_response.dart';
+import 'package:amwal_pay_sdk/localization/app_localizations.dart';
+import 'package:amwal_pay_sdk/localization/app_localizations_setup.dart';
 import 'package:flutter/material.dart';
 
 class ReceiptHandler {
@@ -53,13 +55,17 @@ class ReceiptHandler {
     required BuildContext context,
     required TransactionDetailsSettings settings,
   }) async {
-    await showDialog(
+    await Navigator.of(context).push(DialogRoute(
       context: context,
       builder: (_) {
-        return TransactionStatusDialog(
-          settings: settings,
+        return Localizations(
+          delegates: AppLocalizationsSetup.localizationsDelegates.toList(),
+          locale: settings.locale,
+          child: TransactionStatusDialog(
+            settings: settings,
+          ),
         );
       },
-    );
+    ));
   }
 }
