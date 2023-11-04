@@ -78,17 +78,6 @@ class SaleCardFeatureCommonWidgets {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        paymentArgs.amount,
-                        style: const TextStyle(
-                          color: blackColor,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      Text(
                         paymentArgs.currencyData!.name.translate(
                           context,
                           globalTranslator: translator,
@@ -96,6 +85,17 @@ class SaleCardFeatureCommonWidgets {
                         style: const TextStyle(
                           color: greyColor,
                           fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        paymentArgs.amount,
+                        style: const TextStyle(
+                          color: blackColor,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

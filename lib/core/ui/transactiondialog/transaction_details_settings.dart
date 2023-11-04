@@ -68,6 +68,14 @@ class TransactionDetailsSettings {
       isTransactionDetails: isTransactionDetails ?? this.isTransactionDetails,
       globalTranslator: globalTranslator ?? this.globalTranslator,
       isSuccess: isSuccess,
+      locale: locale,
+      canCapture: canCapture,
+      canRefund: canRefund,
+      canVoid: canVoid,
+      dueAmount: dueAmount,
+      onCapture: onCapture,
+      onRefund: onRefund,
+      onVoid: onVoid,
     );
   }
 }
