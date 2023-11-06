@@ -207,6 +207,8 @@ class _TransactionStatusDialogState extends State<TransactionStatusDialog> {
                     isCaptured: settings.isCaptured,
                     isSettled: settings.isSettled,
                     globalTranslator: settings.globalTranslator,
+                    amount: settings.amount,
+                    currency: settings.currency,
                   ),
                 )
             ],

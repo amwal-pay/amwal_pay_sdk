@@ -4,6 +4,9 @@ import 'package:amwal_pay_sdk/core/base_view_cubit/base_cubit.dart';
 import 'package:amwal_pay_sdk/core/usecase/i_use_case.dart';
 import 'package:amwal_pay_sdk/features/card/data/models/request/purchase_request.dart';
 import 'package:amwal_pay_sdk/features/card/data/models/response/purchase_response.dart';
+import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
+import 'package:amwal_pay_sdk/localization/locale_utils.dart';
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -32,13 +35,44 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
   String? email;
   String? originalTransactionId;
 
+  String? _validateExpDate(){
+    final date = DateTime.now();
+    print(date.year % 100);
+    if((date.month > int.parse(expirationDateMonth!)) && ((date.year % 100) >= int.parse(expirationDateYear!))) {
+      return 'invalid_exp_date';
+    }else{
+      return null;
+    }
+  }
+  
+  void _showErrorSnackBar({
+    required BuildContext context,
+    required String message,
+  }) {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    scaffoldMessenger.hideCurrentSnackBar();
+    final snackBar = SnackBar(
+      content: Text(message),
+      backgroundColor: redColor,
+    );
+    scaffoldMessenger.showSnackBar(snackBar);
+  }
+
   Future<PurchaseData?> purchase(
     String amount,
     String terminalId,
     int currencyId,
     int merchantId,
     String? transactionId,
+    BuildContext? context,
   ) async {
+    final valid = _validateExpDate();
+    if(valid!=null) {
+      if(context!=null && context.mounted){
+        _showErrorSnackBar(context:context, message: valid.translate(context));
+      }
+      return null;
+    }
     final purchaseRequest = PurchaseRequest(
       pan: cardNo!.replaceAll(' ', ''),
       amount: num.parse(amount),
@@ -65,7 +99,18 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
     int currencyId,
     int merchantId,
     String? transactionId,
+      BuildContext? context,
   ) async {
+    final valid = _validateExpDate();
+    if(valid!=null) {
+      if(context!=null && context.mounted){
+        _showErrorSnackBar(context:context, message: valid.translate(context));
+      }
+      return null;
+    }
+    
+   
+   
     emit(const ICubitState.loading());
     final purchaseRequest = PurchaseRequest(
       pan: cardNo!.replaceAll(' ', ''),

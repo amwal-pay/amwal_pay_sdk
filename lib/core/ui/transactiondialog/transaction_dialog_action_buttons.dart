@@ -2,6 +2,7 @@ import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
 import 'package:amwal_pay_sdk/core/ui/alert_dialog/alert_dialog.dart';
 import 'package:amwal_pay_sdk/core/ui/buttons/app_button.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
+import 'package:amwal_pay_sdk/localization/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -26,6 +27,8 @@ abstract class TransactionDialogAction extends StatelessWidget {
     bool? isRefunded,
     bool? isCredit,
     String Function(String)? globalTranslator,
+        required num amount,
+        String? currency,
   }) {
     if (isTransactionDetails && isSuccess) {
       return TransactionDialogActionButtonsForTransaction(
@@ -42,6 +45,8 @@ abstract class TransactionDialogAction extends StatelessWidget {
         onClose: onClose,
         onVoid: onVoid,
         share: share,
+        amount: amount,
+        currency:currency,
       );
     } else {
       return TransactionDialogActionButtons(
@@ -139,9 +144,12 @@ class TransactionDialogActionButtonsForTransaction
   final bool canCapture;
   final String Function(String)? globalTranslator;
   final void Function() share;
+  final num amount;
+  final String? currency;
 
   const TransactionDialogActionButtonsForTransaction({
     Key? key,
+    required this.amount,
     this.canRefund = false,
     this.canVoid = false,
     this.canCapture = false,
@@ -155,6 +163,7 @@ class TransactionDialogActionButtonsForTransaction
     this.isCredit,
     this.globalTranslator,
     required this.share,
+    this.currency,
   }) : super(key: key);
 
   @override
@@ -210,11 +219,19 @@ class TransactionDialogActionButtonsForTransaction
                         ),
                       ),
                       onPressed: () async {
+                        final isEnglish = AppLocalizations.of(context)?.isEnLocale ?? true;
+                        String content = '';
+                        if(isEnglish){
+                          content = 'capture_hint_txt'.translate(context, globalTranslator:globalTranslator,) + '${(currency??'').translate(context, globalTranslator:globalTranslator,)} $amount';
+                        }else{
+                          content = 'capture_hint_txt'.translate(context, globalTranslator:globalTranslator,) + '$amount ${(currency??'').translate(context, globalTranslator:globalTranslator,)}';
+
+                        }
                         final confirmed = await showDialog(
                           context: context,
                           builder: (context) => AppAlertDialog(
                             title: 'capture',
-                            content: 'capture_hint_txt',
+                            content:content ,
                             actionButtonText: 'confirm',
                             actionButtonColor: primaryColor,
                             globalTranslator: globalTranslator,

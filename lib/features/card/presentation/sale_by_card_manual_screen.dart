@@ -110,6 +110,7 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit>
         args.currencyData!.idN,
         args.merchantId,
         args.transactionId,
+        context,
       );
       if (originalTransactionId == null) {
         return;
@@ -148,6 +149,7 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit>
         args.currencyData!.idN,
         args.merchantId,
         args.transactionId,
+        context,
       );
       if (purchaseDataOrNull != null && context.mounted) {
         cubit.formKey.currentState?.reset();

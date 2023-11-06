@@ -104,7 +104,7 @@
   "refund": "REFUND",
   "capture": "CAPTURE",
   "close": "Close",
-  "capture_hint_txt": "Are you sure to capture the Transaction?",
+  "capture_hint_txt": "Do you want to capture the amount ",
   "pay": "PAY",
   "verify": "Verify",
   "invalid_number":"Invalid Phone Number",
@@ -134,5 +134,6 @@
   "invalid-month": "Invalid entry",
   "enter_amount": "Please, Enter Amount",
   "select_currency": "Please, Select Currency",
-  "otp_verification": "OTP Verification"
+  "otp_verification": "OTP Verification",
+  "invalid_exp_date": "Invalid Expiration Date"
 }

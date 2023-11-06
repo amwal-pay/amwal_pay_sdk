@@ -13,6 +13,12 @@ class AmountCurrencyWidgetCubit extends Cubit {
   final formKey = GlobalKey<FormBuilderState>();
 
 
+  String trimLeadingZeros(String? input) {
+    if(input == null) return '';
+    return input.replaceFirst(RegExp(r'^0+'), '');
+  }
+
+
   String? validateFields({
     required BuildContext context,
     required String? terminal,

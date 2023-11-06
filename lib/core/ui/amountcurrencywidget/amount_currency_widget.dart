@@ -36,7 +36,7 @@ class AmountCurrencyWidget extends StatelessWidget {
               FormBuilder(
                 key: cubit.formKey,
                 child: TextFormField(
-                  onChanged: (value) => cubit.amountValue = value,
+                  onChanged: (value) => cubit.amountValue = cubit.trimLeadingZeros(value),
                   maxLines: 1,
                   maxLength: 7,
                   autovalidateMode: AutovalidateMode.onUserInteraction,

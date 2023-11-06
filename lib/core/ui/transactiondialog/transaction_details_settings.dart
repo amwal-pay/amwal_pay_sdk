@@ -22,6 +22,8 @@ class TransactionDetailsSettings {
   final bool canVoid;
   final bool canCapture;
   final bool isSuccess;
+  final num amount;
+  final String? currency;
 
   const TransactionDetailsSettings({
     required this.transactionDisplayName,
@@ -43,6 +45,8 @@ class TransactionDetailsSettings {
     this.canCapture = false,
     this.canRefund = false,
     this.canVoid = false,
+    required this.amount,
+    this.currency,
   });
 
   TransactionDetailsSettings copyWith({
@@ -55,6 +59,7 @@ class TransactionDetailsSettings {
     void Function()? onClose,
     bool? isTransactionDetails,
     String Function(String)? globalTranslator,
+    String? currency,
   }) {
     return TransactionDetailsSettings(
       transactionDisplayName: transactionDisplayName,
@@ -76,6 +81,8 @@ class TransactionDetailsSettings {
       onCapture: onCapture,
       onRefund: onRefund,
       onVoid: onVoid,
+      amount: amount,
+      currency: currency??this.currency,
     );
   }
 }

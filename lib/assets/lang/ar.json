@@ -145,6 +145,7 @@
   "invalid-month": "قيمة غير صحيحة",
   "enter_amount": "ادخل المبلغ",
   "select_currency": "اختر العملة",
-  "otp_verification": "OTP رسالة التحقق"
+  "otp_verification": "OTP رسالة التحقق",
+  "invalid_exp_date": "تاريخ انتهاء صلاحية غير صالح"
 }
 
