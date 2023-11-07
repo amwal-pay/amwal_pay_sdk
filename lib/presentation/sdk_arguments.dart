@@ -5,6 +5,9 @@ typedef OnPayCallback = void Function(
     void Function(TransactionDetailsSettings) listener,
     [String? transactionId]);
 
+typedef GetTransactionFunction = Future<TransactionDetailsSettings?> Function(
+    String transactionId);
+
 class AmwalSdkArguments {
   final Locale locale;
   final bool is3DS;
@@ -16,8 +19,10 @@ class AmwalSdkArguments {
   final int merchantId;
   final OnPayCallback onPay;
   final OnPayCallback? onCountComplete;
+  final GetTransactionFunction getTransactionFunction;
 
   AmwalSdkArguments({
+    required this.getTransactionFunction,
     required this.onPay,
     this.onCountComplete,
     this.locale = const Locale('en'),

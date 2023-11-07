@@ -15,6 +15,7 @@ abstract class IAmwalSdkSettings {
   final String? merchantName;
   final OnPayCallback onPay;
   final OnPayCallback? onCountComplete;
+  final GetTransactionFunction? getTransactionFunction;
   final void Function(Object e, StackTrace stack)? onError;
   final Future<String?> Function()? onTokenExpired;
 
@@ -27,6 +28,7 @@ abstract class IAmwalSdkSettings {
     required this.currency,
     required this.amount,
     required this.onPay,
+    this.getTransactionFunction,
     this.onError,
     this.onCountComplete,
     this.merchantName,
@@ -46,6 +48,7 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
     required super.transactionId,
     required super.merchantName,
     required super.onPay,
+    super.getTransactionFunction,
     super.onCountComplete,
     super.locale,
     super.is3DS,
@@ -70,6 +73,7 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
     required super.amount,
     required this.terminalId,
     required super.merchantName,
+    super.getTransactionFunction,
     super.onCountComplete,
     super.locale,
     super.isMocked,

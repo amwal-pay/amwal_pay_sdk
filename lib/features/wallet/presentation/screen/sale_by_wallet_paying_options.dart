@@ -29,11 +29,13 @@ class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
   final String? transactionId;
   final OnPayCallback onPay;
   final OnPayCallback onCountComplete;
+  final GetTransactionFunction getTransactionFunction;
   final String Function(String)? translator;
 
   const SaleByWalletPayingOptions({
     Key? key,
     required this.onPay,
+    required this.getTransactionFunction,
     required this.onCountComplete,
     required this.amount,
     required this.terminalId,
@@ -136,6 +138,7 @@ class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
                             paymentArgument,
                             translator,
                             onPay,
+                            getTransactionFunction,
                           ),
                         );
                       },
@@ -172,6 +175,7 @@ Widget _saleByWalletOptions(
   PaymentArguments paymentArguments,
   String Function(String)? globalTranslator,
   OnPayCallback onPay,
+  GetTransactionFunction getTransactionFunction,
 ) {
   if (pageNum == 0) {
     return PhonePayWidget(globalTranslator: globalTranslator);
@@ -179,6 +183,7 @@ Widget _saleByWalletOptions(
     return AliasPayWidget(globalTranslator: globalTranslator);
   } else if (pageNum == 2) {
     return ScanQrToPayWidget(
+      getTransactionFunction: getTransactionFunction,
       paymentArguments: paymentArguments,
       globalTranslator: globalTranslator,
       onPay: onPay,

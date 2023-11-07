@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
 import 'package:amwal_pay_sdk/core/base_state/base_cubit_state.dart';
 import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
@@ -9,16 +12,19 @@ import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 class ScanQrToPayWidget extends StatefulWidget {
   final PaymentArguments paymentArguments;
   final String Function(String)? globalTranslator;
   final OnPayCallback onPay;
+  final GetTransactionFunction getTransactionFunction;
   const ScanQrToPayWidget({
     Key? key,
     required this.paymentArguments,
     required this.onPay,
     this.globalTranslator,
+    required this.getTransactionFunction,
   }) : super(key: key);
 
   @override
@@ -28,15 +34,57 @@ class ScanQrToPayWidget extends StatefulWidget {
 class _ScanQrToPayWidgetState extends State<ScanQrToPayWidget> {
   late SaleByQrCubit cubit;
   PaymentArguments get payArgs => widget.paymentArguments;
+  Timer? _timer;
+
+  void _setupGetTransactionId(String transactionId) {
+    print('potato sdk 0');
+    _timer = Timer.periodic(
+      const Duration(seconds: 15),
+      (timer) async {
+        final settings = await widget.getTransactionFunction(transactionId);
+        print('potato sdk');
+        print(settings);
+        if (settings != null) {
+          timer.cancel();
+          if (context.mounted) {
+            await ReceiptHandler.instance.showHistoryReceipt(
+              context: context,
+              settings: settings.copyWith(
+                onClose: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+                },
+              ),
+            );
+          }
+        }
+      },
+    );
+  }
 
   Future<void> _generateQrCode() async {
+    final transactionId = const Uuid().v1();
     await cubit.payWithQr(
+      transactionId: transactionId,
       merchantId: payArgs.merchantId,
       amount: num.parse(payArgs.amount),
       terminalId: int.parse(payArgs.terminalId),
       currencyId: payArgs.currencyData!.idN,
     );
-    widget.onPay((settings) {});
+    _setupGetTransactionId(transactionId);
+    widget.onPay((settings) async {
+      await ReceiptHandler.instance.showHistoryReceipt(
+        context: context,
+        settings: settings.copyWith(
+          onClose: () {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+          },
+        ),
+      );
+    }, transactionId);
   }
 
   @override
@@ -44,6 +92,12 @@ class _ScanQrToPayWidgetState extends State<ScanQrToPayWidget> {
     super.initState();
     cubit = WalletInjector.instance.get<SaleByQrCubit>();
     _generateQrCode();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override

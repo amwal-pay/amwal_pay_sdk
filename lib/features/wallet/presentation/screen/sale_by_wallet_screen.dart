@@ -16,10 +16,12 @@ import 'package:flutter/material.dart';
 class SaleByWalletScreen extends StatefulWidget {
   final OnPayCallback onPayCallback;
   final OnPayCallback onCountComplete;
+  final GetTransactionFunction getTransactionFunction;
   final String transactionId;
 
   const SaleByWalletScreen({
     Key? key,
+    required this.getTransactionFunction,
     required this.onPayCallback,
     required this.onCountComplete,
     required this.transactionId,
@@ -62,6 +64,7 @@ class _SaleByWalletScreenState extends State<SaleByWalletScreen> {
       RouteSettings(arguments: arguments),
       widget.onPayCallback,
       widget.onCountComplete,
+      widget.getTransactionFunction,
     );
   }
 

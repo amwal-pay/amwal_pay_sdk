@@ -3,6 +3,7 @@ class DynamicQRRequest{
   final int merchantId;
   final num amount;
   final int currencyId;
+  final String transactionId;
 
 //<editor-fold desc="Data Methods">
   const DynamicQRRequest({
@@ -10,6 +11,7 @@ class DynamicQRRequest{
     required this.merchantId,
     required this.amount,
     required this.currencyId,
+    required this.transactionId,
   });
 
 
@@ -21,12 +23,14 @@ class DynamicQRRequest{
     int? dataProvider,
     num? amount,
     int? currency,
+    String? transactionId,
   }) {
     return DynamicQRRequest(
       terminalId: terminalId ?? this.terminalId,
       merchantId: merchantId ?? this.merchantId,
       amount: amount ?? this.amount,
       currencyId: currency ?? this.currencyId,
+      transactionId:transactionId??this.transactionId,
     );
   }
 
@@ -38,14 +42,15 @@ class DynamicQRRequest{
       'dataProvider': 2,
       'amount': amount,
       'currency': currencyId,
+      'transactionId': transactionId,
     };
   }
 
   factory DynamicQRRequest.fromMap(Map<String, dynamic> map) {
     return DynamicQRRequest(
+      transactionId: map['transactionId'] as String,
       terminalId: map['terminalId'] as int,
       merchantId: map['merchantId'] as int,
-
       amount: map['amount'] as num,
       currencyId: map['currency'] as int,
     );

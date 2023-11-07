@@ -108,6 +108,7 @@ class AmwalPaySdk {
       settings.locale,
       settings.onPay,
       settings.onCountComplete ?? (_, [__]) {},
+      settings.getTransactionFunction ?? (_) async => null,
       settings.transactionId,
     );
   }
@@ -143,6 +144,8 @@ class AmwalPaySdk {
                 transactionId: settings.transactionId,
                 currencyId: 512,
                 merchantId: int.parse(settings.merchantId),
+                getTransactionFunction:
+                    settings.getTransactionFunction ?? (_) async => null,
               ),
             ),
           );

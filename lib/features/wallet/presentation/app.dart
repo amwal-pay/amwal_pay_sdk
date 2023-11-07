@@ -8,12 +8,15 @@ class WalletSdkApp extends StatelessWidget {
   final Locale? locale;
   final OnPayCallback onPay;
   final OnPayCallback onCountComplete;
+  final GetTransactionFunction getTransactionFunction;
+
   final String transactionId;
   const WalletSdkApp({
     Key? key,
     required this.locale,
     required this.onCountComplete,
     required this.onPay,
+    required this.getTransactionFunction,
     required this.transactionId,
   }) : super(key: key);
 
@@ -29,6 +32,7 @@ class WalletSdkApp extends StatelessWidget {
         onPayCallback: onPay,
         onCountComplete: onCountComplete,
         transactionId: transactionId,
+        getTransactionFunction: getTransactionFunction,
       ),
       theme: ThemeData(
         scaffoldBackgroundColor: whiteColor,

@@ -11,6 +11,7 @@ class SaleByQrCubit extends ICubit<QRResponse> with UiState<QRResponse> {
   SaleByQrCubit(this._payWithQrCode);
 
   Future<void> payWithQr({
+    required String transactionId,
     required int terminalId,
     required int currencyId,
     required int merchantId,
@@ -18,6 +19,7 @@ class SaleByQrCubit extends ICubit<QRResponse> with UiState<QRResponse> {
   }) async {
     emit(const ICubitState.loading());
     final request = DynamicQRRequest(
+      transactionId:transactionId,
       currencyId: currencyId,
       terminalId: terminalId,
       merchantId: merchantId,

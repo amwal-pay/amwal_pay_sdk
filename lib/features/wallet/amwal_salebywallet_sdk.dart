@@ -67,6 +67,7 @@ class AmwalWalletSdk {
     Locale locale,
     OnPayCallback onPay,
     OnPayCallback onCountComplete,
+    GetTransactionFunction getTransactionFunction,
     String transactionId,
   ) async {
     await AmwalSdkNavigator.amwalNavigatorObserver.navigator!.push(
@@ -76,6 +77,7 @@ class AmwalWalletSdk {
           onPay: onPay,
           onCountComplete: onCountComplete,
           transactionId: transactionId,
+          getTransactionFunction: getTransactionFunction,
         ),
       ),
     );

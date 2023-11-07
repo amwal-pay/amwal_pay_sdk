@@ -17,11 +17,14 @@ class AmwalSdkNavigator {
     RouteSettings settings,
     OnPayCallback onPay,
     OnPayCallback onCountComplete,
+    GetTransactionFunction getTransactionFunction,
+
   ) async {
     final args = settings.arguments as PaymentArguments;
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => SaleByWalletPayingOptions(
+          getTransactionFunction: getTransactionFunction,
           onCountComplete: onCountComplete,
           onPay: onPay,
           amount: args.amount,
