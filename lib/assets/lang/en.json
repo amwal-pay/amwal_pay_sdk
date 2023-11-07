@@ -99,7 +99,7 @@
   "log_out": "LOG OUT",
   "log_out_confirm_txt": "Are you sure to log out from your account?",
   "warning": "Warning",
-  "successful_transaction": "our transaction is being processed... You shall receive a response within moments.",
+  "successful_transaction": "Your transaction is being processed... You shall receive a response within moments.",
   "count_down": "Count Down",
   "refund": "REFUND",
   "capture": "CAPTURE",
