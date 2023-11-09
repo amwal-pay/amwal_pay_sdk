@@ -36,14 +36,16 @@ class _ScanQrToPayWidgetState extends State<ScanQrToPayWidget> {
   PaymentArguments get payArgs => widget.paymentArguments;
   Timer? _timer;
 
-  void _setupGetTransactionId(String transactionId) {
-    print('potato sdk 0');
+  void _setupGetTransactionId() {
     _timer = Timer.periodic(
       const Duration(seconds: 15),
       (timer) async {
+        final transactionId = cubit.state.mapOrNull(
+              success: (value) => value.uiModel.data?.walletOrderId,
+            ) ??
+            '';
+        if (transactionId.isEmpty) return;
         final settings = await widget.getTransactionFunction(transactionId);
-        print('potato sdk');
-        print(settings);
         if (settings != null) {
           timer.cancel();
           if (context.mounted) {
@@ -72,7 +74,7 @@ class _ScanQrToPayWidgetState extends State<ScanQrToPayWidget> {
       terminalId: int.parse(payArgs.terminalId),
       currencyId: payArgs.currencyData!.idN,
     );
-    _setupGetTransactionId(transactionId);
+    _setupGetTransactionId();
     widget.onPay((settings) async {
       await ReceiptHandler.instance.showHistoryReceipt(
         context: context,
@@ -121,12 +123,11 @@ class _ScanQrToPayWidgetState extends State<ScanQrToPayWidget> {
         BlocBuilder<SaleByQrCubit, ICubitState<QRResponse>>(
           bloc: cubit,
           builder: (_, state) {
-            final qrCodeString = state.mapOrNull(
-                  success: (value) => value.uiModel.data,
-                ) ??
-                '';
+            final qrData = state.mapOrNull(
+              success: (value) => value.uiModel.data,
+            );
             return QrImageView(
-              data: qrCodeString,
+              data: qrData?.qrCode ?? '',
               size: 200,
             );
           },
