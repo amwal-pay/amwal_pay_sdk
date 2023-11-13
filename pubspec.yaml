@@ -37,6 +37,7 @@ dependencies:
   chucker_flutter: ^1.5.2
   screenshot: ^2.1.0
   jose: ^0.3.4
+  package_info_plus: ^4.1.0
 
 
 dev_dependencies:

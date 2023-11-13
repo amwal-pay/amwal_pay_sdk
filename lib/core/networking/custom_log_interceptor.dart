@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class CustomLogInterceptor extends Interceptor {
   static String language = 'en-US';
@@ -23,7 +24,11 @@ class CustomLogInterceptor extends Interceptor {
   }
 
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+  void onRequest(
+      RequestOptions options, RequestInterceptorHandler handler) async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    options.headers['version'] = packageInfo.version;
+    options.headers['build_number'] = packageInfo.buildNumber;
     options.headers['Accept-Language'] = language;
     if (kDebugMode) {
       print('Request Uri => ${options.uri}');
