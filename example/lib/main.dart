@@ -2,6 +2,7 @@ import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
 import 'package:amwal_pay_sdk/amwal_sdk_settings/amwal_sdk_settings.dart';
 import 'package:example/text_form.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 void main() {
   runApp(const MyApp());
@@ -46,7 +47,10 @@ class _DemoScreenState extends State<DemoScreen> {
     super.initState();
     _terminalController = TextEditingController(text: '6942344');
     _tokenController = TextEditingController(text: '');
-    _transactionRefNoController = TextEditingController(text: '');
+    var uuid = Uuid();
+    var generatedUuid = uuid.v4();
+
+    _transactionRefNoController = TextEditingController(text: generatedUuid);
     _merchantIdController = TextEditingController(text: '1369217');
     _secureHashController =
         TextEditingController(text: '9FFA1F36D6E8A136482DF921E856709226DE5A974DB2673F84DB79DA788F7E19');
