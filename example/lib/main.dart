@@ -44,12 +44,12 @@ class _DemoScreenState extends State<DemoScreen> {
   @override
   void initState() {
     super.initState();
-    _terminalController = TextEditingController(text: '159357');
-    _tokenController = TextEditingController(text: 'api_token');
+    _terminalController = TextEditingController(text: '6942344');
+    _tokenController = TextEditingController(text: '');
     _transactionRefNoController = TextEditingController(text: '');
-    _merchantIdController = TextEditingController(text: '126545');
+    _merchantIdController = TextEditingController(text: '1369217');
     _secureHashController =
-        TextEditingController(text: 'E4564654F45E4554F5454892153');
+        TextEditingController(text: '9FFA1F36D6E8A136482DF921E856709226DE5A974DB2673F84DB79DA788F7E19');
     _amountController = TextEditingController(text: '240');
     _currencyController = TextEditingController(text: 'OMR');
   }
@@ -124,7 +124,7 @@ class _DemoScreenState extends State<DemoScreen> {
                 onPressed: () async {
                   await AmwalPaySdk.instance.initSdk(
                     settings: AmwalSdkSettings(
-                      merchantName: 'Merchant Name',
+                      merchantName: 'Amr Saied',
                       token: _tokenController.text,
                       currency: _currencyController.text,
                       amount: _amountController.text,
