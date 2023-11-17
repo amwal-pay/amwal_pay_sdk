@@ -56,17 +56,17 @@ class AliasPayWidget extends StatelessWidget {
             bloc: walletCubit,
             builder: (_, state) {
               if (walletCubit.state.verified) {
-                return  Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8.0),
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.done,
                         color: successColor,
                       ),
                       Text(
-                          walletCubit.customerNameFromApi ,
-                        style: TextStyle(
+                        walletCubit.customerNameFromApi,
+                        style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                         ),

@@ -7,12 +7,15 @@ import 'package:amwal_pay_sdk/core/ui/accepted_payment_methods_widget.dart';
 import 'package:amwal_pay_sdk/core/ui/buttons/app_button.dart';
 import 'package:amwal_pay_sdk/core/ui/cardinfoform/card_info_form_widget.dart';
 import 'package:amwal_pay_sdk/core/ui/sale_card_feature_common_widgets.dart';
+import 'package:amwal_pay_sdk/features/card/amwal_salebycard_sdk.dart';
+import 'package:amwal_pay_sdk/features/card/cubit/card_transaction_manager.dart';
 import 'package:amwal_pay_sdk/features/card/cubit/sale_by_card_manual_cubit.dart';
 import 'package:amwal_pay_sdk/features/card/data/models/response/purchase_response.dart';
 import 'package:amwal_pay_sdk/features/card/presentation/widgets/otp_dialog.dart';
 import 'package:amwal_pay_sdk/features/currency_field/data/models/response/currency_response.dart';
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
 import 'package:amwal_pay_sdk/features/receipt/receipt_handler.dart';
+import 'package:amwal_pay_sdk/features/transaction/domain/use_case/get_transaction_by_Id.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:flutter/material.dart';
@@ -104,7 +107,7 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit>
 
     Future<void> onPurchaseWith3DS() async {
       String? otpOrNull;
-      final originalTransactionId = await cubit.purchaseOtpStepOne(
+      final purchaseData = await cubit.purchaseOtpStepOne(
         args.amount,
         args.terminalId,
         args.currencyData!.idN,
@@ -112,32 +115,44 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit>
         args.transactionId,
         context,
       );
-      if (originalTransactionId == null) {
-        return;
-      }
-
-      otpOrNull = await showOtpDialog();
-      if (otpOrNull == null || otpOrNull.isEmpty) {
-        return;
-      }
-      final transactionId = const Uuid().v1();
-      final purchaseDataOrNull = await onPurchaseStepTwo(
-        otpOrNull,
-        transactionId,
-        originalTransactionId,
-      );
-      if (purchaseDataOrNull != null && context.mounted) {
-        cubit.showLoader();
-        onPay(
-          (settings) async {
-            cubit.initial();
+      if (purchaseData == null) return;
+      if (purchaseData.isOtpRequired) {
+        otpOrNull = await showOtpDialog();
+        if (otpOrNull == null || otpOrNull.isEmpty) {
+          return;
+        }
+        final transactionId = const Uuid().v1();
+        final purchaseDataOrNull = await onPurchaseStepTwo(
+          otpOrNull,
+          transactionId,
+          purchaseData.transactionId,
+        );
+        if (purchaseDataOrNull != null && context.mounted) {
+          cubit.showLoader();
+          onPay(
+            (settings) async {
+              cubit.initial();
+              await ReceiptHandler.instance.showCardReceipt(
+                context: context,
+                settings: settings,
+              );
+            },
+            purchaseDataOrNull.transactionId,
+          );
+        }
+      } else {
+        if (context.mounted) {
+          cubit.formKey.currentState?.reset();
+          onPay((settings) async {
             await ReceiptHandler.instance.showCardReceipt(
               context: context,
               settings: settings,
             );
-          },
-          purchaseDataOrNull.transactionId,
-        );
+            if (context.mounted) dismissDialog(context);
+          });
+        } else {
+          if (context.mounted) dismissDialog(context);
+        }
       }
     }
 
@@ -221,11 +236,20 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit>
                     onPressed: () async {
                       final isValid = cubit.formKey.currentState!.validate();
                       if (isValid) {
-                        if (args.is3DS) {
-                          await onPurchaseWith3DS();
-                        } else {
-                          await purchaseWithOut3DS();
-                        }
+                        await CardTransactionManager.instance.onPurchaseWith3DS(
+                          cubit: cubit,
+                          args: args,
+                          context: context,
+                          getOneTransactionByIdUseCase: CardInjector.instance
+                              .get<GetOneTransactionByIdUseCase>(),
+                          dismissLoader: dismissDialog,
+                          onPay: onPay,
+                        );
+                        // if (args.is3DS) {
+                        // await onPurchaseWith3DS();
+                        // } else {
+                        //   await purchaseWithOut3DS();
+                        // }
                       }
                     },
                     child: Text(

@@ -2,8 +2,14 @@ import 'dart:async';
 
 import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
 import 'package:amwal_pay_sdk/core/base_state/base_cubit_state.dart';
+import 'package:amwal_pay_sdk/core/networking/constants.dart';
 import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
+import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction.dart';
+import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_details_settings.dart';
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
+import 'package:amwal_pay_sdk/features/transaction/data/models/response/one_transaction_response.dart';
+import 'package:amwal_pay_sdk/features/transaction/domain/use_case/get_transaction_by_Id.dart';
+import 'package:amwal_pay_sdk/features/transaction/util.dart';
 import 'package:amwal_pay_sdk/features/wallet/cubit/sale_by_qr_cubit.dart';
 import 'package:amwal_pay_sdk/features/wallet/data/models/response/qr_response.dart';
 import 'package:amwal_pay_sdk/features/wallet/dependency/injector.dart';
@@ -36,16 +42,64 @@ class _ScanQrToPayWidgetState extends State<ScanQrToPayWidget> {
   PaymentArguments get payArgs => widget.paymentArguments;
   Timer? _timer;
 
+  TransactionDetailsSettings _generateTransactionSettings(
+    OneTransaction oneTransaction,
+    BuildContext context,
+  ) {
+    return TransactionDetailsSettings(
+      amount: oneTransaction.amount,
+      transactionDisplayName: oneTransaction.transactionTypeDisplayName,
+      isSuccess: oneTransaction.responseCodeName == 'Approved',
+      transactionStatus: oneTransaction.responseCodeName == 'Approved'
+          ? TransactionStatus.success
+          : TransactionStatus.failed,
+      transactionType: oneTransaction.transactionType,
+      isTransactionDetails: false,
+      globalTranslator: (string) => string.translate(context),
+      details: {
+        'merchant_name_label': oneTransaction.merchantName,
+        'ref_no': oneTransaction.idN,
+        'merchant_id': oneTransaction.merchantId,
+        'terminal_id': oneTransaction.terminalId,
+        'date_time': oneTransaction.transactionTime.formatDate(context),
+        'amount': oneTransaction.transactionAmount(context),
+      },
+    );
+  }
+
+  Future<TransactionDetailsSettings?> _getTransactionById(
+      String transactionId) async {
+    final oneTransactionResponse = await WalletInjector.instance
+        .get<GetOneTransactionByIdUseCase>()
+        .invoke({
+      'transactionId': transactionId,
+      'merchantId': payArgs.merchantId,
+    });
+    final oneTransaction =
+        oneTransactionResponse.mapOrNull(success: (value) => value.data.data);
+    if (oneTransaction == null) return null;
+    if (!context.mounted) return null;
+    return _generateTransactionSettings(
+      oneTransaction,
+      context,
+    );
+  }
+
   void _setupGetTransactionId() {
     _timer = Timer.periodic(
       const Duration(seconds: 15),
       (timer) async {
+        TransactionDetailsSettings? settings;
         final transactionId = cubit.state.mapOrNull(
               success: (value) => value.uiModel.data?.walletOrderId,
             ) ??
             '';
         if (transactionId.isEmpty) return;
-        final settings = await widget.getTransactionFunction(transactionId);
+        if (NetworkConstants.isSdkInApp) {
+          settings = await _getTransactionById(transactionId);
+        } else {
+          settings = await widget.getTransactionFunction(transactionId);
+        }
         if (settings != null) {
           timer.cancel();
           if (context.mounted) {

@@ -1,7 +1,10 @@
 library amwal_pay_sdk;
 
+import 'dart:io';
+
 import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
 import 'package:amwal_pay_sdk/amwal_sdk_settings/amwal_sdk_settings.dart';
+import 'package:amwal_pay_sdk/core/networking/constants.dart';
 import 'package:amwal_pay_sdk/features/card/amwal_salebycard_sdk.dart';
 import 'package:amwal_pay_sdk/features/wallet/amwal_salebywallet_sdk.dart';
 import 'package:amwal_pay_sdk/navigator/sdk_navigator.dart';
@@ -24,6 +27,7 @@ class AmwalPaySdk {
   Future<void> initSdk({
     required AmwalSdkSettings settings,
   }) async {
+    NetworkConstants.isSdkInApp = true;
     await SdkBuilder.instance.initCacheStorage();
     await CacheStorageHandler.instance.write(
       CacheKeys.token,
@@ -41,6 +45,8 @@ class AmwalPaySdk {
       CacheKeys.merchantName,
       settings.merchantName,
     );
+
+    HttpOverrides.global = MyHttpOverrides();
     final networkService = NetworkServiceBuilder.instance.setupNetworkService(
       settings.isMocked,
       settings.secureHashValue,
@@ -152,5 +158,14 @@ class AmwalPaySdk {
         },
       ),
     );
+  }
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

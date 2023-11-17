@@ -2,6 +2,7 @@ import 'package:amwal_pay_sdk/features/wallet/cubit/sale_by_wallet_pay_cubit.dar
 import 'package:amwal_pay_sdk/features/wallet/data/models/request/payment_request.dart';
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
 import 'package:amwal_pay_sdk/features/wallet/presentation/widgets/sale_by_wallet_mixins/sale_by_wallet_action_mixin.dart';
+import 'package:uuid/uuid.dart';
 
 mixin SaleByWalletPayMixin on SaleByWalletActionsMixin {
   WalletPaymentRequest _generatePayRequest(
@@ -14,9 +15,10 @@ mixin SaleByWalletPayMixin on SaleByWalletActionsMixin {
       amount: num.parse(paymentArguments.amount),
       merchantId: paymentArguments.merchantId,
       terminalId: paymentArguments.terminalId,
-      id: paymentArguments.transactionId,
+      id: paymentArguments.transactionId!,
       mobileNumber: mobileNumber,
-       aliasName: alias,
+      aliasName: alias,
+      transactionId: const Uuid().v1(),
     );
     return request;
   }
@@ -40,7 +42,6 @@ mixin SaleByWalletPayMixin on SaleByWalletActionsMixin {
         await payCubit.payWithMobile(request);
       } else {
         await payCubit.payByAlias(request);
-
       }
     }
   }

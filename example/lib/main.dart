@@ -5,7 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 void main() {
-  runApp(const MyApp());
+  try {
+    runApp(const MyApp());
+  } catch (e) {
+    print(e);
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -40,21 +44,27 @@ class _DemoScreenState extends State<DemoScreen> {
   late TextEditingController _transactionRefNoController;
   late TextEditingController _terminalController;
   late TextEditingController _secureHashController;
+
+  ///
   bool _is3DS = false;
 
   @override
   void initState() {
     super.initState();
-    _terminalController = TextEditingController(text: '6942344');
+
+    /// card terminal => 6942344
+    /// wallet terminal => 6834180
+    _terminalController = TextEditingController(text: '6834180');
     _tokenController = TextEditingController(text: '');
-    var uuid = Uuid();
-    var generatedUuid = uuid.v4();
+    const uuid = Uuid();
+    final generatedUuid = uuid.v1();
 
     _transactionRefNoController = TextEditingController(text: generatedUuid);
     _merchantIdController = TextEditingController(text: '1369217');
-    _secureHashController =
-        TextEditingController(text: '9FFA1F36D6E8A136482DF921E856709226DE5A974DB2673F84DB79DA788F7E19');
-    _amountController = TextEditingController(text: '240');
+    _secureHashController = TextEditingController(
+        text:
+            '9FFA1F36D6E8A136482DF921E856709226DE5A974DB2673F84DB79DA788F7E19');
+    _amountController = TextEditingController(text: '50');
     _currencyController = TextEditingController(text: 'OMR');
   }
 

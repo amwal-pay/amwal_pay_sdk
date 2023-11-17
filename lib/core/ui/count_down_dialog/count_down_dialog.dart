@@ -29,7 +29,7 @@ class _CountDownDialogState extends State<CountDownDialog> {
 
   void _onStart() {
     _timer?.cancel();
-    _timer = Timer.periodic(const Duration(seconds: 20), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 15), (timer) {
       widget.onComplete();
     });
   }

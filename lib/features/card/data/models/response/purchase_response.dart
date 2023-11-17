@@ -22,6 +22,7 @@ class PurchaseData {
   final String message;
   final String transactionId;
   final int terminalId;
+  final bool isOtpRequired;
   final HostResponseData hostResponseData;
 
 //<editor-fold desc="Data Methods">
@@ -30,6 +31,7 @@ class PurchaseData {
     required this.message,
     required this.transactionId,
     required this.hostResponseData,
+    required this.isOtpRequired,
   });
 
   @override
@@ -63,6 +65,7 @@ class PurchaseData {
       message: message ?? this.message,
       transactionId: transactionId ?? this.transactionId,
       hostResponseData: hostResponseData ?? this.hostResponseData,
+      isOtpRequired: isOtpRequired,
     );
   }
 
@@ -72,6 +75,7 @@ class PurchaseData {
       'message': message,
       'transactionId': transactionId,
       'hostResponseData': hostResponseData.toMap(),
+      'isOtpRequired': isOtpRequired,
     };
   }
 
@@ -81,6 +85,7 @@ class PurchaseData {
       message: map['message'] as String,
       transactionId: map['transactionId'] as String,
       hostResponseData: HostResponseData.fromMap(map['hostResponseData']),
+      isOtpRequired: map['isOtpRequired'],
     );
   }
 

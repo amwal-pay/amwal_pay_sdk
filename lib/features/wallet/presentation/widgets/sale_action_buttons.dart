@@ -67,6 +67,8 @@ class SaleActionButtons extends ApiView<SaleByWalletCubit>
                   context,
                   globalTranslator: globalTranslator,
                 ),
+                paymentArguments.transactionId!,
+                paymentArguments.merchantId,
               );
             }
           },

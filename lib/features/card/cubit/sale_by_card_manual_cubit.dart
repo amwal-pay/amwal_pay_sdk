@@ -7,7 +7,6 @@ import 'package:amwal_pay_sdk/features/card/data/models/response/purchase_respon
 import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
@@ -35,16 +34,17 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
   String? email;
   String? originalTransactionId;
 
-  String? _validateExpDate(){
+  String? _validateExpDate() {
     final date = DateTime.now();
     print(date.year % 100);
-    if((date.month > int.parse(expirationDateMonth!)) && ((date.year % 100) >= int.parse(expirationDateYear!))) {
+    if ((date.month > int.parse(expirationDateMonth!)) &&
+        ((date.year % 100) >= int.parse(expirationDateYear!))) {
       return 'invalid_exp_date';
-    }else{
+    } else {
       return null;
     }
   }
-  
+
   void _showErrorSnackBar({
     required BuildContext context,
     required String message,
@@ -67,9 +67,9 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
     BuildContext? context,
   ) async {
     final valid = _validateExpDate();
-    if(valid!=null) {
-      if(context!=null && context.mounted){
-        _showErrorSnackBar(context:context, message: valid.translate(context));
+    if (valid != null) {
+      if (context != null && context.mounted) {
+        _showErrorSnackBar(context: context, message: valid.translate(context));
       }
       return null;
     }
@@ -93,24 +93,22 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
     return state.mapOrNull(success: (value) => value.uiModel.data);
   }
 
-  Future<String?> purchaseOtpStepOne(
+  Future<PurchaseData?> purchaseOtpStepOne(
     String amount,
     String terminalId,
     int currencyId,
     int merchantId,
     String? transactionId,
-      BuildContext? context,
+    BuildContext? context,
   ) async {
     final valid = _validateExpDate();
-    if(valid!=null) {
-      if(context!=null && context.mounted){
-        _showErrorSnackBar(context:context, message: valid.translate(context));
+    if (valid != null) {
+      if (context != null && context.mounted) {
+        _showErrorSnackBar(context: context, message: valid.translate(context));
       }
       return null;
     }
-    
-   
-   
+
     emit(const ICubitState.loading());
     final purchaseRequest = PurchaseRequest(
       pan: cardNo!.replaceAll(' ', ''),
@@ -130,10 +128,11 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
       purchaseRequest,
     );
     final state = mapNetworkState(networkState);
-    originalTransactionId =
-        state.mapOrNull(success: (value) => value.uiModel.data?.transactionId);
+    final purchaseData = state.mapOrNull(
+      success: (value) => value.uiModel.data,
+    );
     emit(state);
-    return originalTransactionId;
+    return purchaseData;
   }
 
   Future<PurchaseData?> purchaseOtpStepTwo(

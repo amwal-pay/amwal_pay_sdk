@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:amwal_pay_sdk/core/networking/custom_log_interceptor.dart';
 import 'package:amwal_pay_sdk/core/networking/dio_client.dart';
 import 'package:amwal_pay_sdk/core/networking/mockup_interceptor.dart';
@@ -13,6 +15,7 @@ class NetworkServiceBuilder {
     String secureHashValue,
     String token,
     String language,
+    HttpClient? client,
   ) {
     final tokenInterceptor = TokenInjectorInterceptor();
     TokenInjectorInterceptor.token = token;
@@ -25,10 +28,12 @@ class NetworkServiceBuilder {
     } else {
       CustomLogInterceptor.language = 'en-US';
     }
+
     return DioClient(
       mockupInterceptor,
       secureHashInterceptor,
       tokenInterceptor,
+      client,
     );
   }
 
@@ -39,6 +44,7 @@ class NetworkServiceBuilder {
     String language, {
     void Function(Object e, StackTrace stack)? onError,
     Future<String?> Function()? onTokenExpired,
+    HttpClient? client,
   }) =>
       NetworkService(
         _initDioClientWithInterceptors(
@@ -46,6 +52,7 @@ class NetworkServiceBuilder {
           secureHashValue,
           token,
           language,
+          client,
         ),
         onError: onError,
         onTokenExpired: onTokenExpired,
