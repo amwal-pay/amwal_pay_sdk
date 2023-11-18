@@ -67,6 +67,7 @@ mixin SaleByWalletActionsMixin on ApiView<SaleByWalletCubit> {
                   success: (value) => value.data.data);
               if (oneTransaction == null) return;
               if (!context.mounted) return;
+              Navigator.pop(context);
               await ReceiptHandler.instance.showHistoryReceipt(
                 context: context,
                 settings: _generateTransactionSettings(
