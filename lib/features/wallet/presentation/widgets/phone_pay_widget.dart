@@ -34,8 +34,11 @@ class PhonePayWidget extends StatelessWidget {
             height: 12,
           ),
           PhoneInputField(
-            widgetTitle: 'wallet_mobile_number'
-                .translate(context, globalTranslator: globalTranslator),
+            // globalTranslator: globalTranslator,
+            widgetTitle: 'wallet_mobile_number'.translate(
+              context,
+              globalTranslator: globalTranslator,
+            ),
             widgetHint: 'phone_number'.translate(
               context,
               globalTranslator: globalTranslator,
@@ -46,14 +49,14 @@ class PhonePayWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Row(
-                children: const [
-                  Icon(
+                children: [
+                  const Icon(
                     Icons.done,
                     color: successColor,
                   ),
                   Text(
-                    'AZE#####AFIQ',
-                    style: TextStyle(
+                    walletCubit.customerNameFromApi,
+                    style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                     ),

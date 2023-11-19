@@ -4,6 +4,7 @@ import 'package:amwal_pay_sdk/features/wallet/cubit/sale_by_qr_cubit.dart';
 import 'package:amwal_pay_sdk/features/wallet/cubit/sale_by_wallet_cubit.dart';
 import 'package:amwal_pay_sdk/features/wallet/cubit/sale_by_wallet_pay_cubit.dart';
 import 'package:amwal_pay_sdk/features/wallet/cubit/sale_by_wallet_verify_cubit.dart';
+import 'package:amwal_pay_sdk/features/wallet/data/models/request/dynamic_qr_request.dart';
 import 'package:amwal_pay_sdk/features/wallet/data/models/request/payment_request.dart';
 import 'package:amwal_pay_sdk/features/wallet/data/models/response/qr_response.dart';
 import 'package:amwal_pay_sdk/features/wallet/data/repository/sale_by_wallet_repo_imp.dart';
@@ -63,7 +64,7 @@ class SaleByWalletModule {
     );
 
     WalletInjector.instance
-        .registerLazySingleton<IUseCase<QRResponse, WalletPaymentRequest>>(
+        .registerLazySingleton<IUseCase<QRResponse, DynamicQRRequest>>(
       () => PayWithQrUseCase(
         getIt<SaleByWalletRepository>(),
       ),
@@ -71,7 +72,7 @@ class SaleByWalletModule {
 
     WalletInjector.instance.registerLazySingleton(
       () => SaleByQrCubit(
-        getIt<IUseCase<QRResponse, WalletPaymentRequest>>(),
+        getIt<IUseCase<QRResponse, DynamicQRRequest>>(),
       ),
     );
   }

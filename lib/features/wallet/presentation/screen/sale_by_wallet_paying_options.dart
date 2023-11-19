@@ -14,20 +14,23 @@ import 'package:amwal_pay_sdk/features/wallet/presentation/widgets/phone_pay_wid
 import 'package:amwal_pay_sdk/features/wallet/presentation/widgets/sale_action_buttons.dart';
 import 'package:amwal_pay_sdk/features/wallet/presentation/widgets/scan_qr_to_pay.dart';
 import 'package:amwal_pay_sdk/features/wallet/state/sale_by_wallet_state.dart';
-
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
-
+import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uuid/uuid.dart';
 
 class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
   final String amount;
   final String terminalId;
+  final int merchantId;
   final String currency;
   final int currencyId;
   final bool showAppBar;
+  final String? transactionId;
   final String merchantName;
   final String Function(String)? translator;
+
   const SaleByWalletPayingOptions({
     Key? key,
     required this.merchantName,
@@ -35,6 +38,8 @@ class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
     required this.terminalId,
     required this.currency,
     required this.currencyId,
+    required this.merchantId,
+    this.transactionId,
     this.showAppBar = true,
     this.translator,
   }) : super(key: key);
@@ -42,9 +47,11 @@ class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
   @override
   Widget build(BuildContext context) {
     final paymentArgument = PaymentArguments(
-      merchantName: merchantName,
       amount: amount,
       terminalId: terminalId,
+      merchantId: merchantId,
+      merchantName: merchantName,
+      // transactionId: transactionId,
       currencyData: CurrencyData(
         idN: currencyId,
         id: currency.toString(),
@@ -126,8 +133,10 @@ class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
                           padding: const EdgeInsets.symmetric(horizontal: 20.0),
                           child: _saleByWalletOptions(
                             state.page,
-                            paymentArgument.terminalId,
+                            paymentArgument,
                             translator,
+                            // onPay,
+                            // getTransactionFunction,
                           ),
                         );
                       },
@@ -159,8 +168,10 @@ class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
 
 Widget _saleByWalletOptions(
   int pageNum,
-  String terminalId,
+  PaymentArguments paymentArguments,
   String Function(String)? globalTranslator,
+  // OnPayCallback onPay,
+  // GetTransactionFunction getTransactionFunction,
 ) {
   if (pageNum == 0) {
     return PhonePayWidget(globalTranslator: globalTranslator);
@@ -168,8 +179,10 @@ Widget _saleByWalletOptions(
     return AliasPayWidget(globalTranslator: globalTranslator);
   } else if (pageNum == 2) {
     return ScanQrToPayWidget(
-      terminalId: terminalId,
+      // getTransactionFunction: getTransactionFunction,
+      paymentArguments: paymentArguments,
       globalTranslator: globalTranslator,
+      // onPay: onPay,
     );
   } else {
     return const SizedBox();

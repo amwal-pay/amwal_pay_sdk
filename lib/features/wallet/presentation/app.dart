@@ -1,11 +1,19 @@
 import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
 import 'package:amwal_pay_sdk/features/wallet/presentation/screen/sale_by_wallet_screen.dart';
 import 'package:amwal_pay_sdk/localization/app_localizations_setup.dart';
+import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:flutter/material.dart';
 
 class WalletSdkApp extends StatelessWidget {
   final Locale? locale;
-  const WalletSdkApp({Key? key, required this.locale}) : super(key: key);
+  final String merchantName;
+  final int merchantId;
+  const WalletSdkApp({
+    Key? key,
+    required this.locale,
+    required this.merchantName,
+    required this.merchantId,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +23,10 @@ class WalletSdkApp extends StatelessWidget {
       supportedLocales: AppLocalizationsSetup.supportedLocales,
       localeResolutionCallback: AppLocalizationsSetup.localeResolutionCallback,
       locale: locale ?? const Locale('en'),
-      home: const SaleByWalletScreen(),
+      home: SaleByWalletScreen(
+        merchantName: merchantName,
+        merchantId: merchantId,
+      ),
       theme: ThemeData(
         scaffoldBackgroundColor: whiteColor,
         appBarTheme: const AppBarTheme(

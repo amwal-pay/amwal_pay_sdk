@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
 import 'package:amwal_pay_sdk/presentation/amwal_pay_screen.dart';
 import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
@@ -21,6 +23,7 @@ void main(List<String> args) {
     ];
   }
   final settings = AmwalSdkSettings.fromArgs(args);
+  HttpOverrides.global = MyHttpOverrides();
   runApp(MyApp(
     settings: settings,
   ));
@@ -70,6 +73,7 @@ class _MyAppState extends State<MyApp> {
       home: isInitialized
           ? AmwalPayScreen(
               arguments: AmwalSdkArguments(
+                merchantId: _settings.merchantId,
                 merchantName: _settings.merchantName,
                 amount: _settings.amount,
                 currency: _settings.currency,
@@ -83,5 +87,14 @@ class _MyAppState extends State<MyApp> {
               child: CircularProgressIndicator.adaptive(),
             ),
     );
+  }
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

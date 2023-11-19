@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 
 class DirectionalWidget extends StatelessWidget {
   final Widget child;
-  const DirectionalWidget({Key? key, required this.child}) : super(key: key);
+  final Locale? locale;
+  const DirectionalWidget({
+    Key? key,
+    required this.child,
+    this.locale,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

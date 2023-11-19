@@ -34,45 +34,51 @@ class AliasPayWidget extends StatelessWidget {
           const SizedBox(
             height: 12,
           ),
-          InputFieldWidget(
-            widgetTitle: 'alis_tab'.translate(
-              context,
-              globalTranslator: globalTranslator,
-            ),
-            widgetHint: 'alias_name'.translate(
-              context,
-              globalTranslator: globalTranslator,
-            ),
-            onChange: (value) => walletCubit.aliasName = value,
-            maxLength: 35,
-            minLength: 3,
-          ),
           BlocBuilder<SaleByWalletCubit, SaleByWalletState>(
               bloc: walletCubit,
               builder: (_, state) {
-                if (walletCubit.state.verified) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Row(
-                      children: const [
-                        Icon(
-                          Icons.done,
-                          color: successColor,
-                        ),
-                        Text(
-                          'AZE#####AFIQ',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        )
-                      ],
-                    ),
-                  );
-                } else {
-                  return const SizedBox();
-                }
+                return InputFieldWidget(
+                  widgetTitle: 'alis_tab'.translate(
+                    context,
+                    globalTranslator: globalTranslator,
+                  ),
+                  widgetHint: 'alias_name'.translate(
+                    context,
+                    globalTranslator: globalTranslator,
+                  ),
+                  readOnly: walletCubit.state.verified,
+                  onChange: (value) => walletCubit.aliasName = value,
+                  maxLength: 40,
+                  minLength: 3,
+                );
               }),
+          BlocBuilder<SaleByWalletCubit, SaleByWalletState>(
+            bloc: walletCubit,
+            builder: (_, state) {
+              if (walletCubit.state.verified) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.done,
+                        color: successColor,
+                      ),
+                      Text(
+                        walletCubit.customerNameFromApi,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              } else {
+                return const SizedBox();
+              }
+            },
+          ),
         ],
       ),
     );

@@ -3,7 +3,6 @@ import 'package:amwal_pay_sdk/core/base_response/base_response.dart';
 class WalletPayResponse extends BaseResponse<WalletPayData> {
   WalletPayResponse({
     required super.success,
-    super.responseCode,
     super.message,
     super.data,
   });
@@ -12,10 +11,6 @@ class WalletPayResponse extends BaseResponse<WalletPayData> {
     return WalletPayResponse(
       success: json['success'],
       message: json['message'],
-      responseCode: int.tryParse(json['responseCode']),
-      data: WalletPayData.fromMap(
-        json['data'],
-      ),
     );
   }
 }
@@ -23,25 +18,25 @@ class WalletPayResponse extends BaseResponse<WalletPayData> {
 class WalletPayData {
   final String id;
   final int idN;
-  final String from;
+  final String? from;
   final String? to;
-  final int merchantRefId;
-  final int terminalNodeId;
-  final int bankId;
+  final int? merchantRefId;
+  final int? terminalNodeId;
+  final int? bankId;
   final num amount;
   final int currencyId;
-  final String createdDateTime;
-  final String maxResponseDatetime;
-  final String? aggregatorId;
-  final int merchantAccountTypeId;
-  final String status;
+  final String? createdDateTime;
+  final String? maxResponseDatetime;
+  final int? aggregatorId;
+  final int? merchantAccountTypeId;
+  final String? status;
   final String? transactionSource;
-  final int transactionTypeId;
-  final String externalTransactionId;
+  final int? transactionTypeId;
+  final String? externalTransactionId;
   final String? originalExternalTransactionId;
-  final String senderMobileNo;
+  final String? senderMobileNo;
   final String? receiverMobileNo;
-  final int transactionMethodId;
+  final int? transactionMethodId;
   final int? originalTransactionId;
   final int? originalDigitalTransactionId;
   final String? senderName;
@@ -53,23 +48,20 @@ class WalletPayData {
   final String? refundReason;
   final String? refundSource;
   final String? refundCreatorId;
-  final String transactionIdentifier;
-  final String orderId;
+  final String? transactionIdentifier;
+  final String? orderId;
   final String? transactionId;
-  final int requestSourceId;
-  final String? merchantBranchId;
   final String? transactionViewModel;
   final String? digitalTransactionEnquiryViewModel;
   final int merchantId;
   final int terminalId;
-  final String? responseCode;
   final String? rowVersion;
 
 //<editor-fold desc="Data Methods">
   const WalletPayData({
     required this.id,
     required this.idN,
-    required this.from,
+    this.from,
     this.to,
     required this.merchantRefId,
     required this.terminalNodeId,
@@ -85,7 +77,7 @@ class WalletPayData {
     required this.transactionTypeId,
     required this.externalTransactionId,
     this.originalExternalTransactionId,
-    required this.senderMobileNo,
+    this.senderMobileNo,
     this.receiverMobileNo,
     required this.transactionMethodId,
     this.originalTransactionId,
@@ -102,13 +94,10 @@ class WalletPayData {
     required this.transactionIdentifier,
     required this.orderId,
     this.transactionId,
-    required this.requestSourceId,
-    this.merchantBranchId,
     this.transactionViewModel,
     this.digitalTransactionEnquiryViewModel,
     required this.merchantId,
     required this.terminalId,
-    this.responseCode,
     this.rowVersion,
   });
 
@@ -153,14 +142,11 @@ class WalletPayData {
           transactionIdentifier == other.transactionIdentifier &&
           orderId == other.orderId &&
           transactionId == other.transactionId &&
-          requestSourceId == other.requestSourceId &&
-          merchantBranchId == other.merchantBranchId &&
           transactionViewModel == other.transactionViewModel &&
           digitalTransactionEnquiryViewModel ==
               other.digitalTransactionEnquiryViewModel &&
           merchantId == other.merchantId &&
           terminalId == other.terminalId &&
-          responseCode == other.responseCode &&
           rowVersion == other.rowVersion);
 
   @override
@@ -200,13 +186,10 @@ class WalletPayData {
       transactionIdentifier.hashCode ^
       orderId.hashCode ^
       transactionId.hashCode ^
-      requestSourceId.hashCode ^
-      merchantBranchId.hashCode ^
       transactionViewModel.hashCode ^
       digitalTransactionEnquiryViewModel.hashCode ^
       merchantId.hashCode ^
       terminalId.hashCode ^
-      responseCode.hashCode ^
       rowVersion.hashCode;
 
   WalletPayData copyWith({
@@ -221,7 +204,7 @@ class WalletPayData {
     int? currencyId,
     String? createdDateTime,
     String? maxResponseDatetime,
-    String? aggregatorId,
+    int? aggregatorId,
     int? merchantAccountTypeId,
     String? status,
     String? transactionSource,
@@ -245,13 +228,10 @@ class WalletPayData {
     String? transactionIdentifier,
     String? orderId,
     String? transactionId,
-    int? requestSourceId,
-    String? merchantBranchId,
     String? transactionViewModel,
     String? digitalTransactionEnquiryViewModel,
     int? merchantId,
     int? terminalId,
-    String? responseCode,
     String? rowVersion,
   }) {
     return WalletPayData(
@@ -277,7 +257,7 @@ class WalletPayData {
       originalExternalTransactionId:
           originalExternalTransactionId ?? this.originalExternalTransactionId,
       senderMobileNo: senderMobileNo ?? this.senderMobileNo,
-      receiverMobileNo: reciverMobileNo ?? this.receiverMobileNo,
+      receiverMobileNo: reciverMobileNo ?? receiverMobileNo,
       transactionMethodId: transactionMethodId ?? this.transactionMethodId,
       originalTransactionId:
           originalTransactionId ?? this.originalTransactionId,
@@ -296,14 +276,11 @@ class WalletPayData {
           transactionIdentifier ?? this.transactionIdentifier,
       orderId: orderId ?? this.orderId,
       transactionId: transactionId ?? this.transactionId,
-      requestSourceId: requestSourceId ?? this.requestSourceId,
-      merchantBranchId: merchantBranchId ?? this.merchantBranchId,
       transactionViewModel: transactionViewModel ?? this.transactionViewModel,
       digitalTransactionEnquiryViewModel: digitalTransactionEnquiryViewModel ??
           this.digitalTransactionEnquiryViewModel,
       merchantId: merchantId ?? this.merchantId,
       terminalId: terminalId ?? this.terminalId,
-      responseCode: responseCode ?? this.responseCode,
       rowVersion: rowVersion ?? this.rowVersion,
     );
   }
@@ -345,13 +322,10 @@ class WalletPayData {
       'transactionIdentifier': transactionIdentifier,
       'orderId': orderId,
       'transactionId': transactionId,
-      'requestSourceId': requestSourceId,
-      'merchantBranchId': merchantBranchId,
       'transactionViewModel': transactionViewModel,
       'digitalTransactionEnquiryViewModel': digitalTransactionEnquiryViewModel,
       'merchantId': merchantId,
       'terminalId': terminalId,
-      'responseCode': responseCode,
       'rowVersion': rowVersion,
     };
   }
@@ -360,26 +334,26 @@ class WalletPayData {
     return WalletPayData(
       id: map['id'] as String,
       idN: map['idN'] as int,
-      from: map['from'] as String,
+      from: map['from'] as String?,
       to: map['to'] as String?,
       merchantRefId: map['merchantRefId'] as int,
       terminalNodeId: map['terminalNodeId'] as int,
       bankId: map['bankId'] as int,
       amount: map['amount'] as num,
       currencyId: map['currencyId'] as int,
-      createdDateTime: map['createdDatetime'] as String,
-      maxResponseDatetime: map['maxResponseDatetime'] as String,
-      aggregatorId: map['aggregatorId'] as String?,
-      merchantAccountTypeId: map['merchantAccountTypeId'] as int,
-      status: map['status'] as String,
+      createdDateTime: map['createdDatetime'] as String?,
+      maxResponseDatetime: map['maxResponseDatetime'] as String?,
+      aggregatorId: map['aggregatorId'] as int?,
+      merchantAccountTypeId: map['merchantAccountTypeId'] as int?,
+      status: map['status'] as String?,
       transactionSource: map['transactionSource'] as String?,
       transactionTypeId: map['transactionTypeId'] as int,
-      externalTransactionId: map['externalTransactionId'] as String,
+      externalTransactionId: map['externalTransactionId'] as String?,
       originalExternalTransactionId:
           map['originalExternalTransactionId'] as String?,
-      senderMobileNo: map['senderMobileNo'] as String,
+      senderMobileNo: map['senderMobileNo'] as String?,
       receiverMobileNo: map['receiverMobileNo'] as String?,
-      transactionMethodId: map['transactionMethodId'] as int,
+      transactionMethodId: map['transactionMethodId'] as int?,
       originalTransactionId: map['originalTransactionId'] as int?,
       originalDigitalTransactionId: map['originalDigitalTransactionId'] as int?,
       senderName: map['senderName'] as String?,
@@ -391,17 +365,14 @@ class WalletPayData {
       refundReason: map['refundReason'] as String?,
       refundSource: map['refundSource'] as String?,
       refundCreatorId: map['refundCreatorId'] as String?,
-      transactionIdentifier: map['transactionIdentifier'] as String,
-      orderId: map['orderId'] as String,
+      transactionIdentifier: map['transactionIdentifier'] as String?,
+      orderId: map['orderId'] as String?,
       transactionId: map['transactionId'] as String?,
-      requestSourceId: map['requestSourceId'] as int,
-      merchantBranchId: map['merchantBranchId'] as String?,
       transactionViewModel: map['transactionViewModel'] as String?,
       digitalTransactionEnquiryViewModel:
           map['digitalTransactionEnquiryViewModel'] as String?,
       merchantId: map['merchantId'] as int,
       terminalId: map['terminalId'] as int,
-      responseCode: map['responseCode'] as String?,
       rowVersion: map['rowVersion'] as String?,
     );
   }

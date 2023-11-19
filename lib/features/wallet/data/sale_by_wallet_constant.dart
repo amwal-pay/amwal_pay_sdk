@@ -1,7 +1,7 @@
 class SaleByWalletConstant {
   SaleByWalletConstant._();
   static const saleByWalletEndpoint = 'DigitalTransaction/DebitPaymentRequest';
-  static const saleByQREndpoint = '/Merchant/GenerateQrCode';
+  static const saleByQREndpoint = '/QRCode/GenerateIsoQRCode';
   static const verifyCustomerEndpoint =
       'DigitalOperation/CustomerNameVerificationRequest';
 

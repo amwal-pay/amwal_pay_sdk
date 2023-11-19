@@ -18,6 +18,7 @@ class AmwalSdkNavigator {
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => SaleByWalletPayingOptions(
+          merchantId: args.merchantId,
           amount: args.amount,
           terminalId: args.terminalId,
           currencyId: args.currencyData!.idN,
@@ -28,12 +29,17 @@ class AmwalSdkNavigator {
     );
   }
 
-  Future<void> toCardScreen({Locale? locale, required bool is3DS}) async =>
+  Future<void> toCardScreen({
+    Locale? locale,
+    required String merchantName,
+    required int merchantId,
+  }) async =>
       await amwalNavigatorObserver.navigator!.push(
         MaterialPageRoute(
           builder: (_) => CardSdkApp(
             locale: locale,
-            is3DS: is3DS,
+            merchantName: merchantName,
+            merchantId: merchantId,
           ),
         ),
       );
@@ -41,11 +47,14 @@ class AmwalSdkNavigator {
   Future<void> toCardOptionScreen(
     RouteSettings settings,
     BuildContext context,
+    Locale locale,
   ) async {
     final arguments = settings.arguments as PaymentArguments;
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => SaleByCardManualScreen(
+          locale: locale,
+          merchantId: arguments.merchantId,
           currency: arguments.currencyData!.name,
           currencyId: arguments.currencyData!.idN,
           terminalId: arguments.terminalId,

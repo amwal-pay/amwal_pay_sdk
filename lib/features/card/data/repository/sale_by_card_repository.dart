@@ -15,8 +15,8 @@ class SaleByCardRepositoryImpl extends ISaleByCardRepository {
     PurchaseRequest request,
   ) async {
     return await networkService.invokeRequest(
-      data: request.toMap(),
       method: HttpMethod.post,
+      data: request.mapToPurchaseData(),
       converter: PurchaseResponse.fromJson,
       endpoint: SaleByCardConstants.purchaseEndpoint,
     );
@@ -27,7 +27,7 @@ class SaleByCardRepositoryImpl extends ISaleByCardRepository {
     PurchaseRequest request,
   ) async {
     return await networkService.invokeRequest(
-      data: request.toMap(),
+      data: request.mapToPurchaseStepOneData(),
       method: HttpMethod.post,
       converter: PurchaseResponse.fromJson,
       endpoint: SaleByCardConstants.purchaseEndpoint,
@@ -39,7 +39,7 @@ class SaleByCardRepositoryImpl extends ISaleByCardRepository {
     PurchaseRequest request,
   ) async {
     return await networkService.invokeRequest(
-      data: request.toMap(),
+      data: request.mapToPurchaseStepTwoData(),
       method: HttpMethod.post,
       converter: PurchaseResponse.fromJson,
       endpoint: SaleByCardConstants.purchaseEndpoint,

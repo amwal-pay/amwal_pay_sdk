@@ -20,6 +20,7 @@ class InputFieldWidget extends StatelessWidget {
     this.minLength = 0,
     this.onChange,
     this.decoration,
+    this.readOnly = false,
   }) : super(key: key);
 
   final String widgetTitle;
@@ -33,6 +34,7 @@ class InputFieldWidget extends StatelessWidget {
   final int minLength;
   final void Function(String)? onChange;
   final InputDecoration? decoration;
+  final bool readOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +72,9 @@ class InputFieldWidget extends StatelessWidget {
                 width: 2,
               ),
               if (widgetTitleIcon != null)
-                SvgPicture.asset(widgetTitleIcon!,)
+                SvgPicture.asset(
+                  widgetTitleIcon!,
+                )
               else
                 const SizedBox(),
             ],
@@ -89,6 +93,7 @@ class InputFieldWidget extends StatelessWidget {
                 FormBuilderValidators.minLength(minLength,
                     errorText: 'invalid_input_field'),
             ]),
+            readOnly: readOnly,
             maxLines: 1,
             decoration: inputDecoration,
             textInputAction: TextInputAction.next,

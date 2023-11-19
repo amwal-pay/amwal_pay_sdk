@@ -2,36 +2,57 @@ import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
 import 'package:amwal_pay_sdk/core/ui/alert_dialog/alert_dialog.dart';
 import 'package:amwal_pay_sdk/core/ui/buttons/app_button.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
+import 'package:amwal_pay_sdk/localization/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
-typedef OnCloseCallback = void Function()?;
+typedef NullableVoidCallback = void Function()?;
 
 abstract class TransactionDialogAction extends StatelessWidget {
   const TransactionDialogAction({super.key});
 
   factory TransactionDialogAction.build(
-    bool isTransactionDetails, {
-    OnCloseCallback onClose,
+    bool isTransactionDetails,
+    void Function() share, {
+    bool isSuccess = false,
+    bool canRefund = false,
+    bool canVoid = false,
+    bool canCapture = false,
+    NullableVoidCallback onRefund,
+    NullableVoidCallback onCapture,
+    NullableVoidCallback onVoid,
+    NullableVoidCallback onClose,
     bool? isSettled,
     bool? isCaptured,
     bool? isRefunded,
     bool? isCredit,
     String Function(String)? globalTranslator,
+        required num amount,
+        String? currency,
   }) {
-    if (isTransactionDetails) {
+    if (isTransactionDetails && isSuccess) {
       return TransactionDialogActionButtonsForTransaction(
-        onClose: onClose,
+        globalTranslator: globalTranslator,
         isRefunded: isRefunded,
         isCaptured: isCaptured,
-        isCredit: isCredit,
+        canCapture: canCapture,
+        onCapture: onCapture,
         isSettled: isSettled,
-        globalTranslator: globalTranslator,
+        canRefund: canRefund,
+        onRefund: onRefund,
+        isCredit: isCredit,
+        canVoid: canVoid,
+        onClose: onClose,
+        onVoid: onVoid,
+        share: share,
+        amount: amount,
+        currency:currency,
       );
     } else {
       return TransactionDialogActionButtons(
         onClose: onClose,
         globalTranslator: globalTranslator,
+        share: share,
       );
     }
   }
@@ -40,8 +61,10 @@ abstract class TransactionDialogAction extends StatelessWidget {
 class TransactionDialogActionButtons extends TransactionDialogAction {
   final void Function()? onClose;
   final String Function(String)? globalTranslator;
+  final void Function() share;
   const TransactionDialogActionButtons({
     Key? key,
+    required this.share,
     this.onClose,
     this.globalTranslator,
   }) : super(key: key);
@@ -66,7 +89,7 @@ class TransactionDialogActionButtons extends TransactionDialogAction {
                         ),
                       ),
                     ),
-                    onPressed: () => Share.share('share text'),
+                    onPressed: share,
                     child: Text(
                       'share_btn'.translate(
                         context,
@@ -108,31 +131,50 @@ class TransactionDialogActionButtons extends TransactionDialogAction {
 
 class TransactionDialogActionButtonsForTransaction
     extends TransactionDialogAction {
-  final void Function()? onClose;
+  final NullableVoidCallback onClose;
+  final NullableVoidCallback onRefund;
+  final NullableVoidCallback onCapture;
+  final NullableVoidCallback onVoid;
   final bool? isSettled;
   final bool? isCaptured;
   final bool? isRefunded;
   final bool? isCredit;
+  final bool canRefund;
+  final bool canVoid;
+  final bool canCapture;
   final String Function(String)? globalTranslator;
+  final void Function() share;
+  final num amount;
+  final String? currency;
 
   const TransactionDialogActionButtonsForTransaction({
     Key? key,
+    required this.amount,
+    this.canRefund = false,
+    this.canVoid = false,
+    this.canCapture = false,
+    this.onVoid,
     this.onClose,
+    this.onRefund,
+    this.onCapture,
     this.isSettled,
     this.isCaptured,
     this.isRefunded,
     this.isCredit,
     this.globalTranslator,
+    required this.share,
+    this.currency,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            if (isRefunded == false)
+            if (canRefund)
               Expanded(
                 child: SizedBox(
                   height: 55,
@@ -145,7 +187,7 @@ class TransactionDialogActionButtonsForTransaction
                         ),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: onRefund,
                     child: FittedBox(
                       child: Text(
                         'refund'.translate(
@@ -162,8 +204,8 @@ class TransactionDialogActionButtonsForTransaction
                   ),
                 ),
               ),
-            const SizedBox(width: 8),
-            if (isCaptured == false)
+            if (canRefund) const SizedBox(width: 8),
+            if (canCapture)
               Expanded(
                 child: SizedBox(
                   height: 55,
@@ -177,20 +219,30 @@ class TransactionDialogActionButtonsForTransaction
                         ),
                       ),
                       onPressed: () async {
-                        await showDialog(
+                        final isEnglish = AppLocalizations.of(context)?.isEnLocale ?? true;
+                        String content = '';
+                        if(isEnglish){
+                          content = 'capture_hint_txt'.translate(context, globalTranslator:globalTranslator,) + '${(currency??'').translate(context, globalTranslator:globalTranslator,)} $amount';
+                        }else{
+                          content = 'capture_hint_txt'.translate(context, globalTranslator:globalTranslator,) + '$amount ${(currency??'').translate(context, globalTranslator:globalTranslator,)}';
+
+                        }
+                        final confirmed = await showDialog(
                           context: context,
                           builder: (context) => AppAlertDialog(
                             title: 'capture',
-                            content: 'capture_hint_txt',
+                            content:content ,
                             actionButtonText: 'confirm',
                             actionButtonColor: primaryColor,
                             globalTranslator: globalTranslator,
                             actionButtonFn: () {
-                              Navigator.of(context).pop();
-                              Navigator.of(context).pop();
+                              Navigator.of(context).pop(true);
                             },
                           ),
                         );
+                        if(confirmed == true) {
+                          onCapture?.call();
+                        }
                       },
                       child: FittedBox(
                         child: Text(
@@ -207,7 +259,38 @@ class TransactionDialogActionButtonsForTransaction
                       )),
                 ),
               ),
-            const SizedBox(width: 8),
+            if (canCapture) const SizedBox(width: 8),
+            if (canVoid)
+              Expanded(
+                child: SizedBox(
+                  height: 55,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: greyColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          10,
+                        ),
+                      ),
+                    ),
+                    onPressed: onVoid,
+                    child: FittedBox(
+                      child: Text(
+                        'void'.translate(
+                          context,
+                          globalTranslator: globalTranslator,
+                        ),
+                        style: const TextStyle(
+                          color: whiteColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            if (canVoid) const SizedBox(width: 8),
             Expanded(
               child: SizedBox(
                 height: 55,
@@ -220,7 +303,7 @@ class TransactionDialogActionButtonsForTransaction
                         ),
                       ),
                     ),
-                    onPressed: () => Share.share('share text'),
+                    onPressed: share,
                     child: Text(
                       'share_btn'.translate(
                         context,

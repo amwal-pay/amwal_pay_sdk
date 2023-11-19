@@ -4,15 +4,17 @@ class PaymentArguments {
   final String amount;
   final String terminalId;
   final CurrencyData? currencyData;
-  final bool is3DS;
   final String merchantName;
+  final int merchantId;
+  final String? transactionId;
 
   const PaymentArguments({
     required this.amount,
     required this.terminalId,
     required this.merchantName,
+    required this.merchantId,
     this.currencyData,
-    this.is3DS = false,
+    this.transactionId,
   });
 
   Map<String, dynamic> toMap() {
@@ -21,6 +23,7 @@ class PaymentArguments {
       'terminalId': terminalId,
       'currencyData': currencyData?.toJson(),
       'merchantName': merchantName,
+      "merchantId": merchantId,
     };
   }
 
@@ -30,6 +33,25 @@ class PaymentArguments {
       terminalId: map['terminalId'] as String,
       currencyData: CurrencyData.fromJson(map['currencyData']),
       merchantName: map['merchantName'],
+      merchantId: map['merchantId'],
+    );
+  }
+
+  PaymentArguments copyWith({
+    String? amount,
+    String? terminalId,
+    CurrencyData? currencyData,
+    String? merchantName,
+    int? merchantId,
+    String? transactionId,
+  }) {
+    return PaymentArguments(
+      amount: amount ?? this.amount,
+      terminalId: terminalId ?? this.terminalId,
+      currencyData: currencyData ?? this.currencyData,
+      merchantName: merchantName ?? this.merchantName,
+      merchantId: merchantId ?? this.merchantId,
+      transactionId: transactionId ?? this.transactionId,
     );
   }
 }

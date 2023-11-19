@@ -18,9 +18,6 @@ class AmwalPaySdk {
     await _initWalletSdk(settings: settings);
     await _initCardSdk(settings: settings);
     return true;
-    // await _openAmwalSdkScreen(
-    //   settings,
-    // );
   }
 
   Future<AmwalWalletSdk> _initWalletSdk({
@@ -32,11 +29,11 @@ class AmwalPaySdk {
       settings.requestSourceId,
     );
     return await AmwalWalletSdk.instance.init(
+      merchantName: settings.merchantName,
       merchantId: settings.merchantId,
       terminalIds: settings.terminalIds,
       secureHashValue: settings.secureHashValue,
       requestSourceId: settings.requestSourceId,
-      transactionRefNo: settings.transactionRefNo,
       isMocked: settings.isMocked,
       locale: settings.locale,
       service: service,
@@ -54,12 +51,11 @@ class AmwalPaySdk {
     );
 
     return await AmwalCardSdk.instance.init(
-      // apiKey: settings.apiKey,
+      merchantName: settings.merchantName,
       merchantId: settings.merchantId,
       terminalIds: settings.terminalIds,
       secureHashValue: settings.secureHashValue,
       requestSourceId: settings.requestSourceId,
-      transactionRefNo: settings.transactionRefNo,
       isMocked: settings.isMocked,
       locale: settings.locale,
       service: service,
@@ -70,6 +66,8 @@ class AmwalPaySdk {
     final walletSdk = await _initWalletSdk(settings: settings);
     await walletSdk.navigateToWallet(
       settings.locale,
+      settings.merchantName,
+      settings.merchantId,
     );
   }
 
@@ -77,7 +75,8 @@ class AmwalPaySdk {
     final cardSdk = await _initCardSdk(settings: settings);
     await cardSdk.navigateToCard(
       settings.locale,
-      settings.is3DS,
+      settings.merchantName,
+      settings.merchantId,
     );
   }
 }

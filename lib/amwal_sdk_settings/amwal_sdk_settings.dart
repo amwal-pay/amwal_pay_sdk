@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 abstract class IAmwalSdkSettings {
   final String requestSourceId;
   final String secureHashValue;
-  final String merchantId;
+  final int merchantId;
   final List<String> terminalIds;
   final String? transactionRefNo;
   final Locale locale;
@@ -91,7 +91,7 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
 
   factory AmwalSdkSettings.fromArgs(List<String> args) {
     return AmwalSdkSettings(
-        merchantId: args[0],
+        merchantId: int.parse(args[0]),
         currency: args[1],
         currencyId: int.parse(args[2]),
         amount: args[3],

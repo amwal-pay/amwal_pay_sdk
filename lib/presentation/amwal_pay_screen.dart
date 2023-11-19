@@ -37,6 +37,7 @@ class AmwalPayScreen extends StatelessWidget {
         body: TabBarView(
           children: [
             SaleByWalletPayingOptions(
+              merchantId: arguments.merchantId,
               merchantName: arguments.merchantName,
               amount: arguments.amount,
               terminalId: arguments.terminalId,
@@ -46,6 +47,8 @@ class AmwalPayScreen extends StatelessWidget {
               translator: (txt) => txt.translate(context),
             ),
             SaleByCardManualScreen(
+              locale: arguments.locale,
+              merchantId: arguments.merchantId,
               merchantName: arguments.merchantName,
               amount: arguments.amount,
               terminalId: arguments.terminalId,

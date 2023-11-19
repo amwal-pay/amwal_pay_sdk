@@ -12,9 +12,8 @@ import 'package:amwal_pay_sdk/features/wallet/presentation/widgets/sale_by_walle
 import 'package:amwal_pay_sdk/features/wallet/presentation/widgets/sale_by_wallet_mixins/sale_by_wallet_pay_mixin.dart';
 import 'package:amwal_pay_sdk/features/wallet/presentation/widgets/sale_by_wallet_mixins/sale_by_wallet_verify_mixin.dart';
 import 'package:amwal_pay_sdk/features/wallet/state/sale_by_wallet_state.dart';
-
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
-
+import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -41,24 +40,29 @@ class SaleActionButtons extends ApiView<SaleByWalletCubit>
         BlocListener<SaleByWalletVerifyCubit,
             ICubitState<VerifyCustomerResponse>>(
           bloc: verifyCubit,
-          listener: (_, state) {
-            state.whenOrNull(success: (value) {
-              if (value.success) {
-                cubit.verified();
-              }
-            });
-          },
+          listener: (_, state) => state.whenOrNull(success: (value) {
+            if (value.success) {
+              cubit.customerNameFromApi = value.data?.customerName ?? "";
+              cubit.verified();
+            }
+          }),
         ),
         BlocListener<SaleByWalletPayCubit, ICubitState<WalletPayResponse>>(
           bloc: payCubit,
           listener: (_, state) async {
-            final walletPayData =
-                state.mapOrNull(success: (value) => value.uiModel.data);
-            if (walletPayData != null) {
+            final isSuccess = state.mapOrNull(
+              success: (value) => true,
+            );
+            if (isSuccess == true) {
               await showCountingDialog(
                 context,
-                walletPayData,
                 globalTranslator,
+                paymentArguments.currencyData!.name.translate(
+                  context,
+                  globalTranslator: globalTranslator,
+                ),
+                paymentArguments.transactionId!,
+                paymentArguments.merchantId,
               );
             }
           },

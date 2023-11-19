@@ -3,36 +3,74 @@ import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
 import 'package:amwal_pay_sdk/core/ui/directional_widget/directional_widget.dart';
 import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction.dart';
 import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_detail_widget.dart';
+import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_details_settings.dart';
 import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_dialog_action_buttons.dart';
+import 'package:amwal_pay_sdk/localization/app_localizations_delegate.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
 
-class TransactionStatusDialog extends StatelessWidget {
-  final TransactionStatus transactionStatus;
-  final Map<String, dynamic>? details;
-  final bool? isRefunded;
-  final bool? isCaptured;
-  final bool? isSettled;
-  final void Function()? onClose;
-  final bool isTransactionDetails;
-  final String Function(String)? globalTranslator;
+class TransactionStatusDialog extends StatefulWidget {
+  final TransactionDetailsSettings settings;
 
   const TransactionStatusDialog({
     Key? key,
-    required this.transactionStatus,
-    this.details,
-    this.onClose,
-    this.isCaptured,
-    this.isSettled,
-    this.isRefunded,
-    this.isTransactionDetails = false,
-    this.globalTranslator,
+    required this.settings,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  State<TransactionStatusDialog> createState() =>
+      _TransactionStatusDialogState();
+}
+
+class _TransactionStatusDialogState extends State<TransactionStatusDialog> {
+  late ScreenshotController _screenshotController;
+  TransactionDetailsSettings get settings => widget.settings;
+  late Map<String, dynamic> dialogDetails;
+  Map<String, dynamic>? dueAmount;
+  bool _isSharing = false;
+  @override
+  void initState() {
+    super.initState();
+    _screenshotController = ScreenshotController();
+    extractDueAmount();
+  }
+
+  void extractDueAmount() {
+    final dueAmountKey = 'due_amount'.translate(
+      context,
+      globalTranslator: settings.globalTranslator,
+    );
+    final containsDueAmount = settings.details!.containsKey(dueAmountKey);
+    dialogDetails = settings.details!;
+    if (containsDueAmount) {
+      dueAmount = {dueAmountKey: dialogDetails[dueAmountKey]};
+      dialogDetails.remove(dueAmountKey);
+    }
+  }
+
+  Future<void> _share() async {
+    setState(() => _isSharing = true);
+    final screenshotData = await _screenshotController.capture();
+    setState(() => _isSharing = false);
+    if (screenshotData != null) {
+      final file = XFile.fromData(
+        screenshotData,
+        mimeType: 'jpg',
+      );
+      await Share.shareXFiles(
+        [
+          file,
+        ],
+      );
+    }
+  }
+
+  Widget dialog({bool forShare = false}) {
+    final size = MediaQuery.of(context).size;
     return Dialog(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
@@ -44,7 +82,7 @@ class TransactionStatusDialog extends StatelessWidget {
           top: 40,
           bottom: 20,
         ),
-        width: MediaQuery.of(context).size.width * 0.8,
+        width: size.width * 0.9,
         decoration: BoxDecoration(
           color: whiteColor,
           borderRadius: BorderRadius.circular(
@@ -54,13 +92,15 @@ class TransactionStatusDialog extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              transactionStatus.transactionStatusImage,
+              settings.transactionStatus.transactionStatusImage,
               const SizedBox(
                 height: 10,
               ),
               Text(
-                transactionStatus.transactionStatusTitle
-                    .translate(context, globalTranslator: globalTranslator),
+                settings.transactionStatus.transactionStatusTitle.translate(
+                  context,
+                  globalTranslator: settings.globalTranslator,
+                ),
                 style: const TextStyle(
                   color: blackColor,
                   fontSize: 16,
@@ -71,10 +111,7 @@ class TransactionStatusDialog extends StatelessWidget {
                 height: 5,
               ),
               Text(
-                'transaction_type'.translate(
-                  context,
-                  globalTranslator: globalTranslator,
-                ),
+                settings.transactionDisplayName,
                 style: const TextStyle(
                   color: greyColor,
                   fontSize: 14,
@@ -87,34 +124,36 @@ class TransactionStatusDialog extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   DirectionalWidget(
+                    locale: settings.locale,
                     child: Image.asset(
                       AppAssets.divCircleLeft,
-
+                      package: 'amwal_pay_sdk',
                       color: greyColor,
                     ),
                   ),
                   Expanded(
                     child: Center(
                       child: Dash(
-                        length: MediaQuery.of(context).size.width * .72,
+                        length: size.width * .72,
                         direction: Axis.horizontal,
                         dashColor: greyColor,
                       ),
                     ),
                   ),
                   DirectionalWidget(
+                    locale: settings.locale,
                     child: Image.asset(
                       AppAssets.divCircleRight,
-
+                      package: 'amwal_pay_sdk',
                       color: greyColor,
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 10),
-              ...details?.keys.map<Widget>(
+              ...settings.details?.keys.map<Widget>(
                     (title) {
-                      final value = details![title].toString();
+                      final value = settings.details![title].toString();
                       return TransactionDetailWidget(
                         title: title,
                         value: value,
@@ -122,26 +161,69 @@ class TransactionStatusDialog extends StatelessWidget {
                     },
                   ).toList() ??
                   const [],
+              if (dueAmount != null)
+                const Divider(
+                  endIndent: 20,
+                  indent: 20,
+                  height: 1,
+                  thickness: 0.8,
+                ),
+              const SizedBox(height: 16),
+              if (dueAmount != null)
+                TransactionDetailWidget(
+                  title: dueAmount!.keys.first,
+                  value: dueAmount!.values.first,
+                  titleStyle: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900,
+                    color: darkBlue,
+                  ),
+                  valueStyle: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900,
+                    color: darkBlue,
+                  ),
+                ),
               const SizedBox(
-                height: 27,
+                height: 12,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                ),
-                child: TransactionDialogAction.build(
-                  isTransactionDetails,
-                  onClose: onClose,
-                  isRefunded: isRefunded,
-                  isCaptured: isCaptured,
-                  isSettled: isSettled,
-                  globalTranslator: globalTranslator,
-                ),
-              )
+              if (!forShare)
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                  ),
+                  child: TransactionDialogAction.build(
+                    settings.isTransactionDetails,
+                    _share,
+                    isSuccess: settings.isSuccess,
+                    onVoid: settings.onVoid,
+                    canCapture: settings.canCapture,
+                    canRefund: settings.canRefund,
+                    canVoid: settings.canVoid,
+                    onRefund: settings.onRefund,
+                    onCapture: settings.onCapture,
+                    onClose: settings.onClose,
+                    isRefunded: settings.isRefunded,
+                    isCaptured: settings.isCaptured,
+                    isSettled: settings.isSettled,
+                    globalTranslator: settings.globalTranslator,
+                    amount: settings.amount,
+                    currency: settings.currency,
+                  ),
+                )
             ],
           ),
         ),
       ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print('sdk settings');
+    return Screenshot(
+      controller: _screenshotController,
+      child: dialog(forShare: _isSharing),
     );
   }
 }
@@ -151,12 +233,12 @@ extension TransactionX on TransactionStatus {
     if (this == TransactionStatus.success) {
       return SvgPicture.asset(
         AppAssets.successIcon,
-
+        package: 'amwal_pay_sdk',
       );
     } else {
       return SvgPicture.asset(
         AppAssets.errorIcon,
-
+        package: 'amwal_pay_sdk',
       );
     }
   }

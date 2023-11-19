@@ -30,7 +30,6 @@ class SaleByWalletRepoImpl extends SaleByWalletRepository {
     return await networkService.invokeRequest(
       data: param.toMap(),
       method: HttpMethod.post,
-      queryParams: {'id': param.id},
       converter: VerifyCustomerResponse.fromJson,
       endpoint: SaleByWalletConstant.verifyCustomerEndpoint,
       mockupResponsePath: SaleByWalletConstant.verifyCustomerSuccessMockup,

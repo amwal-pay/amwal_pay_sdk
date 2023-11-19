@@ -1,5 +1,3 @@
-
-
 import 'package:amwal_pay_sdk/features/wallet/cubit/sale_by_wallet_verify_cubit.dart';
 import 'package:amwal_pay_sdk/features/wallet/data/models/request/verification_request.dart';
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
@@ -15,11 +13,8 @@ mixin SaleByWalletVerifyMixin on SaleByWalletActionsMixin {
       amount: num.parse(paymentArguments.amount),
       currencyId: paymentArguments.currencyData?.idN ?? 512,
       terminalId: paymentArguments.terminalId,
-      id: '13',
-      merchantOrderId: '',
-      messageIdentificationCode: '',
-      instructingAlias: '',
-      instructingMobile: '',
+      merchantId: paymentArguments.merchantId,
+      id: paymentArguments.transactionId,
     );
     return request;
   }
@@ -29,6 +24,16 @@ mixin SaleByWalletVerifyMixin on SaleByWalletActionsMixin {
     required PaymentArguments paymentArguments,
   }) async {
     if (cubit.formKey.currentState!.validate()) {
+      if (cubit.state.page == 0) {
+        cubit.aliasName = "";
+      } else if (cubit.state.page == 1) {
+        cubit.phoneNumber = "";
+      }
+      if (cubit.state.page == 2) {
+        cubit.phoneNumber = "";
+        cubit.aliasName = "";
+      }
+
       final request = _generateVerifyCustomerRequest(paymentArguments);
       await verifyCubit.verifyCustomer(request);
     }

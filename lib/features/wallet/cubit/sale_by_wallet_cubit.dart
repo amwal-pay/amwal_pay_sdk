@@ -16,8 +16,10 @@ class SaleByWalletCubit extends Cubit<SaleByWalletState> {
 
   String phoneNumber = '';
   String aliasName = '';
-  String merchantOrderId = '';
   String transactionId = '';
+
+
+  String customerNameFromApi = '';
 
   void verified() => emit(SaleByWalletState.verified(state.page));
 }
