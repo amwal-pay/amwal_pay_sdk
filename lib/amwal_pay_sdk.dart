@@ -28,8 +28,6 @@ class AmwalPaySdk {
     required AmwalSdkSettings settings,
   }) async {
     NetworkConstants.isSdkInApp = true;
-    print('potato');
-    print(NetworkConstants.url);
     await SdkBuilder.instance.initCacheStorage();
     await CacheStorageHandler.instance.write(
       CacheKeys.token,
