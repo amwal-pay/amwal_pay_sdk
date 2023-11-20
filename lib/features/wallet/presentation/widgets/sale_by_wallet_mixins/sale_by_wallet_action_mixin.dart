@@ -45,10 +45,10 @@ mixin SaleByWalletActionsMixin on ApiView<SaleByWalletCubit> {
 
   Future<void> countingDialog({
     required BuildContext context,
-    // required OnPayCallback onCountingComplete,
     String Function(String)? globalTranslator,
     required String transactionId,
     required int merchantId,
+    required void Function() resetWallet,
   }) async {
     await Navigator.of(context).push(
       DialogRoute(
@@ -56,7 +56,6 @@ mixin SaleByWalletActionsMixin on ApiView<SaleByWalletCubit> {
         builder: (_) => CountDownDialog(
           globalTranslator: globalTranslator,
           onComplete: () async {
-            // if (NetworkConstants.isSdkInApp) {
             final getTransactionUseCase =
                 WalletInjector.instance.get<GetOneTransactionByIdUseCase>();
             final oneTransactionResponse = await getTransactionUseCase.invoke({
@@ -75,24 +74,11 @@ mixin SaleByWalletActionsMixin on ApiView<SaleByWalletCubit> {
                 context,
               ).copyWith(
                 onClose: () {
+                  resetWallet();
                   AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
                 },
               ),
             );
-            // } else {
-            //   onCountingComplete((settings) async {
-            //     final isDialogOpen = ModalRoute.of(context)!.isCurrent != true;
-            //     if (isDialogOpen && context.mounted) {
-            //       Navigator.of(context).pop();
-            //     }
-            //     if (context.mounted) {
-            //       await ReceiptHandler.instance.showWalletReceipt(
-            //         context: context,
-            //         settings: settings,
-            //       );
-            //     }
-            //   });
-            // }
           },
         ),
       ),
@@ -105,26 +91,14 @@ mixin SaleByWalletActionsMixin on ApiView<SaleByWalletCubit> {
     String currency,
     String transactionId,
     int merchantId,
+    void Function() resetWallet,
   ) async {
-    // onPay((settings) async {
-    //   final isDialogOpen =
-    //       context.mounted && ModalRoute.of(context)!.isCurrent != true;
-    //   if (isDialogOpen) {
-    //     Navigator.of(context).pop();
-    //   }
-    //   if (context.mounted) {
-    //     await ReceiptHandler.instance.showWalletReceipt(
-    //       context: context,
-    //       settings: settings,
-    //     );
-    //   }
-    // });
     await countingDialog(
       context: context,
       globalTranslator: globalTranslator,
-      // onCountingComplete: onCountingComplete,
       transactionId: transactionId,
       merchantId: merchantId,
+      resetWallet: resetWallet,
     );
   }
 }

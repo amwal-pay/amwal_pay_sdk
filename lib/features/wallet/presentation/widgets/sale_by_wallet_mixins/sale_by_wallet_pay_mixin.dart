@@ -15,7 +15,7 @@ mixin SaleByWalletPayMixin on SaleByWalletActionsMixin {
       amount: num.parse(paymentArguments.amount),
       merchantId: paymentArguments.merchantId,
       terminalId: paymentArguments.terminalId,
-      id: const Uuid().v1(),
+      id: paymentArguments.transactionId,
       mobileNumber: mobileNumber,
       aliasName: alias,
       transactionId: const Uuid().v1(),

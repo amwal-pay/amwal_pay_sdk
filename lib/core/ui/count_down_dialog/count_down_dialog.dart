@@ -1,9 +1,11 @@
+import 'dart:async';
+
 import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 
-class CountDownDialog extends StatelessWidget {
+class CountDownDialog extends StatefulWidget {
   final void Function() onComplete;
   final String Function(String)? globalTranslator;
   const CountDownDialog({
@@ -11,6 +13,32 @@ class CountDownDialog extends StatelessWidget {
     required this.onComplete,
     this.globalTranslator,
   }) : super(key: key);
+
+  @override
+  State<CountDownDialog> createState() => _CountDownDialogState();
+}
+
+class _CountDownDialogState extends State<CountDownDialog> {
+  late CountDownController _countDownController;
+  Timer? _timer;
+  @override
+  void initState() {
+    super.initState();
+    _countDownController = CountDownController();
+  }
+
+  void _onStart() {
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 15), (timer) {
+      widget.onComplete();
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +55,7 @@ class CountDownDialog extends StatelessWidget {
           Text(
             'count_down'.translate(
               context,
-              globalTranslator: globalTranslator,
+              globalTranslator: widget.globalTranslator,
             ),
             style: const TextStyle(
               color: primaryColor,
@@ -43,9 +71,10 @@ class CountDownDialog extends StatelessWidget {
             ),
             child: Center(
               child: CircularCountDownTimer(
+                controller: _countDownController,
                 width: 110,
                 height: 110,
-                duration: 5,
+                duration: 30,
                 fillColor: whiteColor,
                 ringColor: whiteColor,
                 isReverse: true,
@@ -53,7 +82,10 @@ class CountDownDialog extends StatelessWidget {
                   fontSize: 50,
                   fontWeight: FontWeight.bold,
                 ),
-                onComplete: onComplete,
+                onStart: _onStart,
+                onComplete: () {
+                  _countDownController.restart();
+                },
               ),
             ),
           ),
@@ -63,7 +95,7 @@ class CountDownDialog extends StatelessWidget {
             child: Text(
               'successful_transaction'.translate(
                 context,
-                globalTranslator: globalTranslator,
+                globalTranslator: widget.globalTranslator,
               ),
               style: const TextStyle(
                 fontWeight: FontWeight.bold,

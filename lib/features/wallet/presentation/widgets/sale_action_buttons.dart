@@ -55,15 +55,17 @@ class SaleActionButtons extends ApiView<SaleByWalletCubit>
             );
             if (isSuccess == true) {
               await showCountingDialog(
-                context,
-                globalTranslator,
-                paymentArguments.currencyData!.name.translate(
                   context,
-                  globalTranslator: globalTranslator,
-                ),
-                paymentArguments.transactionId!,
-                paymentArguments.merchantId,
-              );
+                  globalTranslator,
+                  paymentArguments.currencyData!.name.translate(
+                    context,
+                    globalTranslator: globalTranslator,
+                  ),
+                  paymentArguments.transactionId!,
+                  paymentArguments.merchantId, () {
+                payCubit.resetWallet();
+                cubit.reset();
+              });
             }
           },
         ),

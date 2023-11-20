@@ -17,6 +17,10 @@ class SaleByWalletPayCubit extends ICubit<WalletPayResponse>
     this._payWithMobileNoUseCase,
   );
 
+  void resetWallet() {
+    emit(const ICubitState.initial());
+  }
+
   Future<void> payByAlias(
     WalletPaymentRequest request,
   ) async {

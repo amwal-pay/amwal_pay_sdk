@@ -96,11 +96,8 @@ class _ScanQrToPayWidgetState extends State<ScanQrToPayWidget> {
             ) ??
             '';
         if (transactionId.isEmpty) return;
-        // if (NetworkConstants.isSdkInApp) {
         settings = await _getTransactionById(transactionId);
-        // } else {
-        //   settings = await widget.getTransactionFunction(transactionId);
-        // }
+
         if (settings != null) {
           timer.cancel();
           if (context.mounted) {
@@ -109,8 +106,7 @@ class _ScanQrToPayWidgetState extends State<ScanQrToPayWidget> {
               settings: settings.copyWith(
                 onClose: () {
                   Navigator.pop(context);
-                  Navigator.pop(context);
-                  AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+                  _generateQrCode();
                 },
               ),
             );
@@ -130,18 +126,6 @@ class _ScanQrToPayWidgetState extends State<ScanQrToPayWidget> {
       currencyId: payArgs.currencyData!.idN,
     );
     _setupGetTransactionId();
-    // widget.onPay((settings) async {
-    //   await ReceiptHandler.instance.showHistoryReceipt(
-    //     context: context,
-    //     settings: settings.copyWith(
-    //       onClose: () {
-    //         Navigator.pop(context);
-    //         Navigator.pop(context);
-    //         AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
-    //       },
-    //     ),
-    //   );
-    // }, transactionId);
   }
 
   @override

@@ -11,13 +11,22 @@ class SaleByWalletCubit extends Cubit<SaleByWalletState> {
   void onCancel() => emit(SaleByWalletState.initial(state.page));
 
   void init() => emit(const SaleByWalletState.initial(0));
-
   final formKey = GlobalKey<FormBuilderState>();
+
+  void reset() {
+    aliasName = '';
+    phoneNumber = '';
+    transactionId = '';
+    customerNameFromApi = '';
+    formKey.currentState?.reset();
+    emit(state.copyWith(
+      verified: false,
+    ));
+  }
 
   String phoneNumber = '';
   String aliasName = '';
   String transactionId = '';
-
 
   String customerNameFromApi = '';
 

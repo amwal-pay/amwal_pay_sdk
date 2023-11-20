@@ -51,7 +51,7 @@ class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
       terminalId: terminalId,
       merchantId: merchantId,
       merchantName: merchantName,
-      // transactionId: transactionId,
+      transactionId: const Uuid().v1(),
       currencyData: CurrencyData(
         idN: currencyId,
         id: currency.toString(),
