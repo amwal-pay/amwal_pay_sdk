@@ -31,7 +31,6 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit>
   final String terminalId;
   final int merchantId;
   final bool showAppBar;
-  final bool is3DS;
   final String? transactionId;
   final String Function(String)? translator;
   final Locale locale;
@@ -44,7 +43,6 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit>
     required this.currency,
     required this.terminalId,
     required this.merchantId,
-    required this.is3DS,
     required this.locale,
     required this.onPay,
     this.transactionId,
@@ -55,7 +53,6 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit>
   @override
   Widget build(BuildContext context) {
     final args = PaymentArguments(
-      is3DS: is3DS,
       terminalId: terminalId,
       amount: amount,
       merchantId: merchantId,
@@ -66,119 +63,6 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit>
         id: currencyId.toString(),
       ),
     );
-
-    Future<String?> showOtpDialog() async {
-      if (context.mounted) {
-        final otpOrNull = await showDialog<String?>(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) => OTPEntryDialog(
-            otpVerificationString: 'otp_verification'.translate(
-              context,
-              globalTranslator: translator,
-            ),
-            verifyString: 'verify'.translate(
-              context,
-              globalTranslator: translator,
-            ),
-          ),
-        );
-        return otpOrNull;
-      } else {
-        return null;
-      }
-    }
-
-    Future<PurchaseData?> onPurchaseStepTwo(
-      String otp,
-      String transactionId,
-      String originTransactionId,
-    ) async {
-      return await cubit.purchaseOtpStepTwo(
-        args.amount,
-        args.terminalId,
-        args.currencyData!.idN,
-        args.merchantId,
-        transactionId,
-        otp,
-        originTransactionId,
-      );
-    }
-
-    Future<void> onPurchaseWith3DS() async {
-      String? otpOrNull;
-      final purchaseData = await cubit.purchaseOtpStepOne(
-        args.amount,
-        args.terminalId,
-        args.currencyData!.idN,
-        args.merchantId,
-        args.transactionId,
-        context,
-      );
-      if (purchaseData == null) return;
-      if (purchaseData.isOtpRequired) {
-        otpOrNull = await showOtpDialog();
-        if (otpOrNull == null || otpOrNull.isEmpty) {
-          return;
-        }
-        final transactionId = const Uuid().v1();
-        final purchaseDataOrNull = await onPurchaseStepTwo(
-          otpOrNull,
-          transactionId,
-          purchaseData.transactionId,
-        );
-        if (purchaseDataOrNull != null && context.mounted) {
-          cubit.showLoader();
-          onPay(
-            (settings) async {
-              cubit.initial();
-              await ReceiptHandler.instance.showCardReceipt(
-                context: context,
-                settings: settings,
-              );
-            },
-            purchaseDataOrNull.transactionId,
-          );
-        }
-      } else {
-        if (context.mounted) {
-          cubit.formKey.currentState?.reset();
-          onPay((settings) async {
-            await ReceiptHandler.instance.showCardReceipt(
-              context: context,
-              settings: settings,
-            );
-            if (context.mounted) dismissDialog(context);
-          });
-        } else {
-          if (context.mounted) dismissDialog(context);
-        }
-      }
-    }
-
-    Future<void> purchaseWithOut3DS() async {
-      showLoader(context);
-      final purchaseDataOrNull = await cubit.purchase(
-        args.amount,
-        args.terminalId,
-        args.currencyData!.idN,
-        args.merchantId,
-        args.transactionId,
-        context,
-      );
-      if (purchaseDataOrNull != null && context.mounted) {
-        cubit.formKey.currentState?.reset();
-        onPay((settings) async {
-          await ReceiptHandler.instance.showCardReceipt(
-            context: context,
-            settings: settings,
-          );
-          if (context.mounted) dismissDialog(context);
-        });
-      } else {
-        if (context.mounted) dismissDialog(context);
-      }
-    }
 
     return BlocListener<SaleByCardManualCubit, ICubitState<PurchaseResponse>>(
       bloc: cubit,
@@ -245,11 +129,6 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit>
                           dismissLoader: dismissDialog,
                           onPay: onPay,
                         );
-                        // if (args.is3DS) {
-                        // await onPurchaseWith3DS();
-                        // } else {
-                        //   await purchaseWithOut3DS();
-                        // }
                       }
                     },
                     child: Text(

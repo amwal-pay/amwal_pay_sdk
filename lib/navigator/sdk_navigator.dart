@@ -18,7 +18,6 @@ class AmwalSdkNavigator {
     OnPayCallback onPay,
     OnPayCallback onCountComplete,
     GetTransactionFunction getTransactionFunction,
-
   ) async {
     final args = settings.arguments as PaymentArguments;
     await Navigator.of(context).push(
@@ -41,14 +40,12 @@ class AmwalSdkNavigator {
   Future<void> toCardScreen({
     Locale? locale,
     String? transactionId,
-    required bool is3DS,
     required OnPayCallback onPay,
   }) async =>
       await amwalNavigatorObserver.navigator!.push(
         MaterialPageRoute(
           builder: (_) => CardSdkApp(
             locale: locale,
-            is3DS: is3DS,
             transactionId: transactionId,
             onPay: onPay,
           ),
@@ -71,7 +68,6 @@ class AmwalSdkNavigator {
           currencyId: arguments.currencyData!.idN,
           terminalId: arguments.terminalId,
           amount: arguments.amount,
-          is3DS: arguments.is3DS,
           merchantId: arguments.merchantId,
           transactionId: arguments.transactionId,
         ),

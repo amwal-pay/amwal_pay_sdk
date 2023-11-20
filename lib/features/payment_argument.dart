@@ -1,21 +1,18 @@
-
 import 'package:amwal_pay_sdk/features/currency_field/data/models/response/currency_response.dart';
 
 class PaymentArguments {
   final String amount;
   final String terminalId;
   final CurrencyData? currencyData;
-  final bool is3DS;
   final int merchantId;
-    String? transactionId;
+  String? transactionId;
 
-    PaymentArguments({
+  PaymentArguments({
     required this.amount,
     required this.terminalId,
     required this.merchantId,
-      this.transactionId,
+    this.transactionId,
     this.currencyData,
-    this.is3DS = false,
   });
 
   Map<String, dynamic> toMap() {

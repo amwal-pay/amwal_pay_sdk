@@ -5,7 +5,6 @@ import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:flutter/material.dart';
 
 class CardSdkApp extends StatelessWidget {
-  final bool is3DS;
   final Locale? locale;
   final String? transactionId;
   final OnPayCallback onPay;
@@ -13,7 +12,6 @@ class CardSdkApp extends StatelessWidget {
     Key? key,
     this.transactionId,
     required this.locale,
-    required this.is3DS,
     required this.onPay,
   }) : super(key: key);
 
@@ -26,7 +24,6 @@ class CardSdkApp extends StatelessWidget {
       localeResolutionCallback: AppLocalizationsSetup.localeResolutionCallback,
       locale: locale ?? const Locale('en'),
       home: SaleByCardScreen(
-        is3DS: is3DS,
         transactionId: transactionId,
         locale: locale ?? const Locale('en'),
         onPay: onPay,

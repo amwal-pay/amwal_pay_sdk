@@ -60,7 +60,6 @@ class AmwalPayScreen extends StatelessWidget {
               currencyId: arguments.currencyId,
               merchantId: arguments.merchantId,
               transactionId: arguments.transactionId,
-              is3DS: arguments.is3DS,
               showAppBar: false,
               translator: (txt) => txt.translate(context),
             ),

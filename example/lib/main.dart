@@ -5,11 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 void main() {
-  try {
-    runApp(const MyApp());
-  } catch (e) {
-    print(e);
-  }
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -37,16 +33,11 @@ class DemoScreen extends StatefulWidget {
 }
 
 class _DemoScreenState extends State<DemoScreen> {
-  late TextEditingController _tokenController;
   late TextEditingController _currencyController;
   late TextEditingController _amountController;
   late TextEditingController _merchantIdController;
-  late TextEditingController _transactionRefNoController;
   late TextEditingController _terminalController;
   late TextEditingController _secureHashController;
-
-  ///
-  bool _is3DS = false;
 
   @override
   void initState() {
@@ -55,15 +46,10 @@ class _DemoScreenState extends State<DemoScreen> {
     /// card terminal => 6942344
     /// wallet terminal => 6834180
     _terminalController = TextEditingController(text: '6834180');
-    _tokenController = TextEditingController(text: '');
-    const uuid = Uuid();
-    final generatedUuid = uuid.v1();
-
-    _transactionRefNoController = TextEditingController(text: generatedUuid);
     _merchantIdController = TextEditingController(text: '1369217');
     _secureHashController = TextEditingController(
-        text:
-            '9FFA1F36D6E8A136482DF921E856709226DE5A974DB2673F84DB79DA788F7E19');
+      text: '9FFA1F36D6E8A136482DF921E856709226DE5A974DB2673F84DB79DA788F7E19',
+    );
     _amountController = TextEditingController(text: '50');
     _currencyController = TextEditingController(text: 'OMR');
   }
@@ -71,8 +57,6 @@ class _DemoScreenState extends State<DemoScreen> {
   @override
   void dispose() {
     _terminalController.dispose();
-    _tokenController.dispose();
-    _transactionRefNoController.dispose();
     _merchantIdController.dispose();
     _secureHashController.dispose();
     _amountController.dispose();
@@ -102,10 +86,6 @@ class _DemoScreenState extends State<DemoScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextForm(
-                          title: "Token",
-                          controller: _tokenController,
-                        ),
-                        TextForm(
                           title: "Merchant Id",
                           controller: _merchantIdController,
                         ),
@@ -125,10 +105,10 @@ class _DemoScreenState extends State<DemoScreen> {
                           title: "Secure Hash",
                           controller: _secureHashController,
                         ),
-                        TextForm(
-                          title: "Transaction Ref No",
-                          controller: _transactionRefNoController,
-                        ),
+                        // TextForm(
+                        //   title: "Transaction Ref No",
+                        //   controller: _transactionRefNoController,
+                        // ),
                       ],
                     ),
                   ),
@@ -139,15 +119,13 @@ class _DemoScreenState extends State<DemoScreen> {
                   await AmwalPaySdk.instance.initSdk(
                     settings: AmwalSdkSettings(
                       merchantName: 'Amr Saied',
-                      token: _tokenController.text,
                       currency: _currencyController.text,
                       amount: _amountController.text,
-                      transactionId: _transactionRefNoController.text,
+                      transactionId: const Uuid().v1(),
                       merchantId: _merchantIdController.text,
                       secureHashValue: _secureHashController.text,
                       terminalId: _terminalController.text,
                       isMocked: false,
-                      is3DS: _is3DS,
                     ),
                   );
                 },

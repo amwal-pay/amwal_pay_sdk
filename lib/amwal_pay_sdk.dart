@@ -123,7 +123,6 @@ class AmwalPaySdk {
     final cardSdk = await _initCardSdk(settings: settings);
     await cardSdk.navigateToCard(
       settings.locale,
-      settings.is3DS,
       settings.transactionId,
       settings.onPay,
     );

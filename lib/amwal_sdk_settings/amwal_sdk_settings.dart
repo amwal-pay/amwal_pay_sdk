@@ -8,7 +8,6 @@ abstract class IAmwalSdkSettings {
   final List<String> terminalIds;
   final String transactionId;
   final Locale locale;
-  final bool is3DS;
   final bool isMocked;
   final String amount;
   final String currency;
@@ -33,7 +32,6 @@ abstract class IAmwalSdkSettings {
     this.onCountComplete,
     this.merchantName,
     this.locale = const Locale('en'),
-    this.is3DS = false,
     this.isMocked = false,
     this.onTokenExpired,
   });
@@ -51,7 +49,6 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
     super.getTransactionFunction,
     super.onCountComplete,
     super.locale,
-    super.is3DS,
     super.isMocked,
     super.onError,
     super.onTokenExpired,
@@ -65,7 +62,7 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
   final String terminalId;
 
   AmwalSdkSettings({
-    required super.token,
+    super.token = '',
     required super.secureHashValue,
     required super.merchantId,
     required super.transactionId,
@@ -77,7 +74,6 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
     super.onCountComplete,
     super.locale,
     super.isMocked,
-    super.is3DS,
     super.onError,
     super.onTokenExpired,
   }) : super(terminalIds: [terminalId], onPay: (_, [__]) {});

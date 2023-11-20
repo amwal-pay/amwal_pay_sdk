@@ -110,7 +110,7 @@ class _CardInfoFormWidgetState extends State<CardInfoFormWidget> {
           height: 20,
         ),
         Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               child: InputFieldWidget(
@@ -131,11 +131,17 @@ class _CardInfoFormWidgetState extends State<CardInfoFormWidget> {
             const SizedBox(
               width: 2,
             ),
-            const Text(
-              '/',
-              style: TextStyle(
-                fontSize: 30,
-              ),
+            const Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(height: 26),
+                Text(
+                  '/',
+                  style: TextStyle(
+                    fontSize: 30,
+                  ),
+                ),
+              ],
             ),
             const SizedBox(
               width: 2,

@@ -17,7 +17,6 @@ import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:flutter/material.dart';
 
 class SaleByCardScreen extends StatefulApiView<SaleByCardManualCubit> {
-  final bool is3DS;
   final String? transactionId;
   final Locale locale;
   final OnPayCallback onPay;
@@ -25,7 +24,6 @@ class SaleByCardScreen extends StatefulApiView<SaleByCardManualCubit> {
   const SaleByCardScreen({
     Key? key,
     this.transactionId,
-    required this.is3DS,
     required this.locale,
     required this.onPay,
   }) : super(key: key);
@@ -124,7 +122,6 @@ class _SaleByCardScreenState extends State<SaleByCardScreen> {
                   amount: _amountCurrencyWidgetCubit.amountValue,
                   terminalId: terminal!,
                   currencyData: _amountCurrencyWidgetCubit.currencyData,
-                  is3DS: widget.is3DS,
                   merchantId: merchantId,
                   transactionId: widget.transactionId,
                 );

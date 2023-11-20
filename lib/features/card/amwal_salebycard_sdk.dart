@@ -67,12 +67,10 @@ class AmwalCardSdk {
 
   Future<void> navigateToCard(
     Locale locale,
-    bool is3DS,
     String transactionId,
     OnPayCallback onPay,
   ) async {
     await AmwalSdkNavigator.instance.toCardScreen(
-      is3DS: is3DS,
       locale: locale,
       transactionId: transactionId,
       onPay: onPay,
