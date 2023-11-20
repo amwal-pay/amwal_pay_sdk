@@ -63,7 +63,7 @@ class _MyAppState extends State<MyApp> {
       localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,
       supportedLocales: AppLocalizationsSetup.supportedLocales,
       debugShowCheckedModeBanner: false,
-      locale: const Locale('en'),
+      locale: const Locale('ar'),
       navigatorObservers: [
         AmwalSdkNavigator.amwalNavigatorObserver,
       ],
@@ -80,7 +80,6 @@ class _MyAppState extends State<MyApp> {
                 currencyId: _settings.currencyId,
                 terminalId: _settings.terminalId,
                 locale: _settings.locale,
-                is3DS: _settings.is3DS,
               ),
             )
           : const Center(

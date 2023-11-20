@@ -55,15 +55,11 @@ class ReceiptHandler {
     required BuildContext context,
     required TransactionDetailsSettings settings,
   }) async {
-    await Navigator.of(context).push(DialogRoute(
+    await AmwalSdkNavigator.amwalNavigatorObserver.navigator!.push(DialogRoute(
       context: context,
       builder: (_) {
-        return Localizations(
-          delegates: AppLocalizationsSetup.localizationsDelegates.toList(),
-          locale: settings.locale,
-          child: TransactionStatusDialog(
-            settings: settings,
-          ),
+        return TransactionStatusDialog(
+          settings: settings,
         );
       },
     ));

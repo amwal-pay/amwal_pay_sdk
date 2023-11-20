@@ -15,7 +15,7 @@
   "total_sales": "إجمالي المبيعات",
   "transactions": "المعاملات",
   "available_balance": "الرصيد المتاح",
-  "card_label": "الكارت",
+  "card_label": "البطاقة",
   "wallet_label": "المحفظة",
   "sale_by_card_label": "البيع بواسطة البطاقة",
   "sale_by_wallet_label": "البيع بواسطة المحفظة",
@@ -56,8 +56,8 @@
   "copy_btn": "نسخ",
   "share_btn": "شارك",
   "merchant_name_label": "اسم التاجر",
-  "card_number_label":"رقم الكارت",
-  "card_name_label":"اسم الكارت",
+  "card_number_label":"رقم البطاقة",
+  "card_name_label":"اسم البطاقة",
   "email_label":"البريد الألكتروني",
   "expiry_date":"تاريخ الانتهاء",
   "mm_date":"شهر",
@@ -135,6 +135,7 @@
   "redirect_url": "رابط إعادة التوجيه",
   "redirect_url_hint": "Https://",
   "number_of_usage": "عدد مرات الاستخدام",
-  "card": "كارد"
+  "card": "البطاقة",
+  "otp_verification": "OTP Verification"
 }
 

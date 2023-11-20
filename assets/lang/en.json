@@ -124,6 +124,6 @@
   "notification_method":"Notification Method",
   "sms": "SMS",
   "email": "Email",
-  "card": "Card"
-
+  "card": "Card",
+  "otp_verification": "OTP Verification"
 }

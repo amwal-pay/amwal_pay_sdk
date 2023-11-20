@@ -8,7 +8,6 @@ abstract class IAmwalSdkSettings {
   final List<String> terminalIds;
   final String? transactionRefNo;
   final Locale locale;
-  final bool is3DS;
   final bool isMocked;
   final String amount;
   final String currency;
@@ -27,8 +26,7 @@ abstract class IAmwalSdkSettings {
     required this.context,
     required this.merchantName,
     required this.currencyId,
-    this.locale = const Locale('en'),
-    this.is3DS = false,
+    this.locale = const Locale('ar'),
     this.isMocked = false,
   });
 }
@@ -45,7 +43,6 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
     required super.merchantName,
     required super.currencyId,
     super.locale,
-    super.is3DS,
     super.isMocked,
   }) : super(requestSourceId: '6');
 }
@@ -64,7 +61,6 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
     super.context,
     super.locale,
     super.isMocked,
-    super.is3DS,
   }) : super(
           requestSourceId: '7',
           terminalIds: [terminalId],
@@ -77,7 +73,6 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
       terminalId: terminalId,
       context: context ?? this.context,
       locale: locale,
-      is3DS: is3DS,
       isMocked: isMocked,
       currency: currency,
       amount: amount,

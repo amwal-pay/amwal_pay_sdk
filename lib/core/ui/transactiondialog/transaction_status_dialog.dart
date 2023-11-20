@@ -5,7 +5,6 @@ import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction.dart';
 import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_detail_widget.dart';
 import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_details_settings.dart';
 import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_dialog_action_buttons.dart';
-import 'package:amwal_pay_sdk/localization/app_localizations_delegate.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dash/flutter_dash.dart';
@@ -40,10 +39,7 @@ class _TransactionStatusDialogState extends State<TransactionStatusDialog> {
   }
 
   void extractDueAmount() {
-    final dueAmountKey = 'due_amount'.translate(
-      context,
-      globalTranslator: settings.globalTranslator,
-    );
+    final dueAmountKey = 'due_amount'.translateDueAmount(settings.locale);
     final containsDueAmount = settings.details!.containsKey(dueAmountKey);
     dialogDetails = settings.details!;
     if (containsDueAmount) {
@@ -127,7 +123,7 @@ class _TransactionStatusDialogState extends State<TransactionStatusDialog> {
                     locale: settings.locale,
                     child: Image.asset(
                       AppAssets.divCircleLeft,
-                      package: 'amwal_pay_sdk',
+                      // package: 'amwal_pay_sdk',
                       color: greyColor,
                     ),
                   ),
@@ -144,7 +140,7 @@ class _TransactionStatusDialogState extends State<TransactionStatusDialog> {
                     locale: settings.locale,
                     child: Image.asset(
                       AppAssets.divCircleRight,
-                      package: 'amwal_pay_sdk',
+                      // package: 'amwal_pay_sdk',
                       color: greyColor,
                     ),
                   ),
@@ -233,12 +229,12 @@ extension TransactionX on TransactionStatus {
     if (this == TransactionStatus.success) {
       return SvgPicture.asset(
         AppAssets.successIcon,
-        package: 'amwal_pay_sdk',
+        // package: 'amwal_pay_sdk',
       );
     } else {
       return SvgPicture.asset(
         AppAssets.errorIcon,
-        package: 'amwal_pay_sdk',
+        // package: 'amwal_pay_sdk',
       );
     }
   }

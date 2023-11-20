@@ -94,7 +94,6 @@ class CardTransactionManager {
         originTransactionId: purchaseData.transactionId,
       );
       if (purchaseDataOrNull != null && context.mounted) {
-        // if (NetworkConstants.isSdkInApp) {
         cubit.showLoader();
         final oneTransactionResponse =
             await getOneTransactionByIdUseCase.invoke({
@@ -115,34 +114,29 @@ class CardTransactionManager {
             ),
           );
         }
-        // } else {
-        //   cubit.showLoader();
-        //   onPay?.call(
-        //     (settings) async {
-        //       cubit.initial();
-        //       await ReceiptHandler.instance.showCardReceipt(
-        //         context: context,
-        //         settings: settings,
-        //       );
-        //     },
-        //     purchaseDataOrNull.transactionId,
-        //   );
-        // }
       }
     } else {
-      if (context.mounted) {
-        cubit.formKey.currentState?.reset();
-        // onPay?.call((settings) async {
-        //   await ReceiptHandler.instance.showCardReceipt(
-        //     context: context,
-        //     settings: settings,
-        //   );
-        //   if (context.mounted) dismissLoader(context);
-        // });
-      } else {
-        if (context.mounted) dismissLoader(context);
+      cubit.showLoader();
+      final oneTransactionResponse = await getOneTransactionByIdUseCase.invoke({
+        'transactionId': purchaseData.transactionId,
+        'merchantId': args.merchantId,
+      });
+      final oneTransaction =
+          oneTransactionResponse.mapOrNull(success: (value) => value.data.data);
+      cubit.initial();
+      if (oneTransaction != null && context.mounted) {
+        await ReceiptHandler.instance.showHistoryReceipt(
+          context: context,
+          settings:
+              _generateTransactionSettings(oneTransaction, context).copyWith(
+            onClose: () {
+              AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+            },
+          ),
+        );
       }
     }
+    cubit.formKey.currentState?.reset();
   }
 
   TransactionDetailsSettings _generateTransactionSettings(
