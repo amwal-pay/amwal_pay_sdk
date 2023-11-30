@@ -65,13 +65,13 @@ class NetworkService {
     String? mockupResponsePath,
     bool? mockupRequest,
   }) async {
-    await Future.delayed(
-      const Duration(
-        seconds: 2,
-      ),
-    );
-
     if (mockupRequest == true) {
+      await Future.delayed(
+        const Duration(
+          seconds: 2,
+        ),
+      );
+
       String jsonString = await rootBundle.loadString(mockupResponsePath!);
       Map<String, dynamic> jsonData = jsonDecode(jsonString);
 
@@ -86,12 +86,13 @@ class NetworkService {
         queryParams: queryParams,
         mockupResponsePath: mockupResponsePath,
       );
-      if (response.data['success']) {
+      if (response.data?['success'] == true) {
         return NetworkState<T>.success(data: converter(response.data));
       } else {
         return NetworkState<T>.error(
-          message: response.data['message'],
-          errorList: (response.data['errorList'] as List?)
+          message: response.data?['message'] ??
+              'Something went wrong please, try again!',
+          errorList: (response.data?['errorList'] as List?)
               ?.map((e) => e.toString())
               .toList(),
         );
@@ -99,21 +100,26 @@ class NetworkService {
     } on DioException catch (e, stack) {
       debugPrint(e.toString());
       onError?.call(e, stack);
-      if (e.response?.statusCode == 401) {
+
+      final networkErrorState = await _handleError<T>(e.response, () async {
         final token = await onTokenExpired?.call();
         if (token != null) {
           TokenInjectorInterceptor.token = token;
-          return await invokeRequest(
-            endpoint: endpoint,
-            method: method,
-            converter: converter,
-            data: data,
-            queryParams: queryParams,
-          );
+          return true;
+        } else {
+          return false;
         }
-        return const NetworkState.error(
-          message: "UnAuthorized",
+      });
+      if (networkErrorState == null) {
+        return await invokeRequest(
+          endpoint: endpoint,
+          method: method,
+          converter: converter,
+          data: data,
+          queryParams: queryParams,
         );
+      } else {
+        return networkErrorState;
       }
       String contentType =
           e.response?.headers['content-type']?.first ?? 'unknown';
@@ -145,6 +151,40 @@ class NetworkService {
         message: e.toString(),
       );
     }
+  }
+}
+
+Future<NetworkState<T>?> _handleError<T>(
+  Response? response,
+  Future<bool> Function() onTokenExpired,
+) async {
+  String contentType = response?.headers['content-type']?.first ?? 'unknown';
+
+  if (contentType == "application/jose") {
+    final decryptedData =
+        await EncryptionUtil.makeDecryptOfJson(response?.data);
+    response?.data = decryptedData;
+  }
+  if (response == null) {
+    return NetworkState<T>.error(
+        message: 'Something went wrong please, Try Again');
+  } else if (response.statusCode == 401) {
+    final tokenRefreshed = await onTokenExpired();
+    if (tokenRefreshed) {
+      return null;
+    } else {
+      return NetworkState<T>.error(message: 'unAuthorized');
+    }
+  } else if (response.statusCode == 502) {
+    return NetworkState<T>.error(message: 'Bad Gateway');
+  } else if (response.statusCode == 500) {
+    return NetworkState<T>.error(message: 'Server Error Try Again Later');
+  } else if (response.data == null) {
+    return NetworkState<T>.error(
+        message: 'Something went wrong please, Try Again');
+  } else {
+    return NetworkState<T>.error(
+        message: 'Something went wrong please, Try Again');
   }
 }
 

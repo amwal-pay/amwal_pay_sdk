@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 
 // import 'package:get/get.dart';
 
-class InputFieldWidget extends StatelessWidget {
+class InputFieldWidget extends StatefulWidget {
   const InputFieldWidget({
     Key? key,
     this.widgetTitle = '',
@@ -25,6 +25,7 @@ class InputFieldWidget extends StatelessWidget {
     this.onChange,
     this.decoration,
     this.readOnly = false,
+    this.initialValue,
   }) : super(key: key);
 
   final String widgetTitle;
@@ -41,15 +42,51 @@ class InputFieldWidget extends StatelessWidget {
   final bool readOnly;
   final void Function(String)? onChange;
   final InputDecoration? decoration;
+  final String? initialValue;
+
+  @override
+  State<InputFieldWidget> createState() => _InputFieldWidgetState();
+}
+
+class _InputFieldWidgetState extends State<InputFieldWidget> {
+  late TextEditingController _textEditingController;
+
+  @override
+  void initState() {
+    super.initState();
+    print('initState');
+    _textEditingController = TextEditingController();
+    _textEditingController.addListener(() {
+      widget.onChange?.call(_textEditingController.text);
+    });
+  }
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant InputFieldWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    print('updateWidget');
+    if (widget.initialValue == null) {
+      print('clear called');
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        _textEditingController.clear();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final mediaQuerySize = MediaQuery.of(context).size;
-    InputDecoration? inputDecoration = decoration;
+    InputDecoration? inputDecoration = widget.decoration;
     inputDecoration ??= InputDecoration(
       filled: true,
       fillColor: Colors.white,
-      hintText: widgetHint,
+      hintText: widget.widgetHint,
       focusColor: whiteColor,
       hintStyle: const TextStyle(
         color: lightGreyColor,
@@ -68,7 +105,7 @@ class InputFieldWidget extends StatelessWidget {
           Row(
             children: [
               Text(
-                widgetTitle,
+                widget.widgetTitle,
                 style: const TextStyle(
                   color: primaryColor,
                   fontWeight: FontWeight.bold,
@@ -77,9 +114,9 @@ class InputFieldWidget extends StatelessWidget {
               const SizedBox(
                 width: 2,
               ),
-              if (widgetTitleIcon != null)
+              if (widget.widgetTitleIcon != null)
                 SvgPicture.asset(
-                  widgetTitleIcon!,
+                  widget.widgetTitleIcon!,
                   package: 'amwal_pay_sdk',
                 )
               else
@@ -90,23 +127,23 @@ class InputFieldWidget extends StatelessWidget {
             height: 5,
           ),
           TextFormField(
-            readOnly: readOnly,
-            onChanged: onChange,
+            readOnly: widget.readOnly,
+            controller: _textEditingController,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: FormBuilderValidators.compose([
-              if (isRequired)
+              if (widget.isRequired)
                 FormBuilderValidators.required(
                     errorText: 'required_field'.translate(context)),
-              if (isEmail)
+              if (widget.isEmail)
                 FormBuilderValidators.email(
                     errorText: 'invalid_mail'.translate(context)),
-              if (minLength != 0)
-                FormBuilderValidators.minLength(minLength,
+              if (widget.minLength != 0)
+                FormBuilderValidators.minLength(widget.minLength,
                     errorText: 'invalid_input_field'.translate(context)),
-              if (isMonth)
+              if (widget.isMonth)
                 FormBuilderValidators.max(12,
                     errorText: 'invalid-month'.translate(context)),
-              if (isYear)
+              if (widget.isYear)
                 FormBuilderValidators.min(
                     int.parse(DateFormat('yy').format(DateTime.now())),
                     errorText: 'invalid-month'.translate(context)),
@@ -114,11 +151,12 @@ class InputFieldWidget extends StatelessWidget {
             maxLines: 1,
             decoration: inputDecoration,
             textInputAction: TextInputAction.next,
-            keyboardType: isNumber ? TextInputType.number : null,
+            keyboardType: widget.isNumber ? TextInputType.number : null,
             inputFormatters: [
-              if (isNumber == true) FilteringTextInputFormatter.digitsOnly,
-              LengthLimitingTextInputFormatter(maxLength),
-              if (isEnglish)
+              if (widget.isNumber == true)
+                FilteringTextInputFormatter.digitsOnly,
+              LengthLimitingTextInputFormatter(widget.maxLength),
+              if (widget.isEnglish)
                 FilteringTextInputFormatter.allow(RegExp('[a-zA-Z\\s]'))
             ],
           ),
