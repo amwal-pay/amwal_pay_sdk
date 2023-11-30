@@ -27,8 +27,8 @@ abstract class TransactionDialogAction extends StatelessWidget {
     bool? isRefunded,
     bool? isCredit,
     String Function(String)? globalTranslator,
-        required num amount,
-        String? currency,
+    required num amount,
+    String? currency,
   }) {
     if (isTransactionDetails && isSuccess) {
       return TransactionDialogActionButtonsForTransaction(
@@ -46,7 +46,7 @@ abstract class TransactionDialogAction extends StatelessWidget {
         onVoid: onVoid,
         share: share,
         amount: amount,
-        currency:currency,
+        currency: currency,
       );
     } else {
       return TransactionDialogActionButtons(
@@ -218,31 +218,31 @@ class TransactionDialogActionButtonsForTransaction
                           ),
                         ),
                       ),
-                      onPressed: () async {
-                        final isEnglish = AppLocalizations.of(context)?.isEnLocale ?? true;
-                        String content = '';
-                        if(isEnglish){
-                          content = 'capture_hint_txt'.translate(context, globalTranslator:globalTranslator,) + '${(currency??'').translate(context, globalTranslator:globalTranslator,)} $amount';
-                        }else{
-                          content = 'capture_hint_txt'.translate(context, globalTranslator:globalTranslator,) + '$amount ${(currency??'').translate(context, globalTranslator:globalTranslator,)}';
-
-                        }
-                        final confirmed = await showDialog(
-                          context: context,
-                          builder: (context) => AppAlertDialog(
-                            title: 'capture',
-                            content:content ,
-                            actionButtonText: 'confirm',
-                            actionButtonColor: primaryColor,
-                            globalTranslator: globalTranslator,
-                            actionButtonFn: () {
-                              Navigator.of(context).pop(true);
-                            },
-                          ),
-                        );
-                        if(confirmed == true) {
-                          onCapture?.call();
-                        }
+                      onPressed: () {
+                        // final isEnglish = AppLocalizations.of(context)?.isEnLocale ?? true;
+                        // String content = '';
+                        // if(isEnglish){
+                        //   content = '${'capture_hint_txt'.translate(context, globalTranslator:globalTranslator,)}${(currency??'').translate(context, globalTranslator:globalTranslator,)} $amount';
+                        // }else{
+                        //   content = '${'capture_hint_txt'.translate(context, globalTranslator:globalTranslator,)}$amount ${(currency??'').translate(context, globalTranslator:globalTranslator,)}';
+                        //
+                        // }
+                        // final confirmed = await showDialog(
+                        //   context: context,
+                        //   builder: (context) => AppAlertDialog(
+                        //     title: 'capture',
+                        //     content:content ,
+                        //     actionButtonText: 'confirm',
+                        //     actionButtonColor: primaryColor,
+                        //     globalTranslator: globalTranslator,
+                        //     actionButtonFn: () {
+                        //       Navigator.of(context).pop(true);
+                        //     },
+                        //   ),
+                        // );
+                        // if(confirmed == true) {
+                        onCapture?.call();
+                        // }
                       },
                       child: FittedBox(
                         child: Text(
