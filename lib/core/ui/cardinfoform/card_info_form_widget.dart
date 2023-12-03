@@ -87,6 +87,7 @@ class _CardInfoFormWidgetState extends State<CardInfoFormWidget> {
               .translate(context, globalTranslator: widget.globalTranslator),
           isEnglish: true,
           maxLength: 50,
+          initialValue: widget.cubit.cardHolderName,
           onChange: (value) {
             widget.cubit.cardHolderName = value;
           },
@@ -102,6 +103,7 @@ class _CardInfoFormWidgetState extends State<CardInfoFormWidget> {
               .translate(context, globalTranslator: widget.globalTranslator),
           isEmail: true,
           maxLength: 40,
+          initialValue: widget.cubit.email,
           onChange: (value) {
             widget.cubit.email = value;
           },
@@ -123,6 +125,7 @@ class _CardInfoFormWidgetState extends State<CardInfoFormWidget> {
                 minLength: 2,
                 isNumber: true,
                 isMonth: true,
+                initialValue: widget.cubit.expirationDateMonth,
                 onChange: (value) {
                   widget.cubit.expirationDateMonth = value;
                 },
@@ -154,6 +157,7 @@ class _CardInfoFormWidgetState extends State<CardInfoFormWidget> {
                 maxLength: 2,
                 isNumber: true,
                 isYear: true,
+                initialValue: widget.cubit.expirationDateYear,
                 onChange: (value) {
                   widget.cubit.expirationDateYear = value;
                 },
@@ -172,6 +176,7 @@ class _CardInfoFormWidgetState extends State<CardInfoFormWidget> {
                 maxLength: 3,
                 minLength: 3,
                 isNumber: true,
+                initialValue: widget.cubit.cvV2,
                 onChange: (value) {
                   widget.cubit.cvV2 = value;
                 },

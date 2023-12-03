@@ -25,6 +25,9 @@ class _CountDownDialogState extends State<CountDownDialog> {
   void initState() {
     super.initState();
     _countDownController = CountDownController();
+    Future.delayed(const Duration(seconds: 2), () {
+      widget.onComplete();
+    });
   }
 
   void _onStart() {

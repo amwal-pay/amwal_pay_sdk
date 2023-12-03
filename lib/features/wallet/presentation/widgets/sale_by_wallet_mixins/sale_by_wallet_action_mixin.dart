@@ -64,7 +64,8 @@ mixin SaleByWalletActionsMixin on ApiView<SaleByWalletCubit> {
                 'merchantId': merchantId,
               });
               final oneTransaction = oneTransactionResponse.mapOrNull(
-                  success: (value) => value.data.data);
+                success: (value) => value.data.data,
+              );
               if (oneTransaction == null) return;
               if (!context.mounted) return;
               Navigator.pop(context);
