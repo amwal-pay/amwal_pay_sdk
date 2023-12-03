@@ -37,9 +37,8 @@ class AliasPayWidget extends StatelessWidget {
           BlocBuilder<SaleByWalletCubit, SaleByWalletState>(
               bloc: walletCubit,
               builder: (_, state) {
-                print(state.verified);
                 return InputFieldWidget(
-                  initialValue: state.verified ? walletCubit.aliasName : null,
+                  initialValue: walletCubit.aliasName,
                   widgetTitle: 'alis_tab'.translate(
                     context,
                     globalTranslator: globalTranslator,
@@ -50,7 +49,6 @@ class AliasPayWidget extends StatelessWidget {
                   ),
                   readOnly: walletCubit.state.verified,
                   onChange: (value) {
-                    print(value);
                     walletCubit.aliasName = value;
                   },
                   maxLength: 40,

@@ -9,7 +9,7 @@ mixin SaleByWalletVerifyMixin on SaleByWalletActionsMixin {
   ) {
     final request = WalletMobileVerificationRequest(
       mobileNumber: cubit.phoneNumber,
-      alias: cubit.aliasName,
+      alias: cubit.aliasName!,
       amount: num.parse(paymentArguments.amount),
       currencyId: paymentArguments.currencyData?.idN ?? 512,
       terminalId: paymentArguments.terminalId,

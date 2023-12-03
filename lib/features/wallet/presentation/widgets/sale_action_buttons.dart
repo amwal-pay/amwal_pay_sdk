@@ -99,7 +99,7 @@ class SaleActionButtons extends ApiView<SaleByWalletCubit>
                       page: state.page,
                       payCubit: payCubit,
                       paymentArguments: paymentArguments,
-                      alias: cubit.aliasName,
+                      alias: cubit.aliasName!,
                       mobileNumber: cubit.phoneNumber,
                     ),
                     child: Text(
