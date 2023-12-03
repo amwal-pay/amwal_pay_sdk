@@ -1,10 +1,7 @@
 import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
-import 'package:amwal_pay_sdk/core/ui/alert_dialog/alert_dialog.dart';
 import 'package:amwal_pay_sdk/core/ui/buttons/app_button.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
-import 'package:amwal_pay_sdk/localization/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:share_plus/share_plus.dart';
 
 typedef NullableVoidCallback = void Function()?;
 
@@ -105,7 +102,7 @@ class TransactionDialogActionButtons extends TransactionDialogAction {
             ),
             const SizedBox(width: 12),
             Expanded(
-              flex: 3,
+              flex: 2,
               child: AppButton(
                 onPressed: onClose ?? Navigator.of(context).pop,
                 child: Text(
