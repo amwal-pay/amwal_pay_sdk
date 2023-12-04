@@ -38,18 +38,23 @@ class SaleActionButtons extends ApiView<SaleByWalletCubit>
   Widget build(BuildContext context) {
     final verifyCubit = WalletInjector.instance.get<SaleByWalletVerifyCubit>();
     final payCubit = WalletInjector.instance.get<SaleByWalletPayCubit>();
+    final walletCubit = WalletInjector.instance.get<SaleByWalletCubit>();
 
     return MultiBlocListener(
       listeners: [
         BlocListener<SaleByWalletVerifyCubit,
             ICubitState<VerifyCustomerResponse>>(
           bloc: verifyCubit,
-          listener: (_, state) => state.whenOrNull(success: (value) {
-            if (value.success) {
-              cubit.customerNameFromApi = value.data?.customerName ?? "";
-              cubit.verified();
-            }
-          }),
+          listener: (_, state) => state.whenOrNull(
+            success: (value) {
+              if (value.success) {
+                cubit.customerNameFromApi = value.data?.customerName ?? "";
+                return cubit.verified();
+              } else {
+                return;
+              }
+            },
+          ),
         ),
         BlocListener<SaleByWalletPayCubit, ICubitState<WalletPayResponse>>(
           bloc: payCubit,
@@ -58,6 +63,7 @@ class SaleActionButtons extends ApiView<SaleByWalletCubit>
               success: (value) => true,
             );
             if (isSuccess == true) {
+              walletCubit.reset();
               await showCountingDialog(
                 context,
                 globalTranslator,
@@ -85,7 +91,7 @@ class SaleActionButtons extends ApiView<SaleByWalletCubit>
                 const SizedBox(width: 24),
                 Expanded(
                   child: AppOutlineButton(
-                    onPressed: cubit.onCancel,
+                    onPressed: cubit.reset,
                     title: 'cancel'.translate(
                       context,
                       globalTranslator: globalTranslator,
@@ -100,7 +106,7 @@ class SaleActionButtons extends ApiView<SaleByWalletCubit>
                       payCubit: payCubit,
                       paymentArguments: paymentArguments,
                       alias: cubit.aliasName!,
-                      mobileNumber: cubit.phoneNumber,
+                      mobileNumber: cubit.phoneNumber!,
                     ),
                     child: Text(
                       'pay'.translate(

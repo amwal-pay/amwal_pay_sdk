@@ -49,14 +49,12 @@ class SecureHashInterceptor extends Interceptor {
     data['requestDateTime'] =
         DateFormat('yyyyMMddHHmmss').format(DateTime.now());
 
-
     final keys = data.keys.toList();
     keys.sort();
-    final sortedData = { for (var k in keys) k : data[k] };
+    final sortedData = {for (var k in keys) k: data[k]};
 
-
-
-    String secureHashVal = clearSecureHash(secureHashValue, convertMap(sortedData));
+    String secureHashVal =
+        clearSecureHash(secureHashValue, convertMap(sortedData));
     sortedData.addAll({
       'secureHashValue': secureHashVal,
     });
@@ -122,9 +120,9 @@ class SecureHashInterceptor extends Interceptor {
       final signature =
           hmacSha256.convert(utf8.encode(message)); // Generate signature
 
-      print('Message: $message');
-      print('Key: ${hex.encode(key)}'); // Convert bytes back to hex
-      print('Signature: ${hex.encode(signature.bytes)}'); //
+      debugPrint('Message: $message');
+      debugPrint('Key: ${hex.encode(key)}'); // Convert bytes back to hex
+      debugPrint('Signature: ${hex.encode(signature.bytes)}'); //
       return hex.encode(signature.bytes).toUpperCase();
     } catch (ex) {
       return '';

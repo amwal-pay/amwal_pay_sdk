@@ -6,15 +6,16 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 class SaleByWalletCubit extends Cubit<SaleByWalletState> {
   SaleByWalletCubit() : super(const SaleByWalletState.initial(0));
 
-  String phoneNumber = '';
+  String? phoneNumber = '';
   String? aliasName = '';
   String transactionId = '';
   String customerNameFromApi = '';
 
   void updatePage(int page) => emit(SaleByWalletState.initial(page));
 
-  void onCancel() {
+  void reset() {
     aliasName = null;
+    phoneNumber = null;
     emit(SaleByWalletState.initial(state.page));
   }
 
