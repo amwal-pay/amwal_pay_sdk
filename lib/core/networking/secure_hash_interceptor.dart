@@ -46,18 +46,23 @@ class SecureHashInterceptor extends Interceptor {
         'terminalId': terminals.single,
       });
     }
-    String secureHashVal = clearSecureHash(secureHashValue, convertMap(data));
-    // if (data.containsKey('requestDateTime')) {
-    // final date = DateTime.parse(data['requestDateTime']!);
     data['requestDateTime'] =
         DateFormat('yyyyMMddHHmmss').format(DateTime.now());
-    // }
-    data.addAll({
+
+
+    final keys = data.keys.toList();
+    keys.sort();
+    final sortedData = { for (var k in keys) k : data[k] };
+
+
+
+    String secureHashVal = clearSecureHash(secureHashValue, convertMap(sortedData));
+    sortedData.addAll({
       'secureHashValue': secureHashVal,
     });
 
     if (true) {
-      final interceptedOptions = options.copyWith(data: data);
+      final interceptedOptions = options.copyWith(data: sortedData);
       super.onRequest(interceptedOptions, handler);
       return;
     }

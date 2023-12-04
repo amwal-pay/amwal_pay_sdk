@@ -66,13 +66,13 @@ class WalletMobileVerificationRequest {
 
   Map<String, dynamic> toMap() {
     return {
-      if (mobileNumber.isNotEmpty) 'MobileNumber': mobileNumber,
-      if (alias.isNotEmpty) 'Alias': alias,
+      'Alias': alias,
       'amount': amount,
+      'mobileNumber': mobileNumber,
       'currencyId': currencyId,
-      'terminalId': terminalId,
       'merchantId': merchantId,
+      'terminalId': terminalId,
       'uniqueNotificationId': id,
-    };
+    }..removeWhere((key, value) => value == null || value == '');
   }
 }

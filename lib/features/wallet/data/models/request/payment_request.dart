@@ -25,27 +25,27 @@ class WalletPaymentRequest {
 
   Map<String, dynamic> payWithMobileNumber() {
     return {
-      'TransactionMethodId': 5,
-      'MobileNumber': mobileNumber,
-      'CurrencyId': currencyId,
+      'amount': amount,
+      'currencyId': currencyId,
+      'id': id,
+      'mobileNumber': mobileNumber,
+      'transactionMethodId': 5,
+      'uniqueNotificationId': transactionId,
       'merchantId': merchantId.toString(),
-      'TerminalId': terminalId,
-      'Id': id,
-      'UniqueNotificationId': transactionId,
-      'Amount': amount,
+      'terminalId': terminalId,
     };
   }
 
   Map<String, dynamic> payWithAliasName() {
     return {
-      'TransactionMethodId': 6,
-      'CurrencyId': currencyId,
-      'TerminalId': terminalId,
+      'transactionMethodId': 6,
+      'currencyId': currencyId,
+      'terminalId': terminalId,
       'merchantId': merchantId.toString(),
-      'Id': id,
-      'AliasName': aliasName,
-      'Amount': amount,
-      'UniqueNotificationId': transactionId,
+      'id': id,
+      'aliasName': aliasName,
+      'amount': amount,
+      'uniqueNotificationId': transactionId,
     };
   }
 
