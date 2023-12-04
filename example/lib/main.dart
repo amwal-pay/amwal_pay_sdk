@@ -49,7 +49,7 @@ class _DemoScreenState extends State<DemoScreen> {
     _terminalController = TextEditingController(text: '6834180');
     _merchantIdController = TextEditingController(text: '1369217');
     _secureHashController = TextEditingController(
-      text: '9FFA1F36D6E8A136482DF921E856709226DE5A974DB2673F84DB79DA788F7E19',
+      text: '23FEE11265CEA9D8C89717256C589457EAC0767C708064CBFC9CC0A334AF2CA4',
     );
     _amountController = TextEditingController(text: '50');
     _currencyController = TextEditingController(text: 'OMR');

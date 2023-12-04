@@ -1,4 +1,6 @@
-class DynamicQRRequest{
+import 'package:intl/intl.dart';
+
+class DynamicQRRequest {
   final int terminalId;
   final int merchantId;
   final num amount;
@@ -14,8 +16,6 @@ class DynamicQRRequest{
     required this.transactionId,
   });
 
-
-
   DynamicQRRequest copyWith({
     int? terminalId,
     int? merchantId,
@@ -29,8 +29,8 @@ class DynamicQRRequest{
       terminalId: terminalId ?? this.terminalId,
       merchantId: merchantId ?? this.merchantId,
       amount: amount ?? this.amount,
-      currencyId: currency ?? this.currencyId,
-      transactionId:transactionId??this.transactionId,
+      currencyId: currency ?? currencyId,
+      transactionId: transactionId ?? this.transactionId,
     );
   }
 

@@ -17,7 +17,6 @@ class SecureHashInterceptor extends Interceptor {
     required this.secureHashValue,
   });
 
-
   Map<String, dynamic> _voidHandleTerminalId(RequestOptions options) {
     final data = options.data as Map<String, dynamic>;
     return data;
@@ -25,11 +24,13 @@ class SecureHashInterceptor extends Interceptor {
 
   @override
   Future<void> onResponse(
-      Response response, ResponseInterceptorHandler handler) async {
+    Response response,
+    ResponseInterceptorHandler handler,
+  ) async {
     String contentType = response.headers['content-type']?.first ?? 'unknown';
     if (contentType == "application/jose") {
       final dncryptedData =
-      await EncryptionUtil.makeDecryptOfJson(response.data);
+          await EncryptionUtil.makeDecryptOfJson(response.data);
       response.data = dncryptedData;
     }
     super.onResponse(response, handler);
@@ -39,7 +40,6 @@ class SecureHashInterceptor extends Interceptor {
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     final data = _voidHandleTerminalId(options);
     final terminals = MerchantStore.instance.getTerminal();
-    final merchantId = MerchantStore.instance.getMerchantId();
     options.headers['Accept'] = '*/*';
     if (terminals.length == 1) {
       data.addAll({
@@ -47,11 +47,13 @@ class SecureHashInterceptor extends Interceptor {
       });
     }
     String secureHashVal = clearSecureHash(secureHashValue, convertMap(data));
+    if (data.containsKey('requestDateTime')) {
+      final date = DateTime.parse(data['requestDateTime']!);
+      data['requestDateTime'] = DateFormat('yyyyMMddHHmmss').format(date);
+    }
     data.addAll({
       'secureHashValue': secureHashVal,
     });
-    // 'merchantRefId': merchantId,
-
 
     if (true) {
       final interceptedOptions = options.copyWith(data: data);
@@ -80,21 +82,6 @@ class SecureHashInterceptor extends Interceptor {
   }
 
   String clearSecureHash(String secretKey, Map<String, String> data) {
-    // Convert Request DateTime found into APG Date format.
-    if (data.containsKey('requestDateTime')) {
-      var date = DateTime.parse(data['requestDateTime']!);
-      data['requestDateTime'] = DateFormat('yyyyMMddHHmmss').format(date);
-    }
-    // Convert any DateTime found into APG Date Format.
-    data.forEach((key, value) {
-      if (!key.toLowerCase().contains('datetime')) return;
-
-      DateTime datetime;
-      if (DateTime.tryParse(value) != null) {
-        datetime = DateTime.parse(value);
-        data[key] = DateFormat('yyyyMMddHHmmss').format(datetime);
-      }
-    });
     // Remove Secure Hash Value from the model
     data.remove('secureHashValue');
 
