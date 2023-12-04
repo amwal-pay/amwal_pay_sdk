@@ -29,6 +29,7 @@ class CardSdkApp extends StatelessWidget {
         onPay: onPay,
       ),
       theme: ThemeData(
+        useMaterial3: false,
         scaffoldBackgroundColor: whiteColor,
         appBarTheme: const AppBarTheme(
           backgroundColor: blackColor,

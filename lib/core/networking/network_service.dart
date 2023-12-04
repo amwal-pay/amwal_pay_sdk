@@ -121,29 +121,6 @@ class NetworkService {
       } else {
         return networkErrorState;
       }
-      String contentType =
-          e.response?.headers['content-type']?.first ?? 'unknown';
-
-      if (contentType == "application/jose") {
-        final decryptedData =
-            await EncryptionUtil.makeDecryptOfJson(e.response?.data);
-        e.response?.data = decryptedData;
-      }
-
-      try {
-        return NetworkState<T>.error(
-          message: (e.response?.data?['message'] ?? e.message),
-          errorList: (e.response?.data?['errorList'] as List?)
-              ?.map((e) => e.toString())
-              .toList(),
-        );
-      } catch (e, stack) {
-        debugPrint(e.toString());
-        onError?.call(e, stack);
-        return NetworkState<T>.error(
-          message: e.toString(),
-        );
-      }
     } catch (e, stack) {
       debugPrint(e.toString());
       onError?.call(e, stack);
@@ -173,7 +150,12 @@ Future<NetworkState<T>?> _handleError<T>(
     if (tokenRefreshed) {
       return null;
     } else {
-      return NetworkState<T>.error(message: 'unAuthorized');
+      return NetworkState<T>.error(
+        message: response.data?['message'] ?? 'unAuthorized',
+        errorList: (response.data?['errorList'] as List?)
+            ?.map((e) => e.toString())
+            .toList(),
+      );
     }
   } else if (response.statusCode == 502) {
     return NetworkState<T>.error(message: 'Bad Gateway');

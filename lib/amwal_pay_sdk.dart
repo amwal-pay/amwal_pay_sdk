@@ -140,6 +140,9 @@ class AmwalPaySdk {
             supportedLocales: AppLocalizationsSetup.supportedLocales,
             debugShowCheckedModeBanner: false,
             locale: settings.locale,
+            theme: ThemeData(
+              useMaterial3: false,
+            ),
             home: AmwalPayScreen(
               arguments: AmwalSdkArguments(
                 onPay: settings.onPay,

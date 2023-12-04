@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
         AmwalSdkNavigator.amwalNavigatorObserver,
       ],
       theme: ThemeData(
+        useMaterial3: false,
         primarySwatch: Colors.blue,
       ),
       home: const DemoScreen(),

@@ -35,6 +35,7 @@ class WalletSdkApp extends StatelessWidget {
         getTransactionFunction: getTransactionFunction,
       ),
       theme: ThemeData(
+        useMaterial3: false,
         scaffoldBackgroundColor: whiteColor,
         appBarTheme: const AppBarTheme(
           backgroundColor: blackColor,
