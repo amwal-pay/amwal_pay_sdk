@@ -51,7 +51,7 @@ class WalletPaymentRequest {
 
   Map<String, dynamic> payWithQrCode() {
     return {
-      'requestDateTime': DateTime.now().toIso8601String(),
+      // 'requestDateTime': DateTime.now().toIso8601String(),
       'CurrencyId': currencyId,
       'TerminalId': terminalId,
       'MerchantId': merchantId,

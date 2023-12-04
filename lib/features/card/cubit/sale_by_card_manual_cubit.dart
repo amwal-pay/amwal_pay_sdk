@@ -82,7 +82,7 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
       transactionId: transactionId,
       cvV2: cvV2!,
       dateExpiration: '$expirationDateMonth$expirationDateYear',
-      requestDateTime: DateFormat('yyyy-MM-ddTHH:mm:ss').format(DateTime.now()),
+      // requestDateTime: DateFormat('yyyy-MM-ddTHH:mm:ss').format(DateTime.now()),
       orderCustomerEmail: email!,
       clientMail: email!,
       currencyCode: currencyId.toString(),
@@ -118,7 +118,7 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
       cardHolderName: cardHolderName!,
       cvV2: cvV2!,
       dateExpiration: '$expirationDateMonth$expirationDateYear',
-      requestDateTime: DateFormat('yyyy-MM-ddTHH:mm:ss').format(DateTime.now()),
+      // requestDateTime: DateFormat('yyyy-MM-ddTHH:mm:ss').format(DateTime.now()),
       orderCustomerEmail: email!,
       transactionId: transactionId,
       clientMail: email!,
@@ -154,8 +154,8 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
         cvV2: cvV2!,
         otp: otp,
         dateExpiration: '$expirationDateMonth$expirationDateYear',
-        requestDateTime:
-            DateFormat('yyyy-MM-ddTHH:mm:ss').format(DateTime.now()),
+        // requestDateTime:
+        //     DateFormat('yyyy-MM-ddTHH:mm:ss').format(DateTime.now()),
         orderCustomerEmail: email!,
         clientMail: email!,
         currencyCode: currencyId.toString(),

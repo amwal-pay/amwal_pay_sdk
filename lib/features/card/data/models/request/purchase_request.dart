@@ -11,7 +11,7 @@ class PurchaseRequest {
   final String? merchantReference;
   final String dateExpiration;
   final String? refundReason;
-  final String requestDateTime;
+  // final String requestDateTime;
   final String orderCustomerEmail;
   final String? otp;
   final String? orderKey;
@@ -33,7 +33,7 @@ class PurchaseRequest {
     this.merchantReference,
     required this.dateExpiration,
     this.refundReason,
-    required this.requestDateTime,
+    // required this.requestDateTime,
     required this.orderCustomerEmail,
     this.otp,
     this.orderKey,
@@ -59,13 +59,12 @@ class PurchaseRequest {
           merchantReference == other.merchantReference &&
           dateExpiration == other.dateExpiration &&
           refundReason == other.refundReason &&
-          requestDateTime == other.requestDateTime &&
+          // requestDateTime == other.requestDateTime &&
           orderCustomerEmail == other.orderCustomerEmail &&
           otp == other.otp &&
           orderKey == other.orderKey &&
           clientMail == other.clientMail &&
-          transactionIdentifierType ==
-              other.transactionIdentifierType &&
+          transactionIdentifierType == other.transactionIdentifierType &&
           currencyCode == other.currencyCode &&
           currencyId == other.currencyId &&
           transactionId == other.transactionId);
@@ -81,7 +80,7 @@ class PurchaseRequest {
       merchantReference.hashCode ^
       dateExpiration.hashCode ^
       refundReason.hashCode ^
-      requestDateTime.hashCode ^
+      // requestDateTime.hashCode ^
       orderCustomerEmail.hashCode ^
       otp.hashCode ^
       orderKey.hashCode ^
@@ -124,13 +123,13 @@ class PurchaseRequest {
       merchantReference: merchantReference ?? this.merchantReference,
       dateExpiration: dateExpiration ?? this.dateExpiration,
       refundReason: refundReason ?? this.refundReason,
-      requestDateTime: requestDateTime ?? this.requestDateTime,
+      // requestDateTime: requestDateTime ?? this.requestDateTime,
       orderCustomerEmail: orderCustomerEmail ?? this.orderCustomerEmail,
       otp: otp ?? this.otp,
       orderKey: orderKey ?? this.orderKey,
       clientMail: clientMail ?? this.clientMail,
-      transactionIdentifierType: transactionIdentifierType ??
-          this.transactionIdentifierType,
+      transactionIdentifierType:
+          transactionIdentifierType ?? this.transactionIdentifierType,
       currencyCode: currencyCode ?? this.currencyCode,
       currencyId: currencyId ?? this.currencyId,
       transactionId: transactionId ?? this.transactionId,
@@ -145,7 +144,7 @@ class PurchaseRequest {
         'cardHolderName': cardHolderName,
         'cvV2': cvV2,
         'dateExpiration': dateExpiration,
-        'requestDateTime': requestDateTime,
+        // 'requestDateTime': requestDateTime,
         'orderCustomerEmail': orderCustomerEmail,
         'clientMail': clientMail,
         'currencyCode': currencyCode,
@@ -160,7 +159,7 @@ class PurchaseRequest {
         'cardHolderName': cardHolderName,
         'cvV2': cvV2,
         'dateExpiration': dateExpiration,
-        'requestDateTime': requestDateTime,
+        // 'requestDateTime': requestDateTime,
         'orderCustomerEmail': orderCustomerEmail,
         'clientMail': clientMail,
         'currencyCode': currencyCode,
@@ -176,14 +175,13 @@ class PurchaseRequest {
         'cardHolderName': cardHolderName,
         'cvV2': cvV2,
         'dateExpiration': dateExpiration,
-        'requestDateTime': requestDateTime,
+        // 'requestDateTime': requestDateTime,
         'orderCustomerEmail': orderCustomerEmail,
         'clientMail': clientMail,
         'currencyCode': currencyCode,
         'transactionId': transactionId,
         'transactionIdentifierType': transactionIdentifierType,
-        'transactionIdentifierValue':
-            transactionIdentifierValue,
+        'transactionIdentifierValue': transactionIdentifierValue,
       };
 
   Map<String, dynamic> toMap() {
@@ -197,7 +195,7 @@ class PurchaseRequest {
       'merchantReference': merchantReference,
       'dateExpiration': dateExpiration,
       'refundReason': refundReason,
-      'requestDateTime': requestDateTime,
+      // 'requestDateTime': requestDateTime,
       'orderCustomerEmail': orderCustomerEmail,
       'otp': otp,
       'orderKey': orderKey,
@@ -220,13 +218,12 @@ class PurchaseRequest {
       merchantReference: map['merchantReference'] as String,
       dateExpiration: map['dateExpiration'] as String,
       refundReason: map['refundReason'] as String,
-      requestDateTime: map['requestDateTime'] as String,
+      // requestDateTime: map['requestDateTime'] as String,
       orderCustomerEmail: map['orderCustomerEmail'] as String,
       otp: map['otp'] as String,
       orderKey: map['orderKey'] as String,
       clientMail: map['clientMail'] as String,
-      transactionIdentifierType:
-          map['transactionIdentifierType'] as int,
+      transactionIdentifierType: map['transactionIdentifierType'] as int,
       currencyCode: map['currencyCode'] as String,
       currencyId: map['currencyId'] as int,
       transactionId: map['transactionId'] as String,

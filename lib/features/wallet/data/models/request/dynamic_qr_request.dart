@@ -38,7 +38,7 @@ class DynamicQRRequest {
     return {
       'terminalId': terminalId,
       'merchantId': merchantId,
-      'requestDateTime': DateTime.now().toIso8601String(),
+      // 'requestDateTime': DateTime.now().toIso8601String(),
       'dataProvider': 2,
       'amount': amount,
       'currency': currencyId,

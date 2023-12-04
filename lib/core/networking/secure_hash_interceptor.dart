@@ -47,10 +47,11 @@ class SecureHashInterceptor extends Interceptor {
       });
     }
     String secureHashVal = clearSecureHash(secureHashValue, convertMap(data));
-    if (data.containsKey('requestDateTime')) {
-      final date = DateTime.parse(data['requestDateTime']!);
-      data['requestDateTime'] = DateFormat('yyyyMMddHHmmss').format(date);
-    }
+    // if (data.containsKey('requestDateTime')) {
+    // final date = DateTime.parse(data['requestDateTime']!);
+    data['requestDateTime'] =
+        DateFormat('yyyyMMddHHmmss').format(DateTime.now());
+    // }
     data.addAll({
       'secureHashValue': secureHashVal,
     });
