@@ -26,6 +26,7 @@ class InputFieldWidget extends StatefulWidget {
     this.decoration,
     this.readOnly = false,
     this.initialValue,
+    this.focusNode,
   }) : super(key: key);
 
   final String widgetTitle;
@@ -43,6 +44,7 @@ class InputFieldWidget extends StatefulWidget {
   final void Function(String)? onChange;
   final InputDecoration? decoration;
   final String? initialValue;
+  final FocusNode? focusNode;
 
   @override
   State<InputFieldWidget> createState() => _InputFieldWidgetState();
@@ -70,9 +72,7 @@ class _InputFieldWidgetState extends State<InputFieldWidget> {
   @override
   void didUpdateWidget(covariant InputFieldWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-    print('updateWidget');
     if (widget.initialValue == null) {
-      print('clear called');
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         _textEditingController.clear();
       });
@@ -127,6 +127,7 @@ class _InputFieldWidgetState extends State<InputFieldWidget> {
             height: 5,
           ),
           TextFormField(
+            focusNode: widget.focusNode,
             readOnly: widget.readOnly,
             controller: _textEditingController,
             autovalidateMode: AutovalidateMode.onUserInteraction,

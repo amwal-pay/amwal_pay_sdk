@@ -12,11 +12,13 @@ class PhoneInputField extends StatelessWidget {
     required this.widgetTitle,
     required this.widgetHint,
     required this.globalTranslator,
+    required this.focusNode,
     this.onChange,
   }) : super(key: key);
 
   final String widgetTitle;
   final String widgetHint;
+  final FocusNode focusNode;
   final String Function(String)? globalTranslator;
   final void Function(String)? onChange;
   @override
@@ -77,6 +79,7 @@ class PhoneInputField extends StatelessWidget {
                 Expanded(
                   flex: 4,
                   child: TextFormField(
+                    focusNode: focusNode,
                     onChanged: onChange,
                     textInputAction: TextInputAction.done,
                     maxLines: 1,

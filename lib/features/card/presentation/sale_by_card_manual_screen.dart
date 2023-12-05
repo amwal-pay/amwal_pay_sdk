@@ -21,9 +21,10 @@ import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' hide WatchContext;
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:uuid/uuid.dart';
 
-class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit>
+class SaleByCardManualScreen extends StatefulApiView<SaleByCardManualCubit>
     with LoaderMixin {
   final String amount;
   final int currencyId;
@@ -51,25 +52,53 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit>
   }) : super(key: key);
 
   @override
+  State<SaleByCardManualScreen> createState() => _SaleByCardManualScreenState();
+}
+
+class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
+  late FocusNode _cardFocusNode;
+  late FocusNode _expireMonthNode;
+  late FocusNode _expireYearNode;
+  late FocusNode _cvvNode;
+
+  @override
+  void initState() {
+    super.initState();
+    _cardFocusNode = FocusNode();
+    _expireMonthNode = FocusNode();
+    _expireYearNode = FocusNode();
+    _cvvNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _cardFocusNode.dispose();
+    _expireMonthNode.dispose();
+    _expireYearNode.dispose();
+    _cvvNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final args = PaymentArguments(
-      terminalId: terminalId,
-      amount: amount,
-      merchantId: merchantId,
-      transactionId: transactionId,
+      terminalId: widget.terminalId,
+      amount: widget.amount,
+      merchantId: widget.merchantId,
+      transactionId: widget.transactionId,
       currencyData: CurrencyData(
-        idN: currencyId,
-        name: currency,
-        id: currencyId.toString(),
+        idN: widget.currencyId,
+        name: widget.currency,
+        id: widget.currencyId.toString(),
       ),
     );
 
     return BlocListener<SaleByCardManualCubit, ICubitState<PurchaseResponse>>(
-      bloc: cubit,
+      bloc: widget.cubit,
       listener: (_, state) {},
       child: Scaffold(
         backgroundColor: lightGeryColor,
-        appBar: !showAppBar
+        appBar: !widget.showAppBar
             ? null
             : AppBar(
                 backgroundColor: whiteColor,
@@ -82,7 +111,7 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit>
                 title: Text(
                   'card_details_label'.translate(
                     context,
-                    globalTranslator: translator,
+                    globalTranslator: widget.translator,
                   ),
                   key: const Key('cardDetails'),
                   style: const TextStyle(
@@ -92,57 +121,87 @@ class SaleByCardManualScreen extends ApiView<SaleByCardManualCubit>
                   ),
                 ),
               ),
-        body: SingleChildScrollView(
-          key: const Key('cardDetailsScroll'),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 18,
-              vertical: 30,
-            ),
-            child: FormBuilder(
-              key: cubit.formKey,
-              child: Column(
-                children: [
-                  SaleCardFeatureCommonWidgets.merchantAndAmountInfo(
-                    context,
-                    args,
-                    translator: translator,
-                  ),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  CardInfoFormWidget(globalTranslator: translator),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  AppButton(
-                    key: const Key('confirmButton'),
-                    onPressed: () async {
-                      final isValid = cubit.formKey.currentState!.validate();
-                      if (isValid) {
-                        await CardTransactionManager.instance.onPurchaseWith3DS(
-                          cubit: cubit,
-                          args: args,
-                          context: context,
-                          getOneTransactionByIdUseCase: CardInjector.instance
-                              .get<GetOneTransactionByIdUseCase>(),
-                          dismissLoader: dismissDialog,
-                          onPay: onPay,
-                        );
-                      }
-                    },
-                    child: Text(
-                      'confirm'.translate(
-                        context,
-                        globalTranslator: translator,
+        body: KeyboardActions(
+          config: KeyboardActionsConfig(
+              keyboardActionsPlatform: KeyboardActionsPlatform.IOS,
+              actions: [
+                KeyboardActionsItem(
+                  focusNode: _cardFocusNode,
+                  displayArrows: false,
+                ),
+                KeyboardActionsItem(
+                  focusNode: _expireMonthNode,
+                  displayArrows: false,
+                ),
+                KeyboardActionsItem(
+                  focusNode: _expireYearNode,
+                  displayArrows: false,
+                ),
+                KeyboardActionsItem(
+                  focusNode: _cvvNode,
+                  displayArrows: false,
+                ),
+              ]),
+          child: SingleChildScrollView(
+            key: const Key('cardDetailsScroll'),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 18,
+                vertical: 30,
+              ),
+              child: FormBuilder(
+                key: widget.cubit.formKey,
+                child: Column(
+                  children: [
+                    SaleCardFeatureCommonWidgets.merchantAndAmountInfo(
+                      context,
+                      args,
+                      translator: widget.translator,
+                    ),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    CardInfoFormWidget(
+                      globalTranslator: widget.translator,
+                      cardFocusNode: _cardFocusNode,
+                      expireMonthFocusNode: _expireMonthNode,
+                      expireYearFocusNode: _expireYearNode,
+                      cvvFocusNode: _cvvNode,
+                    ),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    AppButton(
+                      key: const Key('confirmButton'),
+                      onPressed: () async {
+                        final isValid =
+                            widget.cubit.formKey.currentState!.validate();
+                        if (isValid) {
+                          await CardTransactionManager.instance
+                              .onPurchaseWith3DS(
+                            cubit: widget.cubit,
+                            args: args,
+                            context: context,
+                            getOneTransactionByIdUseCase: CardInjector.instance
+                                .get<GetOneTransactionByIdUseCase>(),
+                            dismissLoader: widget.dismissDialog,
+                            onPay: widget.onPay,
+                          );
+                        }
+                      },
+                      child: Text(
+                        'confirm'.translate(
+                          context,
+                          globalTranslator: widget.translator,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 60,
-                  ),
-                  const AcceptedPaymentMethodsWidget(),
-                ],
+                    const SizedBox(
+                      height: 60,
+                    ),
+                    const AcceptedPaymentMethodsWidget(),
+                  ],
+                ),
               ),
             ),
           ),

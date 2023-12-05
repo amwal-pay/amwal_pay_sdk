@@ -13,9 +13,17 @@ import 'card_utils.dart';
 
 class CardInfoFormWidget extends StatefulApiView<SaleByCardManualCubit> {
   final String Function(String)? globalTranslator;
+  final FocusNode cardFocusNode;
+  final FocusNode expireMonthFocusNode;
+  final FocusNode expireYearFocusNode;
+  final FocusNode cvvFocusNode;
   const CardInfoFormWidget({
     Key? key,
     this.globalTranslator,
+    required this.cardFocusNode,
+    required this.expireMonthFocusNode,
+    required this.expireYearFocusNode,
+    required this.cvvFocusNode,
   }) : super(key: key);
 
   @override
@@ -46,6 +54,7 @@ class _CardInfoFormWidgetState extends State<CardInfoFormWidget> {
         ),
         TextFormField(
           key: const Key('cardNum'),
+          focusNode: widget.cardFocusNode,
           textInputAction: TextInputAction.next,
           textDirection: TextDirection.ltr,
           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -117,6 +126,7 @@ class _CardInfoFormWidgetState extends State<CardInfoFormWidget> {
             Expanded(
               child: InputFieldWidget(
                 key: const Key('expMonth'),
+                focusNode: widget.expireMonthFocusNode,
                 widgetTitle: 'expiry_date'.translate(context,
                     globalTranslator: widget.globalTranslator),
                 widgetHint: 'mm_date'.translate(context,
@@ -152,6 +162,7 @@ class _CardInfoFormWidgetState extends State<CardInfoFormWidget> {
             Expanded(
               child: InputFieldWidget(
                 key: const Key('expYear'),
+                focusNode: widget.expireYearFocusNode,
                 widgetHint: 'yy_date'.translate(context,
                     globalTranslator: widget.globalTranslator),
                 maxLength: 2,
@@ -169,6 +180,7 @@ class _CardInfoFormWidgetState extends State<CardInfoFormWidget> {
             Expanded(
               child: InputFieldWidget(
                 key: const Key('ccv'),
+                focusNode: widget.cvvFocusNode,
                 widgetTitle: 'cvv',
                 widgetTitleIcon: AppAssets.cvvIcon,
                 widgetHint: 'digits'.translate(context,
