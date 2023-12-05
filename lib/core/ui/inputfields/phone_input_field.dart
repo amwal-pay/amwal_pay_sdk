@@ -78,6 +78,7 @@ class PhoneInputField extends StatelessWidget {
                   flex: 4,
                   child: TextFormField(
                     onChanged: onChange,
+                    textInputAction: TextInputAction.done,
                     maxLines: 1,
                     decoration: InputDecoration(
                       filled: true,

@@ -42,6 +42,52 @@ mixin SaleByWalletActionsMixin on ApiView<SaleByWalletCubit> {
     );
   }
 
+  Future<void> _getTransactionById({
+    required BuildContext context,
+    required OnPayCallback onCountingComplete,
+    required String transactionId,
+    required int merchantId,
+  }) async {
+    if (NetworkConstants.isSdkInApp) {
+      final getTransactionUseCase =
+          WalletInjector.instance.get<GetOneTransactionByIdUseCase>();
+      final oneTransactionResponse = await getTransactionUseCase.invoke({
+        'transactionId': transactionId,
+        'merchantId': merchantId,
+      });
+      final oneTransaction = oneTransactionResponse.mapOrNull(
+        success: (value) => value.data.data,
+      );
+      if (oneTransaction == null) return;
+      if (!context.mounted) return;
+      Navigator.pop(context);
+      await ReceiptHandler.instance.showHistoryReceipt(
+        context: context,
+        settings: _generateTransactionSettings(
+          oneTransaction,
+          context,
+        ).copyWith(
+          onClose: () {
+            AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+          },
+        ),
+      );
+    } else {
+      onCountingComplete((settings) async {
+        final isDialogOpen = ModalRoute.of(context)!.isCurrent != true;
+        if (isDialogOpen && context.mounted) {
+          Navigator.of(context).pop();
+        }
+        if (context.mounted) {
+          await ReceiptHandler.instance.showWalletReceipt(
+            context: context,
+            settings: settings,
+          );
+        }
+      });
+    }
+  }
+
   Future<void> countingDialog({
     required BuildContext context,
     required OnPayCallback onCountingComplete,
@@ -54,46 +100,14 @@ mixin SaleByWalletActionsMixin on ApiView<SaleByWalletCubit> {
         context: context,
         builder: (_) => CountDownDialog(
           globalTranslator: globalTranslator,
-          onComplete: () async {
-            if (NetworkConstants.isSdkInApp) {
-              final getTransactionUseCase =
-                  WalletInjector.instance.get<GetOneTransactionByIdUseCase>();
-              final oneTransactionResponse =
-                  await getTransactionUseCase.invoke({
-                'transactionId': transactionId,
-                'merchantId': merchantId,
-              });
-              final oneTransaction = oneTransactionResponse.mapOrNull(
-                success: (value) => value.data.data,
-              );
-              if (oneTransaction == null) return;
-              if (!context.mounted) return;
-              Navigator.pop(context);
-              await ReceiptHandler.instance.showHistoryReceipt(
-                context: context,
-                settings: _generateTransactionSettings(
-                  oneTransaction,
-                  context,
-                ).copyWith(
-                  onClose: () {
-                    AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
-                  },
-                ),
-              );
-            } else {
-              onCountingComplete((settings) async {
-                final isDialogOpen = ModalRoute.of(context)!.isCurrent != true;
-                if (isDialogOpen && context.mounted) {
-                  Navigator.of(context).pop();
-                }
-                if (context.mounted) {
-                  await ReceiptHandler.instance.showWalletReceipt(
-                    context: context,
-                    settings: settings,
-                  );
-                }
-              });
-            }
+          onComplete: () async => await _showTimeOutDialog(context: context),
+          getTransaction: () async {
+            _getTransactionById(
+              context: context,
+              merchantId: merchantId,
+              transactionId: transactionId,
+              onCountingComplete: onCountingComplete,
+            );
           },
         ),
       ),
@@ -128,6 +142,29 @@ mixin SaleByWalletActionsMixin on ApiView<SaleByWalletCubit> {
       onCountingComplete: onCountingComplete,
       transactionId: transactionId,
       merchantId: merchantId,
+    );
+  }
+
+  Future<void> _showTimeOutDialog({
+    required BuildContext context,
+    String Function(String)? globalTranslator,
+  }) async {
+    await Navigator.of(context).push(
+      DialogRoute(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text(
+            'connection_time_out'.translate(
+              context,
+              globalTranslator: globalTranslator,
+            ),
+          ),
+          content: Text('count_down_failed'.translate(
+            context,
+            globalTranslator: globalTranslator,
+          )),
+        ),
+      ),
     );
   }
 }

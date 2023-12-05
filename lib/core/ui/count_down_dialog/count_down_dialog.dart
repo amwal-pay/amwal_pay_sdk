@@ -6,12 +6,14 @@ import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 
 class CountDownDialog extends StatefulWidget {
+  final void Function() getTransaction;
   final void Function() onComplete;
   final String Function(String)? globalTranslator;
   const CountDownDialog({
     Key? key,
-    required this.onComplete,
+    required this.getTransaction,
     this.globalTranslator,
+    required this.onComplete,
   }) : super(key: key);
 
   @override
@@ -26,14 +28,14 @@ class _CountDownDialogState extends State<CountDownDialog> {
     super.initState();
     _countDownController = CountDownController();
     Future.delayed(const Duration(seconds: 2), () {
-      widget.onComplete();
+      widget.getTransaction();
     });
   }
 
   void _onStart() {
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 15), (timer) {
-      widget.onComplete();
+      widget.getTransaction();
     });
   }
 
@@ -86,9 +88,7 @@ class _CountDownDialogState extends State<CountDownDialog> {
                   fontWeight: FontWeight.bold,
                 ),
                 onStart: _onStart,
-                onComplete: () {
-                  _countDownController.restart();
-                },
+                onComplete: widget.onComplete,
               ),
             ),
           ),

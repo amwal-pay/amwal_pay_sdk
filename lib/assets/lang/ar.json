@@ -146,6 +146,8 @@
   "enter_amount": "ادخل المبلغ",
   "select_currency": "اختر العملة",
   "otp_verification": "OTP رسالة التحقق",
-  "invalid_exp_date": "تاريخ انتهاء صلاحية غير صالح"
+  "invalid_exp_date": "تاريخ انتهاء صلاحية غير صالح",
+  "connection_time_out": "انتهت صلاحية الاتصال",
+  "count_down_failed": "لا يمكننا العثور على معاملتك سوف نخطرك بالتحديثات"
 }
 

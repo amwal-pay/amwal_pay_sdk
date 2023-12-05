@@ -47,16 +47,16 @@ class PhonePayWidget extends StatelessWidget {
           ),
           if (walletCubit.state.verified)
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.0),
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.done,
                     color: successColor,
                   ),
                   Text(
                     walletCubit.customerNameFromApi,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                     ),

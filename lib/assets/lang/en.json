@@ -135,5 +135,7 @@
   "enter_amount": "Please, Enter Amount",
   "select_currency": "Please, Select Currency",
   "otp_verification": "OTP Verification",
-  "invalid_exp_date": "Invalid Expiration Date"
+  "invalid_exp_date": "Invalid Expiration Date",
+  "connection_time_out": "Connection Time Out",
+  "count_down_failed": "Unable to Get transaction details we will notify you with updates"
 }
