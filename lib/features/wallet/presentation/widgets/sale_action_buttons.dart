@@ -27,12 +27,14 @@ class SaleActionButtons extends ApiView<SaleByWalletCubit>
     required this.onPay,
     required this.onCountComplete,
     required this.paymentArguments,
+    required this.countDownInSeconds,
     this.globalTranslator,
   }) : super(key: key);
   final PaymentArguments paymentArguments;
   final OnPayCallback onPay;
   final OnPayCallback onCountComplete;
   final String Function(String)? globalTranslator;
+  final int countDownInSeconds;
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +77,7 @@ class SaleActionButtons extends ApiView<SaleByWalletCubit>
                 ),
                 paymentArguments.transactionId!,
                 paymentArguments.merchantId,
+                countDownInSeconds,
               );
             }
           },

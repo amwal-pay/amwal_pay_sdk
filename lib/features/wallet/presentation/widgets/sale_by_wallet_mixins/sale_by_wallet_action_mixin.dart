@@ -94,12 +94,14 @@ mixin SaleByWalletActionsMixin on ApiView<SaleByWalletCubit> {
     String Function(String)? globalTranslator,
     required String transactionId,
     required int merchantId,
+    required int countDownInSeconds,
   }) async {
     await Navigator.of(context).push(
       DialogRoute(
         context: context,
         builder: (_) => CountDownDialog(
           globalTranslator: globalTranslator,
+          countDownInSeconds: countDownInSeconds,
           onComplete: () async => await _showTimeOutDialog(context: context),
           getTransaction: () async {
             _getTransactionById(
@@ -122,6 +124,7 @@ mixin SaleByWalletActionsMixin on ApiView<SaleByWalletCubit> {
     String currency,
     String transactionId,
     int merchantId,
+    int countDownInSeconds,
   ) async {
     onPay((settings) async {
       final isDialogOpen =
@@ -142,6 +145,7 @@ mixin SaleByWalletActionsMixin on ApiView<SaleByWalletCubit> {
       onCountingComplete: onCountingComplete,
       transactionId: transactionId,
       merchantId: merchantId,
+      countDownInSeconds: countDownInSeconds,
     );
   }
 

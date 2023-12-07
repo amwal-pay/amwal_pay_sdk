@@ -18,6 +18,7 @@ class SaleByWalletScreen extends StatefulWidget {
   final OnPayCallback onCountComplete;
   final GetTransactionFunction getTransactionFunction;
   final String transactionId;
+  final int countDownInSeconds;
 
   const SaleByWalletScreen({
     Key? key,
@@ -25,6 +26,7 @@ class SaleByWalletScreen extends StatefulWidget {
     required this.onPayCallback,
     required this.onCountComplete,
     required this.transactionId,
+    required this.countDownInSeconds,
   }) : super(key: key);
 
   @override
@@ -65,6 +67,7 @@ class _SaleByWalletScreenState extends State<SaleByWalletScreen> {
       widget.onPayCallback,
       widget.onCountComplete,
       widget.getTransactionFunction,
+      widget.countDownInSeconds,
     );
   }
 

@@ -116,6 +116,7 @@ class AmwalPaySdk {
       settings.onCountComplete ?? (_, [__]) {},
       settings.getTransactionFunction ?? (_) async => null,
       settings.transactionId,
+      settings.countDownInSeconds,
     );
   }
 
