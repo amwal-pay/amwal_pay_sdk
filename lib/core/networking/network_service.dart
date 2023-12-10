@@ -161,6 +161,12 @@ Future<NetworkState<T>?> _handleError<T>(
     return NetworkState<T>.error(message: 'Bad Gateway');
   } else if (response.statusCode == 500) {
     return NetworkState<T>.error(message: 'Server Error Try Again Later');
+  } else if (response.statusCode == 400) {
+    return NetworkState<T>.error(
+        message: response.data?['message'],
+        errorList: (response.data?['errorList'] as List?)
+            ?.map((e) => e.toString())
+            .toList());
   } else if (response.data == null) {
     return NetworkState<T>.error(
         message: 'Something went wrong please, Try Again');
