@@ -18,6 +18,7 @@ class AmwalSdkNavigator {
     OnPayCallback onPay,
     OnPayCallback onCountComplete,
     GetTransactionFunction getTransactionFunction,
+    int countDownInSeconds,
   ) async {
     final args = settings.arguments as PaymentArguments;
     await Navigator.of(context).push(
@@ -32,6 +33,7 @@ class AmwalSdkNavigator {
           currencyId: args.currencyData!.idN,
           currency: args.currencyData!.name,
           transactionId: args.transactionId,
+          countDownInSeconds: countDownInSeconds,
         ),
       ),
     );

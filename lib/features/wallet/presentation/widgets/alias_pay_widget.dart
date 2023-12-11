@@ -10,8 +10,10 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 class AliasPayWidget extends StatelessWidget {
   final String Function(String)? globalTranslator;
-
-  const AliasPayWidget({Key? key, this.globalTranslator}) : super(key: key);
+  const AliasPayWidget({
+    Key? key,
+    this.globalTranslator,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

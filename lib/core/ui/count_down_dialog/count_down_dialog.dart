@@ -9,11 +9,13 @@ class CountDownDialog extends StatefulWidget {
   final void Function() getTransaction;
   final void Function() onComplete;
   final String Function(String)? globalTranslator;
+  final int countDownInSeconds;
   const CountDownDialog({
     Key? key,
     required this.getTransaction,
     this.globalTranslator,
     required this.onComplete,
+    required this.countDownInSeconds,
   }) : super(key: key);
 
   @override
@@ -79,7 +81,7 @@ class _CountDownDialogState extends State<CountDownDialog> {
                 controller: _countDownController,
                 width: 110,
                 height: 110,
-                duration: 30,
+                duration: widget.countDownInSeconds,
                 fillColor: whiteColor,
                 ringColor: whiteColor,
                 isReverse: true,

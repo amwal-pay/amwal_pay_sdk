@@ -69,6 +69,7 @@ class AmwalWalletSdk {
     OnPayCallback onCountComplete,
     GetTransactionFunction getTransactionFunction,
     String transactionId,
+    int countDownInSeconds,
   ) async {
     await AmwalSdkNavigator.amwalNavigatorObserver.navigator!.push(
       MaterialPageRoute(
@@ -78,6 +79,7 @@ class AmwalWalletSdk {
           onCountComplete: onCountComplete,
           transactionId: transactionId,
           getTransactionFunction: getTransactionFunction,
+          countDownInSeconds: countDownInSeconds,
         ),
       ),
     );

@@ -32,6 +32,7 @@ class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
   final OnPayCallback onCountComplete;
   final GetTransactionFunction getTransactionFunction;
   final String Function(String)? translator;
+  final int countDownInSeconds;
 
   const SaleByWalletPayingOptions({
     Key? key,
@@ -43,6 +44,7 @@ class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
     required this.currency,
     required this.currencyId,
     required this.merchantId,
+    required this.countDownInSeconds,
     this.transactionId,
     this.showAppBar = true,
     this.translator,
@@ -152,6 +154,7 @@ class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
                       onCountComplete: onCountComplete,
                       paymentArguments: paymentArgument,
                       globalTranslator: translator,
+                      countDownInSeconds: countDownInSeconds,
                     ),
                     const SizedBox(
                       height: 20,
@@ -179,9 +182,13 @@ Widget _saleByWalletOptions(
   GetTransactionFunction getTransactionFunction,
 ) {
   if (pageNum == 0) {
-    return PhonePayWidget(globalTranslator: globalTranslator);
+    return PhonePayWidget(
+      globalTranslator: globalTranslator,
+    );
   } else if (pageNum == 1) {
-    return AliasPayWidget(globalTranslator: globalTranslator);
+    return AliasPayWidget(
+      globalTranslator: globalTranslator,
+    );
   } else if (pageNum == 2) {
     return ScanQrToPayWidget(
       getTransactionFunction: getTransactionFunction,
