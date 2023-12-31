@@ -18,7 +18,6 @@ import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uuid/uuid.dart';
 
 class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
   final String amount;
@@ -160,16 +159,15 @@ class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
                       height: 20,
                     ),
                     BlocBuilder<SaleByWalletCubit, SaleByWalletState>(
-                        bloc: saleByWalletCubit,
-                        builder: (context, state) {
-                          if (state.page != 2) {
-                            return  const AcceptedPaymentMethodsWidget();
-                          } else {
-                            return const SizedBox();
-                          }
-                        },
-                      ),
-
+                      bloc: saleByWalletCubit,
+                      builder: (context, state) {
+                        if (state.page != 2) {
+                          return const AcceptedPaymentMethodsWidget();
+                        } else {
+                          return const SizedBox();
+                        }
+                      },
+                    ),
                     const SizedBox(
                       height: 20,
                     ),
