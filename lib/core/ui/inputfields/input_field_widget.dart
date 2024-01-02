@@ -56,7 +56,6 @@ class _InputFieldWidgetState extends State<InputFieldWidget> {
   @override
   void initState() {
     super.initState();
-    print('initState');
     _textEditingController = TextEditingController();
     _textEditingController.addListener(() {
       widget.onChange?.call(_textEditingController.text);

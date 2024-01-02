@@ -2,9 +2,11 @@ import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
 import 'package:amwal_pay_sdk/core/ui/inputfields/phone_input_field.dart';
 import 'package:amwal_pay_sdk/features/wallet/cubit/sale_by_wallet_cubit.dart';
 import 'package:amwal_pay_sdk/features/wallet/dependency/injector.dart';
+import 'package:amwal_pay_sdk/features/wallet/state/sale_by_wallet_state.dart';
 
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
@@ -32,7 +34,7 @@ class _PhonePayWidgetState extends State<PhonePayWidget> {
     return Container(
       constraints: BoxConstraints.loose(Size(
         size.width,
-        150,
+        180,
       )),
       child: KeyboardActions(
         config: KeyboardActionsConfig(
@@ -62,19 +64,24 @@ class _PhonePayWidgetState extends State<PhonePayWidget> {
               const SizedBox(
                 height: 12,
               ),
-              PhoneInputField(
-                focusNode: _focusNode1,
-                globalTranslator: widget.globalTranslator,
-                widgetTitle: 'wallet_mobile_number'.translate(
-                  context,
-                  globalTranslator: widget.globalTranslator,
-                ),
-                widgetHint: 'phone_number'.translate(
-                  context,
-                  globalTranslator: widget.globalTranslator,
-                ),
-                onChange: (value) => walletCubit.phoneNumber = value,
-              ),
+              BlocBuilder<SaleByWalletCubit, SaleByWalletState>(
+                  bloc: walletCubit,
+                  builder: (_, state) {
+                    return PhoneInputField(
+                      focusNode: _focusNode1,
+                      globalTranslator: widget.globalTranslator,
+                      initialValue: walletCubit.phoneNumber,
+                      widgetTitle: 'wallet_mobile_number'.translate(
+                        context,
+                        globalTranslator: widget.globalTranslator,
+                      ),
+                      widgetHint: 'phone_number'.translate(
+                        context,
+                        globalTranslator: widget.globalTranslator,
+                      ),
+                      onChange: (value) => walletCubit.phoneNumber = value,
+                    );
+                  }),
               if (walletCubit.state.verified)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),

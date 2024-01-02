@@ -6,21 +6,56 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
-class PhoneInputField extends StatelessWidget {
+class PhoneInputField extends StatefulWidget {
   const PhoneInputField({
     Key? key,
     required this.widgetTitle,
     required this.widgetHint,
     required this.globalTranslator,
     required this.focusNode,
+    this.initialValue,
     this.onChange,
   }) : super(key: key);
 
   final String widgetTitle;
   final String widgetHint;
   final FocusNode focusNode;
+  final String? initialValue;
   final String Function(String)? globalTranslator;
   final void Function(String)? onChange;
+
+  @override
+  State<PhoneInputField> createState() => _PhoneInputFieldState();
+}
+
+class _PhoneInputFieldState extends State<PhoneInputField> {
+  late TextEditingController _textEditingController;
+
+  @override
+  void initState() {
+    super.initState();
+    _textEditingController = TextEditingController();
+    _textEditingController.addListener(() {
+      widget.onChange?.call(_textEditingController.text);
+    });
+  }
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant PhoneInputField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialValue == null) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        _textEditingController.clear();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaQuerySize = MediaQuery.of(context).size;
@@ -30,7 +65,7 @@ class PhoneInputField extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            widgetTitle,
+            widget.widgetTitle,
             style: const TextStyle(
               color: primaryColor,
               fontWeight: FontWeight.bold,
@@ -79,14 +114,14 @@ class PhoneInputField extends StatelessWidget {
                 Expanded(
                   flex: 4,
                   child: TextFormField(
-                    focusNode: focusNode,
-                    onChanged: onChange,
+                    focusNode: widget.focusNode,
+                    controller: _textEditingController,
                     textInputAction: TextInputAction.done,
                     maxLines: 1,
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
-                      hintText: widgetHint,
+                      hintText: widget.widgetHint,
                       hintStyle: const TextStyle(
                         color: lightGreyColor,
                         fontWeight: FontWeight.bold,
@@ -103,26 +138,26 @@ class PhoneInputField extends StatelessWidget {
                             r'^((\+|00)?968)?[279]\d{7}$',
                             errorText: 'invalid_phone_number'.translate(
                               context,
-                              globalTranslator: globalTranslator,
+                              globalTranslator: widget.globalTranslator,
                             )),
                         FormBuilderValidators.minLength(
                           7,
                           errorText: "invalid_phone_number".translate(
                             context,
-                            globalTranslator: globalTranslator,
+                            globalTranslator: widget.globalTranslator,
                           ),
                         ),
                         FormBuilderValidators.maxLength(
                           15,
                           errorText: "invalid_phone_number".translate(
                             context,
-                            globalTranslator: globalTranslator,
+                            globalTranslator: widget.globalTranslator,
                           ),
                         ),
                         FormBuilderValidators.required(
                           errorText: 'required_field'.translate(
                             context,
-                            globalTranslator: globalTranslator,
+                            globalTranslator: widget.globalTranslator,
                           ),
                         ),
                       ],
