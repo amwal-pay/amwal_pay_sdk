@@ -137,5 +137,6 @@
   "otp_verification": "OTP Verification",
   "invalid_exp_date": "Invalid Expiration Date",
   "connection_time_out": "Connection Time Out",
-  "count_down_failed": "Unable to Get transaction details we will notify you with updates"
+  "count_down_failed": "Unable to Get transaction details we will notify you with updates",
+  "min_amount_hint": "minimum amount 0.1"
 }
