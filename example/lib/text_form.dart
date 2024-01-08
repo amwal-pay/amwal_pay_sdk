@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class TextForm extends StatelessWidget {
   final String title;
   final String? initialValue;
   final TextEditingController controller;
+  final bool isNumeric;
+  final int? maxLength;
   const TextForm({
     Key? key,
     required this.title,
     this.initialValue,
     required this.controller,
+    this.isNumeric = false,
+    this.maxLength,
   }) : super(key: key);
 
   @override
@@ -22,6 +27,10 @@ class TextForm extends StatelessWidget {
         TextFormField(
           initialValue: initialValue,
           controller: controller,
+          maxLength: maxLength,
+          inputFormatters: [
+            if (isNumeric) FilteringTextInputFormatter.digitsOnly,
+          ],
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
           ),
