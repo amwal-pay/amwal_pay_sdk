@@ -41,12 +41,12 @@ extension OneTransactionExtension on OneTransaction {
 extension DateTimeFormatX on String {
   String formatDate(BuildContext context) {
     final locale = AppLocalizations.of(context)?.locale;
-    final date = DateTime.parse(this);
+    final date = DateTime.parse(this).toLocal();
     final formattedDateString = DateFormat(
             locale?.languageCode == 'en'
                 ? 'dd/MM/yyyy hh:mm a'
                 : 'yyyy/MM/dd hh:mm a',
-            locale?.languageCode)
+            locale?.languageCode).add_Hm()
         .format(date);
     return formattedDateString;
   }
