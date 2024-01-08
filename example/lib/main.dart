@@ -89,14 +89,20 @@ class _DemoScreenState extends State<DemoScreen> {
                         TextForm(
                           title: "Merchant Id",
                           controller: _merchantIdController,
+                          isNumeric: true,
+                          maxLength: 10,
                         ),
                         TextForm(
                           title: "Terminal Id",
                           controller: _terminalController,
+                          isNumeric: true,
+                          maxLength: 10,
                         ),
                         TextForm(
                           title: "Amount",
                           controller: _amountController,
+                          isNumeric: true,
+                          maxLength: 30,
                         ),
                         TextForm(
                           title: "Currency",
@@ -106,10 +112,6 @@ class _DemoScreenState extends State<DemoScreen> {
                           title: "Secure Hash",
                           controller: _secureHashController,
                         ),
-                        // TextForm(
-                        //   title: "Transaction Ref No",
-                        //   controller: _transactionRefNoController,
-                        // ),
                       ],
                     ),
                   ),
