@@ -117,9 +117,10 @@ class _InputFieldWidgetState extends State<InputFieldWidget> {
                 SvgPicture.asset(
                   widget.widgetTitleIcon!,
                   package: 'amwal_pay_sdk',
+                  height: 16,
                 )
               else
-                const SizedBox(),
+                const SizedBox(height: 16),
             ],
           ),
           const SizedBox(
