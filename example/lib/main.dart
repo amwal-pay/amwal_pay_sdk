@@ -40,9 +40,12 @@ class _DemoScreenState extends State<DemoScreen> {
   late TextEditingController _terminalController;
   late TextEditingController _secureHashController;
 
+  late GlobalKey<FormState> _formKey;
+
   @override
   void initState() {
     super.initState();
+    _formKey = GlobalKey<FormState>();
 
     /// card terminal => 6942344
     /// wallet terminal => 6834180
@@ -82,6 +85,7 @@ class _DemoScreenState extends State<DemoScreen> {
               const SizedBox(height: 8),
               Expanded(
                 child: Form(
+                  key: _formKey,
                   child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,6 +123,8 @@ class _DemoScreenState extends State<DemoScreen> {
               ),
               ElevatedButton(
                 onPressed: () async {
+                  final valid = _formKey.currentState!.validate();
+                  if (!valid) return;
                   await AmwalPaySdk.instance.initSdk(
                     settings: AmwalSdkSettings(
                       merchantName: 'Amr Saied',

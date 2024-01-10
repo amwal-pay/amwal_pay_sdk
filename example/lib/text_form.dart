@@ -28,6 +28,14 @@ class TextForm extends StatelessWidget {
           initialValue: initialValue,
           controller: controller,
           maxLength: maxLength,
+          keyboardType: isNumeric ? TextInputType.number : null,
+          validator: (value) {
+            if (value?.isEmpty ?? true) {
+              return 'Required Field';
+            } else {
+              return null;
+            }
+          },
           inputFormatters: [
             if (isNumeric) FilteringTextInputFormatter.digitsOnly,
           ],
