@@ -103,11 +103,14 @@ class _InputFieldWidgetState extends State<InputFieldWidget> {
         children: [
           Row(
             children: [
-              Text(
-                widget.widgetTitle,
-                style: const TextStyle(
-                  color: primaryColor,
-                  fontWeight: FontWeight.bold,
+              SizedBox(
+                height: 24,
+                child: Text(
+                  widget.widgetTitle,
+                  style: const TextStyle(
+                    color: primaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               const SizedBox(

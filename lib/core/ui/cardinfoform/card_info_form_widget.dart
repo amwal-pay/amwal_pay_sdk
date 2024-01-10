@@ -146,7 +146,7 @@ class _CardInfoFormWidgetState extends State<CardInfoFormWidget> {
             ),
             const Column(
               children: [
-                SizedBox(height: 24),
+                SizedBox(height: 36),
                 Text(
                   '/',
                   style: TextStyle(
