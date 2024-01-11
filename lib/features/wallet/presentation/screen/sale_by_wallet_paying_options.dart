@@ -162,7 +162,11 @@ class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
                       bloc: saleByWalletCubit,
                       builder: (context, state) {
                         if (state.page != 2) {
-                          return const AcceptedPaymentMethodsWidget();
+                          return const AcceptedPaymentMethodsWidget(
+                            showMaster: false,
+                            showVisa: false,
+                            showExpress: false,
+                          );
                         } else {
                           return const SizedBox();
                         }

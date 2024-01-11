@@ -1,4 +1,3 @@
-import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
 import 'package:amwal_pay_sdk/core/apiview/api_view.dart';
 import 'package:amwal_pay_sdk/core/base_state/base_cubit_state.dart';
 import 'package:amwal_pay_sdk/core/loader_mixin.dart';
@@ -11,10 +10,8 @@ import 'package:amwal_pay_sdk/features/card/amwal_salebycard_sdk.dart';
 import 'package:amwal_pay_sdk/features/card/cubit/card_transaction_manager.dart';
 import 'package:amwal_pay_sdk/features/card/cubit/sale_by_card_manual_cubit.dart';
 import 'package:amwal_pay_sdk/features/card/data/models/response/purchase_response.dart';
-import 'package:amwal_pay_sdk/features/card/presentation/widgets/otp_dialog.dart';
 import 'package:amwal_pay_sdk/features/currency_field/data/models/response/currency_response.dart';
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
-import 'package:amwal_pay_sdk/features/receipt/receipt_handler.dart';
 import 'package:amwal_pay_sdk/features/transaction/domain/use_case/get_transaction_by_Id.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
@@ -22,7 +19,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' hide WatchContext;
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
-import 'package:uuid/uuid.dart';
 
 class SaleByCardManualScreen extends StatefulApiView<SaleByCardManualCubit>
     with LoaderMixin {
