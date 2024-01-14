@@ -118,6 +118,10 @@ class _SaleByCardScreenState extends State<SaleByCardScreen> {
                   );
                   return;
                 }
+                if (!_amountCurrencyWidgetCubit.formKey.currentState!
+                    .validate()) {
+                  return;
+                }
                 final paymentArguments = PaymentArguments(
                   amount: _amountCurrencyWidgetCubit.amountValue,
                   terminalId: terminal!,

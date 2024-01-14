@@ -157,6 +157,11 @@ class _SaleByWalletScreenState extends State<SaleByWalletScreen> {
                     );
                     return;
                   }
+
+                  if (!amountCubit.formKey.currentState!.validate()) {
+                    return;
+                  }
+
                   final args = PaymentArguments(
                     amount: amountCubit.amountValue,
                     terminalId: _terminal ?? '',
