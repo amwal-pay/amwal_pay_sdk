@@ -70,7 +70,7 @@ class _CountDownDialogState extends State<CountDownDialog> {
               fontSize: 22,
             ),
           ),
-          const SizedBox(height: 40)-
+          const SizedBox(height: 40),
           Container(
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
