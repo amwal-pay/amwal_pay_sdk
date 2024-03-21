@@ -6,7 +6,6 @@ import 'package:amwal_pay_sdk/features/card/cubit/sale_by_card_manual_cubit.dart
 import 'package:amwal_pay_sdk/features/card/data/models/response/purchase_response.dart';
 import 'package:amwal_pay_sdk/features/card/presentation/widgets/otp_dialog.dart';
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
-import 'package:amwal_pay_sdk/features/receipt/receipt_handler.dart';
 import 'package:amwal_pay_sdk/features/transaction/data/models/response/one_transaction_response.dart';
 import 'package:amwal_pay_sdk/features/transaction/domain/use_case/get_transaction_by_Id.dart';
 import 'package:amwal_pay_sdk/features/transaction/util.dart';

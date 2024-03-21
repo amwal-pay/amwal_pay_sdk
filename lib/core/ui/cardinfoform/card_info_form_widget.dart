@@ -40,8 +40,10 @@ class _CardInfoFormWidgetState extends State<CardInfoFormWidget> {
         Row(
           children: [
             Text(
-              'card_number_label'.translate(context,
-                  globalTranslator: widget.globalTranslator),
+              'card_number_label'.translate(
+                context,
+                globalTranslator: widget.globalTranslator,
+              ),
               style: const TextStyle(
                 color: primaryColor,
                 fontWeight: FontWeight.bold,

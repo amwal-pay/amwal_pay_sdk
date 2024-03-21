@@ -1,16 +1,13 @@
 import 'package:amwal_pay_sdk/core/apiview/state_mapper.dart';
 import 'package:amwal_pay_sdk/core/base_state/base_cubit_state.dart';
 import 'package:amwal_pay_sdk/core/base_view_cubit/base_cubit.dart';
+import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
 import 'package:amwal_pay_sdk/core/usecase/i_use_case.dart';
 import 'package:amwal_pay_sdk/features/card/data/models/request/purchase_request.dart';
 import 'package:amwal_pay_sdk/features/card/data/models/response/purchase_response.dart';
-import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:intl/intl.dart';
-import 'package:uuid/uuid.dart';
 
 class SaleByCardManualCubit extends ICubit<PurchaseResponse>
     with UiState<PurchaseResponse> {
@@ -146,22 +143,21 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
   ) async {
     emit(const ICubitState.loading());
     final purchaseRequest = PurchaseRequest(
-        pan: cardNo!.replaceAll(' ', ''),
-        amount: num.parse(amount),
-        terminalId: int.parse(terminalId),
-        merchantId: merchantId,
-        cardHolderName: cardHolderName!,
-        cvV2: cvV2!,
-        otp: otp,
-        dateExpiration: '$expirationDateMonth$expirationDateYear',
-        // requestDateTime:
-        //     DateFormat('yyyy-MM-ddTHH:mm:ss').format(DateTime.now()),
-        orderCustomerEmail: email!,
-        clientMail: email!,
-        currencyCode: currencyId.toString(),
-        transactionIdentifierValue: originalTransactionId,
-        transactionIdentifierType: 2,
-        transactionId: transactionId);
+      pan: cardNo!.replaceAll(' ', ''),
+      amount: num.parse(amount),
+      terminalId: int.parse(terminalId),
+      merchantId: merchantId,
+      cardHolderName: cardHolderName!,
+      cvV2: cvV2!,
+      otp: otp,
+      dateExpiration: '$expirationDateMonth$expirationDateYear',
+      orderCustomerEmail: email!,
+      clientMail: email!,
+      currencyCode: currencyId.toString(),
+      transactionIdentifierValue: originTransactionId,
+      transactionIdentifierType: 2,
+      transactionId: transactionId,
+    );
     final networkState =
         await _purchaseOtpStepTwoUseCase.invoke(purchaseRequest);
     final state = mapNetworkState(networkState);

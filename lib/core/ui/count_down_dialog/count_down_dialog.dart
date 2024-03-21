@@ -84,6 +84,7 @@ class _CountDownDialogState extends State<CountDownDialog> {
                 duration: widget.countDownInSeconds,
                 fillColor: whiteColor,
                 ringColor: whiteColor,
+                textFormat: CountdownTextFormat.S,
                 isReverse: true,
                 textStyle: const TextStyle(
                   fontSize: 50,

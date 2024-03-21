@@ -127,7 +127,7 @@ class _InputFieldWidgetState extends State<InputFieldWidget> {
             ],
           ),
           const SizedBox(
-            height: 5,
+            height: 16,
           ),
           TextFormField(
             focusNode: widget.focusNode,
