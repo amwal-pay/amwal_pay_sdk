@@ -72,7 +72,7 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
     required super.currency,
     required super.amount,
     required this.terminalId,
-    required super.merchantName,
+    super.merchantName,
     super.getTransactionFunction,
     super.onCountComplete,
     super.locale,

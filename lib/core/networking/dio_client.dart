@@ -29,7 +29,7 @@ class DioClient {
         _tokenInjectorInterceptor,
         _secureHashInterceptor,
         _mockupInterceptor,
-        ChuckerDioInterceptor(),
+        // ChuckerDioInterceptor(),
         CustomLogInterceptor(),
       ]);
   }

@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
 import 'package:amwal_pay_sdk/amwal_sdk_settings/amwal_sdk_settings.dart';
 import 'package:amwal_pay_sdk/core/networking/constants.dart';
+import 'package:amwal_pay_sdk/core/networking/network_service.dart';
 import 'package:amwal_pay_sdk/features/card/amwal_salebycard_sdk.dart';
 import 'package:amwal_pay_sdk/features/wallet/amwal_salebywallet_sdk.dart';
 import 'package:amwal_pay_sdk/navigator/sdk_navigator.dart';
@@ -14,6 +15,9 @@ import 'package:amwal_pay_sdk/sdk_builder/network_service_builder.dart';
 import 'package:amwal_pay_sdk/sdk_builder/sdk_builder.dart';
 import 'package:flutter/material.dart';
 
+import 'core/ui/error_dialog.dart';
+import 'core/ui/loading_dialog.dart';
+import 'features/transaction/data/repository/transaction_repository_impl.dart';
 import 'localization/app_localizations_setup.dart';
 
 export 'package:amwal_pay_sdk/features/receipt/receipt_handler.dart';
@@ -55,9 +59,62 @@ class AmwalPaySdk {
     );
 
     SdkBuilder.instance.initSdkModules(networkService);
-    await _openAmwalSdkScreen(
-      settings,
-    );
+
+    checkMerchantProvidedData(networkService, settings);
+  }
+
+  void checkMerchantProvidedData(
+      NetworkService networkService, AmwalSdkSettings settings) {
+    var transactionRepo = TransactionRepositoryImpl(networkService);
+
+    var map = {
+      "merchantId": settings.merchantId,
+      "terminalId": settings.terminalId,
+
+    };
+
+    transactionRepo.getMerchantName(map).then((value) {
+      value.when(
+        success: (data) async {
+         await CacheStorageHandler.instance.write(
+            CacheKeys.merchantName,
+            data.data,
+          );
+          await _openAmwalSdkScreen(
+            settings,
+          );
+        },
+        initial: () {
+          AmwalSdkNavigator.amwalNavigatorObserver.navigator!.push(
+            DialogRoute(
+              context:
+                  AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context,
+              builder: (_) => const LoadingDialog(),
+            ),
+          );
+          //loading state
+        },
+        error: (String? message, List<String>? errorList) {
+          settings.onError
+              ?.call(errorList?.first ?? message ?? '', StackTrace.current);
+          if (AmwalSdkNavigator.amwalNavigatorObserver.navigator != null) {
+            return showDialog(
+              context:
+                  AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context,
+              builder: (_) => ErrorDialog(
+                title: message ?? '',
+                message: (errorList?.join(',') ?? errorList.toString()),
+                resetState: () {
+                  AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+                },
+              ),
+            );
+          }
+          // back to previous screen
+          // AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+        },
+      );
+    });
   }
 
   Future<AmwalWalletSdk> _initWalletSdk({

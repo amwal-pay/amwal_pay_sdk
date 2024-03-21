@@ -4,6 +4,7 @@ class NetworkConstants {
   static const baseUrlSdk = 'https://merchantapp.amwalpg.com:8443/';
 
   static const getTransactionByIdEndpoint = '/Transaction/GetByTransactionId';
+  static const getMerchantNameEndpoint = "/Merchant/GetMerchantName";
 
   static const mockLabBaseUrl = 'https://amwalpayapi.mocklab.io/';
   static const isMockupMode = false;

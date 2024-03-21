@@ -4,6 +4,8 @@ import 'package:amwal_pay_sdk/core/networking/network_state.dart';
 import 'package:amwal_pay_sdk/features/transaction/data/models/response/one_transaction_response.dart';
 import 'package:amwal_pay_sdk/features/transaction/domain/repository/transaction_repository.dart';
 
+import '../models/response/merchant_name_response.dart';
+
 class TransactionRepositoryImpl extends TransactionRepository {
   final NetworkService _networkService;
   TransactionRepositoryImpl(this._networkService);
@@ -16,6 +18,22 @@ class TransactionRepositoryImpl extends TransactionRepository {
       converter: OneTransactionResponse.fromJson,
       method: HttpMethod.post,
       data: data,
+    );
+  }
+
+
+  @override
+  Future<NetworkState<MerchantNameResponse>> getMerchantName(
+      Map<String, dynamic> data,
+      ) async {
+
+    Map<String, dynamic> data2 = Map<String, dynamic>.from(data );
+
+    return await _networkService.invokeRequest(
+      endpoint: NetworkConstants.getMerchantNameEndpoint,
+      converter: MerchantNameResponse.fromJson,
+      method: HttpMethod.post,
+      data: data2,
     );
   }
 }
