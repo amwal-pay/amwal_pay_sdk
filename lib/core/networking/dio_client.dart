@@ -10,7 +10,7 @@ import 'package:dio/dio.dart';
 import 'constants.dart';
 
 class DioClient {
-  Dio? dio;
+ static Dio? dio;
   final MockupInterceptor _mockupInterceptor;
   final SecureHashInterceptor _secureHashInterceptor;
   final TokenInjectorInterceptor _tokenInjectorInterceptor;
