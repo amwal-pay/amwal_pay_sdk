@@ -1,5 +1,6 @@
 import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
 import 'package:amwal_pay_sdk/amwal_sdk_settings/amwal_sdk_settings.dart';
+import 'package:amwal_pay_sdk/core/networking/constants.dart';
 import 'package:example/text_form.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
@@ -41,6 +42,8 @@ class _DemoScreenState extends State<DemoScreen> {
   late TextEditingController _secureHashController;
 
   late GlobalKey<FormState> _formKey;
+  late String altBaseurl;
+  late String dropdownValue;
 
   @override
   void initState() {
@@ -56,6 +59,21 @@ class _DemoScreenState extends State<DemoScreen> {
     );
     _amountController = TextEditingController(text: '50');
     _currencyController = TextEditingController(text: 'OMR');
+
+    altBaseurl = NetworkConstants.baseUrlSdk;
+    dropdownValue = _getDropdownValueFromAltBaseUrl(altBaseurl);
+  }
+
+  String _getDropdownValueFromAltBaseUrl(String altBaseUrl) {
+    if (altBaseUrl == NetworkConstants.SITUrlSdk) {
+      return 'SIT';
+    } else if (altBaseUrl == NetworkConstants.UATUrlSdk) {
+      return 'UAT';
+    } else if (altBaseUrl == NetworkConstants.PRODUrlSdk) {
+      return 'PROD';
+    } else {
+      return 'None';
+    }
   }
 
   @override
@@ -116,6 +134,56 @@ class _DemoScreenState extends State<DemoScreen> {
                           title: "Secure Hash",
                           controller: _secureHashController,
                         ),
+                        const SizedBox(height: 8),
+
+                        const Text("Select Environment"),
+                        const SizedBox(height: 8),
+
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.grey, // Specify the border color
+                              width: 2.0, // Specify the border width
+                            ),
+                            borderRadius: BorderRadius.circular(10), // Optional: Add rounded corners
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: DropdownButton<String>(
+                              isExpanded: true,
+                              value: dropdownValue,
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  dropdownValue = newValue!;
+                                  switch (dropdownValue) {
+                                    case 'SIT':
+                                      altBaseurl = NetworkConstants.SITUrlSdk;
+                                      break;
+                                    case 'UAT':
+                                      altBaseurl = NetworkConstants.UATUrlSdk;
+                                      break;
+                                    case 'PROD':
+                                      altBaseurl = NetworkConstants.PRODUrlSdk;
+                                      break;
+                                    default:
+                                      altBaseurl = '';
+                                      break;
+                                  }
+
+                                  NetworkConstants.baseUrlSdk = altBaseurl;
+                                });
+                              },
+                              items: <String>['None', 'SIT', 'UAT', 'PROD']
+                                  .map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ),
+
                       ],
                     ),
                   ),

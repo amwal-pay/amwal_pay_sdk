@@ -1,7 +1,13 @@
 class NetworkConstants {
   const NetworkConstants._();
   static String baseUrl = 'https://merchantapp.amwalpg.com/';
-  static const baseUrlSdk = 'https://merchantapp.amwalpg.com:8443/';
+  static String baseUrlSdk = 'https://merchantapp.amwalpg.com:8443/';
+  static const PRODUrlSdk = 'https://merchantapp.amwalpg.com:8443/';
+  static const SITUrlSdk = 'https://test.amwalpg.com:22443/';
+  static const UATUrlSdk = 'https://test.amwalpg.com:12443/';
+
+
+
 
   static const getTransactionByIdEndpoint = '/Transaction/GetByTransactionId';
   static const getMerchantNameEndpoint = "/Merchant/GetMerchantName";
