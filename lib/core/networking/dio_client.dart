@@ -10,7 +10,7 @@ import 'package:dio/dio.dart';
 import 'constants.dart';
 
 class DioClient {
-  late final Dio _dio;
+  Dio? dio;
   final MockupInterceptor _mockupInterceptor;
   final SecureHashInterceptor _secureHashInterceptor;
   final TokenInjectorInterceptor _tokenInjectorInterceptor;
@@ -21,7 +21,7 @@ class DioClient {
     this._tokenInjectorInterceptor,
     HttpClient? client,
   ) {
-    _dio = Dio(
+    dio = Dio(
       BaseOptions(
         baseUrl: NetworkConstants.url,
       ),
@@ -39,7 +39,7 @@ class DioClient {
     Map<String, dynamic>? queryParams,
     String? mockupResponsePath,
   }) async {
-    return await _dio.get(
+    return await dio!.get(
       endpoint,
       queryParameters: queryParams,
     );
@@ -51,7 +51,7 @@ class DioClient {
     Map<String, dynamic>? queryParams,
     String? mockupResponsePath,
   }) async {
-    return await _dio.post(
+    return await dio!.post(
       endpoint,
       data: data,
       queryParameters: queryParams,
@@ -63,7 +63,7 @@ class DioClient {
     required Map<String, dynamic> data,
     Map<String, dynamic>? queryParams,
   }) async {
-    return await _dio.put(
+    return await dio!.put(
       endpoint,
       data: data,
       queryParameters: queryParams,
@@ -75,7 +75,7 @@ class DioClient {
     Map<String, dynamic>? data,
     Map<String, dynamic>? queryParams,
   }) async =>
-      await _dio.delete(
+      await dio!.delete(
         endpoint,
         data: data,
         queryParameters: queryParams,
