@@ -12,6 +12,7 @@ import 'package:flutter_dash/flutter_dash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
+final GlobalKey<State> dialogKey = GlobalKey<State>();
 
 class TransactionStatusDialog extends StatefulWidget {
   final TransactionDetailsSettings settings;
@@ -72,6 +73,7 @@ class _TransactionStatusDialogState extends State<TransactionStatusDialog> {
   Widget dialog({bool forShare = false}) {
     final size = MediaQuery.of(context).size;
     return Dialog(
+      key: dialogKey,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(15),
