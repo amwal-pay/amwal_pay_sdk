@@ -1,3 +1,4 @@
+import 'package:amwal_pay_sdk/core/networking/constants.dart';
 import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
 import 'package:amwal_pay_sdk/core/ui/listpicker/drop_down_list_cubit.dart';
 import 'package:amwal_pay_sdk/core/ui/listpicker/drop_down_list_widget.dart';
@@ -30,6 +31,7 @@ class PhoneInputField extends StatefulWidget {
 
 class _PhoneInputFieldState extends State<PhoneInputField> {
   late TextEditingController _textEditingController;
+  Map<String, String>? _selectedCountry;
 
   @override
   void initState() {
@@ -86,28 +88,32 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
                 Expanded(
                   flex: 1,
                   child: Image.network(
-                    'https://cdn.britannica.com/73/5773-004-F7C13E3D/Flag-Oman.jpg',
-                    width: 20,
-                    height: 12,
+                    NetworkConstants.countryFlag(
+                      _selectedCountry?.values.single ?? 'OM',
+                    ),
                   ),
                 ),
                 Expanded(
                   flex: 2,
-                  child: DropDownListWidget<String>(
+                  child: DropDownListWidget<Map<String, String>>(
                     name: '',
                     hintText: '+968',
-                    cubit: DropDownListCubit(),
-                    onDone: () {},
-                    nameMapper: (item) {
-                      return item!;
+                    cubit: DropDownListCubit(initialValue: _selectedCountry),
+                    onDone: () {
+                      setState(() {});
                     },
-                    onSelected: (item) {},
+                    nameMapper: (item) {
+                      return item!.keys.single;
+                    },
+                    onSelected: (item) {
+                      _selectedCountry = item;
+                    },
                     dropDownListItems: const [
-                      "+20",
-                      "+968",
-                      "+967",
-                      "+965",
-                      "+961",
+                      {"+20": 'EG'},
+                      {"+968": "OM"},
+                      {"+967": "YE"},
+                      {"+965": "KW"},
+                      {"+961": 'LB'},
                     ],
                   ),
                 ),
@@ -134,21 +140,27 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
                     validator: FormBuilderValidators.compose(
                       [
                         FormBuilderValidators.numeric(),
+
+                        //   if (s.length > 16 || s.length < 9) return false;
+                        // return hasMatch(s, r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
+
                         FormBuilderValidators.match(
-                            r'^((\+|00)?968)?[279]\d{7}$',
-                            errorText: 'invalid_phone_number'.translate(
-                              context,
-                              globalTranslator: widget.globalTranslator,
-                            )),
+                          r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$',
+                          // r'^((\+|00)?968)?[279]\d{7}$',
+                          errorText: 'invalid_phone_number'.translate(
+                            context,
+                            globalTranslator: widget.globalTranslator,
+                          ),
+                        ),
                         FormBuilderValidators.minLength(
-                          7,
+                          9,
                           errorText: "invalid_phone_number".translate(
                             context,
                             globalTranslator: widget.globalTranslator,
                           ),
                         ),
                         FormBuilderValidators.maxLength(
-                          15,
+                          16,
                           errorText: "invalid_phone_number".translate(
                             context,
                             globalTranslator: widget.globalTranslator,

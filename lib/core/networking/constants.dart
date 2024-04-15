@@ -6,8 +6,8 @@ class NetworkConstants {
   static const SITUrlSdk = 'https://test.amwalpg.com:22443/';
   static const UATUrlSdk = 'https://test.amwalpg.com:12443/';
 
-
-
+  static String countryFlag(String countryCode) =>
+      'https://flagsapi.com/$countryCode/shiny/32.png';
 
   static const getTransactionByIdEndpoint = '/Transaction/GetByTransactionId';
   static const getMerchantNameEndpoint = "/Merchant/GetMerchantName";

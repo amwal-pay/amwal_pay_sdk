@@ -33,7 +33,6 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
 
   String? _validateExpDate() {
     final date = DateTime.now();
-    print(date.year % 100);
     if ((date.month > int.parse(expirationDateMonth!)) &&
         ((date.year % 100) >= int.parse(expirationDateYear!))) {
       return 'invalid_exp_date';
