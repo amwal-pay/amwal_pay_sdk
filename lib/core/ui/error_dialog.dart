@@ -1,3 +1,4 @@
+import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:flutter/material.dart';
 
 class ErrorDialog extends StatelessWidget {
@@ -14,7 +15,7 @@ class ErrorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(title),
+      title: Text('failed'.translate(context)),
       content: Text(
         message,
         style: const TextStyle(color: Colors.black),
