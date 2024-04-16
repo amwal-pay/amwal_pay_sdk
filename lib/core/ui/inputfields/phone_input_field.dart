@@ -109,11 +109,11 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
                       _selectedCountry = item;
                     },
                     dropDownListItems: const [
-                      {"+20": 'EG'},
+                      // {"+20": 'EG'},
                       {"+968": "OM"},
-                      {"+967": "YE"},
-                      {"+965": "KW"},
-                      {"+961": 'LB'},
+                      // {"+967": "YE"},
+                      // {"+965": "KW"},
+                      // {"+961": 'LB'},
                     ],
                   ),
                 ),
@@ -145,22 +145,22 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
                         // return hasMatch(s, r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
 
                         FormBuilderValidators.match(
-                          r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$',
-                          // r'^((\+|00)?968)?[279]\d{7}$',
+                          // r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$',
+                          r'^((\+|00)?968)?[279]\d{7}$',
                           errorText: 'invalid_phone_number'.translate(
                             context,
                             globalTranslator: widget.globalTranslator,
                           ),
                         ),
                         FormBuilderValidators.minLength(
-                          9,
+                          8,
                           errorText: "invalid_phone_number".translate(
                             context,
                             globalTranslator: widget.globalTranslator,
                           ),
                         ),
                         FormBuilderValidators.maxLength(
-                          16,
+                          15,
                           errorText: "invalid_phone_number".translate(
                             context,
                             globalTranslator: widget.globalTranslator,
