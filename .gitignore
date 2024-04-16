@@ -33,3 +33,15 @@ android/local.properties
 linux/flutter/ephemeral/.plugin_symlinks
 .flutter-plugins
 .flutter-plugins-dependencies
+android/local.properties
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+linux/flutter/ephemeral/.plugin_symlinks/path_provider_linux
+linux/flutter/ephemeral/.plugin_symlinks/share_plus
+linux/flutter/ephemeral/.plugin_symlinks/shared_preferences_linux
+linux/flutter/ephemeral/.plugin_symlinks/url_launcher_linux
+linux/flutter/ephemeral/.plugin_symlinks/smart_auth
+macos/Flutter/ephemeral/Flutter-Generated.xcconfig
+macos/Flutter/ephemeral/flutter_export_environment.sh
+.flutter-plugins
+.flutter-plugins-dependencies
