@@ -4,7 +4,7 @@ version: 0.0.48
 homepage: "https://github.com/amwal-pay/amwal_pay_sdk"
 
 environment:
-  sdk: '>=2.19.6 <3.0.0'
+  sdk: ">=2.18.0 <3.19.2"
   flutter: ">=1.17.0"
 
 dependencies:
