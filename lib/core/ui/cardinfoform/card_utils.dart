@@ -6,7 +6,7 @@ import 'card_type.dart';
 class CardUtils {
   static String? validateCardNum(String? input, BuildContext context) {
     if (input == null || input.isEmpty) {
-      return "required_field".translate(context);
+      return "card_number_hint".translate(context);
     }
     input = getCleanedNumber(input);
 

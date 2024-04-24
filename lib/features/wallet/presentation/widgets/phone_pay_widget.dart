@@ -3,7 +3,6 @@ import 'package:amwal_pay_sdk/core/ui/inputfields/phone_input_field.dart';
 import 'package:amwal_pay_sdk/features/wallet/cubit/sale_by_wallet_cubit.dart';
 import 'package:amwal_pay_sdk/features/wallet/dependency/injector.dart';
 import 'package:amwal_pay_sdk/features/wallet/state/sale_by_wallet_state.dart';
-
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

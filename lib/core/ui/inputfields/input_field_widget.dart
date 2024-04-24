@@ -27,8 +27,10 @@ class InputFieldWidget extends StatefulWidget {
     this.readOnly = false,
     this.initialValue,
     this.focusNode,
+    this.hint = 'required_field',
   }) : super(key: key);
 
+  final String hint;
   final String widgetTitle;
   final String widgetHint;
   final String? widgetTitleIcon;
@@ -137,7 +139,7 @@ class _InputFieldWidgetState extends State<InputFieldWidget> {
             validator: FormBuilderValidators.compose([
               if (widget.isRequired)
                 FormBuilderValidators.required(
-                    errorText: 'required_field'.translate(context)),
+                    errorText: widget.hint.translate(context)),
               if (widget.isEmail)
                 FormBuilderValidators.email(
                     errorText: 'invalid_mail'.translate(context)),
