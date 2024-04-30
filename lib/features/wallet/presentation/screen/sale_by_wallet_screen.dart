@@ -183,7 +183,11 @@ class _SaleByWalletScreenState extends State<SaleByWalletScreen> {
             const Expanded(
               child: SizedBox(),
             ),
-            const AcceptedPaymentMethodsWidget(),
+            const AcceptedPaymentMethodsWidget(
+              showMaster: false,
+              showVisa: false,
+              showExpress: false,
+            ),
           ],
         ),
       ),
