@@ -1,7 +1,6 @@
 import 'package:amwal_pay_sdk/core/merchant_store/merchant_store.dart';
 import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
-
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +19,7 @@ class SaleCardFeatureCommonWidgets {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(18.0),
+        padding: const EdgeInsets.all(12.0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -46,7 +45,7 @@ class SaleCardFeatureCommonWidgets {
                     merchantName ?? 'Merchant Name',
                     style: const TextStyle(
                       color: blackColor,
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   )
@@ -54,7 +53,7 @@ class SaleCardFeatureCommonWidgets {
               ),
             ),
             const SizedBox(
-              width: 10,
+              width: 8,
             ),
             Expanded(
               child: Column(
@@ -95,7 +94,7 @@ class SaleCardFeatureCommonWidgets {
                         paymentArgs.amount,
                         style: const TextStyle(
                           color: blackColor,
-                          fontSize: 20,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
