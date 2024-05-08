@@ -125,6 +125,13 @@ class _DemoScreenState extends State<DemoScreen> {
                           controller: _amountController,
                           isNumeric: true,
                           maxLength: 30,
+                          validator: (value) {
+                            if (double.parse(value!) < 1.0) {
+                              return 'Invalid Amount';
+                            } else {
+                              return null;
+                            }
+                          },
                         ),
                         TextForm(
                           title: "Currency",
@@ -135,17 +142,16 @@ class _DemoScreenState extends State<DemoScreen> {
                           controller: _secureHashController,
                         ),
                         const SizedBox(height: 8),
-
                         const Text("Select Environment"),
                         const SizedBox(height: 8),
-
                         Container(
                           decoration: BoxDecoration(
                             border: Border.all(
                               color: Colors.grey, // Specify the border color
                               width: 2.0, // Specify the border width
                             ),
-                            borderRadius: BorderRadius.circular(10), // Optional: Add rounded corners
+                            borderRadius: BorderRadius.circular(
+                                10), // Optional: Add rounded corners
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(4.0),
@@ -173,8 +179,12 @@ class _DemoScreenState extends State<DemoScreen> {
                                   NetworkConstants.baseUrlSdk = altBaseurl;
                                 });
                               },
-                              items: <String>['None', 'SIT', 'UAT', 'PROD']
-                                  .map<DropdownMenuItem<String>>((String value) {
+                              items: <String>[
+                                'None',
+                                'SIT',
+                                'UAT',
+                                'PROD'
+                              ].map<DropdownMenuItem<String>>((String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
                                   child: Text(value),
@@ -183,7 +193,6 @@ class _DemoScreenState extends State<DemoScreen> {
                             ),
                           ),
                         ),
-
                       ],
                     ),
                   ),

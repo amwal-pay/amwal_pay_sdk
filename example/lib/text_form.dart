@@ -7,8 +7,10 @@ class TextForm extends StatelessWidget {
   final TextEditingController controller;
   final bool isNumeric;
   final int? maxLength;
+  final String? Function(String?)? validator;
   const TextForm({
     Key? key,
+    this.validator,
     required this.title,
     this.initialValue,
     required this.controller,
@@ -32,6 +34,8 @@ class TextForm extends StatelessWidget {
           validator: (value) {
             if (value?.isEmpty ?? true) {
               return 'Required Field';
+            } else if (validator != null) {
+              return validator!(value);
             } else {
               return null;
             }

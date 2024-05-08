@@ -138,7 +138,7 @@
   "invalid_exp_date": "Invalid Expiration Date",
   "connection_time_out": "Connection Time Out",
   "count_down_failed": "Unable to Get transaction details we will notify you with updates",
-  "min_amount_hint": "minimum amount 0.1",
+  "min_amount_hint": "minimum amount 1.0",
   "card_number_hint": "Please Enter Card Number",
   "card_holder_hint": "Please Enter Card Holder Name",
   "expiry_month_hint": "Enter Month",

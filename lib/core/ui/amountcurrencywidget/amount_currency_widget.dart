@@ -2,10 +2,10 @@ import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
 import 'package:amwal_pay_sdk/core/ui/amountcurrencywidget/amount_currency_widget_cubit.dart';
 import 'package:amwal_pay_sdk/features/currency_field/presentation/currency_field.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 
 class AmountCurrencyWidget extends StatelessWidget {
   final AmountCurrencyWidgetCubit cubit;
@@ -46,7 +46,7 @@ class AmountCurrencyWidget extends StatelessWidget {
                     [
                       FormBuilderValidators.numeric(),
                       FormBuilderValidators.min(
-                        0.1,
+                        1.0,
                         errorText: "min_amount_hint".translate(context),
                       ),
                       FormBuilderValidators.maxLength(
