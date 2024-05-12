@@ -29,7 +29,7 @@ class AppAssets {
   static const visaLogo = 'lib/assets/images/visa_logo.png';
   static const qrScan = 'lib/assets/images/qr_scan.png';
   static const cvvIcon = 'lib/assets/svg/cvv_icon.svg';
-  static const contactLessIcon = 'lib/assets/svg/contactless_image.svg';
+  static const contactLessImageIcon = 'lib/assets/svg/contactless_image.svg';
   static const arrowUpIcon = 'lib/assets/svg/arrow_up_icon.svg';
   static const arrowDownIcon = 'lib/assets/svg/arrow_down_icon.svg';
   static const downArrowIcon = 'lib/assets/svg/down_arrow.svg';

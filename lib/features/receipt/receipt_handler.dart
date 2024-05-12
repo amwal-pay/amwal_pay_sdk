@@ -1,9 +1,6 @@
 import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
-import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction.dart';
 import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_details_settings.dart';
 import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_status_dialog.dart';
-import 'package:amwal_pay_sdk/features/card/data/models/response/purchase_response.dart';
-import 'package:amwal_pay_sdk/localization/app_localizations.dart';
 import 'package:amwal_pay_sdk/localization/app_localizations_setup.dart';
 import 'package:flutter/material.dart';
 

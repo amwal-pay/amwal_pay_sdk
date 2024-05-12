@@ -1,4 +1,5 @@
 import 'package:amwal_pay_sdk/features/card/presentation/app.dart';
+import 'package:amwal_pay_sdk/features/card/presentation/sale_by_card_contact_less_screen.dart';
 import 'package:amwal_pay_sdk/features/card/presentation/sale_by_card_manual_screen.dart';
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
 import 'package:amwal_pay_sdk/features/wallet/presentation/screen/sale_by_wallet_paying_options.dart';
@@ -64,6 +65,30 @@ class AmwalSdkNavigator {
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => SaleByCardManualScreen(
+          onPay: onPay,
+          locale: locale,
+          currency: arguments.currencyData!.name,
+          currencyId: arguments.currencyData!.idN,
+          terminalId: arguments.terminalId,
+          amount: arguments.amount,
+          merchantId: arguments.merchantId,
+          transactionId: arguments.transactionId,
+        ),
+        settings: settings,
+      ),
+    );
+  }
+
+  Future<void> toCardContactLessOptionScreen(
+    RouteSettings settings,
+    BuildContext context,
+    Locale locale,
+    OnPayCallback onPay,
+  ) async {
+    final arguments = settings.arguments as PaymentArguments;
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => SaleByCardContactLessScreen(
           onPay: onPay,
           locale: locale,
           currency: arguments.currencyData!.name,

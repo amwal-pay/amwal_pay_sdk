@@ -35,6 +35,10 @@ class AppMainButton extends StatelessWidget {
         icon: SvgPicture.asset(
           buttonIcon,
           package: 'amwal_pay_sdk',
+          fit: BoxFit.contain,
+          height: 30,
+          width: 30,
+          color: whiteColor,
         ),
         label: Text(
           buttonText,

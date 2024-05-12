@@ -39,6 +39,7 @@ dependencies:
   jose: ^0.3.4
   package_info_plus: ^4.1.0
   keyboard_actions: ^4.2.0
+  nfc_manager: ^3.4.0
 
 
 dev_dependencies:

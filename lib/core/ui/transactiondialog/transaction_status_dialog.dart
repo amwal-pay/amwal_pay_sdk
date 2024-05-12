@@ -5,13 +5,13 @@ import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction.dart';
 import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_detail_widget.dart';
 import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_details_settings.dart';
 import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_dialog_action_buttons.dart';
-import 'package:amwal_pay_sdk/localization/app_localizations_delegate.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
+
 final GlobalKey<State> dialogKey = GlobalKey<State>();
 
 class TransactionStatusDialog extends StatefulWidget {
@@ -222,7 +222,6 @@ class _TransactionStatusDialogState extends State<TransactionStatusDialog> {
 
   @override
   Widget build(BuildContext context) {
-    print('sdk settings');
     return Screenshot(
       controller: _screenshotController,
       child: dialog(forShare: _isSharing),

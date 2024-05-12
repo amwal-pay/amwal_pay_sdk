@@ -30,21 +30,25 @@ class TransactionDetailWidget extends StatelessWidget {
               Expanded(
                 child: Text(
                   title.translate(context),
-                  style: titleStyle??const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: lightGreyColor,
-                  ),
+                  style: titleStyle ??
+                      const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: lightGreyColor,
+                      ),
                 ),
               ),
               Expanded(
-                child: AutoSizeText(
-                  value,
-                  maxLines: 1,
-                  style: valueStyle?? const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: darkBlue,
+                child: FittedBox(
+                  child: AutoSizeText(
+                    value,
+                    maxLines: 1,
+                    style: valueStyle ??
+                        const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: darkBlue,
+                        ),
                   ),
                 ),
               ),
