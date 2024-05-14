@@ -93,6 +93,8 @@ class CardTransactionManager {
         cubit: cubit,
         originTransactionId: purchaseData.transactionId,
       );
+      print('tomato');
+      print(purchaseDataOrNull?.message);
       if (purchaseDataOrNull != null && context.mounted) {
         if (NetworkConstants.isSdkInApp) {
           cubit.showLoader();

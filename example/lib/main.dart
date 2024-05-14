@@ -1,6 +1,8 @@
 import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
 import 'package:amwal_pay_sdk/amwal_sdk_settings/amwal_sdk_settings.dart';
 import 'package:amwal_pay_sdk/core/networking/constants.dart';
+import 'package:example/currency_model.dart';
+import 'package:example/drop_down_form.dart';
 import 'package:example/text_form.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
@@ -13,16 +15,19 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Amwal pay Demo',
-      navigatorObservers: [
-        AmwalSdkNavigator.amwalNavigatorObserver,
-      ],
-      theme: ThemeData(
-        useMaterial3: false,
-        primarySwatch: Colors.blue,
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
+      child: MaterialApp(
+        title: 'Amwal pay Demo',
+        navigatorObservers: [
+          AmwalSdkNavigator.amwalNavigatorObserver,
+        ],
+        theme: ThemeData(
+          useMaterial3: false,
+          primarySwatch: Colors.blue,
+        ),
+        home: const DemoScreen(),
       ),
-      home: const DemoScreen(),
     );
   }
 }
@@ -124,6 +129,7 @@ class _DemoScreenState extends State<DemoScreen> {
                           title: "Amount",
                           controller: _amountController,
                           isNumeric: true,
+                          maxAmount: 1000000,
                           maxLength: 30,
                           validator: (value) {
                             if (double.parse(value!) < 1.0) {
@@ -133,9 +139,18 @@ class _DemoScreenState extends State<DemoScreen> {
                             }
                           },
                         ),
-                        TextForm(
-                          title: "Currency",
-                          controller: _currencyController,
+                        DropdownForm<CurrencyModel>(
+                          title: 'Currency',
+                          options: const [
+                            CurrencyModel(name: 'OMR', id: '512'),
+                          ],
+                          valueMapper: (currency) => currency.id,
+                          nameMapper: (currency) => currency.name,
+                          initialValue:
+                              const CurrencyModel(name: 'OMR', id: '512'),
+                          onChanged: (currencyId) {
+                            _currencyController.text = currencyId ?? '';
+                          },
                         ),
                         TextForm(
                           title: "Secure Hash",

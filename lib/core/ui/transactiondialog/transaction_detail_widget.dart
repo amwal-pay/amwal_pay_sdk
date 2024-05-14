@@ -1,6 +1,5 @@
 import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 class TransactionDetailWidget extends StatelessWidget {
@@ -28,6 +27,7 @@ class TransactionDetailWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
+                flex: 1,
                 child: Text(
                   title.translate(context),
                   style: titleStyle ??
@@ -39,17 +39,16 @@ class TransactionDetailWidget extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: FittedBox(
-                  child: AutoSizeText(
-                    value,
-                    maxLines: 1,
-                    style: valueStyle ??
-                        const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: darkBlue,
-                        ),
-                  ),
+                flex: 2,
+                child: Text(
+                  value,
+                  maxLines: 1,
+                  style: valueStyle ??
+                      const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: darkBlue,
+                      ),
                 ),
               ),
             ],

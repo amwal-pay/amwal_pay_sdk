@@ -1,4 +1,3 @@
-
 import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
 import 'package:amwal_pay_sdk/core/base_state/base_cubit_state.dart';
 import 'package:amwal_pay_sdk/core/ui/error_dialog.dart';
@@ -27,19 +26,27 @@ abstract class ICubit<G> extends Cubit<ICubitState<G>> {
       loading: () {
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
           showDialog(
-            context: AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context,
+            context:
+                AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context,
             builder: (_) => const LoadingDialog(),
           );
         });
       },
       error: (err, msgList) {
         _dismissDialog(change);
+        String errorMessage = '';
+        if (msgList?.isEmpty ?? true) {
+          errorMessage = err ?? 'Something Went Wrong';
+        } else {
+          errorMessage = (msgList?.join(',') ?? err.toString());
+        }
         if (AmwalSdkNavigator.amwalNavigatorObserver.navigator != null) {
           return showDialog(
-            context: AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context,
+            context:
+                AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context,
             builder: (_) => ErrorDialog(
               title: err ?? '',
-              message: (msgList?.join(',') ?? err.toString()),
+              message: errorMessage,
               resetState: _resetState,
             ),
           );

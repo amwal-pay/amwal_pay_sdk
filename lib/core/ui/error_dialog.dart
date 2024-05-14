@@ -15,9 +15,10 @@ class ErrorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('failed'.translate(context)),
+      title: Center(child: Text('failed'.translate(context))),
       content: Text(
         message,
+        textAlign: TextAlign.center,
         style: const TextStyle(color: Colors.black),
       ),
       actions: [

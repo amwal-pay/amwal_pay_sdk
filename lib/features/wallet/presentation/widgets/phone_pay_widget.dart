@@ -20,15 +20,17 @@ class PhonePayWidget extends StatefulWidget {
 
 class _PhonePayWidgetState extends State<PhonePayWidget> {
   late FocusNode _focusNode1;
+  late SaleByWalletCubit walletCubit;
   @override
   void initState() {
     super.initState();
     _focusNode1 = FocusNode();
+    walletCubit = WalletInjector.instance.get<SaleByWalletCubit>();
+    walletCubit.reset();
   }
 
   @override
   Widget build(BuildContext context) {
-    final walletCubit = WalletInjector.instance.get<SaleByWalletCubit>();
     final size = MediaQuery.sizeOf(context);
     return Container(
       constraints: BoxConstraints.loose(Size(

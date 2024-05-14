@@ -6,6 +6,7 @@ class TextForm extends StatelessWidget {
   final String? initialValue;
   final TextEditingController controller;
   final bool isNumeric;
+  final int? maxAmount;
   final int? maxLength;
   final String? Function(String?)? validator;
   const TextForm({
@@ -16,6 +17,7 @@ class TextForm extends StatelessWidget {
     required this.controller,
     this.isNumeric = false,
     this.maxLength,
+    this.maxAmount,
   }) : super(key: key);
 
   @override
@@ -27,6 +29,7 @@ class TextForm extends StatelessWidget {
         Text(title),
         const SizedBox(height: 8),
         TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           initialValue: initialValue,
           controller: controller,
           maxLength: maxLength,
@@ -42,6 +45,9 @@ class TextForm extends StatelessWidget {
           },
           inputFormatters: [
             if (isNumeric) FilteringTextInputFormatter.digitsOnly,
+            if (isNumeric) FilteringTextInputFormatter.allow(RegExp(r'^\d*$')),
+            if (isNumeric && maxAmount != null)
+              _InputAmountFormatter(maxAmount!),
           ],
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -49,5 +55,26 @@ class TextForm extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class _InputAmountFormatter extends TextInputFormatter {
+  final int maxAmount;
+  const _InputAmountFormatter(this.maxAmount);
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final newValueOrNull = double.tryParse(newValue.text) ?? 1;
+    if (newValueOrNull > maxAmount) {
+      return TextEditingValue(
+        text: maxAmount.toString(),
+      );
+    } else {
+      return TextEditingValue(
+        text: newValue.text.replaceAll(RegExp(r'^0+(?=.)'), ''),
+      );
+    }
   }
 }
