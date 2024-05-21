@@ -216,28 +216,6 @@ class TransactionDialogActionButtonsForTransaction
                         ),
                       ),
                       onPressed: () {
-                        // final isEnglish = AppLocalizations.of(context)?.isEnLocale ?? true;
-                        // String content = '';
-                        // if(isEnglish){
-                        //   content = '${'capture_hint_txt'.translate(context, globalTranslator:globalTranslator,)}${(currency??'').translate(context, globalTranslator:globalTranslator,)} $amount';
-                        // }else{
-                        //   content = '${'capture_hint_txt'.translate(context, globalTranslator:globalTranslator,)}$amount ${(currency??'').translate(context, globalTranslator:globalTranslator,)}';
-                        //
-                        // }
-                        // final confirmed = await showDialog(
-                        //   context: context,
-                        //   builder: (context) => AppAlertDialog(
-                        //     title: 'capture',
-                        //     content:content ,
-                        //     actionButtonText: 'confirm',
-                        //     actionButtonColor: primaryColor,
-                        //     globalTranslator: globalTranslator,
-                        //     actionButtonFn: () {
-                        //       Navigator.of(context).pop(true);
-                        //     },
-                        //   ),
-                        // );
-                        // if(confirmed == true) {
                         onCapture?.call();
                         // }
                       },
