@@ -151,22 +151,32 @@ class PurchaseRequest {
         'transactionId': transactionId,
       };
 
-  Map<String, dynamic> mapToPurchaseStepOneData() => {
-        'pan': pan,
-        'amount': amount,
-        'terminalId': terminalId,
-        'merchantId': merchantId,
-        'cardHolderName': cardHolderName,
-        'cvV2': cvV2,
-        'dateExpiration': dateExpiration,
-        // 'requestDateTime': requestDateTime,
-        'orderCustomerEmail': orderCustomerEmail,
-        'clientMail': clientMail,
-        'currencyCode': currencyCode,
-        'transactionId': transactionId,
-      };
+  Map<String, dynamic> mapToPurchaseStepOneData() {
+    Map<String, dynamic> data = {
+      'pan': pan,
+      'amount': amount,
+      'terminalId': terminalId,
+      'merchantId': merchantId,
+      'cardHolderName': cardHolderName,
+      'cvV2': cvV2,
+      'dateExpiration': dateExpiration,
+      'currencyCode': currencyCode,
+      'transactionId': transactionId,
+    };
 
-  Map<String, dynamic> mapToPurchaseStepTwoData() => {
+    if (orderCustomerEmail.isNotEmpty) {
+      data['orderCustomerEmail'] = orderCustomerEmail;
+    }
+
+    if (clientMail.isNotEmpty) {
+      data['clientMail'] = clientMail;
+    }
+
+    return data;
+  }
+
+  Map<String, dynamic> mapToPurchaseStepTwoData() {
+    Map<String, dynamic> data = {
         'pan': pan,
         'otp': otp,
         'amount': amount,
@@ -175,14 +185,22 @@ class PurchaseRequest {
         'cardHolderName': cardHolderName,
         'cvV2': cvV2,
         'dateExpiration': dateExpiration,
-        // 'requestDateTime': requestDateTime,
-        'orderCustomerEmail': orderCustomerEmail,
-        'clientMail': clientMail,
+
         'currencyCode': currencyCode,
         'transactionId': transactionId,
         'transactionIdentifierType': transactionIdentifierType,
         'transactionIdentifierValue': transactionIdentifierValue,
       };
+
+    if (orderCustomerEmail.isNotEmpty) {
+      data['orderCustomerEmail'] = orderCustomerEmail;
+    }
+
+    if (clientMail.isNotEmpty) {
+      data['clientMail'] = clientMail;
+    }
+    return data;
+  }
 
   Map<String, dynamic> toMap() {
     return {

@@ -2,6 +2,7 @@ import 'package:amwal_pay_sdk/core/merchant_store/merchant_store.dart';
 import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 class SaleCardFeatureCommonWidgets {
@@ -41,8 +42,9 @@ class SaleCardFeatureCommonWidgets {
                   const SizedBox(
                     height: 6,
                   ),
-                  Text(
+                  AutoSizeText(
                     merchantName ?? 'Merchant Name',
+                    maxLines: 1,
                     style: const TextStyle(
                       color: blackColor,
                       fontSize: 18,

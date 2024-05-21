@@ -79,8 +79,8 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
       cvV2: cvV2!,
       dateExpiration: '$expirationDateMonth$expirationDateYear',
       // requestDateTime: DateFormat('yyyy-MM-ddTHH:mm:ss').format(DateTime.now()),
-      orderCustomerEmail: email!,
-      clientMail: email!,
+      orderCustomerEmail: email ?? "",
+      clientMail: email ?? "",
       currencyCode: currencyId.toString(),
     );
     final networkState = await _purchaseUseCase.invoke(purchaseRequest);
