@@ -113,6 +113,7 @@
   "capture_hint_txt": "هل أنت متأكد من التقاط الصفقة؟",
   "pay": "ادفع",
   "verify": "التحقق",
+  "InvalidAliasFormat": "الاسم المستعار غير صحيح",
   "invalid_number":"رقم هاتف غير صحيح",
   "alias_name": "الاسم المستعار",
   "single_usage": "إستخدام مرة",

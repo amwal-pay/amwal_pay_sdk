@@ -109,6 +109,7 @@
   "verify": "Verify",
   "invalid_number":"Invalid Phone Number",
   "alias_name": "Alias Name",
+  "InvalidAliasFormat": " Alias name not valid",
   "authorized_label":  "Authorized",
   "refund_label":  "Refund",
   "failed": "Failed",

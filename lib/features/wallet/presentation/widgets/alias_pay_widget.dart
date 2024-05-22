@@ -7,6 +7,7 @@ import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 
 class AliasPayWidget extends StatelessWidget {
   final String Function(String)? globalTranslator;
@@ -53,8 +54,17 @@ class AliasPayWidget extends StatelessWidget {
                   onChange: (value) {
                     walletCubit.aliasName = value;
                   },
-                  maxLength: 40,
+                  maxLength: 35,
                   minLength: 3,
+                  validators: [
+                    FormBuilderValidators.match(
+                      r'^[a-zA-Z]+@[a-zA-Z]{3,4}$',
+                      errorText: 'InvalidAliasFormat'.translate(
+                        context,
+                        globalTranslator: globalTranslator,
+                      ),
+                    ),
+                  ],
                 );
               }),
           BlocBuilder<SaleByWalletCubit, SaleByWalletState>(

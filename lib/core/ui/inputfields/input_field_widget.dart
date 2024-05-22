@@ -6,8 +6,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
 
-// import 'package:get/get.dart';
-
 class InputFieldWidget extends StatefulWidget {
   const InputFieldWidget({
     Key? key,
@@ -28,6 +26,7 @@ class InputFieldWidget extends StatefulWidget {
     this.initialValue,
     this.focusNode,
     this.hint = 'required_field',
+    this.validators = const [],
   }) : super(key: key);
 
   final String hint;
@@ -47,6 +46,7 @@ class InputFieldWidget extends StatefulWidget {
   final InputDecoration? decoration;
   final String? initialValue;
   final FocusNode? focusNode;
+  final List<FormFieldValidator<String>> validators;
 
   @override
   State<InputFieldWidget> createState() => _InputFieldWidgetState();
@@ -98,6 +98,22 @@ class _InputFieldWidgetState extends State<InputFieldWidget> {
         borderRadius: BorderRadius.circular(8),
       ),
     );
+
+    // Combine default validators with the ones passed via constructor
+    final validators = [
+      if (widget.isRequired)
+        FormBuilderValidators.required(errorText: widget.hint.translate(context)),
+      if (widget.isEmail)
+        FormBuilderValidators.email(errorText: 'invalid_mail'.translate(context)),
+      if (widget.minLength != 0)
+        FormBuilderValidators.minLength(widget.minLength, errorText: 'invalid_input_field'.translate(context)),
+      if (widget.isMonth)
+        FormBuilderValidators.max(12, errorText: 'invalid-month'.translate(context)),
+      if (widget.isYear)
+        FormBuilderValidators.min(int.parse(DateFormat('yy').format(DateTime.now())), errorText: 'invalid-month'.translate(context)),
+      ...widget.validators
+    ];
+
     return SizedBox(
       width: mediaQuerySize.width * 0.9,
       child: Column(
@@ -136,24 +152,7 @@ class _InputFieldWidgetState extends State<InputFieldWidget> {
             readOnly: widget.readOnly,
             controller: _textEditingController,
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            validator: FormBuilderValidators.compose([
-              if (widget.isRequired)
-                FormBuilderValidators.required(
-                    errorText: widget.hint.translate(context)),
-              if (widget.isEmail)
-                FormBuilderValidators.email(
-                    errorText: 'invalid_mail'.translate(context)),
-              if (widget.minLength != 0)
-                FormBuilderValidators.minLength(widget.minLength,
-                    errorText: 'invalid_input_field'.translate(context)),
-              if (widget.isMonth)
-                FormBuilderValidators.max(12,
-                    errorText: 'invalid-month'.translate(context)),
-              if (widget.isYear)
-                FormBuilderValidators.min(
-                    int.parse(DateFormat('yy').format(DateTime.now())),
-                    errorText: 'invalid-month'.translate(context)),
-            ]),
+            validator: FormBuilderValidators.compose(validators),
             maxLines: 1,
             decoration: inputDecoration,
             textInputAction: TextInputAction.next,
