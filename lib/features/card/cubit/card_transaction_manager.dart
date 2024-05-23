@@ -1,4 +1,5 @@
 import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
+import 'package:amwal_pay_sdk/amwal_sdk_settings/amwal_sdk_setting_container.dart';
 import 'package:amwal_pay_sdk/core/networking/constants.dart';
 import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction.dart';
 import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_details_settings.dart';
@@ -152,6 +153,7 @@ class CardTransactionManager {
     BuildContext context,
   ) {
     return TransactionDetailsSettings(
+      locale: AmwalSdkSettingContainer.locale,
       amount: oneTransaction.amount,
       transactionDisplayName: oneTransaction.transactionTypeDisplayName,
       isSuccess: oneTransaction.responseCodeName == 'Approved',
