@@ -28,16 +28,30 @@ class AmwalPayScreen extends StatelessWidget {
           ),
           title: const Text('Amwal Pay'),
           bottom: TabBar(tabs: [
-            Tab(
-              text: 'wallet_label'.translate(context),
-            ),
+
             Tab(
               text: 'card'.translate(context),
+            ),
+            Tab(
+              text: 'wallet_label'.translate(context),
             ),
           ]),
         ),
         body: TabBarView(
           children: [
+
+            SaleByCardManualScreen(
+              onPay: arguments.onPay,
+              locale: arguments.locale,
+              amount: arguments.amount,
+              terminalId: arguments.terminalId,
+              currency: arguments.currency,
+              currencyId: arguments.currencyId,
+              merchantId: arguments.merchantId,
+              transactionId: arguments.transactionId,
+              showAppBar: false,
+              translator: (txt) => txt.translate(context),
+            ),
             SaleByWalletPayingOptions(
               getTransactionFunction: arguments.getTransactionFunction,
               onPay: arguments.onPay,
@@ -51,18 +65,6 @@ class AmwalPayScreen extends StatelessWidget {
               showAppBar: false,
               translator: (txt) => txt.translate(context),
               countDownInSeconds: 30,
-            ),
-            SaleByCardManualScreen(
-              onPay: arguments.onPay,
-              locale: arguments.locale,
-              amount: arguments.amount,
-              terminalId: arguments.terminalId,
-              currency: arguments.currency,
-              currencyId: arguments.currencyId,
-              merchantId: arguments.merchantId,
-              transactionId: arguments.transactionId,
-              showAppBar: false,
-              translator: (txt) => txt.translate(context),
             ),
           ],
         ),

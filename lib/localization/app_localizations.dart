@@ -8,7 +8,7 @@ import 'app_localizations_delegate.dart';
 class AppLocalizations {
   final Locale locale;
 
-  Map<String, String> _localizedStrings = {};
+  Map<String, String> localizedStrings = {};
 
   AppLocalizations(this.locale);
 
@@ -25,12 +25,12 @@ class AppLocalizations {
     );
     Map<String, dynamic> jsonMap = json.decode(jsonString);
 
-    _localizedStrings = jsonMap.map<String, String>((key, value) {
+    localizedStrings = jsonMap.map<String, String>((key, value) {
       return MapEntry(key, value.toString());
     });
   }
 
-  String? translate(String key) => _localizedStrings[key];
+  String? translate(String key) => localizedStrings[key];
 
   bool get isEnLocale => locale.languageCode == 'en';
 }

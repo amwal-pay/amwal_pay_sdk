@@ -28,7 +28,7 @@ abstract class IAmwalSdkSettings {
     required this.currency,
     required this.amount,
     required this.onPay,
-    this.countDownInSeconds = 30,
+    this.countDownInSeconds = 90,
     this.getTransactionFunction,
     this.onError,
     this.onCountComplete,
@@ -49,7 +49,7 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
     required super.merchantName,
     required super.onPay,
     super.getTransactionFunction,
-    super.countDownInSeconds = 30,
+    super.countDownInSeconds = 90,
     super.onCountComplete,
     super.locale,
     super.isMocked,
@@ -79,6 +79,6 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
     super.isMocked,
     super.onError,
     super.onTokenExpired,
-    super.countDownInSeconds = 30,
+    super.countDownInSeconds = 90,
   }) : super(terminalIds: [terminalId], onPay: (_, [__]) {});
 }
