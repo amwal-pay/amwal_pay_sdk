@@ -153,7 +153,7 @@ class _DemoScreenState extends State<DemoScreen> {
                           },
                         ),
                         TextForm(
-                          title: "Secure Hash",
+                          title: "Secret Key",
                           controller: _secureHashController,
                         ),
                         const SizedBox(height: 8),
