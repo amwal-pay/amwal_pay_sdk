@@ -23,7 +23,7 @@ class TransactionRepositoryImpl extends TransactionRepository {
 
 
   @override
-  Future<NetworkState<MerchantNameResponse>> getMerchantName(
+  Future<NetworkState<MerchantDataResponse>> getMerchantData(
       Map<String, dynamic> data,
       ) async {
 
@@ -31,7 +31,7 @@ class TransactionRepositoryImpl extends TransactionRepository {
 
     return await _networkService.invokeRequest(
       endpoint: NetworkConstants.getMerchantNameEndpoint,
-      converter: MerchantNameResponse.fromJson,
+      converter: MerchantDataResponse.fromJson,
       method: HttpMethod.post,
       data: data2,
     );

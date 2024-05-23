@@ -58,10 +58,10 @@ class _DemoScreenState extends State<DemoScreen> {
 
     /// card terminal => 6942344
     /// wallet terminal => 6834180
-    _terminalController = TextEditingController(text: '12895');
-    _merchantIdController = TextEditingController(text: '17023');
+    _terminalController = TextEditingController(text: '221143');
+    _merchantIdController = TextEditingController(text: '7921');
     _secureHashController = TextEditingController(
-      text: '15FBFB9555CCAF369E01C3232E836B57B0BAF7C66DFBC1CADFC9BA3DC31E2F20',
+      text: 'A536D5B3638FE9690E329BC1FF7154FD627FF9A0EFC333ED2B1FA829EA541662',
     );
     _amountController = TextEditingController(text: '50');
     _currencyController = TextEditingController(text: 'OMR');
