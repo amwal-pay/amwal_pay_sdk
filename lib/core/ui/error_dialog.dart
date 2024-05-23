@@ -1,6 +1,8 @@
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:flutter/material.dart';
 
+import '../../navigator/sdk_navigator.dart';
+
 class ErrorDialog extends StatelessWidget {
   final String title;
   final String message;
@@ -15,7 +17,8 @@ class ErrorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Center(child: Text("failed".translate(context))),
+      title: Center(child: Text("Failed".translate(
+          AmwalSdkNavigator.amwalNavigatorObserver.navigator?.context ?? context))),
       content: Text(
         message,
         textAlign: TextAlign.center,
@@ -24,7 +27,8 @@ class ErrorDialog extends StatelessWidget {
       actions: [
         ElevatedButton(
           onPressed: resetState,
-          child:  Text("close".translate(context)),
+          child:  Text("Close".translate(
+              AmwalSdkNavigator.amwalNavigatorObserver.navigator?.context ?? context)),
         ),
       ],
     );

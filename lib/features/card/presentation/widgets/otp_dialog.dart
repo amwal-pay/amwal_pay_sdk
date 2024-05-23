@@ -55,9 +55,12 @@ class _FourBoxOTPEntryDialogState extends State<OTPEntryDialog> {
             ],
           ),
           const SizedBox(height: 32),
-          Pinput(
-            key: const Key('saleByCardPinPut'),
-            controller: _pinPutController,
+          Directionality(
+            textDirection: TextDirection.ltr,
+            child: Pinput(
+              key: const Key('saleByCardPinPut'),
+              controller: _pinPutController,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),

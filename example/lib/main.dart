@@ -113,6 +113,7 @@ class _DemoScreenState extends State<DemoScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+
                         TextForm(
                           title: "Merchant Id",
                           controller: _merchantIdController,
