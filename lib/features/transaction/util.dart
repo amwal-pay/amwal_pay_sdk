@@ -4,6 +4,7 @@ import 'package:amwal_pay_sdk/localization/app_localizations.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 
 extension OneTransactionExtension on OneTransaction {
   bool get isWallet =>
@@ -40,14 +41,10 @@ extension OneTransactionExtension on OneTransaction {
 
 extension DateTimeFormatX on String {
   String formatDate(BuildContext context) {
-    final locale = AppLocalizations.of(context)?.locale;
-    final date = DateTime.parse(this).toLocal();
-    final formattedDateString = DateFormat(
-            locale?.languageCode == 'en'
-                ? 'dd/MM/yyyy hh:mm a'
-                : 'yyyy/MM/dd hh:mm a',
-            locale?.languageCode).add_Hm()
-        .format(date);
-    return formattedDateString;
+
+    DateTime date = DateTime.parse(this).toUtc();
+    DateFormat formatter = DateFormat('dd/MM/yyyy hh:mm a', 'en-GB');
+
+    return formatter.format(date);
   }
 }
