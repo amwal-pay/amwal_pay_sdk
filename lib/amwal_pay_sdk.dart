@@ -3,6 +3,7 @@ library amwal_pay_sdk;
 import 'dart:io';
 
 import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
+import 'package:amwal_pay_sdk/amwal_sdk_settings/amwal_sdk_setting_container.dart';
 import 'package:amwal_pay_sdk/amwal_sdk_settings/amwal_sdk_settings.dart';
 import 'package:amwal_pay_sdk/core/networking/constants.dart';
 import 'package:amwal_pay_sdk/core/networking/network_service.dart';
@@ -31,6 +32,7 @@ class AmwalPaySdk {
   Future<void> initSdk({
     required AmwalSdkSettings settings,
   }) async {
+    AmwalSdkSettingContainer.locale = settings.locale;
     NetworkConstants.isSdkInApp = true;
     await SdkBuilder.instance.initCacheStorage();
     await CacheStorageHandler.instance.write(
@@ -70,13 +72,12 @@ class AmwalPaySdk {
     var map = {
       "merchantId": settings.merchantId,
       "terminalId": settings.terminalId,
-
     };
 
     transactionRepo.getMerchantName(map).then((value) {
       value.when(
         success: (data) async {
-         await CacheStorageHandler.instance.write(
+          await CacheStorageHandler.instance.write(
             CacheKeys.merchantName,
             data.data,
           );

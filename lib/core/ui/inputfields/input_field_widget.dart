@@ -102,15 +102,21 @@ class _InputFieldWidgetState extends State<InputFieldWidget> {
     // Combine default validators with the ones passed via constructor
     final validators = [
       if (widget.isRequired)
-        FormBuilderValidators.required(errorText: widget.hint.translate(context)),
+        FormBuilderValidators.required(
+            errorText: widget.hint.translate(context)),
       if (widget.isEmail)
-        FormBuilderValidators.email(errorText: 'invalid_mail'.translate(context)),
+        FormBuilderValidators.email(
+            errorText: 'invalid_mail'.translate(context)),
       if (widget.minLength != 0)
-        FormBuilderValidators.minLength(widget.minLength, errorText: 'invalid_input_field'.translate(context)),
+        FormBuilderValidators.minLength(widget.minLength,
+            errorText: 'invalid_input_field'.translate(context)),
       if (widget.isMonth)
-        FormBuilderValidators.max(12, errorText: 'invalid-month'.translate(context)),
+        FormBuilderValidators.max(12,
+            errorText: 'invalid-month'.translate(context)),
       if (widget.isYear)
-        FormBuilderValidators.min(int.parse(DateFormat('yy').format(DateTime.now())), errorText: 'invalid-month'.translate(context)),
+        FormBuilderValidators.min(
+            int.parse(DateFormat('yy').format(DateTime.now())),
+            errorText: 'invalid-month'.translate(context)),
       ...widget.validators
     ];
 

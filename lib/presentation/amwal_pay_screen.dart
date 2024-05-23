@@ -28,7 +28,6 @@ class AmwalPayScreen extends StatelessWidget {
           ),
           title: const Text('Amwal Pay'),
           bottom: TabBar(tabs: [
-
             Tab(
               text: 'card'.translate(context),
             ),
@@ -39,7 +38,6 @@ class AmwalPayScreen extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-
             SaleByCardManualScreen(
               onPay: arguments.onPay,
               locale: arguments.locale,

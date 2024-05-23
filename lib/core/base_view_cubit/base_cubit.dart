@@ -1,7 +1,9 @@
 import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
+import 'package:amwal_pay_sdk/amwal_sdk_settings/amwal_sdk_setting_container.dart';
 import 'package:amwal_pay_sdk/core/base_state/base_cubit_state.dart';
 import 'package:amwal_pay_sdk/core/ui/error_dialog.dart';
 import 'package:amwal_pay_sdk/core/ui/loading_dialog.dart';
+import 'package:amwal_pay_sdk/localization/app_localizations_setup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -44,10 +46,16 @@ abstract class ICubit<G> extends Cubit<ICubitState<G>> {
           return showDialog(
             context:
                 AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context,
-            builder: (_) => ErrorDialog(
-              title: err ?? '',
-              message: errorMessage,
-              resetState: _resetState,
+            builder: (_) => Localizations(
+              locale: AmwalSdkSettingContainer.locale,
+              delegates: const [
+                ...AppLocalizationsSetup.localizationsDelegates
+              ],
+              child: ErrorDialog(
+                title: err ?? '',
+                message: errorMessage,
+                resetState: _resetState,
+              ),
             ),
           );
         }

@@ -7,9 +7,9 @@ extension LocalUtils on String {
     BuildContext context, {
     String Function(String p1)? globalTranslator,
   }) {
-    if(globalTranslator!=null){
+    if (globalTranslator != null) {
       return globalTranslator(this);
-    }else{
+    } else {
       return AppLocalizations.of(context)?.translate(this) ?? this;
     }
   }

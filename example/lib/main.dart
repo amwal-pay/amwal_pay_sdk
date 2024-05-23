@@ -45,6 +45,7 @@ class _DemoScreenState extends State<DemoScreen> {
   late TextEditingController _merchantIdController;
   late TextEditingController _terminalController;
   late TextEditingController _secureHashController;
+  late TextEditingController _languageController;
 
   late GlobalKey<FormState> _formKey;
   late String altBaseurl;
@@ -64,6 +65,7 @@ class _DemoScreenState extends State<DemoScreen> {
     );
     _amountController = TextEditingController(text: '50');
     _currencyController = TextEditingController(text: 'OMR');
+    _languageController = TextEditingController(text: 'en');
 
     altBaseurl = NetworkConstants.baseUrlSdk;
     dropdownValue = _getDropdownValueFromAltBaseUrl(altBaseurl);
@@ -83,6 +85,7 @@ class _DemoScreenState extends State<DemoScreen> {
 
   @override
   void dispose() {
+    _languageController.dispose();
     _terminalController.dispose();
     _merchantIdController.dispose();
     _secureHashController.dispose();
@@ -113,7 +116,6 @@ class _DemoScreenState extends State<DemoScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-
                         TextForm(
                           title: "Merchant Id",
                           controller: _merchantIdController,
@@ -151,6 +153,19 @@ class _DemoScreenState extends State<DemoScreen> {
                               const CurrencyModel(name: 'OMR', id: '512'),
                           onChanged: (currencyId) {
                             _currencyController.text = currencyId ?? '';
+                          },
+                        ),
+                        DropdownForm<String>(
+                          title: 'Language',
+                          options: const [
+                            'ar',
+                            'en',
+                          ],
+                          valueMapper: (lang) => lang,
+                          nameMapper: (lang) => lang,
+                          initialValue: 'en',
+                          onChanged: (currencyId) {
+                            _languageController.text = currencyId ?? '';
                           },
                         ),
                         TextForm(
@@ -226,6 +241,7 @@ class _DemoScreenState extends State<DemoScreen> {
                       merchantId: _merchantIdController.text,
                       secureHashValue: _secureHashController.text,
                       terminalId: _terminalController.text,
+                      locale: Locale(_languageController.text),
                       isMocked: false,
                     ),
                   );

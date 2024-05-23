@@ -17,18 +17,18 @@ class ErrorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Center(child: Text("Failed".translate(
-          AmwalSdkNavigator.amwalNavigatorObserver.navigator?.context ?? context))),
+      title: Center(child: Text("failed".translate(context))),
       content: Text(
-        message,
+        message.translate(context),
         textAlign: TextAlign.center,
         style: const TextStyle(color: Colors.black),
       ),
       actions: [
         ElevatedButton(
           onPressed: resetState,
-          child:  Text("Close".translate(
-              AmwalSdkNavigator.amwalNavigatorObserver.navigator?.context ?? context)),
+          child: Text("Close".translate(
+              AmwalSdkNavigator.amwalNavigatorObserver.navigator?.context ??
+                  context)),
         ),
       ],
     );
