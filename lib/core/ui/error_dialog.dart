@@ -15,7 +15,7 @@ class ErrorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Center(child: Text('failed'.translate(context))),
+      title: Center(child: Text("failed".translate(context))),
       content: Text(
         message,
         textAlign: TextAlign.center,
@@ -24,7 +24,7 @@ class ErrorDialog extends StatelessWidget {
       actions: [
         ElevatedButton(
           onPressed: resetState,
-          child: const Text('close'),
+          child:  Text("close".translate(context)),
         ),
       ],
     );

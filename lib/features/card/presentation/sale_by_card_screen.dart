@@ -14,6 +14,7 @@ import 'package:amwal_pay_sdk/features/card/dependency/injector.dart';
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class SaleByCardScreen extends StatefulApiView<SaleByCardManualCubit> {
@@ -138,42 +139,45 @@ class _SaleByCardScreenState extends State<SaleByCardScreen> {
               },
             ),
             const SizedBox(height: 15),
-            AppMainButton(
-              key: const Key('contactless'),
-              buttonIcon: AppAssets.contactlessIcon,
-              buttonText: 'contact_less_label'.translate(context),
-              onClicked: () async {
-                _hideKeyboard?.call();
-                final validation = _amountCurrencyWidgetCubit.validateFields(
-                  context: context,
-                  terminal: terminal,
-                );
-                if (validation != null) {
-                  _amountCurrencyWidgetCubit.showErrorSnackBar(
+            // if debug
+            if (kDebugMode)
+              AppMainButton(
+                key: const Key('contactless'),
+                buttonIcon: AppAssets.contactlessIcon,
+                buttonText: 'contact_less_label'.translate(context),
+                onClicked: () async {
+                  _hideKeyboard?.call();
+                  final validation = _amountCurrencyWidgetCubit.validateFields(
                     context: context,
-                    message: validation,
+                    terminal: terminal,
                   );
-                  return;
-                }
-                if (!_amountCurrencyWidgetCubit.formKey.currentState!
-                    .validate()) {
-                  return;
-                }
-                final paymentArguments = PaymentArguments(
-                  amount: _amountCurrencyWidgetCubit.amountValue,
-                  terminalId: terminal!,
-                  currencyData: _amountCurrencyWidgetCubit.currencyData,
-                  merchantId: merchantId,
-                  transactionId: widget.transactionId,
-                );
-                await AmwalSdkNavigator.instance.toCardContactLessOptionScreen(
-                  RouteSettings(arguments: paymentArguments),
-                  context,
-                  widget.locale,
-                  widget.onPay,
-                );
-              },
-            ),
+                  if (validation != null) {
+                    _amountCurrencyWidgetCubit.showErrorSnackBar(
+                      context: context,
+                      message: validation,
+                    );
+                    return;
+                  }
+                  if (!_amountCurrencyWidgetCubit.formKey.currentState!
+                      .validate()) {
+                    return;
+                  }
+                  final paymentArguments = PaymentArguments(
+                    amount: _amountCurrencyWidgetCubit.amountValue,
+                    terminalId: terminal!,
+                    currencyData: _amountCurrencyWidgetCubit.currencyData,
+                    merchantId: merchantId,
+                    transactionId: widget.transactionId,
+                  );
+                  await AmwalSdkNavigator.instance
+                      .toCardContactLessOptionScreen(
+                    RouteSettings(arguments: paymentArguments),
+                    context,
+                    widget.locale,
+                    widget.onPay,
+                  );
+                },
+              ),
             const SizedBox(height: 15),
             const Expanded(
               child: SizedBox(),
