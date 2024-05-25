@@ -8,6 +8,7 @@ class TransactionDetailWidget extends StatelessWidget {
   final String value;
   final TextStyle? titleStyle;
   final TextStyle? valueStyle;
+
   const TransactionDetailWidget({
     Key? key,
     required this.title,
@@ -28,7 +29,6 @@ class TransactionDetailWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-
                 child: Text(
                   title.translate(context),
                   style: titleStyle ??
@@ -41,16 +41,35 @@ class TransactionDetailWidget extends StatelessWidget {
               ),
               Expanded(
 
-                child: AutoSizeText(
-                  value,
-                  maxLines: 1,
-                  style: valueStyle ??
-                      const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: darkBlue,
-                      ),
-                ),
+                child: (!value.contains("-") || !value.contains("OMR") )
+                    ? AutoSizeText(
+                        value,
+                        maxLines: 1,
+                        style: valueStyle ??
+                            const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: darkBlue,
+                            ),
+                      )
+                    : Row(
+                      children: [
+                        Directionality(
+                            textDirection: TextDirection.ltr,
+                            child: AutoSizeText(
+                              value,
+                              maxLines: 1,
+                              style: valueStyle ??
+                                  const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    color: darkBlue,
+                                  ),
+                            ),
+                          ),
+                        Spacer(),
+                      ],
+                    ),
               ),
             ],
           ),
