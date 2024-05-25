@@ -29,8 +29,9 @@ class TransactionDetailWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: Text(
+                child: AutoSizeText(
                   title.translate(context),
+                  maxLines: 1,
                   style: titleStyle ??
                       const TextStyle(
                         fontSize: 16,
