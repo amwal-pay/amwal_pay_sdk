@@ -17,7 +17,7 @@ class ErrorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Center(child: Text("failed".translate(context))),
+      title: Center(child: Text("Failed".translate(context))),
       content: Text(
         message.translate(context),
         textAlign: TextAlign.center,
@@ -27,7 +27,6 @@ class ErrorDialog extends StatelessWidget {
         ElevatedButton(
           onPressed: resetState,
           child: Text("Close".translate(
-              AmwalSdkNavigator.amwalNavigatorObserver.navigator?.context ??
                   context)),
         ),
       ],

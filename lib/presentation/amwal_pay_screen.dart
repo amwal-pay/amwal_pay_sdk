@@ -67,7 +67,7 @@ class AmwalPayScreen extends StatelessWidget {
               transactionId: arguments.transactionId,
               showAppBar: false,
               translator: (txt) => txt.translate(context),
-              countDownInSeconds: 30,
+              countDownInSeconds: 90,
             ),
           ],
         ),
