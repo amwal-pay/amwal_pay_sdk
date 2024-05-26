@@ -157,6 +157,7 @@
   "card_holder_hint": "من فضلك ادخل اسم حامل البطاقة",
   "expiry_month_hint": "ادخل الشهر",
   "expiry_year_hint": "ادخل السنة",
-  "cvv_hint": "CVV ادخل"
+  "cvv_hint": "CVV ادخل",
+  "something_went_wrong": "حدث خطأ اعد المحاولة لاحقا"
 }
 

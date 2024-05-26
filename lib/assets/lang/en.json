@@ -144,5 +144,7 @@
   "card_holder_hint": "Please Enter Card Holder Name",
   "expiry_month_hint": "Enter Month",
   "expiry_year_hint": "Enter Year",
-  "cvv_hint": "Enter CVV"
+  "cvv_hint": "Enter CVV",
+  "something_went_wrong": "Something Went Wrong"
+
 }

@@ -37,10 +37,12 @@ abstract class ICubit<G> extends Cubit<ICubitState<G>> {
       error: (err, msgList) {
         _dismissDialog(change);
         String errorMessage = '';
+
         if (msgList?.isEmpty ?? true) {
           errorMessage = err ?? 'Something Went Wrong';
         } else {
-          errorMessage = (msgList?.join(',') ?? err.toString());
+          errorMessage =
+              (msgList?.join(',') ?? err?.toString() ?? 'Something Went Wrong');
         }
         if (AmwalSdkNavigator.amwalNavigatorObserver.navigator != null) {
           return showDialog(

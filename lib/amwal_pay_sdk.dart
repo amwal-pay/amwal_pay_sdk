@@ -9,6 +9,7 @@ import 'package:amwal_pay_sdk/core/networking/constants.dart';
 import 'package:amwal_pay_sdk/core/networking/network_service.dart';
 import 'package:amwal_pay_sdk/features/card/amwal_salebycard_sdk.dart';
 import 'package:amwal_pay_sdk/features/wallet/amwal_salebywallet_sdk.dart';
+import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:amwal_pay_sdk/navigator/sdk_navigator.dart';
 import 'package:amwal_pay_sdk/presentation/amwal_pay_screen.dart';
 import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
@@ -98,16 +99,26 @@ class AmwalPaySdk {
         error: (String? message, List<String>? errorList) {
           settings.onError
               ?.call(errorList?.first ?? message ?? '', StackTrace.current);
+
           if (AmwalSdkNavigator.amwalNavigatorObserver.navigator != null) {
+            final context =
+                AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context;
             return showDialog(
-              context:
-                  AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context,
-              builder: (_) => ErrorDialog(
-                title: message ?? '',
-                message: (errorList?.join(',') ?? errorList.toString()),
-                resetState: () {
-                  AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
-                },
+              context: context,
+              builder: (_) => Localizations(
+                locale: AmwalSdkSettingContainer.locale,
+                delegates: const [
+                  ...AppLocalizationsSetup.localizationsDelegates
+                ],
+                child: ErrorDialog(
+                  title: message ?? '',
+                  message: (errorList?.join(',') ??
+                      errorList?.toString() ??
+                      'something_went_wrong'.translate(context)),
+                  resetState: () {
+                    AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+                  },
+                ),
               ),
             );
           }
