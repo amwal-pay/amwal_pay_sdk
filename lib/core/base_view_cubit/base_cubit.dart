@@ -54,6 +54,7 @@ abstract class ICubit<G> extends Cubit<ICubitState<G>> {
                 ...AppLocalizationsSetup.localizationsDelegates
               ],
               child: ErrorDialog(
+                locale: AmwalSdkSettingContainer.locale,
                 title: err ?? '',
                 message: errorMessage,
                 resetState: _resetState,

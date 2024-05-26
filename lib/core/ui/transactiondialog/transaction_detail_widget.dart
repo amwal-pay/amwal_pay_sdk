@@ -29,6 +29,7 @@ class TransactionDetailWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
+                flex: 2,
                 child: AutoSizeText(
                   title.translate(context),
                   maxLines: 1,
@@ -40,30 +41,29 @@ class TransactionDetailWidget extends StatelessWidget {
                       ),
                 ),
               ),
+              // const Spacer(),
+              const SizedBox(width: 4),
               Expanded(
-
+                flex: 3,
                 child: (value.contains("-") && value.contains("OMR"))
-                    ? buildMiunsValue(
-                    value
-                )
+                    ? buildMiunsValue(value)
                     : Row(
-                  children: [
-                    Directionality(
-                      textDirection: TextDirection.rtl,
-                      child: AutoSizeText(
-                        value,
-                        maxLines: 1,
-                        style: valueStyle ??
-                            const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: darkBlue,
+                        children: [
+                          Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: AutoSizeText(
+                              value,
+                              maxLines: 1,
+                              style: valueStyle ??
+                                  const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    color: darkBlue,
+                                  ),
                             ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Spacer(),
-                  ],
-                ),
               ),
             ],
           ),
@@ -77,33 +77,31 @@ class TransactionDetailWidget extends StatelessWidget {
     var valueCurrency = value.split(" ");
     // remove ay empty values
     valueCurrency.removeWhere((element) => element.isEmpty);
-    return Row(
-        children: [
-          Directionality(
-            textDirection: TextDirection.ltr,
-            child: AutoSizeText(
-              valueCurrency.first,
-              maxLines: 1,
-              style: valueStyle ??
-                  const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: darkBlue,
-                  ),
+    return Row(children: [
+      Directionality(
+        textDirection: TextDirection.ltr,
+        child: AutoSizeText(
+          valueCurrency.first,
+          maxLines: 1,
+          style: valueStyle ??
+              const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: darkBlue,
+              ),
+        ),
+      ),
+      const SizedBox(width: 3),
+      AutoSizeText(
+        valueCurrency.last,
+        maxLines: 1,
+        style: valueStyle ??
+            const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color: darkBlue,
             ),
-          ),
-          const SizedBox(width: 3 ),
-          AutoSizeText(
-            valueCurrency.last,
-            maxLines: 1,
-            style: valueStyle ??
-                const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: darkBlue,
-                ),
-          ),
-        ]);
+      ),
+    ]);
   }
-
 }

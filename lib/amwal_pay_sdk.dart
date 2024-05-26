@@ -85,7 +85,7 @@ class AmwalPaySdk {
 
           await CacheStorageHandler.instance.write(
             CacheKeys.merchantData,
-            data.data ,
+            data.data,
           );
           await _openAmwalSdkScreen(
             settings,
@@ -116,6 +116,7 @@ class AmwalPaySdk {
                   ...AppLocalizationsSetup.localizationsDelegates
                 ],
                 child: ErrorDialog(
+                  locale: AmwalSdkSettingContainer.locale,
                   title: message ?? '',
                   message: (errorList?.join(',') ??
                       errorList?.toString() ??
@@ -184,6 +185,7 @@ class AmwalPaySdk {
 
   Future<void> openWalletScreen(AmwalInAppSdkSettings settings) async {
     final walletSdk = await _initWalletSdk(settings: settings);
+    AmwalSdkSettingContainer.locale = settings.locale;
     await walletSdk.navigateToWallet(
       settings.locale,
       settings.onPay,
@@ -196,6 +198,7 @@ class AmwalPaySdk {
 
   Future<void> openCardScreen(AmwalInAppSdkSettings settings) async {
     final cardSdk = await _initCardSdk(settings: settings);
+    AmwalSdkSettingContainer.locale = settings.locale;
     await cardSdk.navigateToCard(
       settings.locale,
       settings.transactionId,
