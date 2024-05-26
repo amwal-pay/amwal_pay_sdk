@@ -75,12 +75,17 @@ class AmwalPaySdk {
       "terminalId": settings.terminalId,
     };
 
-    transactionRepo.getMerchantName(map).then((value) {
+    transactionRepo.getMerchantData(map).then((value) {
       value.when(
         success: (data) async {
           await CacheStorageHandler.instance.write(
             CacheKeys.merchantName,
-            data.data,
+            data.data?.merchantName ?? "",
+          );
+
+          await CacheStorageHandler.instance.write(
+            CacheKeys.merchantData,
+            data.data ,
           );
           await _openAmwalSdkScreen(
             settings,

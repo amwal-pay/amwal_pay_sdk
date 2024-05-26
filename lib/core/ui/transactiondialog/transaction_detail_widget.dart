@@ -8,6 +8,7 @@ class TransactionDetailWidget extends StatelessWidget {
   final String value;
   final TextStyle? titleStyle;
   final TextStyle? valueStyle;
+
   const TransactionDetailWidget({
     Key? key,
     required this.title,
@@ -28,9 +29,9 @@ class TransactionDetailWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-
-                child: Text(
+                child: AutoSizeText(
                   title.translate(context),
+                  maxLines: 1,
                   style: titleStyle ??
                       const TextStyle(
                         fontSize: 16,
@@ -41,15 +42,27 @@ class TransactionDetailWidget extends StatelessWidget {
               ),
               Expanded(
 
-                child: AutoSizeText(
-                  value,
-                  maxLines: 1,
-                  style: valueStyle ??
-                      const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: darkBlue,
+                child: (value.contains("-") && value.contains("OMR"))
+                    ? buildMiunsValue(
+                    value
+                )
+                    : Row(
+                  children: [
+                    Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: AutoSizeText(
+                        value,
+                        maxLines: 1,
+                        style: valueStyle ??
+                            const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: darkBlue,
+                            ),
                       ),
+                    ),
+                    Spacer(),
+                  ],
                 ),
               ),
             ],
@@ -59,4 +72,38 @@ class TransactionDetailWidget extends StatelessWidget {
       ],
     );
   }
+
+  Widget buildMiunsValue(String value) {
+    var valueCurrency = value.split(" ");
+    // remove ay empty values
+    valueCurrency.removeWhere((element) => element.isEmpty);
+    return Row(
+        children: [
+          Directionality(
+            textDirection: TextDirection.ltr,
+            child: AutoSizeText(
+              valueCurrency.first,
+              maxLines: 1,
+              style: valueStyle ??
+                  const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: darkBlue,
+                  ),
+            ),
+          ),
+          const SizedBox(width: 3 ),
+          AutoSizeText(
+            valueCurrency.last,
+            maxLines: 1,
+            style: valueStyle ??
+                const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: darkBlue,
+                ),
+          ),
+        ]);
+  }
+
 }

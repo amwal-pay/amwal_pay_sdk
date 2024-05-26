@@ -4,6 +4,7 @@ import 'package:amwal_pay_sdk/core/networking/constants.dart';
 import 'package:example/currency_model.dart';
 import 'package:example/drop_down_form.dart';
 import 'package:example/text_form.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -58,15 +59,19 @@ class _DemoScreenState extends State<DemoScreen> {
 
     /// card terminal => 6942344
     /// wallet terminal => 6834180
-    _terminalController = TextEditingController(text: '12895');
-    _merchantIdController = TextEditingController(text: '17023');
-    _secureHashController = TextEditingController(
-      text: '15FBFB9555CCAF369E01C3232E836B57B0BAF7C66DFBC1CADFC9BA3DC31E2F20',
-    );
-    _amountController = TextEditingController(text: '50');
-    _currencyController = TextEditingController(text: 'OMR');
-    _languageController = TextEditingController(text: 'en');
+    ///
+    // if(kDebugMode) {
 
+      _amountController = TextEditingController(text: '50');
+      _currencyController = TextEditingController(text: 'OMR');
+      _languageController = TextEditingController(text: 'en');
+      _terminalController = TextEditingController(text: '79685');
+      _merchantIdController = TextEditingController(text: '39467');
+      _secureHashController = TextEditingController(
+        text: 'EB2004079E96F897F2742A7BB5EC276DF58761722DAA18FDC064CC6B24F1517D',
+      );
+
+    // }
     altBaseurl = NetworkConstants.baseUrlSdk;
     dropdownValue = _getDropdownValueFromAltBaseUrl(altBaseurl);
   }

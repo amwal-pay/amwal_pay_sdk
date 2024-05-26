@@ -62,7 +62,7 @@ class TransactionWidget extends StatelessWidget {
                 )
               else
                 Text(
-                  'failed'.translate(context),
+                  'Failed'.translate(context),
                   style: const TextStyle(
                     color: failedColor,
                   ),

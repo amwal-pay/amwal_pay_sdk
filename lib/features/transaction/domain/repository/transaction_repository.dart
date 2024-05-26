@@ -9,7 +9,7 @@ abstract class TransactionRepository {
   );
 
 
-  Future<NetworkState<MerchantNameResponse>> getMerchantName(
+  Future<NetworkState<MerchantDataResponse>> getMerchantData(
     Map<String, dynamic> data,
   );
 }

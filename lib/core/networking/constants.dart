@@ -10,7 +10,7 @@ class NetworkConstants {
       'https://flagsapi.com/$countryCode/shiny/32.png';
 
   static const getTransactionByIdEndpoint = '/Transaction/GetByTransactionId';
-  static const getMerchantNameEndpoint = "/Merchant/GetMerchantName";
+  static const getMerchantNameEndpoint = "/Merchant/GetMerchantDataForSDK";
 
   static const mockLabBaseUrl = 'https://amwalpayapi.mocklab.io/';
   static const isMockupMode = false;

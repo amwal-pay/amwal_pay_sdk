@@ -5,6 +5,7 @@ import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:flutter/material.dart';
 
+import '../core/merchant_store/merchant_store.dart';
 import 'color/colors.dart';
 
 class AmwalPayScreen extends StatelessWidget {
@@ -28,16 +29,19 @@ class AmwalPayScreen extends StatelessWidget {
           ),
           title: const Text('Amwal Pay'),
           bottom: TabBar(tabs: [
+            if(MerchantStore.instance.getMerchantData()?.terminalData.canCardTransaction ?? false)
             Tab(
               text: 'card'.translate(context),
             ),
-            Tab(
+            if(MerchantStore.instance.getMerchantData()?.terminalData.canWalletTransaction ?? false)
+              Tab(
               text: 'wallet_label'.translate(context),
             ),
           ]),
         ),
         body: TabBarView(
           children: [
+            if(MerchantStore.instance.getMerchantData()?.terminalData.canCardTransaction ?? false)
             SaleByCardManualScreen(
               onPay: arguments.onPay,
               locale: arguments.locale,
@@ -50,6 +54,7 @@ class AmwalPayScreen extends StatelessWidget {
               showAppBar: false,
               translator: (txt) => txt.translate(context),
             ),
+            if(MerchantStore.instance.getMerchantData()?.terminalData.canWalletTransaction ?? false)
             SaleByWalletPayingOptions(
               getTransactionFunction: arguments.getTransactionFunction,
               onPay: arguments.onPay,
@@ -62,7 +67,7 @@ class AmwalPayScreen extends StatelessWidget {
               transactionId: arguments.transactionId,
               showAppBar: false,
               translator: (txt) => txt.translate(context),
-              countDownInSeconds: 30,
+              countDownInSeconds: 90,
             ),
           ],
         ),
