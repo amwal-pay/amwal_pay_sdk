@@ -92,7 +92,7 @@ class TransactionDetailWidget extends StatelessWidget {
                   ),
             ),
           ),
-          SizedBox(width: 3 ),
+          const SizedBox(width: 3 ),
           AutoSizeText(
             valueCurrency.last,
             maxLines: 1,
