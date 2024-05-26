@@ -42,8 +42,15 @@ class TransactionDetailWidget extends StatelessWidget {
               ),
               Expanded(
 
-                child: (!value.contains("-") || !value.contains("OMR") )
-                    ? AutoSizeText(
+                child: (value.contains("-") && value.contains("OMR"))
+                    ? buildMiunsValue(
+                    value
+                )
+                    : Row(
+                  children: [
+                    Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: AutoSizeText(
                         value,
                         maxLines: 1,
                         style: valueStyle ??
@@ -52,25 +59,11 @@ class TransactionDetailWidget extends StatelessWidget {
                               fontWeight: FontWeight.w700,
                               color: darkBlue,
                             ),
-                      )
-                    : Row(
-                      children: [
-                        Directionality(
-                            textDirection: TextDirection.ltr,
-                            child: AutoSizeText(
-                              value,
-                              maxLines: 1,
-                              style: valueStyle ??
-                                  const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                    color: darkBlue,
-                                  ),
-                            ),
-                          ),
-                        Spacer(),
-                      ],
+                      ),
                     ),
+                    Spacer(),
+                  ],
+                ),
               ),
             ],
           ),
@@ -79,4 +72,38 @@ class TransactionDetailWidget extends StatelessWidget {
       ],
     );
   }
+
+  Widget buildMiunsValue(String value) {
+    var valueCurrency = value.split(" ");
+    // remove ay empty values
+    valueCurrency.removeWhere((element) => element.isEmpty);
+    return Row(
+        children: [
+          Directionality(
+            textDirection: TextDirection.ltr,
+            child: AutoSizeText(
+              valueCurrency.first,
+              maxLines: 1,
+              style: valueStyle ??
+                  const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: darkBlue,
+                  ),
+            ),
+          ),
+          SizedBox(width: 3 ),
+          AutoSizeText(
+            valueCurrency.last,
+            maxLines: 1,
+            style: valueStyle ??
+                const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: darkBlue,
+                ),
+          ),
+        ]);
+  }
+
 }
