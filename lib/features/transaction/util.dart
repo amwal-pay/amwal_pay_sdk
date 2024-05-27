@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/intl.dart';
 
+import '../../amwal_sdk_settings/amwal_sdk_setting_container.dart';
+
 extension OneTransactionExtension on OneTransaction {
   bool get isWallet =>
       transactionType == 'P2BPull' || transactionType == 'P2BPush';
@@ -43,7 +45,14 @@ extension DateTimeFormatX on String {
   String formatDate(BuildContext context) {
 
     DateTime date = DateTime.parse(this).toUtc();
-    DateFormat formatter = DateFormat('dd/MM/yyyy hh:mm a', 'en-GB');
+
+
+
+    DateFormat formatter = DateFormat(
+        AmwalSdkSettingContainer.locale.languageCode.contains('en')
+            ? 'dd/MM/yyyy hh:mm a'
+            : 'yyyy/MM/dd hh:mm a',
+        AmwalSdkSettingContainer.locale.languageCode);
 
     return formatter.format(date);
   }
