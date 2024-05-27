@@ -24,19 +24,25 @@ extension OneTransactionExtension on OneTransaction {
 
   String transactionAmount(BuildContext context) {
     final isEnglish = AppLocalizations.of(context)?.isEnLocale ?? true;
+    var amount = this.amount.toStringAsFixed(3);
     if (isEnglish) {
       return ' ${currency.translate(context)} $amount';
     } else {
-      return ' $amount ${currency.translate(context)}';
+      return '  $amount ${currency.translate(context)}';
     }
   }
 
+
+
   String transactionDueAmount(BuildContext context, num dueAmount) {
     final isEnglish = AppLocalizations.of(context)?.isEnLocale ?? true;
+    var amount =  dueAmount.toStringAsFixed(3);
+
     if (isEnglish) {
-      return '  ${currency.translate(context)} $dueAmount';
+
+      return '  ${currency.translate(context)} $amount';
     } else {
-      return '  $dueAmount ${currency.translate(context)} ';
+      return '  $amount ${currency.translate(context)} ';
     }
   }
 }
