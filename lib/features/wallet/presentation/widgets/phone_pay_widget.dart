@@ -76,6 +76,8 @@ class _PhonePayWidgetState extends State<PhonePayWidget> {
                         context,
                         globalTranslator: widget.globalTranslator,
                       ),
+                      readOnly: walletCubit.state.verified,
+
                       widgetHint: 'phone_number'.translate(
                         context,
                         globalTranslator: widget.globalTranslator,
