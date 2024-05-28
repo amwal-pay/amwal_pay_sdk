@@ -56,7 +56,7 @@ extension DateTimeFormatX on String {
 
     DateFormat formatter = DateFormat(
         AmwalSdkSettingContainer.locale.languageCode.contains('en')
-            ? 'dd/MM/yyyy hh:mm a'
+            ? 'a hh:mm dd/MM/yyyy'
             : 'yyyy/MM/dd hh:mm a',
         AmwalSdkSettingContainer.locale.languageCode);
 
