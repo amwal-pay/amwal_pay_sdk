@@ -23,27 +23,16 @@ extension OneTransactionExtension on OneTransaction {
   }
 
   String transactionAmount(BuildContext context) {
-    final isEnglish = AppLocalizations.of(context)?.isEnLocale ?? true;
     var amount = this.amount.toStringAsFixed(3);
-    if (isEnglish) {
-      return ' ${currency.translate(context)} $amount';
-    } else {
-      return '  $amount ${currency.translate(context)}';
-    }
+    return '  $amount ${currency.translate(context)}';
+
   }
 
 
 
   String transactionDueAmount(BuildContext context, num dueAmount) {
-    final isEnglish = AppLocalizations.of(context)?.isEnLocale ?? true;
     var amount =  dueAmount.toStringAsFixed(3);
-
-    if (isEnglish) {
-
-      return '  ${currency.translate(context)} $amount';
-    } else {
-      return '  $amount ${currency.translate(context)} ';
-    }
+    return '  $amount ${currency.translate(context)} ';
   }
 }
 
@@ -56,7 +45,7 @@ extension DateTimeFormatX on String {
 
     DateFormat formatter = DateFormat(
         AmwalSdkSettingContainer.locale.languageCode.contains('en')
-            ? 'a hh:mm dd/MM/yyyy'
+            ? 'dd/MM/yyyy hh:mm a'
             : 'yyyy/MM/dd hh:mm a',
         AmwalSdkSettingContainer.locale.languageCode);
 

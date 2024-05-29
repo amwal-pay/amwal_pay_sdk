@@ -49,18 +49,15 @@ class TransactionDetailWidget extends StatelessWidget {
                     ? buildMiunsValue(value)
                     : Row(
                         children: [
-                          Directionality(
-                            textDirection: TextDirection.rtl,
-                            child: AutoSizeText(
-                              value,
-                              maxLines: 1,
-                              style: valueStyle ??
-                                  const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                    color: darkBlue,
-                                  ),
-                            ),
+                          AutoSizeText(
+                            value,
+                            maxLines: 1,
+                            style: valueStyle ??
+                                const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: darkBlue,
+                                ),
                           ),
                         ],
                       ),
