@@ -39,7 +39,7 @@ extension OneTransactionExtension on OneTransaction {
 extension DateTimeFormatX on String {
   String formatDate(BuildContext context) {
 
-    DateTime date = DateTime.parse(this).toUtc();
+    DateTime date = DateTime.parse(this);
 
 
 
