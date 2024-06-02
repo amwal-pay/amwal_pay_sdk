@@ -54,7 +54,7 @@ class TransactionDetailWidget extends StatelessWidget {
                             maxLines: 1,
                             style: valueStyle ??
                                 const TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w700,
                                   color: darkBlue,
                                 ),
@@ -82,7 +82,7 @@ class TransactionDetailWidget extends StatelessWidget {
           maxLines: 1,
           style: valueStyle ??
               const TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w700,
                 color: darkBlue,
               ),
@@ -94,7 +94,7 @@ class TransactionDetailWidget extends StatelessWidget {
         maxLines: 1,
         style: valueStyle ??
             const TextStyle(
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.w700,
               color: darkBlue,
             ),

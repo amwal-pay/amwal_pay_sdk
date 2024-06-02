@@ -84,7 +84,7 @@ class _TransactionStatusDialogState extends State<TransactionStatusDialog> {
           top: 40,
           bottom: 20,
         ),
-        width: size.width * 0.9,
+        width: size.width * 0.95,
         decoration: BoxDecoration(
           color: whiteColor,
           borderRadius: BorderRadius.circular(
