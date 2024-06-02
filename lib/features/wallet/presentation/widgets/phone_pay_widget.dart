@@ -41,7 +41,7 @@ class _PhonePayWidgetState extends State<PhonePayWidget> {
         config: KeyboardActionsConfig(
           keyboardActionsPlatform: KeyboardActionsPlatform.IOS,
           actions: [
-            KeyboardActionsItem(
+          if(!walletCubit.state.verified)  KeyboardActionsItem(
               focusNode: _focusNode1,
               displayArrows: false,
             ),
