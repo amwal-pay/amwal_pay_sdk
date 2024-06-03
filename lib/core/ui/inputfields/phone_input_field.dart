@@ -172,6 +172,7 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
                         FormBuilderValidators.required(
                           errorText: 'required_field'.translate(
                             context,
+                            
                             globalTranslator: widget.globalTranslator,
                           ),
                         ),
@@ -179,6 +180,7 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
                     ),
                     keyboardType: TextInputType.phone,
                     inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp('[a-zA-Z\\s]')),
                       LengthLimitingTextInputFormatter(
                         11,
                       ),
