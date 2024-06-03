@@ -172,7 +172,7 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
                         FormBuilderValidators.required(
                           errorText: 'required_field'.translate(
                             context,
-                            
+
                             globalTranslator: widget.globalTranslator,
                           ),
                         ),
