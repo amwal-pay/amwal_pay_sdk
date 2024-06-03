@@ -50,7 +50,7 @@ class TransactionDetailWidget extends StatelessWidget {
                     : Row(
                         children: [
                           AutoSizeText(
-                            value,
+                            value.trim(),
                             maxLines: 1,
                             style: valueStyle ??
                                 const TextStyle(
@@ -75,7 +75,7 @@ class TransactionDetailWidget extends StatelessWidget {
     // remove ay empty values
     valueCurrency.removeWhere((element) => element.isEmpty);
     return Row(children: [
-      Directionality(
+     if(valueCurrency.first.isNotEmpty) Directionality(
         textDirection: TextDirection.ltr,
         child: AutoSizeText(
           valueCurrency.first,
@@ -88,8 +88,8 @@ class TransactionDetailWidget extends StatelessWidget {
               ),
         ),
       ),
-      const SizedBox(width: 3),
-      AutoSizeText(
+      if(valueCurrency.first.isNotEmpty)   const SizedBox(width: 3),
+      if(valueCurrency.last.isNotEmpty)   AutoSizeText(
         valueCurrency.last,
         maxLines: 1,
         style: valueStyle ??
