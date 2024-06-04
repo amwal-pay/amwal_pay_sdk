@@ -49,18 +49,15 @@ class TransactionDetailWidget extends StatelessWidget {
                     ? buildMiunsValue(value)
                     : Row(
                         children: [
-                          Directionality(
-                            textDirection: TextDirection.rtl,
-                            child: AutoSizeText(
-                              value,
-                              maxLines: 1,
-                              style: valueStyle ??
-                                  const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                    color: darkBlue,
-                                  ),
-                            ),
+                          AutoSizeText(
+                            value.trim(),
+                            maxLines: 1,
+                            style: valueStyle ??
+                                const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                  color: darkBlue,
+                                ),
                           ),
                         ],
                       ),
@@ -78,26 +75,26 @@ class TransactionDetailWidget extends StatelessWidget {
     // remove ay empty values
     valueCurrency.removeWhere((element) => element.isEmpty);
     return Row(children: [
-      Directionality(
+     if(valueCurrency.first.isNotEmpty) Directionality(
         textDirection: TextDirection.ltr,
         child: AutoSizeText(
           valueCurrency.first,
           maxLines: 1,
           style: valueStyle ??
               const TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w700,
                 color: darkBlue,
               ),
         ),
       ),
-      const SizedBox(width: 3),
-      AutoSizeText(
+      if(valueCurrency.first.isNotEmpty)   const SizedBox(width: 3),
+      if(valueCurrency.last.isNotEmpty)   AutoSizeText(
         valueCurrency.last,
         maxLines: 1,
         style: valueStyle ??
             const TextStyle(
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.w700,
               color: darkBlue,
             ),

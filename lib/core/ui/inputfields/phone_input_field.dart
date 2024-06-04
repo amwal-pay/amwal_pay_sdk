@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 class PhoneInputField extends StatefulWidget {
-  const PhoneInputField({
+  PhoneInputField({
     Key? key,
     required this.widgetTitle,
     required this.widgetHint,
@@ -16,6 +16,7 @@ class PhoneInputField extends StatefulWidget {
     required this.focusNode,
     this.initialValue,
     this.onChange,
+    this.readOnly,
   }) : super(key: key);
 
   final String widgetTitle;
@@ -24,6 +25,7 @@ class PhoneInputField extends StatefulWidget {
   final String? initialValue;
   final String Function(String)? globalTranslator;
   final void Function(String)? onChange;
+  bool? readOnly;
 
   @override
   State<PhoneInputField> createState() => _PhoneInputFieldState();
@@ -120,6 +122,7 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
                 Expanded(
                   flex: 4,
                   child: TextFormField(
+                    readOnly: widget.readOnly ?? false,
                     focusNode: widget.focusNode,
                     controller: _textEditingController,
                     textInputAction: TextInputAction.done,
@@ -169,6 +172,7 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
                         FormBuilderValidators.required(
                           errorText: 'required_field'.translate(
                             context,
+
                             globalTranslator: widget.globalTranslator,
                           ),
                         ),
@@ -176,6 +180,7 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
                     ),
                     keyboardType: TextInputType.phone,
                     inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp('[a-zA-Z\\s]')),
                       LengthLimitingTextInputFormatter(
                         11,
                       ),

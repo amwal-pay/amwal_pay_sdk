@@ -93,7 +93,7 @@ class SaleCardFeatureCommonWidgets {
                         width: 8,
                       ),
                       Text(
-                        paymentArgs.amount,
+                        prettyAmountStringValue(paymentArgs.amount),
                         style: const TextStyle(
                           color: blackColor,
                           fontSize: 18,
@@ -109,5 +109,11 @@ class SaleCardFeatureCommonWidgets {
         ),
       ),
     );
+  }
+
+  static String prettyAmountStringValue(String amount) {
+    double numberValue = double.parse(amount);
+    String formattedValue = numberValue.toStringAsFixed(3);
+    return formattedValue;
   }
 }

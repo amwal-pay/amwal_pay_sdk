@@ -13,6 +13,7 @@ class TransactionRepositoryImpl extends TransactionRepository {
   Future<NetworkState<OneTransactionResponse>> getTransactionById(
     Map<String, dynamic> data,
   ) async {
+    await Future.delayed(const Duration(seconds: 3));
     return await _networkService.invokeRequest(
       endpoint: NetworkConstants.getTransactionByIdEndpoint,
       converter: OneTransactionResponse.fromJson,

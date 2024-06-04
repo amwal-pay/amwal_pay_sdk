@@ -137,8 +137,7 @@ class _DemoScreenState extends State<DemoScreen> {
                           title: "Amount",
                           controller: _amountController,
                           isNumeric: true,
-                          maxAmount: 1000000,
-                          maxLength: 30,
+                          maxLength: 6,
                           validator: (value) {
                             if (double.parse(value!) < 1.0) {
                               return 'Invalid Amount';

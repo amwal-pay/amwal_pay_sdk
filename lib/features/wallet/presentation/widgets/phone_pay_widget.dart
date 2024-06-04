@@ -41,7 +41,7 @@ class _PhonePayWidgetState extends State<PhonePayWidget> {
         config: KeyboardActionsConfig(
           keyboardActionsPlatform: KeyboardActionsPlatform.IOS,
           actions: [
-            KeyboardActionsItem(
+          if(!walletCubit.state.verified)  KeyboardActionsItem(
               focusNode: _focusNode1,
               displayArrows: false,
             ),
@@ -76,6 +76,8 @@ class _PhonePayWidgetState extends State<PhonePayWidget> {
                         context,
                         globalTranslator: widget.globalTranslator,
                       ),
+                      readOnly: walletCubit.state.verified,
+
                       widgetHint: 'phone_number'.translate(
                         context,
                         globalTranslator: widget.globalTranslator,
