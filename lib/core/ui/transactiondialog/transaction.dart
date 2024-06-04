@@ -70,8 +70,8 @@ class TransactionWidget extends StatelessWidget {
             ],
           ),
         ),
-        Row(
-          children: const [
+        const Row(
+          children: [
             SizedBox(
               width: 50,
             ),

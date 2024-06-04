@@ -12,6 +12,7 @@ import 'package:amwal_pay_sdk/features/transaction/domain/use_case/get_transacti
 import 'package:amwal_pay_sdk/features/transaction/util.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -23,11 +24,13 @@ class CardTransactionManager {
   Future<String?> showOtpDialog({
     required BuildContext context,
     String Function(String)? translator,
+    required void Function(String, BuildContext) onSubmit,
   }) async {
     final otpOrNull = await showDialog<String?>(
       context: context,
       barrierDismissible: false,
       builder: (_) => OTPEntryDialog(
+        onSubmit: onSubmit,
         otpVerificationString: 'otp_verification'.translate(
           context,
           globalTranslator: translator,
@@ -41,7 +44,7 @@ class CardTransactionManager {
     return otpOrNull;
   }
 
-  Future<PurchaseData?> onPurchaseStepTwo({
+  Future<Either<Map<String, dynamic>, PurchaseData>> onPurchaseStepTwo({
     required String otp,
     required String transactionId,
     required String originTransactionId,
@@ -79,58 +82,76 @@ class CardTransactionManager {
     );
     if (purchaseData == null) return;
     if (purchaseData.isOtpRequired && context.mounted) {
-      otpOrNull = await showOtpDialog(
+      Either<Map<String, dynamic>, PurchaseData> purchaseDataOrFail;
+      final transactionId = const Uuid().v1();
+      int errorCounter = 1;
+      await showOtpDialog(
         context: context,
         translator: translator,
-      );
-      if (otpOrNull == null || otpOrNull.isEmpty) {
-        return;
-      }
-      final transactionId = const Uuid().v1();
-      final purchaseDataOrNull = await onPurchaseStepTwo(
-        args: args,
-        otp: otpOrNull,
-        transactionId: transactionId,
-        cubit: cubit,
-        originTransactionId: purchaseData.transactionId,
-      );
-      print('tomato');
-      print(purchaseDataOrNull?.message);
-      if (purchaseDataOrNull != null && context.mounted) {
-        if (NetworkConstants.isSdkInApp) {
-          cubit.showLoader();
-          final oneTransactionResponse =
-              await getOneTransactionByIdUseCase.invoke({
-            'transactionId': transactionId,
-            'merchantId': args.merchantId,
-          });
-          final oneTransaction = oneTransactionResponse.mapOrNull(
-              success: (value) => value.data.data);
-          cubit.initial();
-          if (oneTransaction != null && context.mounted) {
-            await ReceiptHandler.instance.showHistoryReceipt(
-              context: context,
-              settings: _generateTransactionSettings(oneTransaction, context)
-                  .copyWith(
-                onClose: () {
-                  AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
-                },
-              ),
-            );
-          }
-        } else {
-          cubit.showLoader();
-          onPay?.call(
-            (settings) async {
-              cubit.initial();
-              await ReceiptHandler.instance.showCardReceipt(
-                context: context,
-                settings: settings,
-              );
-            },
-            purchaseDataOrNull.transactionId,
+        onSubmit: (otp, dialogContext) async {
+          otpOrNull = otp;
+          purchaseDataOrFail = await onPurchaseStepTwo(
+            args: args,
+            otp: otpOrNull!,
+            transactionId: transactionId,
+            cubit: cubit,
+            originTransactionId: purchaseData.transactionId,
           );
-        }
+          if (purchaseDataOrFail.isLeft()) {
+            errorCounter++;
+            if (errorCounter == 3) {
+              if (dialogContext.mounted) {
+                Navigator.of(dialogContext).pop();
+                AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+                AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+              }
+            }
+            return;
+          } else if (purchaseDataOrFail.isRight() && context.mounted) {
+            Navigator.of(dialogContext).pop();
+            if (NetworkConstants.isSdkInApp) {
+              cubit.showLoader();
+              final oneTransactionResponse =
+                  await getOneTransactionByIdUseCase.invoke(
+                {
+                  'transactionId': transactionId,
+                  'merchantId': args.merchantId,
+                },
+              );
+              final oneTransaction = oneTransactionResponse.mapOrNull(
+                success: (value) => value.data.data,
+              );
+              cubit.initial();
+              if (oneTransaction != null && context.mounted) {
+                await ReceiptHandler.instance.showHistoryReceipt(
+                  context: context,
+                  settings:
+                      _generateTransactionSettings(oneTransaction, context)
+                          .copyWith(
+                    onClose: () {
+                      AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+                    },
+                  ),
+                );
+              }
+            } else {
+              cubit.showLoader();
+              onPay?.call(
+                (settings) async {
+                  cubit.initial();
+                  await ReceiptHandler.instance.showCardReceipt(
+                    context: context,
+                    settings: settings,
+                  );
+                },
+                purchaseDataOrFail.fold((l) => null, (r) => r.transactionId),
+              );
+            }
+          }
+        },
+      );
+      if (otpOrNull?.isEmpty ?? true) {
+        return;
       }
     } else {
       if (context.mounted) {

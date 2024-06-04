@@ -6,6 +6,7 @@ import 'package:amwal_pay_sdk/core/usecase/i_use_case.dart';
 import 'package:amwal_pay_sdk/features/card/data/models/request/purchase_request.dart';
 import 'package:amwal_pay_sdk/features/card/data/models/response/purchase_response.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
@@ -131,7 +132,7 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
     return purchaseData;
   }
 
-  Future<PurchaseData?> purchaseOtpStepTwo(
+  Future<Either<Map<String, dynamic>, PurchaseData>> purchaseOtpStepTwo(
     String amount,
     String terminalId,
     int currencyId,
@@ -161,9 +162,21 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
         await _purchaseOtpStepTwoUseCase.invoke(purchaseRequest);
     final state = mapNetworkState(networkState);
     emit(state);
-    return state.mapOrNull(success: (value) => value.uiModel.data);
+    final result = state.mapOrNull<Either<Map<String, dynamic>, PurchaseData>>(
+      success: (value) => right(value.uiModel.data!),
+      error: (value) => left({
+        'message': value.message,
+        'errorList': value.errorListMsg,
+      }),
+    );
+    if (result == null) {
+      return left({'message': 'something went wrong'});
+    } else {
+      return result;
+    }
   }
 
   void showLoader() => emit(const ICubitState.loading());
+
   void initial() => emit(const ICubitState.initial());
 }

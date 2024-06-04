@@ -4,11 +4,14 @@ import 'package:pinput/pinput.dart';
 class OTPEntryDialog extends StatefulWidget {
   final String verifyString;
   final String otpVerificationString;
+  final void Function(String, BuildContext) onSubmit;
 
-  const OTPEntryDialog(
-      {super.key,
-      required this.verifyString,
-      required this.otpVerificationString});
+  const OTPEntryDialog({
+    super.key,
+    required this.verifyString,
+    required this.otpVerificationString,
+    required this.onSubmit,
+  });
 
   @override
   State<OTPEntryDialog> createState() => _FourBoxOTPEntryDialogState();
@@ -60,6 +63,7 @@ class _FourBoxOTPEntryDialogState extends State<OTPEntryDialog> {
             child: Pinput(
               key: const Key('saleByCardPinPut'),
               controller: _pinPutController,
+              autofocus: true,
             ),
           ),
           Padding(
@@ -69,10 +73,10 @@ class _FourBoxOTPEntryDialogState extends State<OTPEntryDialog> {
               children: [
                 ElevatedButton(
                   key: const Key('saleByCardOtbVerify'),
-                  onPressed: () => Navigator.pop(
-                    context,
-                    _pinPutController.text,
-                  ),
+                  onPressed: () {
+                    widget.onSubmit(_pinPutController.text, context);
+                    _pinPutController.clear();
+                  },
                   child: Text(widget.verifyString),
                 )
               ],

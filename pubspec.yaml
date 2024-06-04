@@ -40,6 +40,7 @@ dependencies:
   package_info_plus: ^4.1.0
   keyboard_actions: ^4.2.0
   nfc_manager: ^3.4.0
+  dartz: ^0.10.1
 
 
 dev_dependencies:
