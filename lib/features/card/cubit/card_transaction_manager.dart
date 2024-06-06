@@ -83,7 +83,7 @@ class CardTransactionManager {
     if (purchaseData == null) return;
     if (purchaseData.isOtpRequired && context.mounted) {
       Either<Map<String, dynamic>, PurchaseData> purchaseDataOrFail;
-       int errorCounter = 1;
+       int errorCounter = 0;
       await showOtpDialog(
         context: context,
         translator: translator,
@@ -98,11 +98,12 @@ class CardTransactionManager {
           );
           if (purchaseDataOrFail.isLeft()) {
             errorCounter++;
-            if (errorCounter == 3) {
+            if (errorCounter >= 3) {
+
               if (dialogContext.mounted) {
                 Navigator.of(dialogContext).pop();
                 AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
-                AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+                // AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
               }
             }
             return;
