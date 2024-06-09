@@ -18,6 +18,7 @@ class InputFieldWidget extends StatefulWidget {
     this.isEnglish = false,
     this.isMonth = false,
     this.isYear = false,
+    this.isAliasName = false,
     this.maxLength = 20,
     this.minLength = 0,
     this.onChange,
@@ -38,6 +39,7 @@ class InputFieldWidget extends StatefulWidget {
   final bool isNumber;
   final bool isEnglish;
   final bool isMonth;
+  final bool isAliasName;
   final bool isYear;
   final int maxLength;
   final int minLength;
@@ -168,7 +170,13 @@ class _InputFieldWidgetState extends State<InputFieldWidget> {
                 FilteringTextInputFormatter.digitsOnly,
               LengthLimitingTextInputFormatter(widget.maxLength),
               if (widget.isEnglish)
-                FilteringTextInputFormatter.allow(RegExp('[a-zA-Z\\s]'))
+                FilteringTextInputFormatter.allow(RegExp('[a-zA-Z\\s]')),
+              if(widget.isEmail)
+                FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s@._-]')),
+              if(widget.isAliasName)
+                FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9\\s!@#\$%&*\\-_\\.]')),
+
+
             ],
           ),
         ],

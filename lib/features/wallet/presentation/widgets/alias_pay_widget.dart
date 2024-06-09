@@ -41,6 +41,7 @@ class AliasPayWidget extends StatelessWidget {
               bloc: walletCubit,
               builder: (_, state) {
                 return InputFieldWidget(
+                  isAliasName: true,
                   initialValue: walletCubit.aliasName,
                   widgetTitle: 'alis_tab'.translate(
                     context,
