@@ -77,6 +77,8 @@
   "transaction_by_label": "المعاملة عن طريق",
   "phone_number": "رقم التلفون",
   "wallet_mobile_number": "رقم تلفون المحفظة",
+  "transaction_cancel": "تم الغاء المعاملة",
+
   "merchant_id": "رقم التاجر",
   "terminal_id": "رقم الجهاز",
   "date_time": "التاريخ",

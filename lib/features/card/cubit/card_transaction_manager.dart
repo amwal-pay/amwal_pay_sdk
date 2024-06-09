@@ -16,6 +16,9 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../core/ui/error_dialog.dart';
+import '../../../localization/app_localizations_setup.dart';
+
 class CardTransactionManager {
   const CardTransactionManager._();
   static CardTransactionManager get instance =>
@@ -103,7 +106,29 @@ class CardTransactionManager {
               if (dialogContext.mounted) {
                 Navigator.of(dialogContext).pop();
                 AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
-                // AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+                AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+
+
+                if (AmwalSdkNavigator.amwalNavigatorObserver.navigator != null) {
+                  return showDialog(
+                    context:
+                    AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context,
+                    builder: (_) => Localizations(
+                      locale: AmwalSdkSettingContainer.locale,
+                      delegates: const [
+                        ...AppLocalizationsSetup.localizationsDelegates
+                      ],
+                      child: ErrorDialog(
+                        locale: AmwalSdkSettingContainer.locale,
+                        title: "err".translate(context) ?? '',
+                        message: "transaction_cancel".translate(context), resetState: () { AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop(); },
+
+                      ),
+                    ),
+                  );
+                }
+
+
               }
             }
             return;

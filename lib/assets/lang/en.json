@@ -134,6 +134,7 @@
   "stan": "Stan",
   "invalid-month": "Invalid entry",
   "enter_amount": "Please, Enter Amount",
+  "transaction_cancel": "Transaction has been Cancelled",
   "select_currency": "Please, Select Currency",
   "otp_verification": "OTP Verification",
   "invalid_exp_date": "Invalid Expiration Date",
