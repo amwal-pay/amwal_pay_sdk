@@ -87,6 +87,8 @@ class CardTransactionManager {
     if (purchaseData.isOtpRequired && context.mounted) {
       Either<Map<String, dynamic>, PurchaseData> purchaseDataOrFail;
        int errorCounter = 0;
+
+      var transactionId = const Uuid().v1();
       await showOtpDialog(
         context: context,
         translator: translator,
@@ -95,12 +97,13 @@ class CardTransactionManager {
           purchaseDataOrFail = await onPurchaseStepTwo(
             args: args,
             otp: otpOrNull!,
-            transactionId: const Uuid().v1(),
+            transactionId: transactionId,
             cubit: cubit,
             originTransactionId: purchaseData.transactionId,
           );
           if (purchaseDataOrFail.isLeft()) {
             errorCounter++;
+            transactionId = const Uuid().v1();
             if (errorCounter >= 3) {
 
               if (dialogContext.mounted) {
@@ -139,7 +142,7 @@ class CardTransactionManager {
               final oneTransactionResponse =
                   await getOneTransactionByIdUseCase.invoke(
                 {
-                  'transactionId':  const Uuid().v1(),
+                  'transactionId':  transactionId,
                   'merchantId': args.merchantId,
                 },
               );
