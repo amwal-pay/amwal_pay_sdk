@@ -21,6 +21,7 @@ import '../../../localization/app_localizations_setup.dart';
 
 class CardTransactionManager {
   const CardTransactionManager._();
+
   static CardTransactionManager get instance =>
       const CardTransactionManager._();
 
@@ -86,7 +87,7 @@ class CardTransactionManager {
     if (purchaseData == null) return;
     if (purchaseData.isOtpRequired && context.mounted) {
       Either<Map<String, dynamic>, PurchaseData> purchaseDataOrFail;
-       int errorCounter = 0;
+      int errorCounter = 0;
 
       var transactionId = const Uuid().v1();
       await showOtpDialog(
@@ -105,17 +106,16 @@ class CardTransactionManager {
             errorCounter++;
             transactionId = const Uuid().v1();
             if (errorCounter >= 3) {
-
               if (dialogContext.mounted) {
                 Navigator.of(dialogContext).pop();
                 AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
                 AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
 
-
-                if (AmwalSdkNavigator.amwalNavigatorObserver.navigator != null) {
+                if (AmwalSdkNavigator.amwalNavigatorObserver.navigator !=
+                    null) {
                   return showDialog(
-                    context:
-                    AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context,
+                    context: AmwalSdkNavigator
+                        .amwalNavigatorObserver.navigator!.context,
                     builder: (_) => Localizations(
                       locale: AmwalSdkSettingContainer.locale,
                       delegates: const [
@@ -124,14 +124,15 @@ class CardTransactionManager {
                       child: ErrorDialog(
                         locale: AmwalSdkSettingContainer.locale,
                         title: "err".translate(context) ?? '',
-                        message: "transaction_cancel".translate(context), resetState: () { AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop(); },
-
+                        message: "transaction_cancel".translate(context),
+                        resetState: () {
+                          AmwalSdkNavigator.amwalNavigatorObserver.navigator!
+                              .pop();
+                        },
                       ),
                     ),
                   );
                 }
-
-
               }
             }
             return;
@@ -139,22 +140,50 @@ class CardTransactionManager {
             Navigator.of(dialogContext).pop();
             if (NetworkConstants.isSdkInApp) {
               cubit.showLoader();
+
+              OneTransaction? oneTransaction = null;
               final oneTransactionResponse =
                   await getOneTransactionByIdUseCase.invoke(
                 {
-                  'transactionId':  transactionId,
+                  'transactionId': transactionId,
                   'merchantId': args.merchantId,
                 },
               );
-              final oneTransaction = oneTransactionResponse.mapOrNull(
-                success: (value) => value.data.data,
-              );
+              oneTransactionResponse.whenOrNull(success: (value) {
+                oneTransaction = value.data;
+              }, error: (message, errorList) {
+                AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+
+                if (AmwalSdkNavigator.amwalNavigatorObserver.navigator !=
+                    null) {
+                    showDialog(
+                    context: AmwalSdkNavigator
+                        .amwalNavigatorObserver.navigator!.context,
+                    builder: (_) => Localizations(
+                      locale: AmwalSdkSettingContainer.locale,
+                      delegates: const [
+                        ...AppLocalizationsSetup.localizationsDelegates
+                      ],
+                      child: ErrorDialog(
+                        locale: AmwalSdkSettingContainer.locale,
+                        title: "err".translate(context) ?? '',
+                        message: "transaction_cancel".translate(context),
+                        resetState: () {
+                          AmwalSdkNavigator.amwalNavigatorObserver.navigator!
+                              .pop();
+                        },
+                      ),
+                    ),
+                  );
+                }
+              });
+
               cubit.initial();
               if (oneTransaction != null && context.mounted) {
                 await ReceiptHandler.instance.showHistoryReceipt(
                   context: context,
                   settings:
-                      _generateTransactionSettings(oneTransaction, context)
+                      _generateTransactionSettings(oneTransaction!, context)
                           .copyWith(
                     onClose: () {
                       AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
