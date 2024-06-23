@@ -33,8 +33,10 @@ class AcceptedPaymentMethodsWidget extends StatelessWidget {
         ),
         if (showOmanNet)
           Image.asset(
+
             AppAssets.omanNetLogo,
             package: 'amwal_pay_sdk',
+            width: 40,
           ),
         const SizedBox(
           width: 4,

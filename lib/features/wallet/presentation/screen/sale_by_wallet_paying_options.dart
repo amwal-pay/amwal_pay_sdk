@@ -166,6 +166,7 @@ class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
                             showMaster: false,
                             showVisa: false,
                             showExpress: false,
+                            showOmanNet: false,
                           );
                         } else {
                           return const SizedBox();

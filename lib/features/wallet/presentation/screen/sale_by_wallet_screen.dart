@@ -187,6 +187,7 @@ class _SaleByWalletScreenState extends State<SaleByWalletScreen> {
               showMaster: false,
               showVisa: false,
               showExpress: false,
+              showOmanNet: false,
             ),
           ],
         ),
