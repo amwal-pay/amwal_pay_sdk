@@ -113,7 +113,7 @@ class _CardInfoFormWidgetState extends State<CardInfoFormWidget> {
               .translate(context, globalTranslator: widget.globalTranslator),
           widgetHint: 'email_hint'
               .translate(context, globalTranslator: widget.globalTranslator),
-          isEmail: true,
+          isAliasName: true,
           isRequired: false,
           maxLength: 40,
           initialValue: widget.cubit.email,
