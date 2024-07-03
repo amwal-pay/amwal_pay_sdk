@@ -83,7 +83,7 @@ class AmwalSdkNavigator {
     RouteSettings settings,
     BuildContext context,
     Locale locale,
-    OnPayCallback onPay,
+    OnPayCallback? onPay,
   ) async {
     final arguments = settings.arguments as PaymentArguments;
     await Navigator.of(context).push(

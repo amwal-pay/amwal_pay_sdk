@@ -11,7 +11,8 @@ import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nfc_manager/nfc_manager.dart';
-
+import 'package:nfc_manager/platform_tags.dart';
+import 'dart:convert';
 class SaleByCardContactLessScreen
     extends StatefulApiView<SaleByCardContactLessCubit> {
   final String amount;
@@ -23,7 +24,7 @@ class SaleByCardContactLessScreen
   final String? transactionId;
   final String Function(String)? translator;
   final Locale locale;
-  final OnPayCallback onPay;
+  final OnPayCallback? onPay;
 
   const SaleByCardContactLessScreen({
     super.key,
@@ -59,7 +60,12 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
         );
         NfcManager.instance.startSession(
           onDiscovered: (NfcTag tag) async {
-            print(tag.data);
+            var nfca = NfcA.from(tag);
+
+            var panString = utf8.decoder.convert(nfca!.identifier.toList());
+
+            print('panString: $panString');
+
           },
         );
       },

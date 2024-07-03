@@ -52,6 +52,10 @@ class AmwalPaySdk {
       CacheKeys.merchantName,
       settings.merchantName,
     );
+    await CacheStorageHandler.instance.write(
+      CacheKeys.merchant_flavor,
+      settings.flavor,
+    );
 
     HttpOverrides.global = MyHttpOverrides();
     final networkService = NetworkServiceBuilder.instance.setupNetworkService(
@@ -197,8 +201,13 @@ class AmwalPaySdk {
   }
 
   Future<void> openCardScreen(AmwalInAppSdkSettings settings) async {
+
     final cardSdk = await _initCardSdk(settings: settings);
     AmwalSdkSettingContainer.locale = settings.locale;
+    await CacheStorageHandler.instance.write(
+      CacheKeys.merchant_flavor,
+      settings.flavor,
+    );
     await cardSdk.navigateToCard(
       settings.locale,
       settings.transactionId,

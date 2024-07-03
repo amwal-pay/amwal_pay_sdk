@@ -140,7 +140,7 @@ class _SaleByCardScreenState extends State<SaleByCardScreen> {
             ),
             const SizedBox(height: 15),
             // if debug
-            if (kDebugMode)
+            if (MerchantStore.instance.getMerchantFlavor() == 'vpos'|| kDebugMode)
               AppMainButton(
                 key: const Key('contactless'),
                 buttonIcon: AppAssets.contactlessIcon,

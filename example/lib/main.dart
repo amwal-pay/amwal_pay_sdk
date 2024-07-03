@@ -1,6 +1,8 @@
 import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
 import 'package:amwal_pay_sdk/amwal_sdk_settings/amwal_sdk_settings.dart';
 import 'package:amwal_pay_sdk/core/networking/constants.dart';
+import 'package:amwal_pay_sdk/features/currency_field/data/models/response/currency_response.dart';
+import 'package:amwal_pay_sdk/features/payment_argument.dart';
 import 'package:example/currency_model.dart';
 import 'package:example/drop_down_form.dart';
 import 'package:example/text_form.dart';
@@ -235,6 +237,28 @@ class _DemoScreenState extends State<DemoScreen> {
               ),
               ElevatedButton(
                 onPressed: () async {
+
+                  // final paymentArguments = PaymentArguments(
+                  //   amount: "5000",
+                  //   terminalId:  _terminalController.text, merchantId: 1,
+                  //   currencyData: const CurrencyData(
+                  //     idN: 1,
+                  //     name: "OMR",
+                  //     id: "512",
+                  //   ),
+                  //
+                  // );
+                  // await AmwalSdkNavigator.instance
+                  //     .toCardContactLessOptionScreen(
+                  //   RouteSettings(arguments: paymentArguments),
+                  //   context,
+                  //
+                  //   Locale(_languageController.text),null
+                  //
+                  //
+                  // );
+                  // return;
+
                   final valid = _formKey.currentState!.validate();
                   if (!valid) return;
                   await AmwalPaySdk.instance.initSdk(

@@ -1,5 +1,6 @@
 import 'package:amwal_pay_sdk/sdk_builder/sdk_builder.dart';
 
+import '../../amwal_sdk_settings/amwal_sdk_settings.dart';
 import '../../features/transaction/data/models/response/merchant_name_response.dart';
 
 class MerchantStore {
@@ -17,6 +18,8 @@ class MerchantStore {
 
   MerchantData? getMerchantData() =>
       CacheStorageHandler.instance.read(CacheKeys.merchantData);
+  String? getMerchantFlavor() =>
+      CacheStorageHandler.instance.read(CacheKeys.merchant_flavor);
   List<String> getTerminal() =>
       CacheStorageHandler.instance.read(CacheKeys.terminals);
 }

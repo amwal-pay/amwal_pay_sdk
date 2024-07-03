@@ -12,6 +12,8 @@ abstract class IAmwalSdkSettings {
   final String amount;
   final String currency;
   final String? merchantName;
+  final String? flavor;
+
   final OnPayCallback onPay;
   final OnPayCallback? onCountComplete;
   final GetTransactionFunction? getTransactionFunction;
@@ -33,6 +35,7 @@ abstract class IAmwalSdkSettings {
     this.onError,
     this.onCountComplete,
     this.merchantName,
+    this.flavor,
     this.locale = const Locale('en'),
     this.isMocked = false,
     this.onTokenExpired,
@@ -55,10 +58,48 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
     super.isMocked,
     super.onError,
     super.onTokenExpired,
+    super.flavor
+
   }) : super(
           amount: '',
           currency: '',
         );
+
+  factory AmwalInAppSdkSettings.fromJson(Map<String, dynamic> json) {
+    return AmwalInAppSdkSettings(
+      token: json['token'],
+      secureHashValue: json['secureHashValue'],
+      merchantId: json['merchantId'],
+      terminalIds: json['terminalIds'] ?? [] ,
+      transactionId: json['transactionId'],
+      merchantName: json['merchantName'],
+      onPay: json['onPay'],
+      countDownInSeconds: json['countDownInSeconds'],
+      getTransactionFunction: json['getTransactionFunction'],
+      onError: json['onError'],
+      onCountComplete: json['onCountComplete'],
+      locale: json['locale'],
+      isMocked: json['isMocked'],
+      onTokenExpired: json['onTokenExpired'],
+      flavor: json['flavor'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'token': token,
+      'secureHashValue': secureHashValue,
+      'merchantId': merchantId,
+      'transactionId': transactionId,
+      'currency': currency,
+      'amount': amount,
+      'merchantName': merchantName,
+      'locale': locale,
+      'isMocked': isMocked,
+      'countDownInSeconds': countDownInSeconds,
+      'flavor': flavor,
+    };
+  }
 }
 
 class AmwalSdkSettings extends IAmwalSdkSettings {
@@ -80,5 +121,43 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
     super.onError,
     super.onTokenExpired,
     super.countDownInSeconds = 90,
+    super.flavor
   }) : super(terminalIds: [terminalId], onPay: (_, [__]) {});
+
+  factory AmwalSdkSettings.fromJson(Map<String, dynamic> json) {
+    return AmwalSdkSettings(
+      token: json['token'] ?? '',
+      secureHashValue: json['secureHashValue'],
+      merchantId: json['merchantId'],
+      transactionId: json['transactionId'],
+      currency: json['currency'],
+      amount: json['amount'],
+      terminalId: json['terminalId'],
+      merchantName: json['merchantName'],
+      getTransactionFunction: null, // You should handle this according to your logic
+      onCountComplete: null, // You should handle this according to your logic
+      locale: json['locale'],
+      isMocked: json['isMocked'],
+      onError: null, // You should handle this according to your logic
+      onTokenExpired: null, // You should handle this according to your logic
+      countDownInSeconds: json['countDownInSeconds'] ?? 90,
+      flavor: json['flavor'],
+    );
+  }
+  Map<String, dynamic> toJson() {
+    return {
+      'token': token,
+      'secureHashValue': secureHashValue,
+      'merchantId': merchantId,
+      'transactionId': transactionId,
+      'currency': currency,
+      'amount': amount,
+      'terminalId': terminalId,
+      'merchantName': merchantName,
+      'locale': locale,
+      'isMocked': isMocked,
+      'countDownInSeconds': countDownInSeconds,
+      'flavor': flavor,
+    };
+  }
 }
