@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:amwal_pay_sdk/core/apiview/api_view.dart';
 import 'package:amwal_pay_sdk/core/resources/assets/app_assets_paths.dart';
 import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
@@ -8,11 +10,18 @@ import 'package:amwal_pay_sdk/features/currency_field/data/models/response/curre
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
+import 'package:debit_credit_card_widget/debit_credit_card_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:nfc_manager/platform_tags.dart';
 import 'dart:convert';
+
+import '../data/models/response/CardInfo.dart';
+
+const MethodChannel javaChannel = MethodChannel('com_amwalpay_sdk');
+
 class SaleByCardContactLessScreen
     extends StatefulApiView<SaleByCardContactLessCubit> {
   final String amount;
@@ -46,30 +55,86 @@ class SaleByCardContactLessScreen
 }
 
 class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
-  late NfcManager _nfcManager;
-  bool _isNfcAvailable = false;
+  int setupStatusIndex = 0;
+  String setupMessage = "Initializing SDK..";
+  CardInfo? cardInfo;
+  bool setupComplete = false;
+  int flowIndex = 0;
+  bool isScanning = false;
+
+  String scanResult = "";
+
+  Future<void> checkNFCStatus() async {
+    try {
+      setupStatusIndex = await javaChannel.invokeMethod('init');
+      if (setupStatusIndex != 2) {
+        setState(() {
+          setupMessage = setupStatusIndex == 0
+              ? "NFC Unavailable"
+              : "Turn on NFC and restart the app";
+          setupComplete = true;
+        });
+        return;
+      }
+
+      setState(() {
+        setupMessage = "Start Scan";
+      });
+      initCardScanListener();
+      flowIndex++;
+      setupComplete = true;
+    } catch (e) {
+      setState(() {
+        print(e.toString());
+        setupStatusIndex = 0;
+        setupMessage = "NFC Unavailable";
+        setupComplete = true;
+      });
+    }
+  }
+
+  Future<void> initCardScanListener() async {
+    try {
+      final scanOp = json.decode(await javaChannel.invokeMethod("listen"));
+      if (scanOp['success']) {
+        setState(() {
+          setState(() {
+            scanResult = scanOp['cardData'];
+            cardInfo = CardInfo.fromJson(scanOp);
+            flowIndex++;
+            isScanning = false;
+            setupMessage = "Scanning completed";
+          });
+        });
+        return;
+      }
+      throw PlatformException(code: '01', stacktrace: scanOp['error']);
+    } catch (e) {
+      if (context.mounted) {
+        setState(() {
+          flowIndex--;
+          isScanning = false;
+        });
+        showSnackMessage(
+          context,
+          e.toString(),
+          ["OK", () {}],
+        );
+      }
+    }
+  }
+
+  Future<void> forceTerminateNFC() async {
+    // ignore: empty_catches
+    try {
+      await javaChannel.invokeMethod('terminate');
+    } on PlatformException {}
+  }
 
   @override
   void initState() {
     super.initState();
-    _nfcManager = NfcManager.instance;
-    _nfcManager.isAvailable().then(
-      (value) {
-        setState(
-          () => _isNfcAvailable = value,
-        );
-        NfcManager.instance.startSession(
-          onDiscovered: (NfcTag tag) async {
-            var nfca = NfcA.from(tag);
-
-            var panString = utf8.decoder.convert(nfca!.identifier.toList());
-
-            print('panString: $panString');
-
-          },
-        );
-      },
-    );
+    checkNFCStatus();
   }
 
   @override
@@ -130,33 +195,81 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          Expanded(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 28.0),
-                  child: SvgPicture.asset(
-                    AppAssets.contactLessImageIcon,
-                    package: 'amwal_pay_sdk',
+          (cardInfo != null)
+              ?  Expanded(
+                child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: DebitCreditCardWidget(
+                        cardHolderName: ("${cardInfo!.holderFirstname ?? ""} ${cardInfo!.holderLastname ?? ""}"),
+                        cardNumber: cardInfo!.cardNumber.toString(),
+                        cardExpiry: cardInfo!.cardExpiry.toString(),
+                        cardType: CardType.credit,
+                      ),
+                    ),
+                  ),
+              )
+              : Expanded(
+                  child: Center(
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 20),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 28.0),
+                          child: SvgPicture.asset(
+                            AppAssets.contactLessImageIcon,
+                            package: 'amwal_pay_sdk',
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Text(
+                          'tap_the_card_or_phone_msg'.translate(
+                            context,
+                            globalTranslator: widget.translator,
+                          ),
+                          style: const TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Text(
+                          setupMessage,
+                          style: const TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                const SizedBox(height: 12),
-                Text(
-                  'tap_the_card_or_phone_msg'.translate(
-                    context,
-                    globalTranslator: widget.translator,
-                  ),
-                  style: const TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-              ],
-            ),
-          ),
           const AcceptedPaymentMethodsWidget(),
           const SizedBox(height: 24),
         ],
       ),
     );
   }
+}
+
+Future<void> showSnackMessage(
+    BuildContext context, String message, dynamic action) async {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text(
+      message,
+      style: const TextStyle(
+        color: Colors.white,
+      ),
+    ),
+    backgroundColor: const Color(0xFF2d3134),
+    closeIconColor: Colors.white,
+    elevation: 10,
+    behavior: SnackBarBehavior.floating,
+    margin: const EdgeInsets.all(10),
+    action: action == null
+        ? null
+        : SnackBarAction(
+            textColor: Colors.blue,
+            label: action[0],
+            onPressed: () => action[1](),
+          ),
+  ));
 }

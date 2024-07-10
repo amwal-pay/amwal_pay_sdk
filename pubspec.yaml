@@ -41,6 +41,7 @@ dependencies:
   keyboard_actions: ^4.2.0
   nfc_manager: ^3.4.0
   dartz: ^0.10.1
+  debit_credit_card_widget: ^1.0.2
 
 
 dev_dependencies:
@@ -53,7 +54,11 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
+  plugin:
+    platforms:
+      android:
+        package: com.amwalpay.sdk
+        pluginClass: AmwalSDK
   # To add assets to your package, add an assets section, like this:
   assets:
     - lib/assets/lang/
