@@ -160,6 +160,9 @@
   "expiry_month_hint": "ادخل الشهر",
   "expiry_year_hint": "ادخل السنة",
   "cvv_hint": "CVV ادخل",
-  "something_went_wrong": "حدث خطأ اعد المحاولة لاحقا"
+  "something_went_wrong": "حدث خطأ اعد المحاولة لاحقا",
+  "nfc_unavailable": "اتصال المدى القريب لايعمل",
+  "nfc_unavailable_massage": "قم بتشغل اتصال المدى القريب او اعد تشغل التطبيق ",
+  "start_scan" : "بدا فحص الكارت من فضلك ضع الكارت في مكان قراءه اتصال المدى القريب"
 }
 

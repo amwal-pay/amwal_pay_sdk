@@ -146,6 +146,8 @@
   "expiry_month_hint": "Enter Month",
   "expiry_year_hint": "Enter Year",
   "cvv_hint": "Enter CVV",
-  "something_went_wrong": "Something Went Wrong"
-
+  "something_went_wrong": "Something Went Wrong",
+  "nfc_unavailable": "NFC Unavailable",
+  "nfc_unavailable_massage": "Turn on NFC and restart the app",
+  "start_scan" : "Start scan credit card please keed you credit card near to nfc"
 }

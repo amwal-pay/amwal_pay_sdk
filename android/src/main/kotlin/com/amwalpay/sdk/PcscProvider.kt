@@ -2,6 +2,9 @@ package com.amwalpay.sdk
 
 
 import android.nfc.tech.IsoDep
+import com.github.devnied.emvnfccard.exception.CommunicationException
+import com.github.devnied.emvnfccard.parser.IProvider
+import java.io.IOException
 
 class PcscProvider internal constructor(tag: IsoDep?) : IProvider {
     private var mTagCom: IsoDep?
@@ -10,23 +13,23 @@ class PcscProvider internal constructor(tag: IsoDep?) : IProvider {
         mTagCom = tag
     }
 
-    @Override
+
     @Throws(CommunicationException::class)
-    fun transceive(pCommand: ByteArray?): ByteArray? {
+    override fun transceive(pCommand: ByteArray?): ByteArray? {
         val response: ByteArray
         try {
             // send command to emv card
-            response = mTagCom.transceive(pCommand)
+            response = mTagCom!!.transceive(pCommand)
         } catch (e: IOException) {
-            throw CommunicationException(e.getMessage())
+            throw CommunicationException(e.toString())
         }
         return response
     }
 
     @Override
-    fun getAt(): ByteArray? {
+    override fun getAt(): ByteArray? {
         // For NFC-A
-        return mTagCom.getHistoricalBytes()
+        return mTagCom?.getHistoricalBytes()
         // For NFC-B
         // return mTagCom.getHiLayerResponse();
     }
