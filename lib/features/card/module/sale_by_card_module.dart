@@ -10,6 +10,8 @@ import 'package:amwal_pay_sdk/features/card/domain/use_case/purchase_otp_step_on
 import 'package:amwal_pay_sdk/features/card/domain/use_case/purchase_otp_step_two_use_case.dart';
 import 'package:amwal_pay_sdk/features/card/domain/use_case/purchase_use_case.dart';
 
+import '../cubit/sale_by_card_contact_less_cubit.dart';
+
 class SaleByCardModule {
   final NetworkService _networkService;
   SaleByCardModule(this._networkService);
@@ -44,6 +46,14 @@ class SaleByCardModule {
     /// inject sale by card cubit
     CardInjector.instance.registerLazySingleton(
       () => SaleByCardManualCubit(
+        getIt<PurchaseUseCase>(),
+        getIt<PurchaseOtpStepOneUseCase>(),
+        getIt<PurchaseOtpStepTwoUseCase>(),
+      ),
+    );
+    /// inject sale by card cubit
+    CardInjector.instance.registerLazySingleton(
+      () => SaleByCardContactLessCubit(
         getIt<PurchaseUseCase>(),
         getIt<PurchaseOtpStepOneUseCase>(),
         getIt<PurchaseOtpStepTwoUseCase>(),

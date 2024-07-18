@@ -18,12 +18,14 @@ import 'package:nfc_manager/nfc_manager.dart';
 import 'package:nfc_manager/platform_tags.dart';
 import 'dart:convert';
 
+import '../../../core/loader_mixin.dart';
+import '../../transaction/domain/use_case/get_transaction_by_Id.dart';
+import '../cubit/card_transaction_manager.dart';
 import '../data/models/response/CardInfo.dart';
-
-const MethodChannel javaChannel = MethodChannel('com_amwalpay_sdk');
+import '../dependency/injector.dart';
 
 class SaleByCardContactLessScreen
-    extends StatefulApiView<SaleByCardContactLessCubit> {
+    extends StatefulApiView<SaleByCardContactLessCubit> with LoaderMixin {
   final String amount;
   final int currencyId;
   final String currency;
@@ -55,80 +57,78 @@ class SaleByCardContactLessScreen
 }
 
 class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
-  int setupStatusIndex = 0;
-  String setupMessage = "Initializing SDK..";
-  CardInfo? cardInfo;
-  bool setupComplete = false;
-  int flowIndex = 0;
-  bool isScanning = false;
-
-  String scanResult = "";
-
   Future<void> checkNFCStatus() async {
     try {
-      setupStatusIndex = await javaChannel.invokeMethod('init');
-      if (setupStatusIndex != 2) {
-        setState(() {
-          setupMessage = setupStatusIndex == 0
-              ? "nfc_unavailable".translate(
-                  context,
-                  globalTranslator: widget.translator,
-                )
-              : "nfc_unavailable_massage".translate(
-                  context,
-                  globalTranslator: widget.translator,
-                );
-          setupComplete = true;
-        });
+      widget.cubit.setupStatusIndex = await javaChannel.invokeMethod('init');
+      if (widget.cubit.setupStatusIndex != 2) {
+        widget.cubit.setupMessage = widget.cubit.setupStatusIndex == 0
+            ? "nfc_unavailable".translate(
+                context,
+                globalTranslator: widget.translator,
+              )
+            : "nfc_unavailable_massage".translate(
+                context,
+                globalTranslator: widget.translator,
+              );
+
         return;
       }
 
-      setState(() {
-        setupMessage = "start_scan".translate(
-          context,
-          globalTranslator: widget.translator,
-        );
-      });
-      initCardScanListener();
-      flowIndex++;
-      setupComplete = true;
+      widget.cubit.setupMessage = "start_scan".translate(
+        context,
+        globalTranslator: widget.translator,
+      );
     } catch (e) {
-      setState(() {
-        print(e.toString());
-        setupStatusIndex = 0;
-        setupMessage = "nfc_unavailable".translate(
-          context,
-          globalTranslator: widget.translator,
-        );
-        setupComplete = true;
-      });
+      widget.cubit.setupStatusIndex = 0;
+      widget.cubit.setupMessage = "nfc_unavailable".translate(
+        context,
+        globalTranslator: widget.translator,
+      );
     }
+
+    widget.cubit.arg = PaymentArguments(
+      terminalId: widget.terminalId,
+      amount: widget.amount,
+      merchantId: widget.merchantId,
+      transactionId: widget.transactionId,
+      currencyData: CurrencyData(
+        idN: widget.currencyId,
+        name: widget.currency,
+        id: widget.currencyId.toString(),
+      ),
+    );
+    initCardScanListener();
   }
-  Future<void> initCardScanListener() async {
+
+  initCardScanListener() async {
     try {
       final scanOp = json.decode(await javaChannel.invokeMethod("listen"));
       if (scanOp['success']) {
-        setState(() {
-          setState(() {
-            scanResult = scanOp['cardData'];
-            cardInfo = CardInfo.fromJson(scanOp);
-            flowIndex++;
-            isScanning = false;
-            setupMessage = "Scanning completed".translate(
-              context,
-              globalTranslator: widget.translator,
-            );
-          });
-        });
+        if (widget.cubit.cardInfo != null) {
+          return;
+        }
+        widget.cubit.cardInfo = CardInfo.fromJson(scanOp);
+        widget.cubit.fillCardData(widget.cubit.cardInfo!);
+        widget.cubit.setupMessage = "Scanning completed".translate(
+          context,
+          globalTranslator: widget.translator,
+        );
+
+        setState(() {});
+        CardTransactionManager.instance.onPurchaseWith3DS(
+          cubit: widget.cubit,
+          args: widget.cubit.arg!,
+          context: context,
+          getOneTransactionByIdUseCase:
+              CardInjector.instance.get<GetOneTransactionByIdUseCase>(),
+          dismissLoader: widget.dismissDialog,
+          onPay: widget.onPay,
+        );
         return;
       }
       throw PlatformException(code: '01', stacktrace: scanOp['error']);
     } catch (e) {
       if (context.mounted) {
-        setState(() {
-          flowIndex--;
-          isScanning = false;
-        });
         showSnackMessage(
           context,
           e.toString(),
@@ -153,23 +153,12 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
 
   @override
   void dispose() {
-    NfcManager.instance.stopSession();
     super.dispose();
+    forceTerminateNFC();
   }
 
   @override
   Widget build(BuildContext context) {
-    final args = PaymentArguments(
-      terminalId: widget.terminalId,
-      amount: widget.amount,
-      merchantId: widget.merchantId,
-      transactionId: widget.transactionId,
-      currencyData: CurrencyData(
-        idN: widget.currencyId,
-        name: widget.currency,
-        id: widget.currencyId.toString(),
-      ),
-    );
     return Scaffold(
       backgroundColor: lightGeryColor,
       appBar: !widget.showAppBar
@@ -204,22 +193,25 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
             ),
             child: SaleCardFeatureCommonWidgets.merchantAndAmountInfo(
               context,
-              args,
+              widget.cubit.arg!,
               translator: widget.translator,
             ),
           ),
           const SizedBox(height: 16),
-          (cardInfo != null)
+          (widget.cubit.cardInfo != null)
               ? Expanded(
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: DebitCreditCardWidget(
                         cardHolderName:
-                            ("${cardInfo!.holderFirstname ?? ""} ${cardInfo!.holderLastname ?? ""}"),
-                        cardNumber: cardInfo!.cardNumber.toString(),
-                        cardExpiry: cardInfo!.cardExpiry.toString(),
-                        cardBrand: getCardBrand(cardInfo!.cardNumber!),
+                            ("${widget.cubit.cardInfo!.holderFirstname ?? ""} ${widget.cubit.cardInfo!.holderLastname ?? ""}"),
+                        cardNumber:
+                            widget.cubit.cardInfo!.cardNumber.toString(),
+                        cardExpiry:
+                            widget.cubit.cardInfo!.cardExpiry.toString(),
+                        cardBrand: widget.cubit
+                            .getCardBrand(widget.cubit.cardInfo!.cardNumber!),
                         cardType: CardType.credit,
                       ),
                     ),
@@ -252,7 +244,7 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
                           padding: const EdgeInsets.all(8.0),
                           child: Center(
                             child: Text(
-                              setupMessage,
+                              widget.cubit.setupMessage,
                               style: const TextStyle(
                                 fontSize: 18,
                               ),
@@ -269,48 +261,6 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
       ),
     );
   }
-}
-
-CardBrand getCardBrand(String cardNumber) {
-  if (cardNumber.isEmpty) {
-    return CardBrand.visa;
-  }
-
-  cardNumber = cardNumber.replaceAll(RegExp(r'\s+'), ''); // Remove any spaces
-
-  // Define card brand patterns
-  final cardBrandPatterns = {
-    "Visa": RegExp(r'^4[0-9]{12}(?:[0-9]{3})?$'),
-    "MasterCard": RegExp(
-        r'^(?:5[1-5][0-9]{14}|2(?:2[2-9][0-9]{12}|[3-6][0-9]{13}|7[01][0-9]{12}|720[0-9]{12}))$'),
-    "American Express": RegExp(r'^3[47][0-9]{13}$'),
-    "Discover": RegExp(r'^6(?:011|5[0-9]{2})[0-9]{12}$'),
-    "JCB": RegExp(r'^(?:2131|1800|35\d{3})\d{11}$'),
-    "Diners Club": RegExp(r'^3(?:0[0-5]|[68][0-9])[0-9]{11}$'),
-    "Maestro": RegExp(r'^(5018|5020|5038|5893|6304|6759|676[1-3])[0-9]{8,15}$'),
-    "UnionPay": RegExp(r'^(62[0-9]{14,17})$'),
-    "RuPay": RegExp(r'^(60|65|81|82|508)[0-9]{14,15}$'),
-  };
-
-  // Check card number against patterns
-  for (var entry in cardBrandPatterns.entries) {
-    if (entry.value.hasMatch(cardNumber)) {
-      if (entry.key == "Visa") {
-        return CardBrand.visa;
-      } else if (entry.key == "MasterCard") {
-        return CardBrand.mastercard;
-      }else if (entry.key == "American Express") {
-        return CardBrand.americanExpress;
-      }else if (entry.key == "Discover") {
-        return CardBrand.discover;
-      }else if (entry.key == "RuPay") {
-        return CardBrand.rupay;
-      }
-      return CardBrand.visa;
-    }
-  }
-
-  return CardBrand.visa;
 }
 
 Future<void> showSnackMessage(
