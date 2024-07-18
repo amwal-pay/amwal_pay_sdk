@@ -37,7 +37,7 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
       "JCB": RegExp(r'^(?:2131|1800|35\d{3})\d{11}$'),
       "Diners Club": RegExp(r'^3(?:0[0-5]|[68][0-9])[0-9]{11}$'),
       "Maestro":
-          RegExp(r'^(5018|5020|5038|5893|6304|6759|676[1-3])[0-9]{8,15}$'),
+      RegExp(r'^(5018|5020|5038|5893|6304|6759|676[1-3])[0-9]{8,15}$'),
       "UnionPay": RegExp(r'^(62[0-9]{14,17})$'),
       "RuPay": RegExp(r'^(60|65|81|82|508)[0-9]{14,15}$'),
     };
@@ -66,10 +66,10 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
   void fillCardData(CardInfo cardInfo) {
     cardNo = cardInfo.cardNumber;
     cardHolderName =
-        ("${cardInfo.holderFirstname ?? ""} ${cardInfo.holderLastname ?? ""}");
+    ("${cardInfo.holderFirstname ?? ""} ${cardInfo.holderLastname ?? ""}");
     expirationDateMonth = cardInfo.cardExpiry?.split("/")[0];
     expirationDateYear = cardInfo.cardExpiry?.split("/")[1];
-
+    cvV2 = "123";
     emit(ICubitState.success(uiModel: PurchaseResponse(success: true)));
   }
 }

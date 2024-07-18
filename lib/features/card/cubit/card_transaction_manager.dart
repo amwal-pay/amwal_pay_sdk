@@ -75,6 +75,7 @@ class CardTransactionManager {
     required GetOneTransactionByIdUseCase getOneTransactionByIdUseCase,
     required void Function(BuildContext) dismissLoader,
   }) async {
+
     String? otpOrNull;
     final purchaseData = await cubit.purchaseOtpStepOne(
       args.amount,

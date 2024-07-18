@@ -107,6 +107,7 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
         if (widget.cubit.cardInfo != null) {
           return;
         }
+        forceTerminateNFC();
         widget.cubit.cardInfo = CardInfo.fromJson(scanOp);
         widget.cubit.fillCardData(widget.cubit.cardInfo!);
         widget.cubit.setupMessage = "Scanning completed".translate(
@@ -191,11 +192,14 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
               vertical: 30.0,
               horizontal: 18,
             ),
-            child: SaleCardFeatureCommonWidgets.merchantAndAmountInfo(
-              context,
-              widget.cubit.arg!,
-              translator: widget.translator,
-            ),
+
+            child: (widget.cubit.arg != null)
+                ? SaleCardFeatureCommonWidgets.merchantAndAmountInfo(
+                    context,
+                    widget.cubit.arg!,
+                    translator: widget.translator,
+                  )
+                : SizedBox.shrink(),
           ),
           const SizedBox(height: 16),
           (widget.cubit.cardInfo != null)
@@ -211,7 +215,7 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
                         cardExpiry:
                             widget.cubit.cardInfo!.cardExpiry.toString(),
                         cardBrand: widget.cubit
-                            .getCardBrand(widget.cubit.cardInfo!.cardNumber!),
+                            .getCardBrand(widget.cubit.cardInfo?.cardNumber ?? ""),
                         cardType: CardType.credit,
                       ),
                     ),
