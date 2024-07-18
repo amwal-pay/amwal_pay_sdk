@@ -70,7 +70,7 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
                 context,
                 globalTranslator: widget.translator,
               );
-
+        setState(() {});
         return;
       }
 
@@ -78,6 +78,7 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
         context,
         globalTranslator: widget.translator,
       );
+      setState(() {});
     } catch (e) {
       widget.cubit.setupStatusIndex = 0;
       widget.cubit.setupMessage = "nfc_unavailable".translate(
@@ -129,6 +130,8 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
       }
       throw PlatformException(code: '01', stacktrace: scanOp['error']);
     } catch (e) {
+
+
       if (context.mounted) {
         showSnackMessage(
           context,
@@ -136,6 +139,8 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
           ["OK", () {}],
         );
       }
+    await  forceTerminateNFC();
+      await checkNFCStatus();
     }
   }
 
@@ -192,7 +197,6 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
               vertical: 30.0,
               horizontal: 18,
             ),
-
             child: (widget.cubit.arg != null)
                 ? SaleCardFeatureCommonWidgets.merchantAndAmountInfo(
                     context,
@@ -214,8 +218,8 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
                             widget.cubit.cardInfo!.cardNumber.toString(),
                         cardExpiry:
                             widget.cubit.cardInfo!.cardExpiry.toString(),
-                        cardBrand: widget.cubit
-                            .getCardBrand(widget.cubit.cardInfo?.cardNumber ?? ""),
+                        cardBrand: widget.cubit.getCardBrand(
+                            widget.cubit.cardInfo?.cardNumber ?? ""),
                         cardType: CardType.credit,
                       ),
                     ),
