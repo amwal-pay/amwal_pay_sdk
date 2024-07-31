@@ -14,7 +14,7 @@ class ThreeDSWebViewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('3DS Authentication')),
+      appBar: AppBar(title: const Text('3DS Authentication')),
       body: WebView(
         initialUrl: url,
         javascriptMode: JavascriptMode.unrestricted,

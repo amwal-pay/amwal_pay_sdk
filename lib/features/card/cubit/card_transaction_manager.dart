@@ -88,7 +88,7 @@ class CardTransactionManager {
     purchaseData?.threeDSecureUrl = 'https://3ds.com?transactionId=123';
     if (purchaseData == null) return;
     if (purchaseData.threeDSecureUrl != null && context.mounted) {
-      await Navigator.of(context).push(
+      AmwalSdkNavigator.amwalNavigatorObserver.navigator?.push(
         MaterialPageRoute(
           builder: (context) => ThreeDSWebViewPage(
             url: purchaseData.threeDSecureUrl!,
