@@ -156,6 +156,7 @@ class AmwalSDK : FlutterPlugin, ActivityAware, MethodCallHandler, NfcAdapter.Rea
     fun sendCardInfo(data: EmvCard) {
         val jsonObject: JsonObject = JsonObject()
         jsonObject.addProperty("success", true)
+        jsonObject.addProperty("state", data.state.name.toString())
         jsonObject.addProperty("cardData", data.toString())
         try {
             jsonObject.addProperty("cardNumber", data.cardNumber)

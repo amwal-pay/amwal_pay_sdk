@@ -21,17 +21,21 @@ class PurchaseResponse extends BaseResponse<PurchaseData> {
 class PurchaseData {
   final String message;
   final String transactionId;
+
+   String? threeDSecureUrl;
+
   final int terminalId;
   final bool isOtpRequired;
   final HostResponseData hostResponseData;
 
 //<editor-fold desc="Data Methods">
-  const PurchaseData({
+    PurchaseData({
     required this.terminalId,
     required this.message,
     required this.transactionId,
     required this.hostResponseData,
     required this.isOtpRequired,
+    this.threeDSecureUrl,
   });
 
   @override
@@ -57,6 +61,7 @@ class PurchaseData {
     bool? signatureRequired,
     String? mwActionCode,
     String? mwMessage,
+    String? threeDSecureUrl,
     HostResponseData? hostResponseData,
     int? terminalId,
   }) {
@@ -66,6 +71,7 @@ class PurchaseData {
       transactionId: transactionId ?? this.transactionId,
       hostResponseData: hostResponseData ?? this.hostResponseData,
       isOtpRequired: isOtpRequired,
+      threeDSecureUrl: threeDSecureUrl,
     );
   }
 
@@ -76,6 +82,7 @@ class PurchaseData {
       'transactionId': transactionId,
       'hostResponseData': hostResponseData.toMap(),
       'isOtpRequired': isOtpRequired,
+      'threeDSecureUrl': threeDSecureUrl,
     };
   }
 
@@ -86,6 +93,7 @@ class PurchaseData {
       transactionId: map['transactionId'] as String,
       hostResponseData: HostResponseData.fromMap(map['hostResponseData']),
       isOtpRequired: map['isOtpRequired'],
+      threeDSecureUrl: map['threeDSecureUrl'],
     );
   }
 

@@ -18,6 +18,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../core/ui/error_dialog.dart';
 import '../../../localization/app_localizations_setup.dart';
+import '../presentation/thrree_ds_web_view_page.dart';
 
 class CardTransactionManager {
   const CardTransactionManager._();
@@ -75,7 +76,6 @@ class CardTransactionManager {
     required GetOneTransactionByIdUseCase getOneTransactionByIdUseCase,
     required void Function(BuildContext) dismissLoader,
   }) async {
-
     String? otpOrNull;
     final purchaseData = await cubit.purchaseOtpStepOne(
       args.amount,
@@ -85,8 +85,21 @@ class CardTransactionManager {
       args.transactionId,
       context,
     );
+    purchaseData?.threeDSecureUrl = 'https://3ds.com?transactionId=123';
     if (purchaseData == null) return;
-    if (purchaseData.isOtpRequired && context.mounted) {
+    if (purchaseData.threeDSecureUrl != null && context.mounted) {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => ThreeDSWebViewPage(
+            url: purchaseData.threeDSecureUrl!,
+            onTransactionIdFound: (transactionId) async {
+              await receiptAfterComplete(cubit, getOneTransactionByIdUseCase,
+                  transactionId, args, context, onPay, null);
+            },
+          ),
+        ),
+      );
+    } else if (purchaseData.isOtpRequired && context.mounted) {
       Either<Map<String, dynamic>, PurchaseData> purchaseDataOrFail;
       int errorCounter = 0;
 
@@ -139,72 +152,8 @@ class CardTransactionManager {
             return;
           } else if (purchaseDataOrFail.isRight() && context.mounted) {
             Navigator.of(dialogContext).pop();
-            if (NetworkConstants.isSdkInApp) {
-              cubit.showLoader();
-
-              OneTransaction? oneTransaction = null;
-              final oneTransactionResponse =
-                  await getOneTransactionByIdUseCase.invoke(
-                {
-                  'transactionId': transactionId,
-                  'merchantId': args.merchantId,
-                },
-              );
-              oneTransactionResponse.whenOrNull(success: (value) {
-                oneTransaction = value.data;
-              }, error: (message, errorList) {
-                AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
-
-                if (AmwalSdkNavigator.amwalNavigatorObserver.navigator !=
-                    null) {
-                    showDialog(
-                    context: AmwalSdkNavigator
-                        .amwalNavigatorObserver.navigator!.context,
-                    builder: (_) => Localizations(
-                      locale: AmwalSdkSettingContainer.locale,
-                      delegates: const [
-                        ...AppLocalizationsSetup.localizationsDelegates
-                      ],
-                      child: ErrorDialog(
-                        locale: AmwalSdkSettingContainer.locale,
-                        title: "err".translate(context) ?? '',
-                        message: "transaction_cancel".translate(context),
-                        resetState: () {
-                          AmwalSdkNavigator.amwalNavigatorObserver.navigator!
-                              .pop();
-                        },
-                      ),
-                    ),
-                  );
-                }
-              });
-
-              cubit.initial();
-              if (oneTransaction != null && context.mounted) {
-                await ReceiptHandler.instance.showHistoryReceipt(
-                  context: context,
-                  settings:
-                      _generateTransactionSettings(oneTransaction!, context)
-                          .copyWith(
-                    onClose: () {
-                      AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
-                    },
-                  ),
-                );
-              }
-            } else {
-              cubit.showLoader();
-              onPay?.call(
-                (settings) async {
-                  cubit.initial();
-                  await ReceiptHandler.instance.showCardReceipt(
-                    context: context,
-                    settings: settings,
-                  );
-                },
-                purchaseDataOrFail.fold((l) => null, (r) => r.transactionId),
-              );
-            }
+            await receiptAfterComplete(cubit, getOneTransactionByIdUseCase,
+                transactionId, args, context, onPay, purchaseDataOrFail);
           }
         },
       );
@@ -224,6 +173,78 @@ class CardTransactionManager {
       } else {
         if (context.mounted) dismissLoader(context);
       }
+    }
+  }
+
+  Future<void> receiptAfterComplete(
+      SaleByCardManualCubit cubit,
+      GetOneTransactionByIdUseCase getOneTransactionByIdUseCase,
+      String transactionId,
+      PaymentArguments args,
+      BuildContext context,
+      OnPayCallback? onPay,
+      Either<Map<String, dynamic>, PurchaseData>? purchaseDataOrFail) async {
+    if (NetworkConstants.isSdkInApp) {
+      cubit.showLoader();
+
+      OneTransaction? oneTransaction = null;
+      final oneTransactionResponse = await getOneTransactionByIdUseCase.invoke(
+        {
+          'transactionId': transactionId,
+          'merchantId': args.merchantId,
+        },
+      );
+      oneTransactionResponse.whenOrNull(success: (value) {
+        oneTransaction = value.data;
+      }, error: (message, errorList) {
+        AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+
+        if (AmwalSdkNavigator.amwalNavigatorObserver.navigator != null) {
+          showDialog(
+            context:
+                AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context,
+            builder: (_) => Localizations(
+              locale: AmwalSdkSettingContainer.locale,
+              delegates: const [
+                ...AppLocalizationsSetup.localizationsDelegates
+              ],
+              child: ErrorDialog(
+                locale: AmwalSdkSettingContainer.locale,
+                title: "err".translate(context) ?? '',
+                message: "transaction_cancel".translate(context),
+                resetState: () {
+                  AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+                },
+              ),
+            ),
+          );
+        }
+      });
+
+      cubit.initial();
+      if (oneTransaction != null && context.mounted) {
+        await ReceiptHandler.instance.showHistoryReceipt(
+          context: context,
+          settings:
+              _generateTransactionSettings(oneTransaction!, context).copyWith(
+            onClose: () {
+              AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+            },
+          ),
+        );
+      }
+    } else {
+      cubit.showLoader();
+      onPay?.call(
+        (settings) async {
+          cubit.initial();
+          await ReceiptHandler.instance.showCardReceipt(
+            context: context,
+            settings: settings,
+          );
+        },
+        purchaseDataOrFail?.fold((l) => null, (r) => r.transactionId),
+      );
     }
   }
 

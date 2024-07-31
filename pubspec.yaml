@@ -42,6 +42,7 @@ dependencies:
   nfc_manager: ^3.4.0
   dartz: ^0.10.1
   debit_credit_card_widget: ^1.0.2
+  webview_flutter: ^3.0.0
 
 
 dev_dependencies:
