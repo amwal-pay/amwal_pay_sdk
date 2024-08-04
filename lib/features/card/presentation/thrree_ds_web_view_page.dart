@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../../core/resources/color/colors.dart';
+
 class ThreeDSWebViewPage extends StatelessWidget {
   final String url;
   final void Function(String transactionId) onTransactionIdFound;
@@ -14,7 +16,12 @@ class ThreeDSWebViewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('3DS Authentication')),
+      resizeToAvoidBottomInset: false,
+      backgroundColor: lightGeryColor,
+      appBar: AppBar(title: const Text('3DS Authentication'),
+        backgroundColor: whiteColor,
+
+      ),
       body: WebView(
         initialUrl: url,
         javascriptMode: JavascriptMode.unrestricted,
