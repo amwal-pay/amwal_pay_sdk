@@ -25,7 +25,7 @@ class PhoneInputField extends StatefulWidget {
   final String? initialValue;
   final String Function(String)? globalTranslator;
   final void Function(String)? onChange;
-  bool? readOnly;
+  final bool? readOnly;
 
   @override
   State<PhoneInputField> createState() => _PhoneInputFieldState();
@@ -149,7 +149,7 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
 
                         FormBuilderValidators.match(
                           // r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$',
-                          r'^((\+|00)?968)?[279]\d{7}$',
+                          RegExp(r'^((\+|00)?968)?[279]\d{7}$'),
                           errorText: 'invalid_phone_number'.translate(
                             context,
                             globalTranslator: widget.globalTranslator,

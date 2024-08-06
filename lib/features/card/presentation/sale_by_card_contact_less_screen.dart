@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:amwal_pay_sdk/core/apiview/api_view.dart';
 import 'package:amwal_pay_sdk/core/resources/assets/app_assets_paths.dart';
 import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
@@ -10,19 +8,12 @@ import 'package:amwal_pay_sdk/features/currency_field/data/models/response/curre
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
+import 'package:amwal_pay_sdk/service/nfc_manager.dart';
 import 'package:debit_credit_card_widget/debit_credit_card_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:nfc_manager/nfc_manager.dart';
-import 'package:nfc_manager/platform_tags.dart';
-import 'dart:convert';
 
 import '../../../core/loader_mixin.dart';
-import '../../transaction/domain/use_case/get_transaction_by_Id.dart';
-import '../cubit/card_transaction_manager.dart';
-import '../data/models/response/CardInfo.dart';
-import '../dependency/injector.dart';
 
 class SaleByCardContactLessScreen
     extends StatefulApiView<SaleByCardContactLessCubit> with LoaderMixin {
@@ -57,37 +48,16 @@ class SaleByCardContactLessScreen
 }
 
 class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
+  SaleByCardContactLessCubit get cubit => widget.cubit;
+
   Future<void> checkNFCStatus() async {
-    try {
-      widget.cubit.setupStatusIndex = await javaChannel.invokeMethod('init');
-      if (widget.cubit.setupStatusIndex != 2) {
-        widget.cubit.setupMessage = widget.cubit.setupStatusIndex == 0
-            ? "nfc_unavailable".translate(
-                context,
-                globalTranslator: widget.translator,
-              )
-            : "nfc_unavailable_massage".translate(
-                context,
-                globalTranslator: widget.translator,
-              );
-        setState(() {});
-        return;
-      }
-
-      widget.cubit.setupMessage = "start_scan".translate(
-        context,
-        globalTranslator: widget.translator,
-      );
-      setState(() {});
-    } catch (e) {
-      widget.cubit.setupStatusIndex = 0;
-      widget.cubit.setupMessage = "nfc_unavailable".translate(
-        context,
-        globalTranslator: widget.translator,
-      );
-    }
-
-    widget.cubit.arg = PaymentArguments(
+    final status = await cubit.checkNFCStatus(
+      context,
+      widget.translator,
+    );
+    setState(() {});
+    if (status != NFCStatus.enabled) return;
+    cubit.arg = PaymentArguments(
       terminalId: widget.terminalId,
       amount: widget.amount,
       merchantId: widget.merchantId,
@@ -98,57 +68,33 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
         id: widget.currencyId.toString(),
       ),
     );
-    initCardScanListener();
+
+    await initCardScanListener();
   }
 
-  initCardScanListener() async {
-    try {
-      final scanOp = json.decode(await javaChannel.invokeMethod("listen"));
-      if (scanOp['success']) {
-        if (widget.cubit.cardInfo != null) {
-          return;
-        }
-        forceTerminateNFC();
-        widget.cubit.cardInfo = CardInfo.fromJson(scanOp);
-        widget.cubit.fillCardData(widget.cubit.cardInfo!);
-        widget.cubit.setupMessage = "Scanning completed".translate(
+  Future<void> initCardScanListener() async {
+    final cardScannedOrFail = await cubit.startNFCScan(
+      context,
+      widget.translator,
+      widget.dismissDialog,
+      widget.onPay,
+    );
+    cardScannedOrFail.fold(
+      (l) {
+        showSnackMessage(
+          context,
+          l.toString(),
+          ["OK", () {}],
+        );
+      },
+      (r) {
+        cubit.setupMessage = "Scanning completed".translate(
           context,
           globalTranslator: widget.translator,
         );
-
         setState(() {});
-        CardTransactionManager.instance.onPurchaseWith3DS(
-          cubit: widget.cubit,
-          args: widget.cubit.arg!,
-          context: context,
-          getOneTransactionByIdUseCase:
-              CardInjector.instance.get<GetOneTransactionByIdUseCase>(),
-          dismissLoader: widget.dismissDialog,
-          onPay: widget.onPay,
-        );
-        return;
-      }
-      throw PlatformException(code: '01', stacktrace: scanOp['error']);
-    } catch (e) {
-
-
-      if (context.mounted) {
-        showSnackMessage(
-          context,
-          e.toString(),
-          ["OK", () {}],
-        );
-      }
-    await  forceTerminateNFC();
-      await checkNFCStatus();
-    }
-  }
-
-  Future<void> forceTerminateNFC() async {
-    // ignore: empty_catches
-    try {
-      await javaChannel.invokeMethod('terminate');
-    } on PlatformException {}
+      },
+    );
   }
 
   @override
@@ -159,8 +105,8 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
 
   @override
   void dispose() {
+    cubit.onDispose();
     super.dispose();
-    forceTerminateNFC();
   }
 
   @override
@@ -203,7 +149,7 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
                     widget.cubit.arg!,
                     translator: widget.translator,
                   )
-                : SizedBox.shrink(),
+                : const SizedBox.shrink(),
           ),
           const SizedBox(height: 16),
           (widget.cubit.cardInfo != null)
@@ -216,8 +162,9 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
                             ("${widget.cubit.cardInfo!.holderFirstname ?? ""} ${widget.cubit.cardInfo!.holderLastname ?? ""}"),
                         cardNumber:
                             widget.cubit.cardInfo!.cardNumber.toString(),
-                        cardExpiry:
-                            widget.cubit.cardInfo!.cardExpiry.toString(),
+                        cardExpiry: widget.cubit.cardInfo!.cardExpiry!
+                            .replaceFirst('/', '')
+                            .toString(),
                         cardBrand: widget.cubit.getCardBrand(
                             widget.cubit.cardInfo?.cardNumber ?? ""),
                         cardType: CardType.credit,
@@ -249,7 +196,7 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
                         ),
                         const SizedBox(height: 20),
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 24.0),
                           child: Center(
                             child: Text(
                               widget.cubit.setupMessage,

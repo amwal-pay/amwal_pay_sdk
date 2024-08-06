@@ -62,7 +62,7 @@ class AmountCurrencyWidget extends StatelessWidget {
                         ),
                       ),
                       FormBuilderValidators.match(
-                        '^(?!.*^(000.00)).*\$',
+                        RegExp('^(?!.*^(000.00)).*\$'),
                         errorText: 'invalid_input_field'.translate(
                           context,
                         ),

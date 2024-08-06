@@ -59,7 +59,7 @@ class AliasPayWidget extends StatelessWidget {
                   minLength: 3,
                   validators: [
                     FormBuilderValidators.match(
-                      r'^[a-zA-Z]+@[a-zA-Z]{3,4}$',
+                      RegExp(r'^[a-zA-Z]+@[a-zA-Z]{3,4}$'),
                       errorText: 'InvalidAliasFormat'.translate(
                         context,
                         globalTranslator: globalTranslator,
