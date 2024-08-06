@@ -22,7 +22,6 @@ class PurchaseData {
   final String message;
   final String transactionId;
 
-   String? threeDSecureUrl;
 
   final int terminalId;
   final bool isOtpRequired;
@@ -35,7 +34,6 @@ class PurchaseData {
     required this.transactionId,
     required this.hostResponseData,
     required this.isOtpRequired,
-    this.threeDSecureUrl,
   });
 
   @override
@@ -71,7 +69,6 @@ class PurchaseData {
       transactionId: transactionId ?? this.transactionId,
       hostResponseData: hostResponseData ?? this.hostResponseData,
       isOtpRequired: isOtpRequired,
-      threeDSecureUrl: threeDSecureUrl,
     );
   }
 
@@ -82,7 +79,6 @@ class PurchaseData {
       'transactionId': transactionId,
       'hostResponseData': hostResponseData.toMap(),
       'isOtpRequired': isOtpRequired,
-      'threeDSecureUrl': threeDSecureUrl,
     };
   }
 
@@ -93,7 +89,6 @@ class PurchaseData {
       transactionId: map['transactionId'] as String,
       hostResponseData: HostResponseData.fromMap(map['hostResponseData']),
       isOtpRequired: map['isOtpRequired'],
-      threeDSecureUrl: map['threeDSecureUrl'],
     );
   }
 
@@ -106,6 +101,7 @@ class HostResponseData {
   final String? stan;
   final String? trackId;
   final String? paymentId;
+  final String? accessUrl;
 
 //<editor-fold desc="Data Methods">
   const HostResponseData({
@@ -114,6 +110,7 @@ class HostResponseData {
     required this.stan,
     required this.trackId,
     required this.paymentId,
+    required this.accessUrl,
   });
 
   @override
@@ -141,6 +138,7 @@ class HostResponseData {
     String? stan,
     String? trackId,
     String? paymentId,
+    String? accessUrl,
   }) {
     return HostResponseData(
       transactionId: transactionId ?? this.transactionId,
@@ -148,6 +146,7 @@ class HostResponseData {
       stan: stan ?? this.stan,
       trackId: trackId ?? this.trackId,
       paymentId: paymentId ?? this.paymentId,
+      accessUrl: accessUrl ?? this.accessUrl,
     );
   }
 
@@ -158,6 +157,7 @@ class HostResponseData {
       'Stan': stan,
       'TrackId': trackId,
       'PaymentId': paymentId,
+      'AccessUrl': accessUrl,
     };
   }
 
@@ -168,6 +168,7 @@ class HostResponseData {
       stan: map['Stan'] as String?,
       trackId: map['TrackId'] as String?,
       paymentId: map['PaymentId'] as String?,
+      accessUrl: map['AccessUrl'] as String?,
     );
   }
 }

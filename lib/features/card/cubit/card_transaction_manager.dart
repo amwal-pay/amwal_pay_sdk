@@ -85,13 +85,13 @@ class CardTransactionManager {
       args.transactionId,
       context,
     );
-    purchaseData?.threeDSecureUrl = 'https://3ds.com?transactionId=123';
+    // purchaseData?.threeDSecureUrl = 'https://3ds.com?transactionId=123';
     if (purchaseData == null) return;
-    if (purchaseData.threeDSecureUrl != null && context.mounted) {
+    if (purchaseData.hostResponseData.accessUrl != null && context.mounted) {
       AmwalSdkNavigator.amwalNavigatorObserver.navigator?.push(
         MaterialPageRoute(
           builder: (context) => ThreeDSWebViewPage(
-            url: purchaseData.threeDSecureUrl!,
+            url: purchaseData.hostResponseData.accessUrl!,
             onTransactionIdFound: (transactionId) async {
               await receiptAfterComplete(cubit, getOneTransactionByIdUseCase,
                   transactionId, args, context, onPay, null);
