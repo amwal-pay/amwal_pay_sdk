@@ -50,5 +50,4 @@ example/pubspec.lock
 .ios/Runner.xcworkspace/xcuserdata/amrsaied.xcuserdatad/UserInterfaceState.xcuserstate
 
 # FVM Version Cache
-.fvm/
 android/.gradle
