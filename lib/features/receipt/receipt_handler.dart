@@ -32,20 +32,26 @@ class ReceiptHandler {
     required BuildContext context,
     required TransactionDetailsSettings settings,
   }) async {
-    await Navigator.of(context).push(DialogRoute(
-      context: context,
-      builder: (_) {
-        return TransactionStatusDialog(
-          settings: settings.copyWith(
-            onClose: () {
-              Navigator.pop(_);
-              Navigator.pop(_);
-              AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
-            },
-          ),
-        );
-      },
-    ));
+    await Navigator.of(AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context).push(
+      DialogRoute(
+        context: AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context,
+        builder: (BuildContext context) {
+          return Localizations(
+            delegates: AppLocalizationsSetup.localizationsDelegates.toList(),
+            locale: settings.locale,
+            child: TransactionStatusDialog(
+              settings: settings.copyWith(
+                onClose: () {
+                  Navigator.pop(AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context);
+                  Navigator.pop(AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context);
+                  // AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+                },
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   Future<void> showHistoryReceipt({

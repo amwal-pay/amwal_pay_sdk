@@ -93,7 +93,7 @@ class CardTransactionManager {
           builder: (context) => ThreeDSWebViewPage(
             url: purchaseData.hostResponseData.accessUrl!,
             onTransactionIdFound: (transactionId) async {
-              await receiptAfterComplete(cubit, getOneTransactionByIdUseCase,
+               receiptAfterComplete(cubit, getOneTransactionByIdUseCase,
                   transactionId, args, context, onPay, null);
             },
           ),

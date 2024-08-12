@@ -30,8 +30,9 @@ class ThreeDSWebViewPage extends StatelessWidget {
           final Uri uri = Uri.parse(url);
           if (uri.queryParameters.containsKey('transactionId')) {
             final transactionId = uri.queryParameters['transactionId']!;
-            onTransactionIdFound(transactionId);
             Navigator.of(context).pop();
+            onTransactionIdFound(transactionId);
+
           }
         },
       ),
