@@ -20,7 +20,6 @@ class WalletPayData {
   final int idN;
   final String? from;
   final String? to;
-  final int? merchantRefId;
   final int? terminalNodeId;
   final int? bankId;
   final num amount;
@@ -63,7 +62,6 @@ class WalletPayData {
     required this.idN,
     this.from,
     this.to,
-    required this.merchantRefId,
     required this.terminalNodeId,
     required this.bankId,
     required this.amount,
@@ -110,7 +108,6 @@ class WalletPayData {
           idN == other.idN &&
           from == other.from &&
           to == other.to &&
-          merchantRefId == other.merchantRefId &&
           terminalNodeId == other.terminalNodeId &&
           bankId == other.bankId &&
           amount == other.amount &&
@@ -155,7 +152,6 @@ class WalletPayData {
       idN.hashCode ^
       from.hashCode ^
       to.hashCode ^
-      merchantRefId.hashCode ^
       terminalNodeId.hashCode ^
       bankId.hashCode ^
       amount.hashCode ^
@@ -197,7 +193,6 @@ class WalletPayData {
     int? idN,
     String? from,
     String? to,
-    int? merchantRefId,
     int? terminalNodeId,
     int? bankId,
     num? amount,
@@ -239,7 +234,6 @@ class WalletPayData {
       idN: idN ?? this.idN,
       from: from ?? this.from,
       to: to ?? this.to,
-      merchantRefId: merchantRefId ?? this.merchantRefId,
       terminalNodeId: terminalNodeId ?? this.terminalNodeId,
       bankId: bankId ?? this.bankId,
       amount: amount ?? this.amount,
@@ -291,7 +285,6 @@ class WalletPayData {
       'idN': idN,
       'from': from,
       'to': to,
-      'merchantRefId': merchantRefId,
       'terminalNodeId': terminalNodeId,
       'bankId': bankId,
       'amount': amount,
@@ -336,7 +329,6 @@ class WalletPayData {
       idN: map['idN'] as int,
       from: map['from'] as String?,
       to: map['to'] as String?,
-      merchantRefId: map['merchantRefId'] as int,
       terminalNodeId: map['terminalNodeId'] as int,
       bankId: map['bankId'] as int,
       amount: map['amount'] as num,

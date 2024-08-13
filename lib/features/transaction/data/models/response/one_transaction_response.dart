@@ -32,7 +32,6 @@ class OneTransaction {
   final String responseCodeName;
   final bool isRefunded;
   final bool isCaptured;
-  final int merchantRefId;
   final int terminalNodeId;
   final int transactionMethodId;
   final int hostId;
@@ -77,7 +76,6 @@ class OneTransaction {
     data['responseCodeName'] = responseCodeName;
     data['isRefunded'] = isRefunded;
     data['isCaptured'] = isCaptured;
-    data['merchantRefId'] = merchantRefId;
     data['terminalNodeId'] = terminalNodeId;
     data['transactionMethodId'] = transactionMethodId;
     data['hostId'] = hostId;
@@ -126,7 +124,6 @@ class OneTransaction {
     required this.responseCodeName,
     required this.isRefunded,
     required this.isCaptured,
-    required this.merchantRefId,
     required this.terminalNodeId,
     required this.transactionMethodId,
     required this.hostId,
@@ -171,7 +168,6 @@ class OneTransaction {
           responseCodeName == other.responseCodeName &&
           isRefunded == other.isRefunded &&
           isCaptured == other.isCaptured &&
-          merchantRefId == other.merchantRefId &&
           terminalNodeId == other.terminalNodeId &&
           transactionMethodId == other.transactionMethodId &&
           hostId == other.hostId &&
@@ -211,7 +207,6 @@ class OneTransaction {
       responseCodeName.hashCode ^
       isRefunded.hashCode ^
       isCaptured.hashCode ^
-      merchantRefId.hashCode ^
       terminalNodeId.hashCode ^
       transactionMethodId.hashCode ^
       hostId.hashCode ^
@@ -250,7 +245,6 @@ class OneTransaction {
     String? responseCodeName,
     bool? isRefunded,
     bool? isCaptured,
-    int? merchantRefId,
     int? terminalNodeId,
     int? transactionMethodId,
     int? hostId,
@@ -297,7 +291,6 @@ class OneTransaction {
       responseCodeName: responseCodeName ?? this.responseCodeName,
       isRefunded: isRefunded ?? this.isRefunded,
       isCaptured: isCaptured ?? this.isCaptured,
-      merchantRefId: merchantRefId ?? this.merchantRefId,
       terminalNodeId: terminalNodeId ?? this.terminalNodeId,
       transactionMethodId: transactionMethodId ?? this.transactionMethodId,
       hostId: hostId ?? this.hostId,
@@ -342,7 +335,6 @@ class OneTransaction {
       'responseCodeName': responseCodeName,
       'isRefunded': isRefunded,
       'isCaptured': isCaptured,
-      'merchantRefId': merchantRefId,
       'terminalNodeId': terminalNodeId,
       'transactionMethodId': transactionMethodId,
       'hostId': hostId,
@@ -390,7 +382,6 @@ class OneTransaction {
       responseCodeName: map['responseCodeName'] as String,
       isRefunded: map['isRefunded'] as bool,
       isCaptured: map['isCaptured'] as bool,
-      merchantRefId: map['merchantRefId'] as int,
       terminalNodeId: map['terminalNodeId'] as int,
       transactionMethodId: map['transactionMethodId'] as int,
       hostId: map['hostId'] as int,

@@ -165,7 +165,7 @@ class CardTransactionManager {
         cubit.formKey.currentState?.reset();
         onPay?.call((settings) async {
           await ReceiptHandler.instance.showCardReceipt(
-            context: context,
+            context:  AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context,
             settings: settings,
           );
           if (context.mounted) dismissLoader(context);
@@ -239,7 +239,7 @@ class CardTransactionManager {
         (settings) async {
           cubit.initial();
           await ReceiptHandler.instance.showCardReceipt(
-            context: context,
+            context:  AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context,
             settings: settings,
           );
         },
