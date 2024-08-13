@@ -205,7 +205,7 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
         ("${cardInfo.holderFirstname ?? ""} ${cardInfo.holderLastname ?? ""}");
     expirationDateMonth = cardInfo.cardExpiry?.split("/")[0];
     expirationDateYear = cardInfo.cardExpiry?.split("/")[1];
-    cvV2 = "123";
+    cvV2 = "";
     emit(ICubitState.success(uiModel: PurchaseResponse(success: true)));
   }
 }

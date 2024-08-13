@@ -172,6 +172,10 @@ class PurchaseRequest {
       data['clientMail'] = clientMail;
     }
 
+
+    if (cvV2.isEmpty) {
+      data['transactionMethod'] = "9";
+    }
     return data;
   }
 
