@@ -10,10 +10,15 @@ import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:amwal_pay_sdk/service/nfc_manager.dart';
 import 'package:debit_credit_card_widget/debit_credit_card_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../core/loader_mixin.dart';
+import '../../transaction/domain/use_case/get_transaction_by_Id.dart';
+import '../cubit/card_transaction_manager.dart';
+import '../data/models/response/CardInfo.dart';
+import '../dependency/injector.dart';
 
 class SaleByCardContactLessScreen
     extends StatefulApiView<SaleByCardContactLessCubit> with LoaderMixin {
@@ -51,12 +56,7 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
   SaleByCardContactLessCubit get cubit => widget.cubit;
 
   Future<void> checkNFCStatus() async {
-    final status = await cubit.checkNFCStatus(
-      context,
-      widget.translator,
-    );
-    setState(() {});
-    if (status != NFCStatus.enabled) return;
+
     cubit.arg = PaymentArguments(
       terminalId: widget.terminalId,
       amount: widget.amount,
@@ -68,8 +68,40 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
         id: widget.currencyId.toString(),
       ),
     );
-
+    setState(() {});
+    final status = await cubit.checkNFCStatus(
+      context,
+      widget.translator,
+    );
+    if (status != NFCStatus.enabled) return;
     await initCardScanListener();
+    setState(() {});
+
+  }
+
+  testNfcAPI() {
+
+    // fake CardInfo.fromJson
+    final scanResult = {
+      "cardNumber": "4000000000000002",
+      "cardExpiry": "12/29",
+      "holderFirstname": "John",
+      "holderLastname": "Doe",
+      "success": true,
+    };
+
+    cubit.cardInfo = CardInfo.fromJson(scanResult);
+    cubit.fillCardData(cubit.cardInfo!);
+    CardTransactionManager.instance.onPurchaseWith3DS(
+      cubit: cubit,
+      args: cubit.arg!,
+      context: context.mounted ? context : context,
+      getOneTransactionByIdUseCase:
+          CardInjector.instance.get<GetOneTransactionByIdUseCase>(),
+      dismissLoader: widget.dismissDialog,
+      onPay: widget.onPay,
+    );
+    setState(() {});
   }
 
   Future<void> initCardScanListener() async {
@@ -176,6 +208,13 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
                   child: Center(
                     child: Column(
                       children: [
+                        // Button show only in debug to fire testNfcAPI()
+                        if (kDebugMode)
+                          ElevatedButton(
+                            onPressed: testNfcAPI,
+                            child: const Text('Test NFC API'),
+                          ),
+
                         const SizedBox(height: 20),
                         Padding(
                           padding: const EdgeInsets.only(left: 28.0),

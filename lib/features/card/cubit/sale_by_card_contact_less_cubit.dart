@@ -86,10 +86,7 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
         );
         cardInfo = CardInfo.fromJson(scanResult);
         fillCardData(cardInfo!);
-        setupMessage = "Scanning completed".translate(
-          context.mounted ? context : context,
-          globalTranslator: translator,
-        );
+
         CardTransactionManager.instance.onPurchaseWith3DS(
           cubit: this,
           args: arg!,
@@ -98,6 +95,10 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
               CardInjector.instance.get<GetOneTransactionByIdUseCase>(),
           dismissLoader: dismissDialog,
           onPay: onPay,
+        );
+        setupMessage = "Scanning completed".translate(
+          context.mounted ? context : context,
+          globalTranslator: translator,
         );
       }
       return right(unit);
