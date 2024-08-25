@@ -10,7 +10,7 @@ import 'package:dio/dio.dart';
 import 'constants.dart';
 
 class DioClient {
- static Dio? dio;
+  static Dio? dio;
   final MockupInterceptor _mockupInterceptor;
   final SecureHashInterceptor _secureHashInterceptor;
   final TokenInjectorInterceptor _tokenInjectorInterceptor;
@@ -24,6 +24,8 @@ class DioClient {
     dio = Dio(
       BaseOptions(
         baseUrl: NetworkConstants.url,
+        connectTimeout: const Duration(seconds: 60),
+        receiveTimeout: const Duration(seconds: 60),
       ),
     )..interceptors.addAll([
         _tokenInjectorInterceptor,
