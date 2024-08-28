@@ -104,23 +104,23 @@ class _CardInfoFormWidgetState extends State<CardInfoFormWidget> {
             widget.cubit.cardHolderName = value;
           },
         ),
-        const SizedBox(
-          height: 20,
-        ),
-        InputFieldWidget(
-          key: const Key('email'),
-          widgetTitle: 'email_label'
-              .translate(context, globalTranslator: widget.globalTranslator),
-          widgetHint: 'email_hint'
-              .translate(context, globalTranslator: widget.globalTranslator),
-          isAliasName: true,
-          isRequired: false,
-          maxLength: 40,
-          initialValue: widget.cubit.email,
-          onChange: (value) {
-            widget.cubit.email = value;
-          },
-        ),
+        // const SizedBox(
+        //   height: 20,
+        // ),
+        // InputFieldWidget(
+        //   key: const Key('email'),
+        //   widgetTitle: 'email_label'
+        //       .translate(context, globalTranslator: widget.globalTranslator),
+        //   widgetHint: 'email_hint'
+        //       .translate(context, globalTranslator: widget.globalTranslator),
+        //   isAliasName: true,
+        //   isRequired: false,
+        //   maxLength: 40,
+        //   initialValue: widget.cubit.email,
+        //   onChange: (value) {
+        //     widget.cubit.email = value;
+        //   },
+        // ),
         const SizedBox(
           height: 20,
         ),
