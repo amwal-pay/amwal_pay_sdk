@@ -47,19 +47,15 @@ class TransactionDetailWidget extends StatelessWidget {
                 flex: 3,
                 child: (value.contains("-") && value.contains("OMR"))
                     ? buildMiunsValue(value)
-                    : Row(
-                        children: [
-                          AutoSizeText(
-                            value.trim(),
-                            maxLines: 1,
-                            style: valueStyle ??
-                                const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                  color: darkBlue,
-                                ),
-                          ),
-                        ],
+                    : Text(
+                        value.trim(),
+                        maxLines: 2,
+                        style: valueStyle ??
+                            const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: darkBlue,
+                            ),
                       ),
               ),
             ],
@@ -75,11 +71,25 @@ class TransactionDetailWidget extends StatelessWidget {
     // remove ay empty values
     valueCurrency.removeWhere((element) => element.isEmpty);
     return Row(children: [
-     if(valueCurrency.first.isNotEmpty) Directionality(
-        textDirection: TextDirection.ltr,
-        child: AutoSizeText(
-          valueCurrency.first,
-          maxLines: 1,
+      if (valueCurrency.first.isNotEmpty)
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: AutoSizeText(
+            valueCurrency.first,
+            maxLines: 2,
+            style: valueStyle ??
+                const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: darkBlue,
+                ),
+          ),
+        ),
+      if (valueCurrency.first.isNotEmpty) const SizedBox(width: 3),
+      if (valueCurrency.last.isNotEmpty)
+        AutoSizeText(
+          valueCurrency.last,
+          maxLines: 2,
           style: valueStyle ??
               const TextStyle(
                 fontSize: 14,
@@ -87,18 +97,6 @@ class TransactionDetailWidget extends StatelessWidget {
                 color: darkBlue,
               ),
         ),
-      ),
-      if(valueCurrency.first.isNotEmpty)   const SizedBox(width: 3),
-      if(valueCurrency.last.isNotEmpty)   AutoSizeText(
-        valueCurrency.last,
-        maxLines: 1,
-        style: valueStyle ??
-            const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-              color: darkBlue,
-            ),
-      ),
     ]);
   }
 }

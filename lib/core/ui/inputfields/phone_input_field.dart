@@ -142,7 +142,12 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
                     ),
                     validator: FormBuilderValidators.compose(
                       [
-                        FormBuilderValidators.numeric(),
+                        FormBuilderValidators.numeric(
+                          errorText: 'enter_valid_phone'.translate(
+                            context,
+                            globalTranslator: widget.globalTranslator,
+                          ),
+                        ),
 
                         //   if (s.length > 16 || s.length < 9) return false;
                         // return hasMatch(s, r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
