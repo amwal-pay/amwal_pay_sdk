@@ -76,15 +76,17 @@ class CardTransactionManager {
     required GetOneTransactionByIdUseCase getOneTransactionByIdUseCase,
     required void Function(BuildContext) dismissLoader,
   }) async {
+    void Function()? dismissFn;
     String? otpOrNull;
     final purchaseData = await cubit.purchaseOtpStepOne(
-      args.amount,
-      args.terminalId,
-      args.currencyData!.idN,
-      args.merchantId,
-      args.transactionId,
-      context,
-    );
+        args.amount,
+        args.terminalId,
+        args.currencyData!.idN,
+        args.merchantId,
+        args.transactionId,
+        context, dismissLoaderTrigger: (dismiss) {
+      dismissFn = dismiss;
+    });
     // purchaseData?.threeDSecureUrl = 'https://3ds.com?transactionId=123';
     if (purchaseData == null) return;
     if (purchaseData.hostResponseData.accessUrl != null && context.mounted) {
@@ -93,7 +95,7 @@ class CardTransactionManager {
           builder: (context) => ThreeDSWebViewPage(
             url: purchaseData.hostResponseData.accessUrl!,
             onTransactionIdFound: (transactionId) async {
-               receiptAfterComplete(cubit, getOneTransactionByIdUseCase,
+              receiptAfterComplete(cubit, getOneTransactionByIdUseCase,
                   transactionId, args, context, onPay, null);
             },
           ),
@@ -151,9 +153,16 @@ class CardTransactionManager {
             }
             return;
           } else if (purchaseDataOrFail.isRight() && context.mounted) {
-            Navigator.of(dialogContext).pop();
-            await receiptAfterComplete(cubit, getOneTransactionByIdUseCase,
-                transactionId, args, context, onPay, purchaseDataOrFail);
+            // Navigator.of(dialogContext).pop();
+            await receiptAfterComplete(
+              cubit,
+              getOneTransactionByIdUseCase,
+              transactionId,
+              args,
+              context,
+              onPay,
+              purchaseDataOrFail,
+            );
           }
         },
       );
@@ -165,7 +174,8 @@ class CardTransactionManager {
         cubit.formKey.currentState?.reset();
         onPay?.call((settings) async {
           await ReceiptHandler.instance.showCardReceipt(
-            context:  AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context,
+            context:
+                AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context,
             settings: settings,
           );
           if (context.mounted) dismissLoader(context);
@@ -177,13 +187,15 @@ class CardTransactionManager {
   }
 
   Future<void> receiptAfterComplete(
-      SaleByCardManualCubit cubit,
-      GetOneTransactionByIdUseCase getOneTransactionByIdUseCase,
-      String transactionId,
-      PaymentArguments args,
-      BuildContext context,
-      OnPayCallback? onPay,
-      Either<Map<String, dynamic>, PurchaseData>? purchaseDataOrFail) async {
+    SaleByCardManualCubit cubit,
+    GetOneTransactionByIdUseCase getOneTransactionByIdUseCase,
+    String transactionId,
+    PaymentArguments args,
+    BuildContext context,
+    OnPayCallback? onPay,
+    Either<Map<String, dynamic>, PurchaseData>? purchaseDataOrFail, {
+    void Function()? dismissFn,
+  }) async {
     if (NetworkConstants.isSdkInApp) {
       cubit.showLoader();
 
@@ -194,6 +206,7 @@ class CardTransactionManager {
           'merchantId': args.merchantId,
         },
       );
+      dismissFn?.call();
       oneTransactionResponse.whenOrNull(success: (value) {
         oneTransaction = value.data;
       }, error: (message, errorList) {
@@ -239,7 +252,8 @@ class CardTransactionManager {
         (settings) async {
           cubit.initial();
           await ReceiptHandler.instance.showCardReceipt(
-            context:  AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context,
+            context:
+                AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context,
             settings: settings,
           );
         },

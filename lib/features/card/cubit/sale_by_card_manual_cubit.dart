@@ -96,8 +96,9 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
     int currencyId,
     int merchantId,
     String? transactionId,
-    BuildContext? context,
-  ) async {
+    BuildContext? context, {
+    void Function(void Function())? dismissLoaderTrigger,
+  }) async {
     final valid = _validateExpDate();
     if (valid != null) {
       if (context != null && context.mounted) {
@@ -128,7 +129,11 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
     final purchaseData = state.mapOrNull(
       success: (value) => value.uiModel.data,
     );
-    emit(state);
+    if (dismissLoaderTrigger == null) {
+      emit(state);
+    } else {
+      dismissLoaderTrigger(() => emit(state));
+    }
     return purchaseData;
   }
 
