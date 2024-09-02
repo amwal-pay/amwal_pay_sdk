@@ -11,6 +11,7 @@ import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:amwal_pay_sdk/service/nfc_manager.dart';
 import 'package:dartz/dartz.dart';
 import 'package:debit_credit_card_widget/debit_credit_card_widget.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 
 class SaleByCardContactLessCubit extends SaleByCardManualCubit {
@@ -49,7 +50,8 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
         );
       }
       return nfcStatus!;
-    } catch (e) {
+    } catch (e, s) {
+      FirebaseCrashlytics.instance.recordError(e, s);
       nfcStatus = NFCStatus.notAvailable;
       setupMessage = "nfc_unavailable".translate(
         context.mounted ? context : context,
@@ -77,6 +79,7 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
         );
         terminateNFC();
       }
+      FirebaseCrashlytics.instance.recordError(scanResult['error'], null);
       return left(scanResult['error']);
     } else {
       if (cardInfo == null) {
