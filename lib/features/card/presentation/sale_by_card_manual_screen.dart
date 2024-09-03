@@ -175,14 +175,17 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
                         if (isValid) {
                           await CardTransactionManager.instance
                               .onPurchaseWith3DS(
-                            cubit: widget.cubit,
-                            args: args,
-                            context: context,
-                            getOneTransactionByIdUseCase: CardInjector.instance
-                                .get<GetOneTransactionByIdUseCase>(),
-                            dismissLoader: widget.dismissDialog,
-                            onPay: widget.onPay,
-                          );
+                                  cubit: widget.cubit,
+                                  args: args,
+                                  context: context,
+                                  getOneTransactionByIdUseCase: CardInjector
+                                      .instance
+                                      .get<GetOneTransactionByIdUseCase>(),
+                                  dismissLoader: widget.dismissDialog,
+                                  onPay: widget.onPay,
+                                  setContext: (cb) {
+                                    cb(context);
+                                  });
                         }
                       },
                       child: Text(

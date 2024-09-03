@@ -75,28 +75,32 @@ class CardTransactionManager {
     OnPayCallback? onPay,
     required GetOneTransactionByIdUseCase getOneTransactionByIdUseCase,
     required void Function(BuildContext) dismissLoader,
+    void Function(void Function(BuildContext))? setContext,
   }) async {
     void Function()? dismissFn;
     String? otpOrNull;
     final purchaseData = await cubit.purchaseOtpStepOne(
-        args.amount,
-        args.terminalId,
-        args.currencyData!.idN,
-        args.merchantId,
-        args.transactionId,
-        context, dismissLoaderTrigger: (dismiss) {
-      dismissFn = dismiss;
-    });
-    // purchaseData?.threeDSecureUrl = 'https://3ds.com?transactionId=123';
+      args.amount,
+      args.terminalId,
+      args.currencyData!.idN,
+      args.merchantId,
+      args.transactionId,
+      context,
+      dismissLoaderTrigger: (dismiss) {
+        dismissFn = dismiss;
+      },
+    );
+    dismissFn?.call();
     if (purchaseData == null) return;
     if (purchaseData.hostResponseData.accessUrl != null && context.mounted) {
-      AmwalSdkNavigator.amwalNavigatorObserver.navigator?.push(
+      await AmwalSdkNavigator.amwalNavigatorObserver.navigator?.push(
         MaterialPageRoute(
           builder: (context) => ThreeDSWebViewPage(
             url: purchaseData.hostResponseData.accessUrl!,
             onTransactionIdFound: (transactionId) async {
-              receiptAfterComplete(cubit, getOneTransactionByIdUseCase,
-                  transactionId, args, context, onPay, null);
+              await receiptAfterComplete(cubit, getOneTransactionByIdUseCase,
+                  transactionId, args, context, onPay, null,
+                  setContext: setContext);
             },
           ),
         ),
@@ -195,11 +199,12 @@ class CardTransactionManager {
     OnPayCallback? onPay,
     Either<Map<String, dynamic>, PurchaseData>? purchaseDataOrFail, {
     void Function()? dismissFn,
+    void Function(void Function(BuildContext))? setContext,
   }) async {
     if (NetworkConstants.isSdkInApp) {
       cubit.showLoader();
 
-      OneTransaction? oneTransaction = null;
+      OneTransaction? oneTransaction;
       final oneTransactionResponse = await getOneTransactionByIdUseCase.invoke(
         {
           'transactionId': transactionId,
@@ -233,13 +238,16 @@ class CardTransactionManager {
           );
         }
       });
-
+      BuildContext lContext = context;
+      setContext?.call((ctx) {
+        lContext = ctx;
+      });
       cubit.initial();
-      if (oneTransaction != null && context.mounted) {
+      if (oneTransaction != null) {
         await ReceiptHandler.instance.showHistoryReceipt(
-          context: context,
+          context: lContext,
           settings:
-              _generateTransactionSettings(oneTransaction!, context).copyWith(
+              _generateTransactionSettings(oneTransaction!, lContext).copyWith(
             onClose: () {
               AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
             },

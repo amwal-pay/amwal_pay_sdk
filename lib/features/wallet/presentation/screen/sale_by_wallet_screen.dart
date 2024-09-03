@@ -51,9 +51,7 @@ class _SaleByWalletScreenState extends State<SaleByWalletScreen> {
     terminals = merchantStore.getTerminal();
     merchantName = merchantStore.getMerchantName() ?? '';
     merchantId = int.parse(merchantStore.getMerchantId());
-    if (terminals.length == 1) {
-      _terminal = terminals.single;
-    }
+    _terminal = terminals.first;
   }
 
   Future<void> _navigateToSaleByWalletOptions(

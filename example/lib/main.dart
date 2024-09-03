@@ -1,12 +1,9 @@
 import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
 import 'package:amwal_pay_sdk/amwal_sdk_settings/amwal_sdk_settings.dart';
 import 'package:amwal_pay_sdk/core/networking/constants.dart';
-import 'package:amwal_pay_sdk/features/currency_field/data/models/response/currency_response.dart';
-import 'package:amwal_pay_sdk/features/payment_argument.dart';
 import 'package:example/currency_model.dart';
 import 'package:example/drop_down_form.dart';
 import 'package:example/text_form.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -64,14 +61,14 @@ class _DemoScreenState extends State<DemoScreen> {
     ///
     // if(kDebugMode) {
 
-      _amountController = TextEditingController(text: '50');
-      _currencyController = TextEditingController(text: 'OMR');
-      _languageController = TextEditingController(text: 'en');
-      _terminalController = TextEditingController(text: '79685');
-      _merchantIdController = TextEditingController(text: '39467');
-      _secureHashController = TextEditingController(
-        text: 'EB2004079E96F897F2742A7BB5EC276DF58761722DAA18FDC064CC6B24F1517D',
-      );
+    _amountController = TextEditingController(text: '50');
+    _currencyController = TextEditingController(text: 'OMR');
+    _languageController = TextEditingController(text: 'en');
+    _terminalController = TextEditingController(text: '79685');
+    _merchantIdController = TextEditingController(text: '39467');
+    _secureHashController = TextEditingController(
+      text: 'EB2004079E96F897F2742A7BB5EC276DF58761722DAA18FDC064CC6B24F1517D',
+    );
 
     // }
     altBaseurl = NetworkConstants.baseUrlSdk;
@@ -237,7 +234,6 @@ class _DemoScreenState extends State<DemoScreen> {
               ),
               ElevatedButton(
                 onPressed: () async {
-
                   // final paymentArguments = PaymentArguments(
                   //   amount: "5000",
                   //   terminalId:  _terminalController.text, merchantId: 1,

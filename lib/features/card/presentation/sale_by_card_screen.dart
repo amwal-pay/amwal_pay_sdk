@@ -51,9 +51,7 @@ class _SaleByCardScreenState extends State<SaleByCardScreen> {
     merchantId = int.parse(merchantStore.getMerchantId());
     _terminals = merchantStore.getTerminal();
     merchantName = merchantStore.getMerchantName() ?? '';
-    if (_terminals.length == 1) {
-      terminal = _terminals.single;
-    }
+    terminal = _terminals.first;
   }
 
   @override
@@ -140,7 +138,8 @@ class _SaleByCardScreenState extends State<SaleByCardScreen> {
             ),
             const SizedBox(height: 15),
             // if debug
-            if (MerchantStore.instance.getMerchantFlavor() == 'vpos'|| kDebugMode)
+            if (MerchantStore.instance.getMerchantFlavor() == 'vpos' ||
+                kDebugMode)
               AppMainButton(
                 key: const Key('contactless'),
                 buttonIcon: AppAssets.contactlessIcon,
