@@ -84,9 +84,15 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
     } else {
       if (cardInfo == null) {
         await terminateNFC();
-        scanResult['cardExpiry'] = _convertArabicToEnglishNumbers(
-          scanResult['cardExpiry'],
-        );
+        FirebaseCrashlytics.instance.log(scanResult.toString());
+        try {
+          scanResult['cardExpiry'] = _convertArabicToEnglishNumbers(
+            scanResult['cardExpiry'] ?? '',
+          );
+        } catch (e) {
+          FirebaseCrashlytics.instance.recordError(scanResult, null);
+        }
+
         cardInfo = CardInfo.fromJson(scanResult);
         fillCardData(cardInfo!);
 
