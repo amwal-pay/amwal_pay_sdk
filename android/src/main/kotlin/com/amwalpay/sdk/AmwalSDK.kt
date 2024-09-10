@@ -160,7 +160,7 @@ class AmwalSDK : FlutterPlugin, ActivityAware, MethodCallHandler, NfcAdapter.Rea
         jsonObject.addProperty("cardData", data.toString())
         try {
             jsonObject.addProperty("cardNumber", data.cardNumber)
-            val outputFormat = SimpleDateFormat("MM/yy", Locale.getDefault())
+            val outputFormat = SimpleDateFormat("MM/yy", Locale.ENGLISH)
 
             jsonObject.addProperty("cardExpiry",  outputFormat.format(data.expireDate))
             jsonObject.addProperty("holderFirstname", data.holderFirstname)
