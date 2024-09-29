@@ -51,7 +51,7 @@
   "copy_btn": "COPY",
   "share_btn": "SHARE",
   "merchant_name_label": "Merchant Name",
-  "card_number_label":"Card Number",
+  "card_number_label":"Card Number *",
   "card_name_label":"Card Name",
   "email_label":"Email",
   "expiry_date":"Expiry Date",

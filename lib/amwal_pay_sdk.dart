@@ -71,7 +71,9 @@ class AmwalPaySdk {
   }
 
   void checkMerchantProvidedData(
-      NetworkService networkService, AmwalSdkSettings settings) {
+    NetworkService networkService,
+    AmwalSdkSettings settings,
+  ) {
     var transactionRepo = TransactionRepositoryImpl(networkService);
 
     var map = {
@@ -201,7 +203,6 @@ class AmwalPaySdk {
   }
 
   Future<void> openCardScreen(AmwalInAppSdkSettings settings) async {
-
     final cardSdk = await _initCardSdk(settings: settings);
     AmwalSdkSettingContainer.locale = settings.locale;
     await CacheStorageHandler.instance.write(

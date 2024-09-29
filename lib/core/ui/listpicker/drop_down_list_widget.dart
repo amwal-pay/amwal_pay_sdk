@@ -20,6 +20,7 @@ class DropDownListWidget<T> extends StatelessWidget {
   final Border? border;
   final BorderRadius? borderRadius;
   final void Function()? onCancel;
+  final bool required;
 
   const DropDownListWidget({
     Key? key,
@@ -34,11 +35,23 @@ class DropDownListWidget<T> extends StatelessWidget {
     this.onCancel,
     this.border,
     this.borderRadius = const BorderRadius.all(Radius.circular(8)),
+    this.required = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final mediaQuerySize = MediaQuery.of(context).size;
+    String getTitle() {
+      final title = StringBuffer('');
+      if (widgetTitle != null) {
+        title.write(widgetTitle);
+        if (required) {
+          title.write(' *');
+        }
+      }
+      return title.toString();
+    }
+
     return Material(
       child: Container(
         color: lightGeryColor,
@@ -47,7 +60,7 @@ class DropDownListWidget<T> extends StatelessWidget {
           children: [
             if (widgetTitle != null)
               Text(
-                widgetTitle!,
+                getTitle(),
                 style: const TextStyle(
                   color: primaryColor,
                   fontWeight: FontWeight.bold,

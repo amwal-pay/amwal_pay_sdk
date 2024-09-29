@@ -70,7 +70,8 @@ class _ScanQrToPayWidgetState extends State<ScanQrToPayWidget> {
   }
 
   Future<TransactionDetailsSettings?> _getTransactionById(
-      String transactionId) async {
+    String transactionId,
+  ) async {
     final oneTransactionResponse = await WalletInjector.instance
         .get<GetOneTransactionByIdUseCase>()
         .invoke({

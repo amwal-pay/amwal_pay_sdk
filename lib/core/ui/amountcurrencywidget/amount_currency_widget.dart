@@ -25,7 +25,7 @@ class AmountCurrencyWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'amount_label'.translate(context),
+                '${'amount_label'.translate(context)} *',
                 style: const TextStyle(
                   color: primaryColor,
                   fontWeight: FontWeight.bold,

@@ -4,7 +4,6 @@ import 'package:amwal_pay_sdk/core/networking/custom_log_interceptor.dart';
 import 'package:amwal_pay_sdk/core/networking/mockup_interceptor.dart';
 import 'package:amwal_pay_sdk/core/networking/secure_hash_interceptor.dart';
 import 'package:amwal_pay_sdk/core/networking/token_interceptor.dart';
-import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:dio/dio.dart';
 
 import 'constants.dart';
@@ -31,7 +30,6 @@ class DioClient {
         _tokenInjectorInterceptor,
         _secureHashInterceptor,
         _mockupInterceptor,
-        // ChuckerDioInterceptor(),
         CustomLogInterceptor(),
       ]);
   }

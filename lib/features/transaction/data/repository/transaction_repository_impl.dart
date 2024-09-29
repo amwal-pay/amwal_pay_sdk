@@ -8,7 +8,9 @@ import '../models/response/merchant_name_response.dart';
 
 class TransactionRepositoryImpl extends TransactionRepository {
   final NetworkService _networkService;
+
   TransactionRepositoryImpl(this._networkService);
+
   @override
   Future<NetworkState<OneTransactionResponse>> getTransactionById(
     Map<String, dynamic> data,
@@ -22,14 +24,11 @@ class TransactionRepositoryImpl extends TransactionRepository {
     );
   }
 
-
   @override
   Future<NetworkState<MerchantDataResponse>> getMerchantData(
-      Map<String, dynamic> data,
-      ) async {
-
-    Map<String, dynamic> data2 = Map<String, dynamic>.from(data );
-
+    Map<String, dynamic> data,
+  ) async {
+    Map<String, dynamic> data2 = Map<String, dynamic>.from(data);
     return await _networkService.invokeRequest(
       endpoint: NetworkConstants.getMerchantNameEndpoint,
       converter: MerchantDataResponse.fromJson,

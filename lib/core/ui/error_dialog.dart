@@ -29,7 +29,8 @@ class ErrorDialog extends StatelessWidget {
       ),
       content: Text(
         message.translate(
-            AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context),
+          AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context,
+        ),
         textAlign: TextAlign.center,
         style: const TextStyle(color: Colors.black),
       ),

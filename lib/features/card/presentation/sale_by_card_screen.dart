@@ -85,6 +85,7 @@ class _SaleByCardScreenState extends State<SaleByCardScreen> {
         child: Column(
           children: [
             AmountCurrencyWidget(cubit: _amountCurrencyWidgetCubit),
+            const SizedBox(height: 16),
             if (_terminals.length != 1)
               DropDownListWidget<String>(
                 name: "Web Terminal",
@@ -98,6 +99,7 @@ class _SaleByCardScreenState extends State<SaleByCardScreen> {
                 onSelected: (item) => terminal = item,
                 onCancel: () => terminal = null,
                 dropDownListItems: _terminals,
+                required: true,
               ),
             const SizedBox(height: 60),
             AppMainButton(

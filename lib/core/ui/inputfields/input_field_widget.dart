@@ -82,6 +82,15 @@ class _InputFieldWidgetState extends State<InputFieldWidget> {
     }
   }
 
+  String getTitle() {
+    final title = StringBuffer('');
+    title.write(widget.widgetTitle);
+    if (widget.isRequired && title.isNotEmpty) {
+      title.write(' *');
+    }
+    return title.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaQuerySize = MediaQuery.of(context).size;
@@ -132,7 +141,7 @@ class _InputFieldWidgetState extends State<InputFieldWidget> {
               SizedBox(
                 height: 24,
                 child: Text(
-                  widget.widgetTitle,
+                  getTitle(),
                   style: const TextStyle(
                     color: primaryColor,
                     fontWeight: FontWeight.bold,
@@ -171,12 +180,11 @@ class _InputFieldWidgetState extends State<InputFieldWidget> {
               LengthLimitingTextInputFormatter(widget.maxLength),
               if (widget.isEnglish)
                 FilteringTextInputFormatter.allow(RegExp('[a-zA-Z\\s]')),
-              if(widget.isEmail)
+              if (widget.isEmail)
                 FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s@._-]')),
-              if(widget.isAliasName)
-                FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9\\s!@#\$%&*\\-_\\.]')),
-
-
+              if (widget.isAliasName)
+                FilteringTextInputFormatter.allow(
+                    RegExp('[a-zA-Z0-9\\s!@#\$%&*\\-_\\.]')),
             ],
           ),
         ],

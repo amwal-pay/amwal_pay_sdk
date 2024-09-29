@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 class PhoneInputField extends StatefulWidget {
-  PhoneInputField({
+  const PhoneInputField({
     Key? key,
     required this.widgetTitle,
     required this.widgetHint,
@@ -17,6 +17,7 @@ class PhoneInputField extends StatefulWidget {
     this.initialValue,
     this.onChange,
     this.readOnly,
+    this.required = false,
   }) : super(key: key);
 
   final String widgetTitle;
@@ -26,6 +27,7 @@ class PhoneInputField extends StatefulWidget {
   final String Function(String)? globalTranslator;
   final void Function(String)? onChange;
   final bool? readOnly;
+  final bool required;
 
   @override
   State<PhoneInputField> createState() => _PhoneInputFieldState();
@@ -60,6 +62,16 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
     }
   }
 
+  String getTitle() {
+    final title = StringBuffer('');
+    title.write(widget.widgetTitle);
+    if (widget.required) {
+      title.write(' *');
+    }
+
+    return title.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaQuerySize = MediaQuery.of(context).size;
@@ -69,7 +81,7 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            widget.widgetTitle,
+            getTitle(),
             style: const TextStyle(
               color: primaryColor,
               fontWeight: FontWeight.bold,
