@@ -10,10 +10,13 @@ import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/resources/color/colors.dart';
+
 class CurrencyField extends StatefulWidget {
   final double? width;
   final double? height;
   final void Function(CurrencyData?) onChanged;
+
   const CurrencyField({
     Key? key,
     this.width,
@@ -59,34 +62,62 @@ class _CurrencyFieldState extends State<CurrencyField> {
               ?.where((element) => element.idN == 512)
               .toList(),
         );
-        return SizedBox(
-          width: widget.width,
-          height: widget.height,
-          child: DropDownListWidget<CurrencyData>(
-            name: '',
-            widgetTitle: 'currency_label'.translate(context),
-            hintText: 'currency_label'.translate(context),
-            cubit: DropDownListCubit(
-              initialValue: _currencyData ?? _defaultCurrency,
-            ),
-            nameMapper: (item) {
-              return item!.name;
-            },
-            onDone: () => setState(
-              () => widget.onChanged(_currencyData ?? _defaultCurrency),
-            ),
-            onCancel: () => setState(() {
-              _currencyData = null;
-              _defaultCurrency = null;
-              widget.onChanged(null);
-            }),
-            onSelected: (item) {
-              _currencyData = item;
-              widget.onChanged(_currencyData);
-            },
-            dropDownListItems: currencies ?? const [],
-          ),
-        );
+        if (currencies != null && currencies.isNotEmpty) {
+          _defaultCurrency = currencies.first;
+          widget.onChanged(_defaultCurrency);
+        }
+
+        return (currencies?.length ?? 0) > 1
+            ? SizedBox(
+                width: widget.width,
+                height: widget.height,
+                child: DropDownListWidget<CurrencyData>(
+                  name: '',
+                  widgetTitle: 'currency_label'.translate(context),
+                  hintText: 'currency_label'.translate(context),
+                  cubit: DropDownListCubit(
+                    initialValue: _currencyData ?? _defaultCurrency,
+                  ),
+                  nameMapper: (item) {
+                    return item!.name;
+                  },
+                  onDone: () => setState(
+                    () => widget.onChanged(_currencyData ?? _defaultCurrency),
+                  ),
+                  onCancel: () => setState(() {
+                    _currencyData = null;
+                    _defaultCurrency = null;
+                    widget.onChanged(null);
+                  }),
+                  onSelected: (item) {
+                    _currencyData = item;
+                    widget.onChanged(_currencyData);
+                  },
+                  dropDownListItems: currencies ?? const [],
+                ),
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        _defaultCurrency?.name ?? '',
+                        style: const TextStyle(
+                          color: black2Color,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 100,
+                      ),
+                    ],
+                  ),
+                ],
+              );
       },
     );
   }
