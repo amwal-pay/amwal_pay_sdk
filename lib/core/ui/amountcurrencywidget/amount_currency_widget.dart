@@ -1,4 +1,5 @@
 import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
+import 'package:amwal_pay_sdk/core/tooltip_widget.dart';
 import 'package:amwal_pay_sdk/core/ui/amountcurrencywidget/amount_currency_widget_cubit.dart';
 import 'package:amwal_pay_sdk/features/currency_field/presentation/currency_field.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
@@ -24,11 +25,14 @@ class AmountCurrencyWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                '${'amount_label'.translate(context)} *',
-                style: const TextStyle(
-                  color: primaryColor,
-                  fontWeight: FontWeight.bold,
+              TooltipWidget(
+                message: 'wallet_amount_tooltip'.translate(context),
+                title: Text(
+                  '${'amount_label'.translate(context)} *',
+                  style: const TextStyle(
+                    color: primaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               const SizedBox(
