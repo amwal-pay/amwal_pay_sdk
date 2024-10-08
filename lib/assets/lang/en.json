@@ -150,5 +150,6 @@
   "nfc_unavailable": "NFC Unavailable",
   "nfc_unavailable_massage": "Turn on NFC and restart the app",
   "start_scan" : "Please hold your card near the NFC reader to scan.",
-  "enter_valid_phone": "Enter Valid Phone Number"
+  "enter_valid_phone": "Enter Valid Phone Number",
+  "wallet_amount_tooltip": "Enter the total amount the payer needs to pay."
 }
