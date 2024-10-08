@@ -42,13 +42,17 @@ class SaleCardFeatureCommonWidgets {
                   const SizedBox(
                     height: 6,
                   ),
-                  AutoSizeText(
-                    merchantName ?? 'Merchant Name',
-                    maxLines: 1,
-                    style: const TextStyle(
-                      color: blackColor,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                  FittedBox(
+                    child: AutoSizeText(
+                      merchantName ?? 'Merchant Name',
+                      overflow: TextOverflow.ellipsis,
+                      minFontSize: 12, // Adjust this value as needed
+                      maxLines: 1,
+                      style: const TextStyle(
+                        color: blackColor,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   )
                 ],
