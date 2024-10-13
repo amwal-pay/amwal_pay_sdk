@@ -25,12 +25,12 @@ mixin SaleByWalletActionsMixin on ApiView<SaleByWalletCubit> {
     return TransactionDetailsSettings(
       locale: AmwalSdkSettingContainer.locale,
       amount: oneTransaction.amount,
-      transactionDisplayName: oneTransaction.transactionTypeDisplayName,
+      transactionDisplayName: oneTransaction.transactionTypeDisplayName ?? '',
       isSuccess: oneTransaction.responseCodeName == 'Approved',
       transactionStatus: oneTransaction.responseCodeName == 'Approved'
           ? TransactionStatus.success
           : TransactionStatus.failed,
-      transactionType: oneTransaction.transactionType,
+      transactionType: oneTransaction.transactionType ?? '',
       isTransactionDetails: false,
       globalTranslator: (string) => string.translate(context),
       details: {
@@ -38,7 +38,7 @@ mixin SaleByWalletActionsMixin on ApiView<SaleByWalletCubit> {
         'ref_no': oneTransaction.idN,
         'merchant_id': oneTransaction.merchantId,
         'terminal_id': oneTransaction.terminalId,
-        'date_time': oneTransaction.transactionTime.formatDate(context),
+        'date_time': oneTransaction.transactionTime?.formatDate(context),
         'amount': oneTransaction.transactionAmount(context),
       },
     );

@@ -64,10 +64,10 @@ class _DemoScreenState extends State<DemoScreen> {
     _amountController = TextEditingController(text: '50');
     _currencyController = TextEditingController(text: 'OMR');
     _languageController = TextEditingController(text: 'en');
-    _terminalController = TextEditingController(text: '79685');
-    _merchantIdController = TextEditingController(text: '39467');
+    _terminalController = TextEditingController(text: '432308');
+    _merchantIdController = TextEditingController(text: '70210');
     _secureHashController = TextEditingController(
-      text: 'EB2004079E96F897F2742A7BB5EC276DF58761722DAA18FDC064CC6B24F1517D',
+      text: '332A5AA255DE7D35DBEA355AAD95CB5C6A469F5B81601DC18A89C0BC6DDF083F',
     );
 
     // }

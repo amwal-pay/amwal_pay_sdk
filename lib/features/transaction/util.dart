@@ -24,7 +24,7 @@ extension OneTransactionExtension on OneTransaction {
 
   String transactionAmount(BuildContext context) {
     var amount = this.amount.toStringAsFixed(3);
-    return '  $amount ${currency.translate(context)}';
+    return '  $amount ${currency?.translate(context)}';
 
   }
 
@@ -32,7 +32,7 @@ extension OneTransactionExtension on OneTransaction {
 
   String transactionDueAmount(BuildContext context, num dueAmount) {
     var amount =  dueAmount.toStringAsFixed(3);
-    return '  $amount ${currency.translate(context)} ';
+    return '  $amount ${currency?.translate(context)} ';
   }
 }
 

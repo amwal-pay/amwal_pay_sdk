@@ -18,49 +18,49 @@ class OneTransactionResponse extends BaseResponse<OneTransaction> {
 
 class OneTransaction {
   final int idN;
-  final String id;
-  final String transactionTime;
+  final String? id;
+  final String? transactionTime;
   final num amount;
   final num totalAmount;
   final num tips;
   final int convFees;
   final String? cardNumber;
-  final String cvV2;
+  final String? cvV2;
   final String? cardHolderName;
   final String? cardHolderEmail;
   final String? cardHolderMobile;
-  final String responseCodeName;
+  final String? responseCodeName;
   final bool isRefunded;
   final bool isCaptured;
   final int terminalNodeId;
   final int transactionMethodId;
   final int hostId;
   final int currencyId;
-  final String currency;
+  final String? currency;
   final int transactionTypeId;
-  final String transactionType;
+  final String? transactionType;
   final int? originalTransactionId;
   final String? stan;
   final int terminalTypeId;
   final int requestSourceId;
   final int? terminalType;
   final int channelType;
-  final String methodName;
+  final String? methodName;
   final int bankId;
   final int? aggregatorId;
   final String? aggregator;
-  final String transactionTypeDisplayName;
+  final String? transactionTypeDisplayName;
   final int? amsTransactionStatusId;
-  final String orderId;
+  final String? orderId;
   final DigitalTransaction? digitalTransaction;
-  final String merchantName;
+  final String? merchantName;
   final int merchantId;
   final int terminalId;
   final TransactionActions? transactionActions;
   final num? amountAvailableForRefundOrCompletion;
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+  Map<String?, dynamic> toJson() {
+    final Map<String?, dynamic> data = <String?, dynamic>{};
     data['idN'] = idN;
     data['id'] = id;
     data['transactionTime'] = transactionTime;
@@ -117,7 +117,7 @@ class OneTransaction {
     required this.convFees,
     this.transactionActions,
     this.cardNumber,
-    required this.cvV2,
+     this.cvV2,
     this.cardHolderName,
     this.cardHolderEmail,
     this.cardHolderMobile,
@@ -318,7 +318,7 @@ class OneTransaction {
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String?, dynamic> toMap() {
     return {
       'idN': idN,
       'id': id,
@@ -359,49 +359,49 @@ class OneTransaction {
     };
   }
 
-  factory OneTransaction.fromMap(Map<String, dynamic> map) {
+  factory OneTransaction.fromMap(Map<String?, dynamic> map) {
     return OneTransaction(
       transactionActions: map['transactionActions'] != null
           ? TransactionActions.fromMap(map['transactionActions'])
           : null,
-      merchantName: map['merchantName'] as String,
+      merchantName: map['merchantName'] as String?,
       merchantId: map['merchantId'] as int,
       terminalId: map['terminalId'] as int,
       idN: map['idN'] as int,
-      id: map['id'] as String,
-      transactionTime: map['transactionTime'] as String,
+      id: map['id'] as String?,
+      transactionTime: map['transactionTime'] as String?,
       amount: map['amount'] as num,
       totalAmount: map['totalAmount'] as int,
       tips: map['tips'] as int,
       convFees: map['convFees'] as int,
       cardNumber: map['cardNumber'] as String?,
-      cvV2: map['cvV2'] as String,
+      cvV2: map['cvV2'] as String?,
       cardHolderName: map['cardHolderName'] as String?,
       cardHolderEmail: map['cardHolderEmail'] as String?,
       cardHolderMobile: map['cardHolderMobile'] as String?,
-      responseCodeName: map['responseCodeName'] as String,
+      responseCodeName: map['responseCodeName'] as String?,
       isRefunded: map['isRefunded'] as bool,
       isCaptured: map['isCaptured'] as bool,
       terminalNodeId: map['terminalNodeId'] as int,
       transactionMethodId: map['transactionMethodId'] as int,
       hostId: map['hostId'] as int,
       currencyId: map['currencyId'] as int,
-      currency: map['currency'] as String,
+      currency: map['currency'] as String?,
       transactionTypeId: map['transactionTypeId'] as int,
-      transactionType: map['transactionType'] as String,
+      transactionType: map['transactionType'] as String?,
       originalTransactionId: map['originalTransactionId'] as int?,
       stan: map['stan'] as String?,
       terminalTypeId: map['terminalTypeId'] as int,
       requestSourceId: map['requestSourceId'] as int,
       terminalType: map['terminalType'] as int?,
       channelType: map['channelType'] as int,
-      methodName: map['methodName'] as String,
+      methodName: map['methodName'] as String?,
       bankId: map['bankId'] as int,
       aggregatorId: map['aggregatorId'] as int?,
       aggregator: map['aggregator'] as String?,
-      transactionTypeDisplayName: map['transactionTypeDisplayName'] as String,
+      transactionTypeDisplayName: map['transactionTypeDisplayName'] as String?,
       amsTransactionStatusId: map['amsTransactionStatusId'] as int?,
-      orderId: map['orderId'] as String,
+      orderId: map['orderId'] as String?,
       amountAvailableForRefundOrCompletion:
           map['amountAvailableForRefundOrCompletion'],
       digitalTransaction: map['digitalTransaction'] != null
@@ -415,11 +415,11 @@ class OneTransaction {
 
 class DigitalTransaction {
   final int idN;
-  final String createdDatetime;
-  final String maxResponseDatetime;
-  final String status;
+  final String? createdDatetime;
+  final String? maxResponseDatetime;
+  final String? status;
   final int? aggregatorId;
-  final String externalTransactionId;
+  final String? externalTransactionId;
   final String? originalExternalTransactionId;
   final String? senderMobileNo;
   final String? receiverMobileNo;
@@ -435,10 +435,10 @@ class DigitalTransaction {
   final String? refundCreatorId;
   final int? transactionId;
   final int requestSourceId;
-  final String orderId;
+  final String? orderId;
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+  Map<String?, dynamic> toJson() {
+    final Map<String?, dynamic> data = <String?, dynamic>{};
     data['idN'] = idN;
     data['createdDatetime'] = createdDatetime;
     data['maxResponseDatetime'] = maxResponseDatetime;
@@ -468,10 +468,10 @@ class DigitalTransaction {
   DigitalTransaction({
     required this.idN,
     required this.createdDatetime,
-    required this.maxResponseDatetime,
-    required this.status,
+     this.maxResponseDatetime,
+      this.status,
     required this.aggregatorId,
-    required this.externalTransactionId,
+      this.externalTransactionId,
     required this.originalExternalTransactionId,
     required this.senderMobileNo,
     required this.receiverMobileNo,
@@ -487,7 +487,7 @@ class DigitalTransaction {
     required this.refundCreatorId,
     required this.transactionId,
     required this.requestSourceId,
-    required this.orderId,
+      this.orderId,
   });
 
   @override
@@ -597,7 +597,7 @@ class DigitalTransaction {
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String?, dynamic> toMap() {
     return {
       'idN': idN,
       'createdDatetime': createdDatetime,
@@ -624,14 +624,14 @@ class DigitalTransaction {
     };
   }
 
-  factory DigitalTransaction.fromMap(Map<String, dynamic> map) {
+  factory DigitalTransaction.fromMap(Map<String?, dynamic> map) {
     return DigitalTransaction(
       idN: map['idN'] as int,
-      createdDatetime: map['createdDatetime'] as String,
-      maxResponseDatetime: map['maxResponseDatetime'] as String,
-      status: map['status'] as String,
+      createdDatetime: map['createdDatetime'] as String?,
+      maxResponseDatetime: map['maxResponseDatetime'] as String?,
+      status: map['status'] as String?,
       aggregatorId: map['aggregatorId'] as int?,
-      externalTransactionId: map['externalTransactionId'] as String,
+      externalTransactionId: map['externalTransactionId'] as String?,
       originalExternalTransactionId:
           map['originalExternalTransactionId'] as String?,
       senderMobileNo: map['senderMobileNo'] as String?,
@@ -648,7 +648,7 @@ class DigitalTransaction {
       refundCreatorId: map['refundCreatorId'] as String?,
       transactionId: map['transactionId'] as int?,
       requestSourceId: map['requestSourceId'] as int,
-      orderId: map['orderId'] as String,
+      orderId: map['orderId'] as String?,
     );
   }
 
@@ -701,7 +701,7 @@ class TransactionActions {
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String?, dynamic> toMap() {
     return {
       'canRefund': canRefund,
       'canVoid': canVoid,
@@ -709,7 +709,7 @@ class TransactionActions {
     };
   }
 
-  factory TransactionActions.fromMap(Map<String, dynamic> map) {
+  factory TransactionActions.fromMap(Map<String?, dynamic> map) {
     return TransactionActions(
       canRefund: map['canRefund'] as bool,
       canVoid: map['canVoid'] as bool,
