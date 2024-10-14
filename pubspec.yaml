@@ -4,7 +4,7 @@ version: 0.0.48
 homepage: "https://github.com/amwal-pay/amwal_pay_sdk"
 
 environment:
-  sdk: ">=2.18.0 <3.19.2"
+  sdk: ">=3.5.0 <3.24.3"
   flutter: ">=1.17.0"
 
 dependencies:
@@ -42,7 +42,7 @@ dependencies:
   nfc_manager: ^3.4.0
   dartz: ^0.10.1
   debit_credit_card_widget: ^1.0.2
-  webview_flutter: ^3.0.0
+  webview_flutter: ^4.10.0
   firebase_crashlytics: ^3.4.9
 
 
