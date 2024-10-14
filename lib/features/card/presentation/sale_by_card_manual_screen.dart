@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' hide WatchContext;
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
+import 'package:uuid/uuid.dart';
 
 class SaleByCardManualScreen extends StatefulApiView<SaleByCardManualCubit>
     with LoaderMixin {
@@ -173,6 +174,8 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
                         final isValid =
                             widget.cubit.formKey.currentState!.validate();
                         if (isValid) {
+                          //TODO test after server work done
+                          args.transactionId = const Uuid().v1();
                           await CardTransactionManager.instance
                               .onPurchaseWith3DS(
                                   cubit: widget.cubit,
