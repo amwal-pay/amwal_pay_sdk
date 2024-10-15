@@ -176,14 +176,20 @@ class CardTransactionManager {
     } else {
       if (context.mounted) {
         cubit.formKey.currentState?.reset();
-        onPay?.call((settings) async {
-          await ReceiptHandler.instance.showCardReceipt(
-            context:
-                AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context,
-            settings: settings,
+
+
+          await receiptAfterComplete(
+            cubit,
+            getOneTransactionByIdUseCase,
+            purchaseData.transactionId,
+            args,
+            context,
+            onPay,
+            Right(purchaseData),
           );
-          if (context.mounted) dismissLoader(context);
-        });
+
+
+
       } else {
         if (context.mounted) dismissLoader(context);
       }
