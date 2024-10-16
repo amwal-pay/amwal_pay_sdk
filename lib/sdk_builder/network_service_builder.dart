@@ -9,10 +9,12 @@ import 'package:amwal_pay_sdk/core/networking/token_interceptor.dart';
 
 class NetworkServiceBuilder {
   const NetworkServiceBuilder._();
+
   static NetworkServiceBuilder get instance => const NetworkServiceBuilder._();
+
   DioClient _initDioClientWithInterceptors(
     bool isMocked,
-    String secureHashValue,
+    String? secureHashValue,
     String token,
     String language,
     HttpClient? client,
@@ -20,9 +22,11 @@ class NetworkServiceBuilder {
     final tokenInterceptor = TokenInjectorInterceptor();
     TokenInjectorInterceptor.token = token;
     final mockupInterceptor = MockupInterceptor(isMocked);
+
     final secureHashInterceptor = SecureHashInterceptor(
-      secureHashValue: secureHashValue,
+      secureHashValue: secureHashValue ?? "",
     );
+
     if (language == 'ar') {
       CustomLogInterceptor.language = 'ar-EG';
     } else {
@@ -39,7 +43,7 @@ class NetworkServiceBuilder {
 
   NetworkService setupNetworkService(
     bool isMocked,
-    String secureHashValue,
+    String? secureHashValue,
     String token,
     String language, {
     void Function(Object e, StackTrace stack)? onError,

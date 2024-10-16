@@ -6,7 +6,7 @@ class WalletInjector {
   static WalletInjector get instance => const WalletInjector._();
   static const walletScope = 'wallet_scope';
 
-  GetIt get getIt => GetIt.instance;
+    GetIt get getIt => GetIt.instance;
 
   T get<T extends Object>() => getIt.get<T>();
 

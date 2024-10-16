@@ -17,7 +17,7 @@ class AmwalCardSdk {
   Future<void> _sdkInitialization(
     String token,
     List<String> terminalIds,
-    String secureHashValue,
+    String? secureHashValue,
     String merchantId,
     bool isMocked,
     NetworkService service, {
@@ -42,7 +42,7 @@ class AmwalCardSdk {
     required String token,
     required String merchantId,
     required List<String> terminalIds,
-    required String secureHashValue,
+      String? secureHashValue,
     required String transactionRefNo,
     required NetworkService service,
     String? merchantName,

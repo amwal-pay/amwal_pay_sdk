@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 abstract class IAmwalSdkSettings {
   final String token;
-  final String secureHashValue;
+  String? secureHashValue;
   final String merchantId;
   final List<String> terminalIds;
   final String transactionId;
@@ -21,9 +21,9 @@ abstract class IAmwalSdkSettings {
   final Future<String?> Function()? onTokenExpired;
   final int countDownInSeconds;
 
-  const IAmwalSdkSettings({
+    IAmwalSdkSettings({
     required this.token,
-    required this.secureHashValue,
+    this.secureHashValue,
     required this.merchantId,
     required this.terminalIds,
     required this.transactionId,
@@ -43,24 +43,23 @@ abstract class IAmwalSdkSettings {
 }
 
 class AmwalInAppSdkSettings extends IAmwalSdkSettings {
-  const AmwalInAppSdkSettings({
-    required super.token,
-    required super.secureHashValue,
-    required super.merchantId,
-    required super.terminalIds,
-    required super.transactionId,
-    required super.merchantName,
-    required super.onPay,
-    super.getTransactionFunction,
-    super.countDownInSeconds = 90,
-    super.onCountComplete,
-    super.locale,
-    super.isMocked,
-    super.onError,
-    super.onTokenExpired,
-    super.flavor
-
-  }) : super(
+  AmwalInAppSdkSettings(
+      {required super.token,
+      super.secureHashValue,
+      required super.merchantId,
+      required super.terminalIds,
+      required super.transactionId,
+      required super.merchantName,
+      required super.onPay,
+      super.getTransactionFunction,
+      super.countDownInSeconds = 90,
+      super.onCountComplete,
+      super.locale,
+      super.isMocked,
+      super.onError,
+      super.onTokenExpired,
+      super.flavor})
+      : super(
           amount: '',
           currency: '',
         );
@@ -70,7 +69,7 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
       token: json['token'],
       secureHashValue: json['secureHashValue'],
       merchantId: json['merchantId'],
-      terminalIds: json['terminalIds'] ?? [] ,
+      terminalIds: json['terminalIds'] ?? [],
       transactionId: json['transactionId'],
       merchantName: json['merchantName'],
       onPay: json['onPay'],
@@ -105,24 +104,24 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
 class AmwalSdkSettings extends IAmwalSdkSettings {
   final String terminalId;
 
-  AmwalSdkSettings({
-    super.token = '',
-    required super.secureHashValue,
-    required super.merchantId,
-    required super.transactionId,
-    required super.currency,
-    required super.amount,
-    required this.terminalId,
-    super.merchantName,
-    super.getTransactionFunction,
-    super.onCountComplete,
-    super.locale,
-    super.isMocked,
-    super.onError,
-    super.onTokenExpired,
-    super.countDownInSeconds = 90,
-    super.flavor
-  }) : super(terminalIds: [terminalId], onPay: (_, [__]) {});
+  AmwalSdkSettings(
+      {super.token = '',
+      required super.secureHashValue,
+      required super.merchantId,
+      required super.transactionId,
+      required super.currency,
+      required super.amount,
+      required this.terminalId,
+      super.merchantName,
+      super.getTransactionFunction,
+      super.onCountComplete,
+      super.locale,
+      super.isMocked,
+      super.onError,
+      super.onTokenExpired,
+      super.countDownInSeconds = 90,
+      super.flavor})
+      : super(terminalIds: [terminalId], onPay: (_, [__]) {});
 
   factory AmwalSdkSettings.fromJson(Map<String, dynamic> json) {
     return AmwalSdkSettings(
@@ -134,16 +133,21 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
       amount: json['amount'],
       terminalId: json['terminalId'],
       merchantName: json['merchantName'],
-      getTransactionFunction: null, // You should handle this according to your logic
-      onCountComplete: null, // You should handle this according to your logic
+      getTransactionFunction: null,
+      // You should handle this according to your logic
+      onCountComplete: null,
+      // You should handle this according to your logic
       locale: json['locale'],
       isMocked: json['isMocked'],
-      onError: null, // You should handle this according to your logic
-      onTokenExpired: null, // You should handle this according to your logic
+      onError: null,
+      // You should handle this according to your logic
+      onTokenExpired: null,
+      // You should handle this according to your logic
       countDownInSeconds: json['countDownInSeconds'] ?? 90,
       flavor: json['flavor'],
     );
   }
+
   Map<String, dynamic> toJson() {
     return {
       'token': token,
