@@ -175,7 +175,7 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
                             widget.cubit.formKey.currentState!.validate();
                         if (isValid) {
                           //TODO test after server work done
-                          args.transactionId = const Uuid().v1();
+                          // args.transactionId = const Uuid().v1();
                           await CardTransactionManager.instance
                               .onPurchaseWith3DS(
                                   cubit: widget.cubit,
