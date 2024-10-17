@@ -9,6 +9,7 @@ class TextForm extends StatelessWidget {
   final int? maxAmount;
   final int? maxLength;
   final String? Function(String?)? validator;
+
   const TextForm({
     Key? key,
     this.validator,
@@ -33,7 +34,6 @@ class TextForm extends StatelessWidget {
           initialValue: initialValue,
           controller: controller,
           maxLength: maxLength,
-          keyboardType: isNumeric ? TextInputType.number : null,
           validator: (value) {
             if (value?.isEmpty ?? true) {
               return 'Required Field';
@@ -44,8 +44,8 @@ class TextForm extends StatelessWidget {
             }
           },
           inputFormatters: [
-            if (isNumeric) FilteringTextInputFormatter.digitsOnly,
-            if (isNumeric) FilteringTextInputFormatter.allow(RegExp(r'^\d*$')),
+            if (isNumeric)
+              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
             if (isNumeric && maxAmount != null)
               _InputAmountFormatter(maxAmount!),
           ],
@@ -60,7 +60,9 @@ class TextForm extends StatelessWidget {
 
 class _InputAmountFormatter extends TextInputFormatter {
   final int maxAmount;
+
   const _InputAmountFormatter(this.maxAmount);
+
   @override
   TextEditingValue formatEditUpdate(
     TextEditingValue oldValue,
