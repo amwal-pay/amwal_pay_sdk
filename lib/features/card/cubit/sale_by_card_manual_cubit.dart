@@ -10,6 +10,8 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
+import '../../../navigator/sdk_navigator.dart';
+
 class SaleByCardManualCubit extends ICubit<PurchaseResponse>
     with UiState<PurchaseResponse> {
   final IUseCase<PurchaseResponse, PurchaseRequest> _purchaseUseCase;
@@ -127,7 +129,15 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
     final state = mapNetworkState(networkState);
     final purchaseData = state.mapOrNull(
       success: (value) => value.uiModel.data,
-    );
+      error: (value) {
+        if (context != null && context.mounted) {
+          AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+        }
+        return null;
+      },
+  );
+
+
     if (dismissLoaderTrigger == null) {
       emit(state);
     } else {
