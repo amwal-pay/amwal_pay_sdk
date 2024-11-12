@@ -20,6 +20,7 @@ class AmwalSdkNavigator {
     OnPayCallback onCountComplete,
     GetTransactionFunction getTransactionFunction,
     int countDownInSeconds,
+    EventCallback? log,
   ) async {
     final args = settings.arguments as PaymentArguments;
     await Navigator.of(context).push(
@@ -35,6 +36,7 @@ class AmwalSdkNavigator {
           currency: args.currencyData!.name,
           transactionId: args.transactionId,
           countDownInSeconds: countDownInSeconds,
+          log: log,
         ),
       ),
     );
@@ -44,6 +46,7 @@ class AmwalSdkNavigator {
     Locale? locale,
     String? transactionId,
     required OnPayCallback onPay,
+    EventCallback? log,
   }) async =>
       await amwalNavigatorObserver.navigator!.push(
         MaterialPageRoute(
@@ -51,6 +54,7 @@ class AmwalSdkNavigator {
             locale: locale,
             transactionId: transactionId,
             onPay: onPay,
+            log: log,
           ),
         ),
       );
@@ -60,6 +64,7 @@ class AmwalSdkNavigator {
     BuildContext context,
     Locale locale,
     OnPayCallback onPay,
+    EventCallback? log,
   ) async {
     final arguments = settings.arguments as PaymentArguments;
     await Navigator.of(context).push(
@@ -73,6 +78,7 @@ class AmwalSdkNavigator {
           amount: arguments.amount,
           merchantId: arguments.merchantId,
           transactionId: arguments.transactionId,
+          log: log,
         ),
         settings: settings,
       ),

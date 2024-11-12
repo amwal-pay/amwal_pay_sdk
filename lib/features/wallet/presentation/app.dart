@@ -10,7 +10,7 @@ class WalletSdkApp extends StatelessWidget {
   final OnPayCallback onCountComplete;
   final GetTransactionFunction getTransactionFunction;
   final int countDownInSeconds;
-
+  final EventCallback? log;
   final String transactionId;
   const WalletSdkApp({
     Key? key,
@@ -20,6 +20,7 @@ class WalletSdkApp extends StatelessWidget {
     required this.getTransactionFunction,
     required this.transactionId,
     required this.countDownInSeconds,
+    this.log,
   }) : super(key: key);
 
   @override
@@ -36,6 +37,7 @@ class WalletSdkApp extends StatelessWidget {
         transactionId: transactionId,
         getTransactionFunction: getTransactionFunction,
         countDownInSeconds: countDownInSeconds,
+        log: log,
       ),
       theme: ThemeData(
         useMaterial3: false,

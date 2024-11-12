@@ -8,6 +8,11 @@ typedef OnPayCallback = void Function(
 typedef GetTransactionFunction = Future<TransactionDetailsSettings?> Function(
     String transactionId);
 
+typedef EventCallback = void Function(
+  String event,
+  Map<String, dynamic> param,
+);
+
 class AmwalSdkArguments {
   final Locale locale;
   final bool is3DS;

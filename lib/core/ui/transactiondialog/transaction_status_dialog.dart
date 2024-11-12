@@ -6,6 +6,7 @@ import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_detail_widge
 import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_details_settings.dart';
 import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_dialog_action_buttons.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
+import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,10 +17,12 @@ final GlobalKey<State> dialogKey = GlobalKey<State>();
 
 class TransactionStatusDialog extends StatefulWidget {
   final TransactionDetailsSettings settings;
+  final EventCallback? log;
 
   const TransactionStatusDialog({
     Key? key,
     required this.settings,
+    this.log,
   }) : super(key: key);
 
   @override
@@ -62,11 +65,18 @@ class _TransactionStatusDialogState extends State<TransactionStatusDialog> {
         screenshotData,
         mimeType: 'jpg',
       );
-      await Share.shareXFiles(
+
+      final shareResult = await Share.shareXFiles(
         [
           file,
         ],
       );
+      if (shareResult.status == ShareResultStatus.success) {
+        widget.log?.call('transaction_shared', {
+          'user_id': settings.details?['merchant_id'],
+          'transaction_id': settings.transactionId,
+        });
+      }
     }
   }
 

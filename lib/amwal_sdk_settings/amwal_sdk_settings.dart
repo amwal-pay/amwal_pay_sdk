@@ -18,10 +18,11 @@ abstract class IAmwalSdkSettings {
   final OnPayCallback? onCountComplete;
   final GetTransactionFunction? getTransactionFunction;
   final void Function(Object e, StackTrace stack)? onError;
+  final void Function(String, Map<String, dynamic> param)? log;
   final Future<String?> Function()? onTokenExpired;
   final int countDownInSeconds;
 
-    IAmwalSdkSettings({
+  IAmwalSdkSettings({
     required this.token,
     this.secureHashValue,
     required this.merchantId,
@@ -39,27 +40,29 @@ abstract class IAmwalSdkSettings {
     this.locale = const Locale('en'),
     this.isMocked = false,
     this.onTokenExpired,
+    this.log,
   });
 }
 
 class AmwalInAppSdkSettings extends IAmwalSdkSettings {
-  AmwalInAppSdkSettings(
-      {required super.token,
-      super.secureHashValue,
-      required super.merchantId,
-      required super.terminalIds,
-      required super.transactionId,
-      required super.merchantName,
-      required super.onPay,
-      super.getTransactionFunction,
-      super.countDownInSeconds = 90,
-      super.onCountComplete,
-      super.locale,
-      super.isMocked,
-      super.onError,
-      super.onTokenExpired,
-      super.flavor})
-      : super(
+  AmwalInAppSdkSettings({
+    required super.token,
+    super.secureHashValue,
+    required super.merchantId,
+    required super.terminalIds,
+    required super.transactionId,
+    required super.merchantName,
+    required super.onPay,
+    super.getTransactionFunction,
+    super.countDownInSeconds = 90,
+    super.onCountComplete,
+    super.locale,
+    super.isMocked,
+    super.onError,
+    super.onTokenExpired,
+    super.log,
+    super.flavor,
+  }) : super(
           amount: '',
           currency: '',
         );
@@ -76,6 +79,7 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
       countDownInSeconds: json['countDownInSeconds'],
       getTransactionFunction: json['getTransactionFunction'],
       onError: json['onError'],
+      log: json['log'],
       onCountComplete: json['onCountComplete'],
       locale: json['locale'],
       isMocked: json['isMocked'],
@@ -97,6 +101,7 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
       'isMocked': isMocked,
       'countDownInSeconds': countDownInSeconds,
       'flavor': flavor,
+      'log': log,
     };
   }
 }
@@ -118,6 +123,7 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
       super.locale,
       super.isMocked,
       super.onError,
+      super.log,
       super.onTokenExpired,
       super.countDownInSeconds = 90,
       super.flavor})
@@ -140,6 +146,7 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
       locale: json['locale'],
       isMocked: json['isMocked'],
       onError: null,
+      log: null,
       // You should handle this according to your logic
       onTokenExpired: null,
       // You should handle this according to your logic

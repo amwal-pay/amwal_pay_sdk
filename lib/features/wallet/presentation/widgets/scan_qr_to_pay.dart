@@ -26,12 +26,14 @@ class ScanQrToPayWidget extends StatefulWidget {
   final String Function(String)? globalTranslator;
   final OnPayCallback onPay;
   final GetTransactionFunction getTransactionFunction;
+  final EventCallback? log;
   const ScanQrToPayWidget({
     Key? key,
     required this.paymentArguments,
     required this.onPay,
     this.globalTranslator,
     required this.getTransactionFunction,
+    this.log,
   }) : super(key: key);
 
   @override
@@ -106,6 +108,15 @@ class _ScanQrToPayWidgetState extends State<ScanQrToPayWidget> {
         if (settings != null) {
           timer.cancel();
           if (context.mounted) {
+            if (settings.isSuccess) {
+              widget.log?.call('payment_successful', {
+                'user_id': payArgs.merchantId,
+                'transaction_id': transactionId,
+                'payment_amount': payArgs.amount,
+                'payment_method': 'Dynamic Qr',
+                'currency': payArgs.currencyData!.name,
+              });
+            }
             await ReceiptHandler.instance.showHistoryReceipt(
               context: context,
               settings: settings.copyWith(
@@ -132,6 +143,12 @@ class _ScanQrToPayWidgetState extends State<ScanQrToPayWidget> {
       currencyId: payArgs.currencyData!.idN,
     );
     _setupGetTransactionId();
+    widget.log?.call('payment_initiated', {
+      'user_id': payArgs.merchantId,
+      'payment_amount': payArgs.amount,
+      'payment_method': 'Dynamic Qr',
+      'currency': payArgs.currencyData!.name,
+    });
     widget.onPay((settings) async {
       await ReceiptHandler.instance.showHistoryReceipt(
         context: context,
@@ -183,6 +200,16 @@ class _ScanQrToPayWidgetState extends State<ScanQrToPayWidget> {
             final qrData = state.mapOrNull(
               success: (value) => value.uiModel.data,
             );
+            state.mapOrNull(error: (_) {
+              widget.log?.call('payment_failed', {
+                "user_id": payArgs.merchantId,
+                "transaction_id": payArgs.transactionId,
+                "payment_amount": payArgs.amount,
+                "payment_method": 'Dynamic Qr',
+                "failed_reason": _.message,
+                "currency": payArgs.currencyData?.name ?? '',
+              });
+            });
             return QrImageView(
               data: qrData?.qrCode ?? '',
               size: 200,

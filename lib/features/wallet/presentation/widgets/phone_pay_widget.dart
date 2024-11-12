@@ -12,7 +12,10 @@ import 'package:keyboard_actions/keyboard_actions.dart';
 class PhonePayWidget extends StatefulWidget {
   final String Function(String)? globalTranslator;
 
-  const PhonePayWidget({Key? key, this.globalTranslator}) : super(key: key);
+  const PhonePayWidget({
+    Key? key,
+    this.globalTranslator,
+  }) : super(key: key);
 
   @override
   State<PhonePayWidget> createState() => _PhonePayWidgetState();

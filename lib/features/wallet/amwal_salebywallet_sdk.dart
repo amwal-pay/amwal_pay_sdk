@@ -41,7 +41,7 @@ class AmwalWalletSdk {
     required String token,
     required String merchantId,
     required List<String> terminalIds,
-      String? secureHashValue,
+    String? secureHashValue,
     required String transactionRefNo,
     required NetworkService service,
     String? merchantName,
@@ -70,6 +70,7 @@ class AmwalWalletSdk {
     GetTransactionFunction getTransactionFunction,
     String transactionId,
     int countDownInSeconds,
+    EventCallback? log,
   ) async {
     await AmwalSdkNavigator.amwalNavigatorObserver.navigator!.push(
       MaterialPageRoute(
@@ -80,6 +81,7 @@ class AmwalWalletSdk {
           transactionId: transactionId,
           getTransactionFunction: getTransactionFunction,
           countDownInSeconds: countDownInSeconds,
+          log: log,
         ),
       ),
     );

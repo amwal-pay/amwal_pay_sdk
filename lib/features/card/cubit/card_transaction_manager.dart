@@ -76,6 +76,7 @@ class CardTransactionManager {
     required GetOneTransactionByIdUseCase getOneTransactionByIdUseCase,
     required void Function(BuildContext) dismissLoader,
     void Function(void Function(BuildContext))? setContext,
+    EventCallback? log,
   }) async {
     void Function()? dismissFn;
     String? otpOrNull;
@@ -133,6 +134,13 @@ class CardTransactionManager {
 
                 if (AmwalSdkNavigator.amwalNavigatorObserver.navigator !=
                     null) {
+                  log?.call('payment_abandoned', {
+                    "user_id": args.merchantId,
+                    "transaction_id": transactionId,
+                    "payment_amount": args.amount,
+                    "payment_method": 'Pay by Card',
+                    "currency": args.currencyData?.name ?? '',
+                  });
                   return showDialog(
                     context: AmwalSdkNavigator
                         .amwalNavigatorObserver.navigator!.context,
@@ -177,19 +185,16 @@ class CardTransactionManager {
       if (context.mounted) {
         cubit.formKey.currentState?.reset();
 
-
-          await receiptAfterComplete(
-            cubit,
-            getOneTransactionByIdUseCase,
-            purchaseData.transactionId,
-            args,
-            context,
-            onPay,
-            Right(purchaseData),
-          );
-
-
-
+        await receiptAfterComplete(
+          cubit,
+          getOneTransactionByIdUseCase,
+          purchaseData.transactionId,
+          args,
+          context,
+          onPay,
+          Right(purchaseData),
+          log: log,
+        );
       } else {
         if (context.mounted) dismissLoader(context);
       }
@@ -206,6 +211,7 @@ class CardTransactionManager {
     Either<Map<String, dynamic>, PurchaseData>? purchaseDataOrFail, {
     void Function()? dismissFn,
     void Function(void Function(BuildContext))? setContext,
+    EventCallback? log,
   }) async {
     if (NetworkConstants.isSdkInApp) {
       cubit.showLoader();
@@ -220,7 +226,22 @@ class CardTransactionManager {
       dismissFn?.call();
       oneTransactionResponse.whenOrNull(success: (value) {
         oneTransaction = value.data;
+        log?.call('payment_successfully', {
+          "user_id": args.merchantId,
+          "transaction_id": value.data?.id,
+          "payment_amount": args.amount,
+          "payment_method": 'Pay by Card',
+          "currency": args.currencyData?.name ?? '',
+        });
       }, error: (message, errorList) {
+        log?.call('payment_failed', {
+          "user_id": args.merchantId,
+          "transaction_id": transactionId,
+          "payment_amount": args.amount,
+          "payment_method": 'Pay by Card',
+          'failed_reason': message,
+          "currency": args.currencyData?.name ?? '',
+        });
         AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
 
         if (AmwalSdkNavigator.amwalNavigatorObserver.navigator != null) {
@@ -291,6 +312,7 @@ class CardTransactionManager {
       transactionType: oneTransaction.transactionType ?? "",
       isTransactionDetails: false,
       globalTranslator: (string) => string.translate(context),
+      transactionId: oneTransaction.id,
       details: {
         'merchant_name_label': oneTransaction.merchantName,
         'ref_no': oneTransaction.idN,

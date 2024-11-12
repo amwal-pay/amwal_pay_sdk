@@ -32,6 +32,7 @@ class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
   final GetTransactionFunction getTransactionFunction;
   final String Function(String)? translator;
   final int countDownInSeconds;
+  final EventCallback? log;
 
   const SaleByWalletPayingOptions({
     Key? key,
@@ -47,6 +48,7 @@ class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
     this.transactionId,
     this.showAppBar = true,
     this.translator,
+    this.log,
   }) : super(key: key);
 
   @override
@@ -141,6 +143,7 @@ class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
                             translator,
                             onPay,
                             getTransactionFunction,
+                            log,
                           ),
                         );
                       },
@@ -154,6 +157,7 @@ class SaleByWalletPayingOptions extends ApiView<SaleByWalletPayCubit> {
                       paymentArguments: paymentArgument,
                       globalTranslator: translator,
                       countDownInSeconds: countDownInSeconds,
+                      log: log,
                     ),
                     const SizedBox(
                       height: 20,
@@ -193,6 +197,7 @@ Widget _saleByWalletOptions(
   String Function(String)? globalTranslator,
   OnPayCallback onPay,
   GetTransactionFunction getTransactionFunction,
+  EventCallback? log,
 ) {
   if (pageNum == 0) {
     return PhonePayWidget(
@@ -208,6 +213,7 @@ Widget _saleByWalletOptions(
       paymentArguments: paymentArguments,
       globalTranslator: globalTranslator,
       onPay: onPay,
+      log: log,
     );
   } else {
     return const SizedBox();

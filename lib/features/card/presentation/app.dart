@@ -8,11 +8,13 @@ class CardSdkApp extends StatelessWidget {
   final Locale? locale;
   final String? transactionId;
   final OnPayCallback onPay;
+  final EventCallback? log;
   const CardSdkApp({
     Key? key,
     this.transactionId,
     required this.locale,
     required this.onPay,
+    this.log,
   }) : super(key: key);
 
   @override
@@ -27,6 +29,7 @@ class CardSdkApp extends StatelessWidget {
         transactionId: transactionId,
         locale: locale ?? const Locale('en'),
         onPay: onPay,
+        log: log,
       ),
       theme: ThemeData(
         useMaterial3: false,

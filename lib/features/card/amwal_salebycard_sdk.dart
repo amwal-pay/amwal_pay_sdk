@@ -42,7 +42,7 @@ class AmwalCardSdk {
     required String token,
     required String merchantId,
     required List<String> terminalIds,
-      String? secureHashValue,
+    String? secureHashValue,
     required String transactionRefNo,
     required NetworkService service,
     String? merchantName,
@@ -69,11 +69,13 @@ class AmwalCardSdk {
     Locale locale,
     String transactionId,
     OnPayCallback onPay,
+    EventCallback? log,
   ) async {
     await AmwalSdkNavigator.instance.toCardScreen(
       locale: locale,
       transactionId: transactionId,
       onPay: onPay,
+      log: log,
     );
   }
 }

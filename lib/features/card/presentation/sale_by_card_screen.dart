@@ -21,12 +21,14 @@ class SaleByCardScreen extends StatefulApiView<SaleByCardManualCubit> {
   final String? transactionId;
   final Locale locale;
   final OnPayCallback onPay;
+  final EventCallback? log;
 
   const SaleByCardScreen({
     Key? key,
     this.transactionId,
     required this.locale,
     required this.onPay,
+    this.log,
   }) : super(key: key);
 
   @override
@@ -130,11 +132,19 @@ class _SaleByCardScreenState extends State<SaleByCardScreen> {
                   merchantId: merchantId,
                   transactionId: widget.transactionId,
                 );
+                widget.log?.call('payment_initiated', {
+                  "user_id": merchantId,
+                  "payment_amount": _amountCurrencyWidgetCubit.amountValue,
+                  "payment_method": 'Pay by Card',
+                  "currency":
+                      _amountCurrencyWidgetCubit.currencyData?.name ?? '',
+                });
                 await AmwalSdkNavigator.instance.toCardOptionScreen(
                   RouteSettings(arguments: paymentArguments),
                   context,
                   widget.locale,
                   widget.onPay,
+                  widget.log,
                 );
               },
             ),
@@ -170,6 +180,13 @@ class _SaleByCardScreenState extends State<SaleByCardScreen> {
                     merchantId: merchantId,
                     transactionId: widget.transactionId,
                   );
+                  widget.log?.call('payment_initiated', {
+                    "user_id": merchantId,
+                    "payment_amount": _amountCurrencyWidgetCubit.amountValue,
+                    "payment_method": 'Pay by Card',
+                    "currency":
+                        _amountCurrencyWidgetCubit.currencyData?.name ?? '',
+                  });
                   await AmwalSdkNavigator.instance
                       .toCardContactLessOptionScreen(
                     RouteSettings(arguments: paymentArguments),

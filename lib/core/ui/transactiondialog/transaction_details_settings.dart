@@ -24,6 +24,7 @@ class TransactionDetailsSettings {
   final bool isSuccess;
   final num amount;
   final String? currency;
+  final String? transactionId;
 
   const TransactionDetailsSettings({
     required this.transactionDisplayName,
@@ -31,6 +32,7 @@ class TransactionDetailsSettings {
     required this.transactionStatus,
     required this.transactionType,
     required this.isSuccess,
+    this.transactionId,
     this.dueAmount,
     this.locale = const Locale('en'),
     this.globalTranslator,
@@ -60,6 +62,7 @@ class TransactionDetailsSettings {
     bool? isTransactionDetails,
     String Function(String)? globalTranslator,
     String? currency,
+    String? transactionId,
   }) {
     return TransactionDetailsSettings(
       transactionDisplayName: transactionDisplayName,
@@ -82,7 +85,8 @@ class TransactionDetailsSettings {
       onRefund: onRefund,
       onVoid: onVoid,
       amount: amount,
-      currency: currency??this.currency,
+      currency: currency ?? this.currency,
+      transactionId: transactionId,
     );
   }
 }

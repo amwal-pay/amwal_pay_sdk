@@ -128,6 +128,7 @@ mixin SaleByWalletActionsMixin on ApiView<SaleByWalletCubit> {
     String transactionId,
     int merchantId,
     int countDownInSeconds,
+    EventCallback? log,
   ) async {
     onPay((settings) async {
       final isDialogOpen =
@@ -136,6 +137,24 @@ mixin SaleByWalletActionsMixin on ApiView<SaleByWalletCubit> {
         Navigator.of(context).pop();
       }
       if (context.mounted) {
+        if (settings.isSuccess) {
+          log?.call('payment_successful', {
+            'user_id': merchantId,
+            'transaction_id': transactionId,
+            'payment_amount': settings.amount,
+            'payment_method': 'Pay by Wallet',
+            'currency': currency,
+          });
+        } else {
+          log?.call('payment_failed', {
+            'user_id': merchantId,
+            'transaction_id': transactionId,
+            'payment_amount': settings.amount,
+            'payment_method': 'Pay by Wallet',
+            'failed_reason': settings.transactionStatus,
+            'currency': currency,
+          });
+        }
         await ReceiptHandler.instance.showWalletReceipt(
           context: context,
           settings: settings,

@@ -29,12 +29,14 @@ class SaleActionButtons extends ApiView<SaleByWalletCubit>
     required this.paymentArguments,
     required this.countDownInSeconds,
     this.globalTranslator,
+    this.log,
   }) : super(key: key);
   final PaymentArguments paymentArguments;
   final OnPayCallback onPay;
   final OnPayCallback onCountComplete;
   final String Function(String)? globalTranslator;
   final int countDownInSeconds;
+  final EventCallback? log;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +66,16 @@ class SaleActionButtons extends ApiView<SaleByWalletCubit>
             final isSuccess = state.mapOrNull(
               success: (value) => true,
             );
+            state.mapOrNull(error: (_) {
+              log?.call('payment_failed', {
+                'user_id': paymentArguments.merchantId,
+                'transaction_id': paymentArguments.transactionId,
+                'payment_amount': paymentArguments.amount,
+                'payment_method': 'Pay by Wallet',
+                'failed_reason': _.message,
+                'currency': paymentArguments.currencyData!.name,
+              });
+            });
             if (isSuccess == true) {
               walletCubit.reset();
               await showCountingDialog(
@@ -78,6 +90,7 @@ class SaleActionButtons extends ApiView<SaleByWalletCubit>
                 paymentArguments.transactionId!,
                 paymentArguments.merchantId,
                 countDownInSeconds,
+                log,
               );
             }
           },
@@ -94,7 +107,16 @@ class SaleActionButtons extends ApiView<SaleByWalletCubit>
                 const SizedBox(width: 24),
                 Expanded(
                   child: AppOutlineButton(
-                    onPressed: cubit.reset,
+                    onPressed: () {
+                      log?.call('payment_abandoned', {
+                        "user_id": paymentArguments.merchantId,
+                        "transaction_id": paymentArguments.transactionId,
+                        "payment_amount": paymentArguments.amount,
+                        "payment_method": 'Pay by Wallet',
+                        "currency": paymentArguments.currencyData?.name ?? '',
+                      });
+                      cubit.reset();
+                    },
                     title: 'cancel'.translate(
                       context,
                       globalTranslator: globalTranslator,
@@ -108,8 +130,8 @@ class SaleActionButtons extends ApiView<SaleByWalletCubit>
                       page: state.page,
                       payCubit: payCubit,
                       paymentArguments: paymentArguments,
-                      alias: cubit.aliasName??'',
-                      mobileNumber: cubit.phoneNumber??'',
+                      alias: cubit.aliasName ?? '',
+                      mobileNumber: cubit.phoneNumber ?? '',
                     ),
                     child: Text(
                       'pay'.translate(

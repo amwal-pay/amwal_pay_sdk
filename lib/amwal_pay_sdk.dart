@@ -199,6 +199,7 @@ class AmwalPaySdk {
       settings.getTransactionFunction ?? (_) async => null,
       settings.transactionId,
       settings.countDownInSeconds,
+      settings.log,
     );
   }
 
@@ -213,6 +214,7 @@ class AmwalPaySdk {
       settings.locale,
       settings.transactionId,
       settings.onPay,
+      settings.log,
     );
   }
 

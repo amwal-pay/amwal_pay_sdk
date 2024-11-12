@@ -19,7 +19,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' hide WatchContext;
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
-import 'package:uuid/uuid.dart';
 
 class SaleByCardManualScreen extends StatefulApiView<SaleByCardManualCubit>
     with LoaderMixin {
@@ -33,6 +32,7 @@ class SaleByCardManualScreen extends StatefulApiView<SaleByCardManualCubit>
   final String Function(String)? translator;
   final Locale locale;
   final OnPayCallback onPay;
+  final EventCallback? log;
 
   const SaleByCardManualScreen({
     Key? key,
@@ -46,6 +46,7 @@ class SaleByCardManualScreen extends StatefulApiView<SaleByCardManualCubit>
     this.transactionId,
     this.showAppBar = true,
     this.translator,
+    this.log,
   }) : super(key: key);
 
   @override
@@ -186,6 +187,7 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
                                       .get<GetOneTransactionByIdUseCase>(),
                                   dismissLoader: widget.dismissDialog,
                                   onPay: widget.onPay,
+                                  log: widget.log,
                                   setContext: (cb) {
                                     cb(context);
                                   });
