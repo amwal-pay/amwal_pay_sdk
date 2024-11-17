@@ -1,3 +1,4 @@
+import 'package:amwal_pay_sdk/features/card/data/models/response/purchase_response.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -6,10 +7,12 @@ import '../../../core/resources/color/colors.dart';
 class ThreeDSWebViewPage extends StatefulWidget {
   final String url;
   final void Function(String transactionId) onTransactionIdFound;
+  final void Function(PurchaseData) onTransactionFound;
 
   const ThreeDSWebViewPage({
     required this.url,
     required this.onTransactionIdFound,
+    required this.onTransactionFound,
     Key? key,
   }) : super(key: key);
 
@@ -31,8 +34,10 @@ class _ThreeDSWebViewPageState extends State<ThreeDSWebViewPage> {
             final Uri uri = Uri.parse(url);
             if (uri.queryParameters.containsKey('transactionId')) {
               final transactionId = uri.queryParameters['transactionId']!;
+              final purchaseData = PurchaseData.fromUri(uri);
               Navigator.of(context).pop();
               widget.onTransactionIdFound(transactionId);
+              widget.onTransactionFound(purchaseData);
             }
           },
           onWebResourceError: (WebResourceError error) {

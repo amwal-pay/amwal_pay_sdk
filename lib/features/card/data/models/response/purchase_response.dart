@@ -122,6 +122,31 @@ class PurchaseData {
     );
   }
 
+  factory PurchaseData.fromUri(Uri uri) {
+    return PurchaseData(
+      message: 'success',
+      transactionId: uri.queryParameters['TransactionId']!,
+      terminalId: int.parse(uri.queryParameters['TerminalId'] ?? '0'),
+      hostResponseData: HostResponseData(
+        transactionId: uri.queryParameters['TransactionId']!,
+        rrn: '',
+        stan: '',
+        trackId: '',
+        paymentId: '',
+        accessUrl: null,
+      ),
+      isOtpRequired: false,
+      merchantName: uri.queryParameters['MerchantName'],
+      merchantId: uri.queryParameters['MerchantId'],
+      currency: uri.queryParameters['Currency'],
+      currencyId: uri.queryParameters['CurrencyId'],
+      transactionDate: uri.queryParameters['TransactionDate'],
+      amount: uri.queryParameters['Amount'],
+      transactionTypeDisplayName:
+          uri.queryParameters['TransactionTypeDisplayName'],
+    );
+  }
+
 //</editor-fold>
 }
 

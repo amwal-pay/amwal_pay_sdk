@@ -114,12 +114,19 @@ class AmwalCardTransactionManager extends ICardTransactionManager {
       MaterialPageRoute(
         builder: (context) => ThreeDSWebViewPage(
           url: url,
-          onTransactionIdFound: (transactionId) async {
+          onTransactionFound: (purchaseData) async {
             await receiptAfterComplete(
-              transactionId,
-              null,
+              purchaseData.transactionId,
+              Right(purchaseData),
               setContext: setContext,
             );
+          },
+          onTransactionIdFound: (transactionId) async {
+            // await receiptAfterComplete(
+            //   transactionId,
+            //   null,
+            //   setContext: setContext,
+            // );
           },
         ),
       ),

@@ -116,6 +116,13 @@ class InAppCardTransactionManager extends ICardTransactionManager {
       MaterialPageRoute(
         builder: (context) => ThreeDSWebViewPage(
           url: url,
+          onTransactionFound: (purchaseData) async {
+            await receiptAfterComplete(
+              purchaseData.transactionId,
+              Right(purchaseData),
+              setContext: setContext,
+            );
+          },
           onTransactionIdFound: (transactionId) async {
             await receiptAfterComplete(
               transactionId,
