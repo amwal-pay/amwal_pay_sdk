@@ -1,15 +1,17 @@
 import 'package:amwal_pay_sdk/core/apiview/api_view.dart';
 import 'package:amwal_pay_sdk/core/base_state/base_cubit_state.dart';
 import 'package:amwal_pay_sdk/core/loader_mixin.dart';
+import 'package:amwal_pay_sdk/core/networking/constants.dart';
 import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
 import 'package:amwal_pay_sdk/core/ui/accepted_payment_methods_widget.dart';
 import 'package:amwal_pay_sdk/core/ui/buttons/app_button.dart';
 import 'package:amwal_pay_sdk/core/ui/cardinfoform/card_info_form_widget.dart';
 import 'package:amwal_pay_sdk/core/ui/sale_card_feature_common_widgets.dart';
 import 'package:amwal_pay_sdk/features/card/amwal_salebycard_sdk.dart';
-import 'package:amwal_pay_sdk/features/card/cubit/card_transaction_manager.dart';
 import 'package:amwal_pay_sdk/features/card/cubit/sale_by_card_manual_cubit.dart';
 import 'package:amwal_pay_sdk/features/card/data/models/response/purchase_response.dart';
+import 'package:amwal_pay_sdk/features/card/transaction_manager/amwal_card_transaction_manager.dart';
+import 'package:amwal_pay_sdk/features/card/transaction_manager/in_app_card_transaction_manager.dart';
 import 'package:amwal_pay_sdk/features/currency_field/data/models/response/currency_response.dart';
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
 import 'package:amwal_pay_sdk/features/transaction/domain/use_case/get_transaction_by_Id.dart';
@@ -177,20 +179,39 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
                         if (isValid) {
                           //TODO test after server work done
                           // args.transactionId = const Uuid().v1();
-                          await CardTransactionManager.instance
-                              .onPurchaseWith3DS(
-                                  cubit: widget.cubit,
-                                  args: args,
-                                  context: context,
-                                  getOneTransactionByIdUseCase: CardInjector
-                                      .instance
-                                      .get<GetOneTransactionByIdUseCase>(),
-                                  dismissLoader: widget.dismissDialog,
-                                  onPay: widget.onPay,
-                                  log: widget.log,
-                                  setContext: (cb) {
-                                    cb(context);
-                                  });
+                          if (NetworkConstants.isSdkInApp) {
+                            await InAppCardTransactionManager(
+                              context: context,
+                              paymentArguments: args,
+                              saleByCardManualCubit: widget.cubit,
+                              onPay: widget.onPay,
+                              log: widget.log,
+                              getOneTransactionByIdUseCase: CardInjector
+                                  .instance
+                                  .get<GetOneTransactionByIdUseCase>(),
+                            ).onPurchaseWith3DS(
+                              dismissLoader: widget.dismissDialog,
+                              setContext: (cb) {
+                                cb(context);
+                              },
+                            );
+                          } else {
+                            await AmwalCardTransactionManager(
+                              context: context,
+                              paymentArguments: args,
+                              saleByCardManualCubit: widget.cubit,
+                              onPay: widget.onPay,
+                              log: widget.log,
+                              getOneTransactionByIdUseCase: CardInjector
+                                  .instance
+                                  .get<GetOneTransactionByIdUseCase>(),
+                            ).onPurchaseWith3DS(
+                              dismissLoader: widget.dismissDialog,
+                              setContext: (cb) {
+                                cb(context);
+                              },
+                            );
+                          }
                         }
                       },
                       child: Text(

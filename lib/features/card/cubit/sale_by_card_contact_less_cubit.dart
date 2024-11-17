@@ -1,9 +1,9 @@
 import 'package:amwal_pay_sdk/core/base_state/base_cubit_state.dart';
 import 'package:amwal_pay_sdk/features/card/amwal_salebycard_sdk.dart';
-import 'package:amwal_pay_sdk/features/card/cubit/card_transaction_manager.dart';
 import 'package:amwal_pay_sdk/features/card/cubit/sale_by_card_manual_cubit.dart';
 import 'package:amwal_pay_sdk/features/card/data/models/response/CardInfo.dart';
 import 'package:amwal_pay_sdk/features/card/data/models/response/purchase_response.dart';
+import 'package:amwal_pay_sdk/features/card/transaction_manager/amwal_card_transaction_manager.dart';
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
 import 'package:amwal_pay_sdk/features/transaction/domain/use_case/get_transaction_by_Id.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
@@ -66,6 +66,7 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
     dynamic translator,
     void Function(BuildContext) dismissDialog,
     OnPayCallback? onPay,
+    EventCallback? log,
   ) async {
     final scanResult = await NFCManager.instance.startNFCScan();
     if (!scanResult['success']) {
@@ -76,6 +77,7 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
           translator,
           dismissDialog,
           onPay,
+          log,
         );
         terminateNFC();
       }
@@ -96,15 +98,18 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
         cardInfo = CardInfo.fromJson(scanResult);
         fillCardData(cardInfo!);
 
-        CardTransactionManager.instance.onPurchaseWith3DS(
-          cubit: this,
-          args: arg!,
+        AmwalCardTransactionManager(
           context: context.mounted ? context : context,
+          paymentArguments: arg!,
+          saleByCardManualCubit: this,
+          onPay: onPay,
+          log: log,
           getOneTransactionByIdUseCase:
               CardInjector.instance.get<GetOneTransactionByIdUseCase>(),
+        ).onPurchaseWith3DS(
           dismissLoader: dismissDialog,
-          onPay: onPay,
         );
+
         setupMessage = "Scanning completed".translate(
           context.mounted ? context : context,
           globalTranslator: translator,

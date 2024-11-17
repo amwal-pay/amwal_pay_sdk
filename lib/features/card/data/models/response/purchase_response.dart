@@ -21,19 +21,33 @@ class PurchaseResponse extends BaseResponse<PurchaseData> {
 class PurchaseData {
   final String message;
   final String transactionId;
-
-
   final int terminalId;
+  final String? transactionTypeId;
+  final String? transactionTypeDisplayName;
+  final String? merchantId;
+  final String? currency;
+  final String? amount;
+  final String? currencyId;
+  final String? transactionDate;
+  final String? merchantName;
   final bool isOtpRequired;
   final HostResponseData hostResponseData;
 
 //<editor-fold desc="Data Methods">
-    PurchaseData({
+  PurchaseData({
     required this.terminalId,
     required this.message,
     required this.transactionId,
     required this.hostResponseData,
     required this.isOtpRequired,
+    this.transactionTypeId,
+    this.transactionTypeDisplayName,
+    this.merchantId,
+    this.currency,
+    this.amount,
+    this.currencyId,
+    this.merchantName,
+    this.transactionDate,
   });
 
   @override
@@ -62,6 +76,8 @@ class PurchaseData {
     String? threeDSecureUrl,
     HostResponseData? hostResponseData,
     int? terminalId,
+    String? transactionDate,
+    String? merchantName,
   }) {
     return PurchaseData(
       terminalId: terminalId ?? this.terminalId,
@@ -69,6 +85,12 @@ class PurchaseData {
       transactionId: transactionId ?? this.transactionId,
       hostResponseData: hostResponseData ?? this.hostResponseData,
       isOtpRequired: isOtpRequired,
+      transactionTypeId: transactionTypeId,
+      transactionTypeDisplayName: transactionTypeDisplayName,
+      merchantId: merchantId,
+      currency: currency,
+      amount: amount,
+      currencyId: currencyId,
     );
   }
 
@@ -84,11 +106,19 @@ class PurchaseData {
 
   factory PurchaseData.fromMap(Map<String, dynamic> map) {
     return PurchaseData(
-      terminalId: map['terminalId'],
       message: map['message'] as String,
       transactionId: map['transactionId'] as String,
       hostResponseData: HostResponseData.fromMap(map['hostResponseData']),
       isOtpRequired: map['isOtpRequired'],
+      terminalId: map['terminalId'],
+      transactionTypeId: map['transactionTypeId']?.toString(),
+      transactionTypeDisplayName: map['transactionTypeDisplayName']?.toString(),
+      currency: map['currency']?.toString(),
+      currencyId: map['currencyId']?.toString(),
+      merchantId: map['merchantId']?.toString(),
+      amount: map['amount']?.toString(),
+      transactionDate: map['transactionDate'],
+      merchantName: map['merchantName'],
     );
   }
 

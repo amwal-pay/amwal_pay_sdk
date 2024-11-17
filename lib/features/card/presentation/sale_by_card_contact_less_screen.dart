@@ -1,9 +1,12 @@
 import 'package:amwal_pay_sdk/core/apiview/api_view.dart';
+import 'package:amwal_pay_sdk/core/networking/constants.dart';
 import 'package:amwal_pay_sdk/core/resources/assets/app_assets_paths.dart';
 import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
 import 'package:amwal_pay_sdk/core/ui/accepted_payment_methods_widget.dart';
 import 'package:amwal_pay_sdk/core/ui/sale_card_feature_common_widgets.dart';
 import 'package:amwal_pay_sdk/features/card/cubit/sale_by_card_contact_less_cubit.dart';
+import 'package:amwal_pay_sdk/features/card/transaction_manager/amwal_card_transaction_manager.dart';
+import 'package:amwal_pay_sdk/features/card/transaction_manager/in_app_card_transaction_manager.dart';
 import 'package:amwal_pay_sdk/features/currency_field/data/models/response/currency_response.dart';
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
@@ -16,7 +19,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../core/loader_mixin.dart';
 import '../../transaction/domain/use_case/get_transaction_by_Id.dart';
-import '../cubit/card_transaction_manager.dart';
 import '../data/models/response/CardInfo.dart';
 import '../dependency/injector.dart';
 
@@ -32,6 +34,7 @@ class SaleByCardContactLessScreen
   final String Function(String)? translator;
   final Locale locale;
   final OnPayCallback? onPay;
+  final EventCallback? log;
 
   const SaleByCardContactLessScreen({
     super.key,
@@ -45,6 +48,7 @@ class SaleByCardContactLessScreen
     this.translator,
     required this.locale,
     required this.onPay,
+    this.log,
   });
 
   @override
@@ -56,7 +60,6 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
   SaleByCardContactLessCubit get cubit => widget.cubit;
 
   Future<void> checkNFCStatus() async {
-
     cubit.arg = PaymentArguments(
       terminalId: widget.terminalId,
       amount: widget.amount,
@@ -76,11 +79,9 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
     if (status != NFCStatus.enabled) return;
     await initCardScanListener();
     setState(() {});
-
   }
 
   testNfcAPI() {
-
     // fake CardInfo.fromJson
     final scanResult = {
       "cardNumber": "4000000000000002",
@@ -92,15 +93,37 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
 
     cubit.cardInfo = CardInfo.fromJson(scanResult);
     cubit.fillCardData(cubit.cardInfo!);
-    CardTransactionManager.instance.onPurchaseWith3DS(
-      cubit: cubit,
-      args: cubit.arg!,
-      context: context.mounted ? context : context,
-      getOneTransactionByIdUseCase:
-          CardInjector.instance.get<GetOneTransactionByIdUseCase>(),
-      dismissLoader: widget.dismissDialog,
-      onPay: widget.onPay,
-    );
+    if (NetworkConstants.isSdkInApp) {
+      InAppCardTransactionManager(
+        context: context,
+        paymentArguments: cubit.arg!,
+        saleByCardManualCubit: widget.cubit,
+        onPay: widget.onPay,
+        log: widget.log,
+        getOneTransactionByIdUseCase:
+            CardInjector.instance.get<GetOneTransactionByIdUseCase>(),
+      ).onPurchaseWith3DS(
+        dismissLoader: widget.dismissDialog,
+        setContext: (cb) {
+          cb(context);
+        },
+      );
+    } else {
+      AmwalCardTransactionManager(
+        context: context,
+        paymentArguments: cubit.arg!,
+        saleByCardManualCubit: widget.cubit,
+        onPay: widget.onPay,
+        log: widget.log,
+        getOneTransactionByIdUseCase:
+            CardInjector.instance.get<GetOneTransactionByIdUseCase>(),
+      ).onPurchaseWith3DS(
+        dismissLoader: widget.dismissDialog,
+        setContext: (cb) {
+          cb(context);
+        },
+      );
+    }
     setState(() {});
   }
 
@@ -110,6 +133,7 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
       widget.translator,
       widget.dismissDialog,
       widget.onPay,
+      widget.log,
     );
     cardScannedOrFail.fold(
       (l) {
