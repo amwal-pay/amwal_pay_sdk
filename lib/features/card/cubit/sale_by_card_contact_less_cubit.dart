@@ -25,6 +25,8 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
     super.purchaseUseCase,
     super.purchaseOtpStepOneUseCase,
     super.purchaseOtpStepTwoUseCase,
+    super.payWithTokenUseCase,
+    super.getCustomerTokensUseCase,
   );
 
   Future<NFCStatus> checkNFCStatus(

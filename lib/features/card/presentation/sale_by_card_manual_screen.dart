@@ -68,6 +68,7 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
     _expireMonthNode = FocusNode();
     _expireYearNode = FocusNode();
     _cvvNode = FocusNode();
+    widget.cubit.getCustomerTokens();
   }
 
   @override
@@ -171,6 +172,13 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
                     const SizedBox(
                       height: 40,
                     ),
+                    if (NetworkConstants.isSdkInApp)
+                      CheckboxListTile(
+                        value: widget.cubit.isTokenized,
+                        title: Text('save_card'.translate(context)),
+                        onChanged: (value) =>
+                            widget.cubit.isTokenized = value ?? false,
+                      ),
                     AppButton(
                       key: const Key('confirmButton'),
                       onPressed: () async {
@@ -191,6 +199,7 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
                                   .get<GetOneTransactionByIdUseCase>(),
                             ).onPurchaseWith3DS(
                               dismissLoader: widget.dismissDialog,
+                              token: widget.cubit.customerToken,
                               setContext: (cb) {
                                 cb(context);
                               },

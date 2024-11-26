@@ -51,6 +51,8 @@ class DioClient {
     Map<String, dynamic>? queryParams,
     String? mockupResponsePath,
   }) async {
+    print(data);
+    print(queryParams);
     return await dio!.post(
       endpoint,
       data: data,

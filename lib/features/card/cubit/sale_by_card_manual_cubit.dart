@@ -3,7 +3,9 @@ import 'package:amwal_pay_sdk/core/base_state/base_cubit_state.dart';
 import 'package:amwal_pay_sdk/core/base_view_cubit/base_cubit.dart';
 import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
 import 'package:amwal_pay_sdk/core/usecase/i_use_case.dart';
+import 'package:amwal_pay_sdk/features/card/data/models/request/customer_token_request.dart';
 import 'package:amwal_pay_sdk/features/card/data/models/request/purchase_request.dart';
+import 'package:amwal_pay_sdk/features/card/data/models/response/customer_token_response.dart';
 import 'package:amwal_pay_sdk/features/card/data/models/response/purchase_response.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:dartz/dartz.dart';
@@ -17,11 +19,16 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
   final IUseCase<PurchaseResponse, PurchaseRequest> _purchaseUseCase;
   final IUseCase<PurchaseResponse, PurchaseRequest> _purchaseOtpStepOneUseCase;
   final IUseCase<PurchaseResponse, PurchaseRequest> _purchaseOtpStepTwoUseCase;
+  final IUseCase<PurchaseResponse, PurchaseRequest> _purchaseWithToken;
+  final IUseCase<CustomerTokenResponse, CustomerTokenRequest>?
+      _getCustomerTokensUseCase;
 
   SaleByCardManualCubit(
     this._purchaseUseCase,
     this._purchaseOtpStepOneUseCase,
     this._purchaseOtpStepTwoUseCase,
+    this._purchaseWithToken,
+    this._getCustomerTokensUseCase,
   );
 
   final formKey = GlobalKey<FormBuilderState>();
@@ -33,6 +40,9 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
   String? expirationDateYear;
   String? email;
   String? originalTransactionId;
+
+  bool isTokenized = true;
+  CustomerToken? customerToken;
 
   String? _validateExpDate() {
     final date = DateTime.now();
@@ -99,6 +109,7 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
     int merchantId,
     String? transactionId,
     BuildContext? context, {
+    bool isTokenized = false,
     void Function(void Function())? dismissLoaderTrigger,
   }) async {
     final valid = _validateExpDate();
@@ -122,6 +133,7 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
       transactionId: transactionId,
       clientMail: email ?? "",
       currencyCode: currencyId.toString(),
+      isTokenized: isTokenized,
     );
     final networkState = await _purchaseOtpStepOneUseCase.invoke(
       purchaseRequest,
@@ -135,8 +147,62 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
         }
         return null;
       },
-  );
+    );
 
+    if (dismissLoaderTrigger == null) {
+      emit(state);
+    } else {
+      dismissLoaderTrigger(() => emit(state));
+    }
+    return purchaseData;
+  }
+
+  Future<PurchaseData?> payWithToken(
+    String amount,
+    String terminalId,
+    int currencyId,
+    int merchantId,
+    String? transactionId,
+    BuildContext? context, {
+    bool isTokenized = false,
+    void Function(void Function())? dismissLoaderTrigger,
+  }) async {
+    final valid = _validateExpDate();
+    if (valid != null) {
+      if (context != null && context.mounted) {
+        _showErrorSnackBar(context: context, message: valid.translate(context));
+      }
+      return null;
+    }
+
+    emit(const ICubitState.loading());
+    final purchaseRequest = PurchaseRequest(
+      pan: cardNo!.replaceAll(' ', ''),
+      amount: num.parse(amount),
+      terminalId: int.parse(terminalId),
+      merchantId: merchantId,
+      cardHolderName: cardHolderName!,
+      cvV2: cvV2 ?? "",
+      dateExpiration: '$expirationDateMonth$expirationDateYear',
+      orderCustomerEmail: email ?? "",
+      transactionId: transactionId,
+      clientMail: email ?? "",
+      currencyCode: currencyId.toString(),
+      isTokenized: isTokenized,
+    );
+    final networkState = await _purchaseWithToken.invoke(
+      purchaseRequest,
+    );
+    final state = mapNetworkState(networkState);
+    final purchaseData = state.mapOrNull(
+      success: (value) => value.uiModel.data,
+      error: (value) {
+        if (context != null && context.mounted) {
+          AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+        }
+        return null;
+      },
+    );
 
     if (dismissLoaderTrigger == null) {
       emit(state);
@@ -154,6 +220,7 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
     String? transactionId,
     String otp,
     String originTransactionId,
+    bool isTokenized,
   ) async {
     emit(const ICubitState.loading());
     final purchaseRequest = PurchaseRequest(
@@ -171,6 +238,7 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
       transactionIdentifierValue: originTransactionId,
       transactionIdentifierType: 2,
       transactionId: transactionId,
+      isTokenized: isTokenized,
     );
     final networkState =
         await _purchaseOtpStepTwoUseCase.invoke(purchaseRequest);
@@ -188,6 +256,33 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
     } else {
       return result;
     }
+  }
+
+  Future<void> getCustomerTokens() async {
+    final response = await _getCustomerTokensUseCase?.invoke(
+      const CustomerTokenRequest(),
+    );
+    if (response == null) return;
+    final tokenResponse = response.mapOrNull(
+      success: (v) => v.data,
+    );
+    if (tokenResponse?.data?.isEmpty ?? true) return;
+
+    final navigator = AmwalSdkNavigator.amwalNavigatorObserver.navigator!;
+    showBottomSheet(
+      context:
+          navigator.context.mounted ? navigator.context : navigator.context,
+      builder: (context) => ListView.builder(
+        itemBuilder: (_, index) {
+          final item = tokenResponse!.data![index];
+          return RadioListTile(
+            value: item.cardNumber,
+            groupValue: customerToken?.cardNumber,
+            onChanged: (_) => customerToken = item,
+          );
+        },
+      ),
+    );
   }
 
   void showLoader() => emit(const ICubitState.loading());

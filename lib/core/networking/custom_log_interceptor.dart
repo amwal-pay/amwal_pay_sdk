@@ -1,3 +1,5 @@
+import 'package:amwal_pay_sdk/core/networking/constants.dart';
+import 'package:amwal_pay_sdk/sdk_builder/sdk_builder.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -25,11 +27,21 @@ class CustomLogInterceptor extends Interceptor {
 
   @override
   void onRequest(
-      RequestOptions options, RequestInterceptorHandler handler) async {
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
     final packageInfo = await PackageInfo.fromPlatform();
     options.headers['version'] = packageInfo.version;
     options.headers['build_number'] = packageInfo.buildNumber;
     options.headers['Accept-Language'] = language;
+    final token = CacheStorageHandler.instance.read(CacheKeys.sessionToken);
+    if (options.uri.toString().contains(NetworkConstants.getSDKSessionToken)) {
+      options.headers['authority'] = 'localhost';
+      options.headers['accept'] = 'text/plain';
+    } else {
+      options.headers['authorization'] = 'Bearer $token';
+    }
+
     if (kDebugMode) {
       print('Request Uri => ${options.uri}');
       print('Request Method => ${options.method}');

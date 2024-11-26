@@ -68,4 +68,5 @@ class CacheKeys {
   static const merchant_flavor = 'merchant_flavor';
   static const token = 'amwal_pay_sdk_merchant_token';
   static const terminals = 'amwal_pay_sdk_merchant_terminals';
+  static const sessionToken = 'amwal_pay_sdk_session_token';
 }

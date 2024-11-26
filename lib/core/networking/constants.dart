@@ -5,12 +5,15 @@ class NetworkConstants {
   static const PRODUrlSdk = 'https://merchantapp.amwalpg.com:8443/';
   static const SITUrlSdk = 'https://test.amwalpg.com:22443/';
   static const UATUrlSdk = 'https://test.amwalpg.com:12443/';
+  static const testUrlSDK = 'https://test.amwalpg.com:24443/';
 
   static String countryFlag(String countryCode) =>
       'https://flagsapi.com/$countryCode/shiny/32.png';
 
   static const getTransactionByIdEndpoint = '/Transaction/GetByTransactionId';
   static const getMerchantNameEndpoint = "/Merchant/GetMerchantDataForSDK";
+  static const getSDKSessionToken = "Membership/GetSDKSessionToken";
+  static const getCustomerTokens = "/Customer/GetCustomerTokens";
 
   static const mockLabBaseUrl = 'https://amwalpayapi.mocklab.io/';
   static const isMockupMode = false;

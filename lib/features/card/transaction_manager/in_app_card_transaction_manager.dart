@@ -3,6 +3,7 @@ import 'package:amwal_pay_sdk/amwal_sdk_settings/amwal_sdk_setting_container.dar
 import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction.dart';
 import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_details_settings.dart';
 import 'package:amwal_pay_sdk/features/card/cubit/sale_by_card_manual_cubit.dart';
+import 'package:amwal_pay_sdk/features/card/data/models/response/customer_token_response.dart';
 import 'package:amwal_pay_sdk/features/card/data/models/response/purchase_response.dart';
 import 'package:amwal_pay_sdk/features/card/transaction_manager/i_card_transaction_manager.dart';
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
@@ -63,6 +64,7 @@ class InAppCardTransactionManager extends ICardTransactionManager {
       transactionId,
       otp,
       originTransactionId,
+      true,
     );
   }
 
@@ -70,19 +72,37 @@ class InAppCardTransactionManager extends ICardTransactionManager {
   Future<void> onPurchaseWith3DS({
     required void Function(BuildContext) dismissLoader,
     void Function(void Function(BuildContext))? setContext,
+    CustomerToken? token,
   }) async {
     void Function()? dismissFn;
-    final purchaseData = await saleByCardManualCubit.purchaseOtpStepOne(
-      paymentArguments.amount,
-      paymentArguments.terminalId,
-      paymentArguments.currencyData!.idN,
-      paymentArguments.merchantId,
-      paymentArguments.transactionId,
-      context,
-      dismissLoaderTrigger: (dismiss) {
-        dismissFn = dismiss;
-      },
-    );
+    PurchaseData? purchaseData;
+    if (token != null) {
+      purchaseData = await saleByCardManualCubit.payWithToken(
+        paymentArguments.amount,
+        paymentArguments.terminalId,
+        paymentArguments.currencyData!.idN,
+        0,
+        paymentArguments.transactionId,
+        context,
+        isTokenized: saleByCardManualCubit.isTokenized,
+        dismissLoaderTrigger: (dismiss) {
+          dismissFn = dismiss;
+        },
+      );
+    } else {
+      purchaseData = await saleByCardManualCubit.purchaseOtpStepOne(
+        paymentArguments.amount,
+        paymentArguments.terminalId,
+        paymentArguments.currencyData!.idN,
+        0,
+        paymentArguments.transactionId,
+        context,
+        isTokenized: true,
+        dismissLoaderTrigger: (dismiss) {
+          dismissFn = dismiss;
+        },
+      );
+    }
     dismissFn?.call();
     if (purchaseData == null) return;
     if (purchaseData.hostResponseData.accessUrl != null && context.mounted) {
@@ -322,7 +342,7 @@ class InAppCardTransactionManager extends ICardTransactionManager {
     void Function()? dismissFn,
     void Function(void Function(BuildContext))? setContext,
   }) async {
-    saleByCardManualCubit.showLoader();
+    // saleByCardManualCubit.showLoader();
     final purchaseData = purchaseDataOrFail?.fold((_) => null, (r) => r);
 
     if (purchaseData != null) {
@@ -374,8 +394,8 @@ class InAppCardTransactionManager extends ICardTransactionManager {
       locale: AmwalSdkSettingContainer.locale,
       amount: num.parse(purchaseData.amount!),
       transactionDisplayName: purchaseData.transactionTypeDisplayName ?? "",
-      isSuccess: purchaseData.message.toLowerCase() == 'success',
-      transactionStatus: purchaseData.message.toLowerCase() == 'success'
+      isSuccess: purchaseData.message.toLowerCase() != 'canceled',
+      transactionStatus: purchaseData.message.toLowerCase() != 'canceled'
           ? TransactionStatus.success
           : TransactionStatus.failed,
       transactionType: purchaseData.message,

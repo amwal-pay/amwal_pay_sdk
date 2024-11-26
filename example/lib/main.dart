@@ -64,10 +64,10 @@ class _DemoScreenState extends State<DemoScreen> {
     _amountController = TextEditingController(text: '50');
     _currencyController = TextEditingController(text: 'OMR');
     _languageController = TextEditingController(text: 'en');
-    _terminalController = TextEditingController(text: '432308');
-    _merchantIdController = TextEditingController(text: '70210');
+    _terminalController = TextEditingController(text: '925299');
+    _merchantIdController = TextEditingController(text: '59266');
     _secureHashController = TextEditingController(
-      text: '332A5AA255DE7D35DBEA355AAD95CB5C6A469F5B81601DC18A89C0BC6DDF083F',
+      text: '1698BC3561925188241E839408D3B0D4F62DCE0BD4F3CCF19CB526F0BB458B69',
     );
 
     // }
@@ -185,7 +185,8 @@ class _DemoScreenState extends State<DemoScreen> {
                               width: 2.0, // Specify the border width
                             ),
                             borderRadius: BorderRadius.circular(
-                                10), // Optional: Add rounded corners
+                              10,
+                            ), // Optional: Add rounded corners
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(4.0),
@@ -234,29 +235,13 @@ class _DemoScreenState extends State<DemoScreen> {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  // final paymentArguments = PaymentArguments(
-                  //   amount: "5000",
-                  //   terminalId:  _terminalController.text, merchantId: 1,
-                  //   currencyData: const CurrencyData(
-                  //     idN: 1,
-                  //     name: "OMR",
-                  //     id: "512",
-                  //   ),
-                  //
-                  // );
-                  // await AmwalSdkNavigator.instance
-                  //     .toCardContactLessOptionScreen(
-                  //   RouteSettings(arguments: paymentArguments),
-                  //   context,
-                  //
-                  //   Locale(_languageController.text),null
-                  //
-                  //
-                  // );
-                  // return;
-
                   final valid = _formKey.currentState!.validate();
                   if (!valid) return;
+
+                  await AmwalPaySdk.instance.getSDKSessionToken(
+                    merchantId: _merchantIdController.text,
+                    secureHashValue: _secureHashController.text,
+                  );
                   await AmwalPaySdk.instance.initSdk(
                     settings: AmwalSdkSettings(
                       currency: _currencyController.text,

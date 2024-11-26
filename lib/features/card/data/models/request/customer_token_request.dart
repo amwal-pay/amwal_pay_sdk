@@ -1,0 +1,3 @@
+class CustomerTokenRequest {
+  const CustomerTokenRequest();
+}

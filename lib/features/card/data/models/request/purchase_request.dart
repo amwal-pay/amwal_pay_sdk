@@ -1,5 +1,3 @@
-import 'package:uuid/uuid.dart';
-
 class PurchaseRequest {
   final String pan;
 
@@ -21,6 +19,9 @@ class PurchaseRequest {
   final String? currencyCode;
   final int? currencyId;
   final String? transactionId;
+  final bool isTokenized;
+  final String? customerId;
+  final String? customerTokenId;
 
 //<editor-fold desc="Data Methods">
   const PurchaseRequest({
@@ -33,7 +34,6 @@ class PurchaseRequest {
     this.merchantReference,
     required this.dateExpiration,
     this.refundReason,
-    // required this.requestDateTime,
     required this.orderCustomerEmail,
     this.otp,
     this.orderKey,
@@ -43,6 +43,9 @@ class PurchaseRequest {
     this.currencyCode,
     this.currencyId,
     this.transactionId,
+    this.isTokenized = false,
+    this.customerId,
+    this.customerTokenId,
   });
 
   @override
@@ -123,7 +126,6 @@ class PurchaseRequest {
       merchantReference: merchantReference ?? this.merchantReference,
       dateExpiration: dateExpiration ?? this.dateExpiration,
       refundReason: refundReason ?? this.refundReason,
-      // requestDateTime: requestDateTime ?? this.requestDateTime,
       orderCustomerEmail: orderCustomerEmail ?? this.orderCustomerEmail,
       otp: otp ?? this.otp,
       orderKey: orderKey ?? this.orderKey,
@@ -133,8 +135,22 @@ class PurchaseRequest {
       currencyCode: currencyCode ?? this.currencyCode,
       currencyId: currencyId ?? this.currencyId,
       transactionId: transactionId ?? this.transactionId,
+      isTokenized: isTokenized,
+      customerId: customerId,
+      customerTokenId: customerTokenId,
     );
   }
+
+  Map<String, dynamic> mapToPayWithToken() => {
+        'amount': amount,
+        'terminalId': terminalId,
+        'merchantId': merchantId,
+        'currencyCode': currencyCode,
+        'transactionId': transactionId,
+        'clientMail': clientMail,
+        'customerId': customerId,
+        'customerTokenId': customerTokenId,
+      };
 
   Map<String, dynamic> mapToPurchaseData() => {
         'pan': pan,
@@ -144,11 +160,11 @@ class PurchaseRequest {
         'cardHolderName': cardHolderName,
         'cvV2': cvV2,
         'dateExpiration': dateExpiration,
-        // 'requestDateTime': requestDateTime,
         'orderCustomerEmail': orderCustomerEmail,
         'clientMail': clientMail,
         'currencyCode': currencyCode,
         'transactionId': transactionId,
+        'isTokenized': isTokenized,
       };
 
   Map<String, dynamic> mapToPurchaseStepOneData() {
@@ -156,13 +172,16 @@ class PurchaseRequest {
       'pan': pan,
       'amount': amount,
       'terminalId': terminalId,
-      'merchantId': merchantId,
       'cardHolderName': cardHolderName,
       'cvV2': cvV2,
       'dateExpiration': dateExpiration,
       'currencyCode': currencyCode,
       'transactionId': transactionId,
+      'isTokenized': isTokenized,
     };
+    if (merchantId != 0) {
+      data['merchantId'] = merchantId;
+    }
 
     if (orderCustomerEmail.isNotEmpty) {
       data['orderCustomerEmail'] = orderCustomerEmail;
@@ -172,7 +191,6 @@ class PurchaseRequest {
       data['clientMail'] = clientMail;
     }
 
-
     if (cvV2.isEmpty) {
       data['transactionMethod'] = "9";
     }
@@ -181,20 +199,20 @@ class PurchaseRequest {
 
   Map<String, dynamic> mapToPurchaseStepTwoData() {
     Map<String, dynamic> data = {
-        'pan': pan,
-        'otp': otp,
-        'amount': amount,
-        'terminalId': terminalId,
-        'merchantId': merchantId,
-        'cardHolderName': cardHolderName,
-        'cvV2': cvV2,
-        'dateExpiration': dateExpiration,
-
-        'currencyCode': currencyCode,
-        'transactionId': transactionId,
-        'transactionIdentifierType': transactionIdentifierType,
-        'transactionIdentifierValue': transactionIdentifierValue,
-      };
+      'pan': pan,
+      'otp': otp,
+      'amount': amount,
+      'terminalId': terminalId,
+      'merchantId': merchantId,
+      'cardHolderName': cardHolderName,
+      'cvV2': cvV2,
+      'dateExpiration': dateExpiration,
+      'currencyCode': currencyCode,
+      'transactionId': transactionId,
+      'transactionIdentifierType': transactionIdentifierType,
+      'transactionIdentifierValue': transactionIdentifierValue,
+      'isTokenized': isTokenized,
+    };
 
     if (orderCustomerEmail.isNotEmpty) {
       data['orderCustomerEmail'] = orderCustomerEmail;

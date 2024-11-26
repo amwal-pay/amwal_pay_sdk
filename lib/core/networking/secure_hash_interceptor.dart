@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:amwal_pay_sdk/core/merchant_store/merchant_store.dart';
-import 'package:amwal_pay_sdk/features/card/domain/sale_by_card_constants.dart';
+import 'package:amwal_pay_sdk/core/networking/constants.dart';
 import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
@@ -39,8 +39,15 @@ class SecureHashInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     final data = _voidHandleTerminalId(options);
-    final terminals = MerchantStore.instance.getTerminal();
+    if (NetworkConstants.isSdkInApp) {
+      data['requestDateTime'] =
+          DateFormat('yyyyMMddHHmmss').format(DateTime.now());
+      final interceptedOptions = options.copyWith(data: data);
+      super.onRequest(interceptedOptions, handler);
+      return;
+    }
     options.headers['Accept'] = '*/*';
+    final terminals = MerchantStore.instance.getTerminal();
     if (terminals.length == 1) {
       data.addAll({
         'terminalId': terminals.single,
@@ -64,11 +71,6 @@ class SecureHashInterceptor extends Interceptor {
       super.onRequest(interceptedOptions, handler);
       return;
     }
-
-    final encryptedData = EncryptionUtil.makeEncryptOfJson(data);
-
-    final interceptedOptions = options.copyWith(data: encryptedData);
-    super.onRequest(interceptedOptions, handler);
   }
 
   Map<String, String> convertMap(Map<String, dynamic> originalMap) {

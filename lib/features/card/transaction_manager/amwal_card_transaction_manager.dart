@@ -61,6 +61,7 @@ class AmwalCardTransactionManager extends ICardTransactionManager {
       transactionId,
       otp,
       originTransactionId,
+      false,
     );
   }
 

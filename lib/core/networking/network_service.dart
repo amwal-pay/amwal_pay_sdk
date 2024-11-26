@@ -77,7 +77,6 @@ class NetworkService {
 
       return NetworkState<T>.success(data: converter(jsonData));
     }
-
     try {
       final response = await _httpMethodHandler(
         endpoint: endpoint,
