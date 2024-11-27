@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
 import 'package:amwal_pay_sdk/amwal_sdk_settings/amwal_sdk_settings.dart';
 import 'package:amwal_pay_sdk/core/networking/constants.dart';
+import 'package:dio/dio.dart';
 import 'package:example/currency_model.dart';
 import 'package:example/drop_down_form.dart';
 import 'package:example/text_form.dart';
@@ -13,6 +16,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
@@ -46,10 +50,13 @@ class _DemoScreenState extends State<DemoScreen> {
   late TextEditingController _terminalController;
   late TextEditingController _secureHashController;
   late TextEditingController _languageController;
+  late TextEditingController _customerIdController;
 
   late GlobalKey<FormState> _formKey;
   late String altBaseurl;
   late String dropdownValue;
+
+  Timer? _timer;
 
   @override
   void initState() {
@@ -58,19 +65,18 @@ class _DemoScreenState extends State<DemoScreen> {
 
     /// card terminal => 6942344
     /// wallet terminal => 6834180
-    ///
-    // if(kDebugMode) {
 
     _amountController = TextEditingController(text: '50');
     _currencyController = TextEditingController(text: 'OMR');
     _languageController = TextEditingController(text: 'en');
     _terminalController = TextEditingController(text: '925299');
     _merchantIdController = TextEditingController(text: '59266');
+    _customerIdController =
+        TextEditingController(text: 'a4f68fd8-acae-11ef-9cd2-0242ac120002');
     _secureHashController = TextEditingController(
       text: '1698BC3561925188241E839408D3B0D4F62DCE0BD4F3CCF19CB526F0BB458B69',
     );
 
-    // }
     altBaseurl = NetworkConstants.baseUrlSdk;
     dropdownValue = _getDropdownValueFromAltBaseUrl(altBaseurl);
   }
@@ -87,6 +93,60 @@ class _DemoScreenState extends State<DemoScreen> {
     }
   }
 
+  Future<String?> getSDKSessionToken({
+    required String merchantId,
+    required String secureHashValue,
+    String? customerId,
+  }) async {
+    final dio = Dio(
+      BaseOptions(
+        baseUrl: NetworkConstants.testUrlSDK,
+        headers: {
+          'authority': 'localhost',
+          'accept': 'text/plain',
+          'accept-language': 'en-US,en;q=0.9',
+          'content-type': 'application/json',
+        },
+      ),
+    );
+
+    final response = await dio.post(
+      NetworkConstants.getSDKSessionToken,
+      data: {
+        'merchantId': merchantId,
+        'secureHashValue': secureHashValue,
+      },
+    );
+    if (response.data['success']) {
+      return response.data['data']['sessionToken'];
+    }
+    return null;
+  }
+
+  Future<void> initPayment() async {
+    final valid = _formKey.currentState!.validate();
+    if (!valid) return;
+
+    final sessionToken = await getSDKSessionToken(
+      merchantId: _merchantIdController.text,
+      secureHashValue: _secureHashController.text,
+      customerId: _customerIdController.text,
+    );
+    await AmwalPaySdk.instance.initSdk(
+      settings: AmwalSdkSettings(
+        sessionToken: sessionToken ?? '',
+        currency: _currencyController.text,
+        amount: _amountController.text,
+        transactionId: const Uuid().v1(),
+        merchantId: _merchantIdController.text,
+        secureHashValue: _secureHashController.text,
+        terminalId: _terminalController.text,
+        locale: Locale(_languageController.text),
+        isMocked: false,
+      ),
+    );
+  }
+
   @override
   void dispose() {
     _languageController.dispose();
@@ -95,6 +155,7 @@ class _DemoScreenState extends State<DemoScreen> {
     _secureHashController.dispose();
     _amountController.dispose();
     _currencyController.dispose();
+    _customerIdController.dispose();
     super.dispose();
   }
 
@@ -131,6 +192,10 @@ class _DemoScreenState extends State<DemoScreen> {
                           controller: _terminalController,
                           isNumeric: true,
                           maxLength: 10,
+                        ),
+                        TextForm(
+                          title: "Customer Id",
+                          controller: _customerIdController,
                         ),
                         TextForm(
                           title: "Amount",
@@ -235,25 +300,9 @@ class _DemoScreenState extends State<DemoScreen> {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  final valid = _formKey.currentState!.validate();
-                  if (!valid) return;
-
-                  await AmwalPaySdk.instance.getSDKSessionToken(
-                    merchantId: _merchantIdController.text,
-                    secureHashValue: _secureHashController.text,
-                  );
-                  await AmwalPaySdk.instance.initSdk(
-                    settings: AmwalSdkSettings(
-                      currency: _currencyController.text,
-                      amount: _amountController.text,
-                      transactionId: const Uuid().v1(),
-                      merchantId: _merchantIdController.text,
-                      secureHashValue: _secureHashController.text,
-                      terminalId: _terminalController.text,
-                      locale: Locale(_languageController.text),
-                      isMocked: false,
-                    ),
-                  );
+                  if (_timer?.isActive ?? false) _timer?.cancel();
+                  _timer = Timer(const Duration(milliseconds: 300),
+                      () async => await initPayment());
                 },
                 child: const Text('initiate payment demo'),
               ),

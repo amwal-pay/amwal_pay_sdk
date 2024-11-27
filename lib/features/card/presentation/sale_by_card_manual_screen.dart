@@ -60,6 +60,7 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
   late FocusNode _expireMonthNode;
   late FocusNode _expireYearNode;
   late FocusNode _cvvNode;
+  bool checked = false;
 
   @override
   void initState() {
@@ -173,11 +174,34 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
                       height: 40,
                     ),
                     if (NetworkConstants.isSdkInApp)
-                      CheckboxListTile(
-                        value: widget.cubit.isTokenized,
-                        title: Text('save_card'.translate(context)),
-                        onChanged: (value) =>
-                            widget.cubit.isTokenized = value ?? false,
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              setState(() {
+                                checked = !checked;
+                              });
+                              widget.cubit.isTokenized = checked;
+                            },
+                            icon: checked
+                                ? const Icon(
+                                    Icons.check_box_rounded,
+                                    color: primaryColor,
+                                  )
+                                : const Icon(
+                                    Icons.check_box_outline_blank_outlined,
+                                  ),
+                          ),
+                          const SizedBox(width: 24),
+                          Text(
+                            'save_card'.translate(context),
+                            style: const TextStyle(
+                              color: primaryColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     AppButton(
                       key: const Key('confirmButton'),

@@ -13,6 +13,7 @@ abstract class IAmwalSdkSettings {
   final String currency;
   final String? merchantName;
   final String? flavor;
+  final String sessionToken;
 
   final OnPayCallback onPay;
   final OnPayCallback? onCountComplete;
@@ -23,6 +24,7 @@ abstract class IAmwalSdkSettings {
   final int countDownInSeconds;
 
   IAmwalSdkSettings({
+    required this.sessionToken,
     required this.token,
     this.secureHashValue,
     required this.merchantId,
@@ -62,6 +64,7 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
     super.onTokenExpired,
     super.log,
     super.flavor,
+    required super.sessionToken,
   }) : super(
           amount: '',
           currency: '',
@@ -70,6 +73,7 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
   factory AmwalInAppSdkSettings.fromJson(Map<String, dynamic> json) {
     return AmwalInAppSdkSettings(
       token: json['token'],
+      sessionToken: json['sessionToken'] ?? '',
       secureHashValue: json['secureHashValue'],
       merchantId: json['merchantId'],
       terminalIds: json['terminalIds'] ?? [],
@@ -91,6 +95,7 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
   Map<String, dynamic> toJson() {
     return {
       'token': token,
+      'sessionToken': sessionToken,
       'secureHashValue': secureHashValue,
       'merchantId': merchantId,
       'transactionId': transactionId,
@@ -126,7 +131,8 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
       super.log,
       super.onTokenExpired,
       super.countDownInSeconds = 90,
-      super.flavor})
+      super.flavor,
+      super.sessionToken = ''})
       : super(terminalIds: [terminalId], onPay: (_, [__]) {});
 
   factory AmwalSdkSettings.fromJson(Map<String, dynamic> json) {

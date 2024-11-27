@@ -6,7 +6,6 @@ import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
 import 'package:amwal_pay_sdk/amwal_sdk_settings/amwal_sdk_setting_container.dart';
 import 'package:amwal_pay_sdk/amwal_sdk_settings/amwal_sdk_settings.dart';
 import 'package:amwal_pay_sdk/core/networking/constants.dart';
-import 'package:amwal_pay_sdk/core/networking/custom_log_interceptor.dart';
 import 'package:amwal_pay_sdk/core/networking/network_service.dart';
 import 'package:amwal_pay_sdk/features/card/amwal_salebycard_sdk.dart';
 import 'package:amwal_pay_sdk/features/wallet/amwal_salebywallet_sdk.dart';
@@ -16,7 +15,6 @@ import 'package:amwal_pay_sdk/presentation/amwal_pay_screen.dart';
 import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:amwal_pay_sdk/sdk_builder/network_service_builder.dart';
 import 'package:amwal_pay_sdk/sdk_builder/sdk_builder.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import 'core/ui/error_dialog.dart';
@@ -32,45 +30,16 @@ class AmwalPaySdk {
 
   static AmwalPaySdk get instance => const AmwalPaySdk._();
 
-  Future<void> getSDKSessionToken({
-    required String merchantId,
-    required String secureHashValue,
-    String? customerId,
-  }) async {
-    final dio = Dio(
-      BaseOptions(
-        baseUrl: NetworkConstants.testUrlSDK,
-        headers: {
-          'authority': 'localhost',
-          'accept': 'text/plain',
-          'accept-language': 'en-US,en;q=0.9',
-          'content-type': 'application/json',
-        },
-      ),
-    );
-
-    dio.interceptors.add(CustomLogInterceptor());
-    final response = await dio.post(
-      NetworkConstants.getSDKSessionToken,
-      data: {
-        'merchantId': merchantId,
-        'secureHashValue': secureHashValue,
-      },
-    );
-    if (response.data['success']) {
-      await CacheStorageHandler.instance.write(
-        CacheKeys.sessionToken,
-        response.data['data']['sessionToken'],
-      );
-    }
-  }
-
   Future<void> initSdk({
     required AmwalSdkSettings settings,
   }) async {
     AmwalSdkSettingContainer.locale = settings.locale;
     NetworkConstants.isSdkInApp = true;
     await SdkBuilder.instance.initCacheStorage();
+    await CacheStorageHandler.instance.write(
+      CacheKeys.sessionToken,
+      settings.sessionToken,
+    );
     await CacheStorageHandler.instance.write(
       CacheKeys.token,
       settings.token,
