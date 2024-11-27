@@ -192,7 +192,6 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
                                     Icons.check_box_outline_blank_outlined,
                                   ),
                           ),
-                          const SizedBox(width: 24),
                           Text(
                             'save_card'.translate(context),
                             style: const TextStyle(
