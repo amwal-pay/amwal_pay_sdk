@@ -171,27 +171,31 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
                       cvvFocusNode: _cvvNode,
                     ),
                     const SizedBox(
-                      height: 40,
+                      height: 16,
                     ),
                     if (NetworkConstants.isSdkInApp)
                       Row(
                         children: [
-                          IconButton(
-                            onPressed: () {
+                          GestureDetector(
+                            onTap: () {
                               setState(() {
                                 checked = !checked;
                               });
                               widget.cubit.isTokenized = checked;
                             },
-                            icon: checked
+                            child: checked
                                 ? const Icon(
                                     Icons.check_box_rounded,
                                     color: primaryColor,
+                                    size: 25,
                                   )
                                 : const Icon(
-                                    Icons.check_box_outline_blank_outlined,
+                                    Icons.check_box_outline_blank,
+                                    color: black3Color,
+                                    size: 25,
                                   ),
                           ),
+                          const SizedBox(width: 8),
                           Text(
                             'save_card'.translate(context),
                             style: const TextStyle(
@@ -202,6 +206,9 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
                           ),
                         ],
                       ),
+                    const SizedBox(
+                      height: 40,
+                    ),
                     AppButton(
                       key: const Key('confirmButton'),
                       onPressed: () async {
