@@ -115,6 +115,7 @@ class _DemoScreenState extends State<DemoScreen> {
       data: {
         'merchantId': merchantId,
         'secureHashValue': secureHashValue,
+        'customerId': customerId,
       },
     );
     if (response.data['success']) {
