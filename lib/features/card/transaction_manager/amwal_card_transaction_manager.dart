@@ -99,6 +99,7 @@ class AmwalCardTransactionManager extends ICardTransactionManager {
         await onTransactionCreated(
           purchaseData.transactionId,
           Right(purchaseData),
+          setContext,
         );
       } else {
         if (context.mounted) dismissLoader(context);
@@ -195,6 +196,7 @@ class AmwalCardTransactionManager extends ICardTransactionManager {
           await onTransactionCreated(
             transactionId,
             purchaseDataOrFail,
+            null,
           );
         }
       },

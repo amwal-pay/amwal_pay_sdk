@@ -25,8 +25,12 @@ class AmwalSdkArguments {
   final OnPayCallback onPay;
   final OnPayCallback? onCountComplete;
   final GetTransactionFunction getTransactionFunction;
+  final void Function(String?)? customerCallback;
+  final String? customerId;
 
   AmwalSdkArguments({
+    this.customerId,
+    this.customerCallback,
     required this.getTransactionFunction,
     required this.onPay,
     this.onCountComplete,

@@ -44,18 +44,22 @@ class AmwalPaySdk {
       CacheKeys.token,
       settings.token,
     );
+
     await CacheStorageHandler.instance.write(
       CacheKeys.terminals,
       settings.terminalIds,
     );
+
     await CacheStorageHandler.instance.write(
       CacheKeys.merchantId,
       settings.merchantId,
     );
+
     await CacheStorageHandler.instance.write(
       CacheKeys.merchantName,
       settings.merchantName,
     );
+
     await CacheStorageHandler.instance.write(
       CacheKeys.merchant_flavor,
       settings.flavor,
@@ -238,6 +242,8 @@ class AmwalPaySdk {
             ),
             home: AmwalPayScreen(
               arguments: AmwalSdkArguments(
+                customerId: settings.customerId,
+                customerCallback: settings.customerCallback,
                 onPay: settings.onPay,
                 amount: settings.amount,
                 terminalId: settings.terminalIds.single,

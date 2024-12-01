@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
 import 'package:amwal_pay_sdk/amwal_sdk_settings/amwal_sdk_settings.dart';
 import 'package:amwal_pay_sdk/core/networking/constants.dart';
+import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:dio/dio.dart';
 import 'package:example/currency_model.dart';
 import 'package:example/drop_down_form.dart';
 import 'package:example/text_form.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 void main() {
@@ -50,7 +52,6 @@ class _DemoScreenState extends State<DemoScreen> {
   late TextEditingController _terminalController;
   late TextEditingController _secureHashController;
   late TextEditingController _languageController;
-  late TextEditingController _customerIdController;
 
   late GlobalKey<FormState> _formKey;
   late String altBaseurl;
@@ -71,8 +72,6 @@ class _DemoScreenState extends State<DemoScreen> {
     _languageController = TextEditingController(text: 'en');
     _terminalController = TextEditingController(text: '925299');
     _merchantIdController = TextEditingController(text: '59266');
-    _customerIdController =
-        TextEditingController(text: 'a4f68fd8-acae-11ef-9cd2-0242ac120002');
     _secureHashController = TextEditingController(
       text: '1698BC3561925188241E839408D3B0D4F62DCE0BD4F3CCF19CB526F0BB458B69',
     );
@@ -98,41 +97,78 @@ class _DemoScreenState extends State<DemoScreen> {
     required String secureHashValue,
     String? customerId,
   }) async {
-    final dio = Dio(
-      BaseOptions(
-        baseUrl: NetworkConstants.testUrlSDK,
-        headers: {
-          'authority': 'localhost',
-          'accept': 'text/plain',
-          'accept-language': 'en-US,en;q=0.9',
-          'content-type': 'application/json',
+    try {
+      final dio = Dio(
+        BaseOptions(
+          baseUrl: NetworkConstants.testUrlSDK,
+          headers: {
+            'authority': 'localhost',
+            'accept': 'text/plain',
+            'accept-language': 'en-US,en;q=0.9',
+            'content-type': 'application/json',
+          },
+        ),
+      );
+      final response = await dio.post(
+        NetworkConstants.getSDKSessionToken,
+        data: {
+          'merchantId': merchantId,
+          'secureHashValue': secureHashValue,
+          'customerId': customerId,
         },
-      ),
-    );
-
-    final response = await dio.post(
-      NetworkConstants.getSDKSessionToken,
-      data: {
-        'merchantId': merchantId,
-        'secureHashValue': secureHashValue,
-        'customerId': customerId,
-      },
-    );
-    if (response.data['success']) {
-      return response.data['data']['sessionToken'];
+      );
+      if (response.data['success']) {
+        return response.data['data']['sessionToken'];
+      }
+    } on DioException catch (e) {
+      final errorMessage = e.response!.data['errorList'].join(',');
+      await _showErrorDialog(errorMessage);
+      return null;
+    } catch (e) {
+      await _showErrorDialog('Something Went Wrong');
+      return null;
     }
     return null;
+  }
+
+  Future<void> _showErrorDialog(String message) async {
+    await showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text('failed'.translate(context)),
+          content: Text(message),
+        );
+      },
+    );
+  }
+
+  void _onCustomerId(String? customerId) async {
+    final instance = await SharedPreferences.getInstance();
+    if (customerId != null) {
+      await instance.setString('customer_id', customerId);
+    }
+  }
+
+  Future<String?> _getCustomerId() async {
+    final instance = await SharedPreferences.getInstance();
+    return instance.getString('customer_id');
   }
 
   Future<void> initPayment() async {
     final valid = _formKey.currentState!.validate();
     if (!valid) return;
 
+    final customerId = await _getCustomerId();
+
     final sessionToken = await getSDKSessionToken(
       merchantId: _merchantIdController.text,
       secureHashValue: _secureHashController.text,
-      customerId: _customerIdController.text,
+      customerId: customerId,
     );
+
+    if (sessionToken == null) return;
+
     await AmwalPaySdk.instance.initSdk(
       settings: AmwalSdkSettings(
         sessionToken: sessionToken ?? '',
@@ -144,6 +180,8 @@ class _DemoScreenState extends State<DemoScreen> {
         terminalId: _terminalController.text,
         locale: Locale(_languageController.text),
         isMocked: false,
+        customerCallback: _onCustomerId,
+        customerId: customerId,
       ),
     );
   }
@@ -156,7 +194,6 @@ class _DemoScreenState extends State<DemoScreen> {
     _secureHashController.dispose();
     _amountController.dispose();
     _currencyController.dispose();
-    _customerIdController.dispose();
     super.dispose();
   }
 
@@ -193,10 +230,6 @@ class _DemoScreenState extends State<DemoScreen> {
                           controller: _terminalController,
                           isNumeric: true,
                           maxLength: 10,
-                        ),
-                        TextForm(
-                          title: "Customer Id",
-                          controller: _customerIdController,
                         ),
                         TextForm(
                           title: "Amount",

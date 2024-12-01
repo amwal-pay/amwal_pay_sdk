@@ -31,6 +31,8 @@ class PurchaseData {
   final String? transactionDate;
   final String? merchantName;
   final bool isOtpRequired;
+  final String? customerId;
+  final String? customerTokenId;
   final HostResponseData hostResponseData;
 
 //<editor-fold desc="Data Methods">
@@ -40,6 +42,8 @@ class PurchaseData {
     required this.transactionId,
     required this.hostResponseData,
     required this.isOtpRequired,
+    this.customerId,
+    this.customerTokenId,
     this.transactionTypeId,
     this.transactionTypeDisplayName,
     this.merchantId,
@@ -91,6 +95,8 @@ class PurchaseData {
       currency: currency,
       amount: amount,
       currencyId: currencyId,
+      customerId: customerId,
+      customerTokenId: customerTokenId,
     );
   }
 
@@ -106,20 +112,22 @@ class PurchaseData {
 
   factory PurchaseData.fromMap(Map<String, dynamic> map) {
     return PurchaseData(
-      message: map['message'] as String,
-      transactionId: map['transactionId'] as String,
-      hostResponseData: HostResponseData.fromMap(map['hostResponseData']),
-      isOtpRequired: map['isOtpRequired'],
-      terminalId: map['terminalId'],
-      transactionTypeId: map['transactionTypeId']?.toString(),
-      transactionTypeDisplayName: map['transactionTypeDisplayName']?.toString(),
-      currency: map['currency']?.toString(),
-      currencyId: map['currencyId']?.toString(),
-      merchantId: map['merchantId']?.toString(),
-      amount: map['amount']?.toString(),
-      transactionDate: map['transactionDate'],
-      merchantName: map['merchantName'],
-    );
+        message: map['message'] as String,
+        transactionId: map['transactionId'] as String,
+        hostResponseData: HostResponseData.fromMap(map['hostResponseData']),
+        isOtpRequired: map['isOtpRequired'],
+        terminalId: map['terminalId'],
+        transactionTypeId: map['transactionTypeId']?.toString(),
+        transactionTypeDisplayName:
+            map['transactionTypeDisplayName']?.toString(),
+        currency: map['currency']?.toString(),
+        currencyId: map['currencyId']?.toString(),
+        merchantId: map['merchantId']?.toString(),
+        amount: map['amount']?.toString(),
+        transactionDate: map['transactionDate'],
+        merchantName: map['merchantName'],
+        customerTokenId: map['customerTokenId'],
+        customerId: map['customerId']);
   }
 
   factory PurchaseData.fromUri(Uri uri) {
@@ -142,6 +150,8 @@ class PurchaseData {
       currencyId: uri.queryParameters['CurrencyId'],
       transactionDate: uri.queryParameters['TransactionDate'],
       amount: uri.queryParameters['Amount'],
+      customerTokenId: uri.queryParameters['CustomerTokenId'],
+      customerId: uri.queryParameters['CustomerId'],
       transactionTypeDisplayName:
           uri.queryParameters['TransactionTypeDisplayName'],
     );

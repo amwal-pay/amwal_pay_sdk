@@ -76,10 +76,12 @@ abstract class ICardTransactionManager {
   Future<void> onTransactionCreated(
     String transactionId,
     Either<Map<String, dynamic>, PurchaseData>? purchaseDataOrFail,
+    void Function(void Function(BuildContext))? setContext,
   ) async {
     await receiptAfterComplete(
       transactionId,
       purchaseDataOrFail,
+      setContext: setContext,
     );
   }
 

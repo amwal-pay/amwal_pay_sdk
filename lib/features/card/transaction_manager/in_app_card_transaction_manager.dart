@@ -41,7 +41,18 @@ class InAppCardTransactionManager extends ICardTransactionManager {
   @override
   final GetOneTransactionByIdUseCase getOneTransactionByIdUseCase;
 
+  final void Function(String?)? customerCallback;
+
+  final String? customerId;
+
+  final String? customerTokenId;
+  final String? cvv;
+
   InAppCardTransactionManager({
+    this.cvv,
+    this.customerTokenId,
+    this.customerId,
+    this.customerCallback,
     required this.context,
     required this.saleByCardManualCubit,
     required this.paymentArguments,
@@ -85,6 +96,9 @@ class InAppCardTransactionManager extends ICardTransactionManager {
         paymentArguments.transactionId,
         context,
         isTokenized: saleByCardManualCubit.isTokenized,
+        customerId: customerId,
+        customerTokenId: customerTokenId,
+        cvv: cvv,
         dismissLoaderTrigger: (dismiss) {
           dismissFn = dismiss;
         },
@@ -117,13 +131,15 @@ class InAppCardTransactionManager extends ICardTransactionManager {
     } else {
       if (context.mounted) {
         saleByCardManualCubit.formKey.currentState?.reset();
-        await onTransactionCreated(
-          purchaseData.transactionId,
-          Right(purchaseData),
-        );
       } else {
         if (context.mounted) dismissLoader(context);
       }
+      customerCallback?.call(purchaseData.customerId);
+      await onTransactionCreated(
+        purchaseData.transactionId,
+        Right(purchaseData),
+        setContext,
+      );
     }
   }
 
@@ -213,9 +229,14 @@ class InAppCardTransactionManager extends ICardTransactionManager {
           }
           return;
         } else if (purchaseDataOrFail.isRight() && context.mounted) {
+          final customerId =
+              purchaseDataOrFail.fold((_) => null, (r) => r.customerId);
+          customerCallback?.call(customerId);
+
           await onTransactionCreated(
             transactionId,
             purchaseDataOrFail,
+            null,
           );
         }
       },
@@ -237,10 +258,12 @@ class InAppCardTransactionManager extends ICardTransactionManager {
       purchaseData,
       lContext,
     );
+
     await ReceiptHandler.instance.showHistoryReceipt(
-      context: lContext.mounted ? lContext : lContext,
+      context: lContext,
       settings: settings.copyWith(
         onClose: () {
+          AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
           AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
         },
       ),
@@ -342,7 +365,6 @@ class InAppCardTransactionManager extends ICardTransactionManager {
     void Function()? dismissFn,
     void Function(void Function(BuildContext))? setContext,
   }) async {
-    // saleByCardManualCubit.showLoader();
     final purchaseData = purchaseDataOrFail?.fold((_) => null, (r) => r);
 
     if (purchaseData != null) {

@@ -14,7 +14,6 @@ abstract class IAmwalSdkSettings {
   final String? merchantName;
   final String? flavor;
   final String sessionToken;
-
   final OnPayCallback onPay;
   final OnPayCallback? onCountComplete;
   final GetTransactionFunction? getTransactionFunction;
@@ -22,8 +21,12 @@ abstract class IAmwalSdkSettings {
   final void Function(String, Map<String, dynamic> param)? log;
   final Future<String?> Function()? onTokenExpired;
   final int countDownInSeconds;
+  final void Function(String?)? customerCallback;
+  final String? customerId;
 
   IAmwalSdkSettings({
+    this.customerId,
+    this.customerCallback,
     required this.sessionToken,
     required this.token,
     this.secureHashValue,
@@ -48,6 +51,7 @@ abstract class IAmwalSdkSettings {
 
 class AmwalInAppSdkSettings extends IAmwalSdkSettings {
   AmwalInAppSdkSettings({
+    super.customerId,
     required super.token,
     super.secureHashValue,
     required super.merchantId,
@@ -65,6 +69,7 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
     super.log,
     super.flavor,
     required super.sessionToken,
+    super.customerCallback,
   }) : super(
           amount: '',
           currency: '',
@@ -114,26 +119,28 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
 class AmwalSdkSettings extends IAmwalSdkSettings {
   final String terminalId;
 
-  AmwalSdkSettings(
-      {super.token = '',
-      required super.secureHashValue,
-      required super.merchantId,
-      required super.transactionId,
-      required super.currency,
-      required super.amount,
-      required this.terminalId,
-      super.merchantName,
-      super.getTransactionFunction,
-      super.onCountComplete,
-      super.locale,
-      super.isMocked,
-      super.onError,
-      super.log,
-      super.onTokenExpired,
-      super.countDownInSeconds = 90,
-      super.flavor,
-      super.sessionToken = ''})
-      : super(terminalIds: [terminalId], onPay: (_, [__]) {});
+  AmwalSdkSettings({
+    super.token = '',
+    required super.secureHashValue,
+    required super.merchantId,
+    required super.transactionId,
+    required super.currency,
+    required super.amount,
+    required this.terminalId,
+    super.merchantName,
+    super.getTransactionFunction,
+    super.onCountComplete,
+    super.locale,
+    super.isMocked,
+    super.onError,
+    super.log,
+    super.onTokenExpired,
+    super.countDownInSeconds = 90,
+    super.flavor,
+    super.sessionToken = '',
+    super.customerCallback,
+    super.customerId,
+  }) : super(terminalIds: [terminalId], onPay: (_, [__]) {});
 
   factory AmwalSdkSettings.fromJson(Map<String, dynamic> json) {
     return AmwalSdkSettings(

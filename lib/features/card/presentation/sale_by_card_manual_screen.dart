@@ -35,9 +35,12 @@ class SaleByCardManualScreen extends StatefulApiView<SaleByCardManualCubit>
   final Locale locale;
   final OnPayCallback onPay;
   final EventCallback? log;
+  final void Function(String?)? customerCallback;
+  final String? customerId;
 
   const SaleByCardManualScreen({
     Key? key,
+    this.customerCallback,
     required this.amount,
     required this.currencyId,
     required this.currency,
@@ -49,6 +52,7 @@ class SaleByCardManualScreen extends StatefulApiView<SaleByCardManualCubit>
     this.showAppBar = true,
     this.translator,
     this.log,
+    this.customerId,
   }) : super(key: key);
 
   @override
@@ -60,6 +64,7 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
   late FocusNode _expireMonthNode;
   late FocusNode _expireYearNode;
   late FocusNode _cvvNode;
+  late PaymentArguments args;
   bool checked = false;
 
   @override
@@ -69,7 +74,28 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
     _expireMonthNode = FocusNode();
     _expireYearNode = FocusNode();
     _cvvNode = FocusNode();
-    widget.cubit.getCustomerTokens();
+    args = PaymentArguments(
+      terminalId: widget.terminalId,
+      amount: widget.amount,
+      merchantId: widget.merchantId,
+      transactionId: widget.transactionId,
+      currencyData: CurrencyData(
+        idN: widget.currencyId,
+        name: widget.currency,
+        id: widget.currencyId.toString(),
+      ),
+    );
+    widget.cubit.getCustomerTokens(
+      context,
+      (cb) {
+        cb(context);
+      },
+      widget.onPay,
+      widget.log,
+      widget.customerCallback,
+      args,
+      widget.customerId,
+    );
   }
 
   @override
@@ -83,18 +109,6 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final args = PaymentArguments(
-      terminalId: widget.terminalId,
-      amount: widget.amount,
-      merchantId: widget.merchantId,
-      transactionId: widget.transactionId,
-      currencyData: CurrencyData(
-        idN: widget.currencyId,
-        name: widget.currency,
-        id: widget.currencyId.toString(),
-      ),
-    );
-
     return BlocListener<SaleByCardManualCubit, ICubitState<PurchaseResponse>>(
       bloc: widget.cubit,
       listener: (_, state) {},
@@ -215,10 +229,9 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
                         final isValid =
                             widget.cubit.formKey.currentState!.validate();
                         if (isValid) {
-                          //TODO test after server work done
-                          // args.transactionId = const Uuid().v1();
                           if (NetworkConstants.isSdkInApp) {
                             await InAppCardTransactionManager(
+                              customerCallback: widget.customerCallback,
                               context: context,
                               paymentArguments: args,
                               saleByCardManualCubit: widget.cubit,

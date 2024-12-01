@@ -32,7 +32,9 @@ class ReceiptHandler {
     required BuildContext context,
     required TransactionDetailsSettings settings,
   }) async {
-    await Navigator.of(AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context).push(
+    await Navigator.of(
+            AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context)
+        .push(
       DialogRoute(
         context: AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context,
         builder: (BuildContext context) {
@@ -42,8 +44,10 @@ class ReceiptHandler {
             child: TransactionStatusDialog(
               settings: settings.copyWith(
                 onClose: () {
-                  Navigator.pop(AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context);
-                  Navigator.pop(AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context);
+                  Navigator.pop(AmwalSdkNavigator
+                      .amwalNavigatorObserver.navigator!.context);
+                  Navigator.pop(AmwalSdkNavigator
+                      .amwalNavigatorObserver.navigator!.context);
                   // AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
                 },
               ),
@@ -58,7 +62,7 @@ class ReceiptHandler {
     required BuildContext context,
     required TransactionDetailsSettings settings,
   }) async {
-    await Navigator.of(context).push(DialogRoute(
+    await Navigator.of(context, rootNavigator: true).push(DialogRoute(
       context: context,
       builder: (_) {
         return Localizations(

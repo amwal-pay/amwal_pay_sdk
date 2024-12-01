@@ -150,6 +150,7 @@ class PurchaseRequest {
         'clientMail': clientMail,
         'customerId': customerId,
         'customerTokenId': customerTokenId,
+        'cvV2': cvV2,
       };
 
   Map<String, dynamic> mapToPurchaseData() => {
