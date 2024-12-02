@@ -53,8 +53,6 @@ abstract class IAmwalSdkSettings {
 
 class AmwalInAppSdkSettings extends IAmwalSdkSettings {
   AmwalInAppSdkSettings({
-    super.onResponse,
-    super.customerId,
     required super.token,
     super.secureHashValue,
     required super.merchantId,
@@ -71,17 +69,18 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
     super.onTokenExpired,
     super.log,
     super.flavor,
-    required super.sessionToken,
     super.customerCallback,
   }) : super(
           amount: '',
           currency: '',
+          onResponse: null,
+          customerId: null,
+          sessionToken: '',
         );
 
   factory AmwalInAppSdkSettings.fromJson(Map<String, dynamic> json) {
     return AmwalInAppSdkSettings(
       token: json['token'],
-      sessionToken: json['sessionToken'] ?? '',
       secureHashValue: json['secureHashValue'],
       merchantId: json['merchantId'],
       terminalIds: json['terminalIds'] ?? [],
