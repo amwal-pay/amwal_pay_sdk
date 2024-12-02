@@ -55,6 +55,7 @@ class AmwalPayScreen extends StatelessWidget {
                     .canCardTransaction ??
                 false)
               SaleByCardManualScreen(
+                onResponse: arguments.onResponse,
                 onPay: arguments.onPay,
                 locale: arguments.locale,
                 amount: arguments.amount,

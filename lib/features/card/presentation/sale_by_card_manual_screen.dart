@@ -36,10 +36,12 @@ class SaleByCardManualScreen extends StatefulApiView<SaleByCardManualCubit>
   final OnPayCallback onPay;
   final EventCallback? log;
   final void Function(String?)? customerCallback;
+  final void Function(String?)? onResponse;
   final String? customerId;
 
   const SaleByCardManualScreen({
     Key? key,
+    this.onResponse,
     this.customerCallback,
     required this.amount,
     required this.currencyId,
@@ -93,6 +95,7 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
       widget.onPay,
       widget.log,
       widget.customerCallback,
+      widget.onResponse,
       args,
       widget.customerId,
     );
@@ -232,6 +235,7 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
                           if (NetworkConstants.isSdkInApp) {
                             await InAppCardTransactionManager(
                               customerCallback: widget.customerCallback,
+                              onResponse: widget.onResponse,
                               context: context,
                               paymentArguments: args,
                               saleByCardManualCubit: widget.cubit,

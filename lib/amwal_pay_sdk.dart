@@ -242,6 +242,7 @@ class AmwalPaySdk {
             ),
             home: AmwalPayScreen(
               arguments: AmwalSdkArguments(
+                onResponse: settings.onResponse,
                 customerId: settings.customerId,
                 customerCallback: settings.customerCallback,
                 onPay: settings.onPay,

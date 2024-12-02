@@ -275,6 +275,7 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
     OnPayCallback onPay,
     EventCallback? log,
     void Function(String?)? customerCallback,
+    void Function(String?)? onResponse,
     PaymentArguments args,
     String? customerId,
   ) async {

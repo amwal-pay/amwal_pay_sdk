@@ -155,6 +155,10 @@ class _DemoScreenState extends State<DemoScreen> {
     return instance.getString('customer_id');
   }
 
+  void _onResponse(String? response) {
+    debugPrint(response);
+  }
+
   Future<void> initPayment() async {
     final valid = _formKey.currentState!.validate();
     if (!valid) return;
@@ -182,6 +186,7 @@ class _DemoScreenState extends State<DemoScreen> {
         isMocked: false,
         customerCallback: _onCustomerId,
         customerId: customerId,
+        onResponse: _onResponse,
       ),
     );
   }

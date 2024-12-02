@@ -27,8 +27,10 @@ class AmwalSdkArguments {
   final GetTransactionFunction getTransactionFunction;
   final void Function(String?)? customerCallback;
   final String? customerId;
+  final void Function(String?)? onResponse;
 
   AmwalSdkArguments({
+    this.onResponse,
     this.customerId,
     this.customerCallback,
     required this.getTransactionFunction,

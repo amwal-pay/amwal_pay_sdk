@@ -23,8 +23,10 @@ abstract class IAmwalSdkSettings {
   final int countDownInSeconds;
   final void Function(String?)? customerCallback;
   final String? customerId;
+  final void Function(String?)? onResponse;
 
   IAmwalSdkSettings({
+    this.onResponse,
     this.customerId,
     this.customerCallback,
     required this.sessionToken,
@@ -51,6 +53,7 @@ abstract class IAmwalSdkSettings {
 
 class AmwalInAppSdkSettings extends IAmwalSdkSettings {
   AmwalInAppSdkSettings({
+    super.onResponse,
     super.customerId,
     required super.token,
     super.secureHashValue,
@@ -120,6 +123,7 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
   final String terminalId;
 
   AmwalSdkSettings({
+    super.onResponse,
     super.token = '',
     required super.secureHashValue,
     required super.merchantId,

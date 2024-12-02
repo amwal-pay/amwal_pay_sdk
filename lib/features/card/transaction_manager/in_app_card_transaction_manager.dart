@@ -42,6 +42,7 @@ class InAppCardTransactionManager extends ICardTransactionManager {
   final GetOneTransactionByIdUseCase getOneTransactionByIdUseCase;
 
   final void Function(String?)? customerCallback;
+  final void Function(String?)? onResponse;
 
   final String? customerId;
 
@@ -53,6 +54,7 @@ class InAppCardTransactionManager extends ICardTransactionManager {
     this.customerTokenId,
     this.customerId,
     this.customerCallback,
+    this.onResponse,
     required this.context,
     required this.saleByCardManualCubit,
     required this.paymentArguments,
@@ -135,6 +137,7 @@ class InAppCardTransactionManager extends ICardTransactionManager {
         if (context.mounted) dismissLoader(context);
       }
       customerCallback?.call(purchaseData.customerId);
+      onResponse?.call(purchaseData.toMap().toString());
       await onTransactionCreated(
         purchaseData.transactionId,
         Right(purchaseData),
@@ -153,6 +156,9 @@ class InAppCardTransactionManager extends ICardTransactionManager {
         builder: (context) => ThreeDSWebViewPage(
           url: url,
           onTransactionFound: (purchaseData) async {
+            customerCallback?.call(purchaseData.customerId);
+            onResponse?.call(purchaseData.toMap().toString());
+
             await receiptAfterComplete(
               purchaseData.transactionId,
               Right(purchaseData),
@@ -229,9 +235,9 @@ class InAppCardTransactionManager extends ICardTransactionManager {
           }
           return;
         } else if (purchaseDataOrFail.isRight() && context.mounted) {
-          final customerId =
-              purchaseDataOrFail.fold((_) => null, (r) => r.customerId);
-          customerCallback?.call(customerId);
+          final purchaseData = purchaseDataOrFail.fold((_) => null, (r) => r);
+          customerCallback?.call(purchaseData?.customerId);
+          onResponse?.call(purchaseData?.toMap().toString());
 
           await onTransactionCreated(
             transactionId,
