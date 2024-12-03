@@ -87,18 +87,20 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
         id: widget.currencyId.toString(),
       ),
     );
-    widget.cubit.getCustomerTokens(
-      context,
-      (cb) {
-        cb(context);
-      },
-      widget.onPay,
-      widget.log,
-      widget.customerCallback,
-      widget.onResponse,
-      args,
-      widget.customerId,
-    );
+    if (NetworkConstants.isSdkInApp) {
+      widget.cubit.getCustomerTokens(
+        context,
+        (cb) {
+          cb(context);
+        },
+        widget.onPay,
+        widget.log,
+        widget.customerCallback,
+        widget.onResponse,
+        args,
+        widget.customerId,
+      );
+    }
   }
 
   @override

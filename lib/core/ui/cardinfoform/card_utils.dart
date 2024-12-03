@@ -39,8 +39,13 @@ class CardUtils {
   }
 
   static CardType getCardTypeFrmNumber(String input) {
+    input = input.replaceAll(RegExp(r'[^0-9]'), '');
     CardType cardType;
-    if (input.startsWith(RegExp(
+    if (RegExp(
+            r'^(419244|426371|426372|404747|43382962|43382963|43382964|43382999|46442605|48909105|48417205|43323605|40402905|46395255|4837913[0-9]|4837914[0-9]|4837915[0-9]|4228213[0-9]|4228215[0-9]|42282230|422820[3-5][0-9]|447168[3-5][0-9]|407545[2-5][0-9]|43663755|464156|464157|416370|48413[0-1]|4797102[2-3]|44747774|4474797[7-8]|43347833|43935700|43241[0-5]|433084|422610|473820|510723|515722|523672|53441[7-8]|539150|54918[1-4]|42136060|42147814|419291|4673620[0-1]|43909701|41329805|47429505|410469|536028|559753|4228233[0-4]|4228235[0-1]|4641753[0-1]|4641755[0-1]|601722|40277200)')
+        .hasMatch(input)) {
+      cardType = CardType.omanNetCard;
+    } else if (input.startsWith(RegExp(
         r'((5[1-5])|(222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720))'))) {
       cardType = CardType.master;
     } else if (input.startsWith(RegExp(r'4'))) {
@@ -55,13 +60,12 @@ class CardUtils {
       cardType = CardType.dinersClub;
     } else if (input.startsWith(RegExp(r'(352[89]|35[3-8][0-9])'))) {
       cardType = CardType.jcb;
-    } else if (input.startsWith(RegExp('9512'))) {
-      cardType = CardType.omanNetCard;
     } else if (input.length <= 8) {
       cardType = CardType.others;
     } else {
       cardType = CardType.invalid;
     }
+    print(cardType);
     return cardType;
   }
 
