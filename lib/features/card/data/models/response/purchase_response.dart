@@ -124,7 +124,7 @@ class PurchaseData {
         currencyId: map['currencyId']?.toString(),
         merchantId: map['merchantId']?.toString(),
         amount: map['amount']?.toString(),
-        transactionDate: map['transactionDate'],
+        transactionDate: map['transactionDate'] ?? map['transactionTime'] ,
         merchantName: map['merchantName'],
         customerTokenId: map['customerTokenId'],
         customerId: map['customerId']);
