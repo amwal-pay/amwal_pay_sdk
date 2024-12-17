@@ -4,6 +4,7 @@ import 'package:amwal_pay_sdk/core/ui/inputfields/input_field_widget.dart';
 import 'package:amwal_pay_sdk/features/card/data/models/response/customer_token_response.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:keyboard_actions/keyboard_actions.dart';
 
 class SelectCardBottomSheet extends StatefulWidget {
   final List<CustomerToken> tokens;
@@ -24,10 +25,13 @@ class SelectCardBottomSheet extends StatefulWidget {
 class _SelectCardBottomSheetState extends State<SelectCardBottomSheet> {
   CustomerToken? _selectedCustomerToken;
   String? _cvv;
+  late FocusNode _cardFocusNode;
 
   @override
   void initState() {
     super.initState();
+    _cardFocusNode = FocusNode();
+
     _selectedCustomerToken = widget.initialValue;
   }
 
@@ -58,18 +62,33 @@ class _SelectCardBottomSheetState extends State<SelectCardBottomSheet> {
                 ),
                 Expanded(
                   flex: 3,
-                  child: InputFieldWidget(
-                    key: const Key('ccv'),
-                    widgetTitle: 'cvv',
-                    widgetTitleIcon: AppAssets.cvvIcon,
-                    widgetHint: 'digits'.translate(context),
-                    maxLength: 3,
-                    minLength: 3,
-                    hint: 'cvv_hint',
-                    isNumber: true,
-                    onChange: (value) {
-                      _cvv = value;
-                    },
+                  child: KeyboardActions(
+
+                    config: KeyboardActionsConfig(
+                      keyboardActionsPlatform: KeyboardActionsPlatform.IOS,
+                      actions: [
+                        if (_cvv?.isNotEmpty ?? false)
+                          KeyboardActionsItem(
+                            focusNode: _cardFocusNode,
+                            displayArrows: false,
+                          ),
+                      ],
+                    ),
+                    child: InputFieldWidget(
+                      focusNode: _cardFocusNode,
+
+                      key: const Key('ccv'),
+                      widgetTitle: 'cvv',
+                      widgetTitleIcon: AppAssets.cvvIcon,
+                      widgetHint: 'digits'.translate(context),
+                      maxLength: 3,
+                      minLength: 3,
+                      hint: 'cvv_hint',
+                      isNumber: true,
+                      onChange: (value) {
+                        _cvv = value;
+                      },
+                    ),
                   ),
                 ),
               ],

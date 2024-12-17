@@ -50,7 +50,7 @@ class AmountCurrencyWidget extends StatelessWidget {
                     [
                       FormBuilderValidators.numeric(),
                       FormBuilderValidators.min(
-                        1.0,
+                        0.1,
                         errorText: "min_amount_hint".translate(context),
                       ),
                       FormBuilderValidators.maxLength(

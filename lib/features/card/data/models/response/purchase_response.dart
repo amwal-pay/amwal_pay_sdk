@@ -133,10 +133,10 @@ class PurchaseData {
   factory PurchaseData.fromUri(Uri uri) {
     return PurchaseData(
       message: 'success',
-      transactionId: uri.queryParameters['TransactionId']!,
-      terminalId: int.parse(uri.queryParameters['TerminalId'] ?? '0'),
+      transactionId: uri.queryParameters['transactionId'] ?? "",
+      terminalId: int.parse(uri.queryParameters['terminalId'] ?? '0'),
       hostResponseData: HostResponseData(
-        transactionId: uri.queryParameters['TransactionId']!,
+        transactionId: uri.queryParameters['transactionId']!,
         rrn: '',
         stan: '',
         trackId: '',
@@ -144,16 +144,17 @@ class PurchaseData {
         accessUrl: null,
       ),
       isOtpRequired: false,
-      merchantName: uri.queryParameters['MerchantName'],
-      merchantId: uri.queryParameters['MerchantId'],
-      currency: uri.queryParameters['Currency'],
-      currencyId: uri.queryParameters['CurrencyId'],
-      transactionDate: uri.queryParameters['TransactionDate'],
-      amount: uri.queryParameters['Amount'],
-      customerTokenId: uri.queryParameters['CustomerTokenId'],
-      customerId: uri.queryParameters['CustomerId'],
+      merchantName: uri.queryParameters['merchantName'] ?? '',
+      merchantId: uri.queryParameters['merchantId'] ?? '',
+      currency: uri.queryParameters['currency'] ?? '',
+      currencyId: uri.queryParameters['currencyId'] ?? '',
+      transactionDate: uri.queryParameters['transactionTime'] ?? '',
+      amount: uri.queryParameters['amount'] ?? '',
+      customerTokenId: uri.queryParameters['customerTokenId'] ?? '',
+      customerId: uri.queryParameters['customerId'] ?? '',
+
       transactionTypeDisplayName:
-          uri.queryParameters['TransactionTypeDisplayName'],
+          uri.queryParameters['transactionTypeDisplayName'],
     );
   }
 
