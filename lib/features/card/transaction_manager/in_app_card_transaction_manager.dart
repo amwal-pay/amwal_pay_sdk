@@ -113,7 +113,7 @@ class InAppCardTransactionManager extends ICardTransactionManager {
         0,
         paymentArguments.transactionId,
         context,
-        isTokenized: true,
+        isTokenized: saleByCardManualCubit.isTokenized,
         dismissLoaderTrigger: (dismiss) {
           dismissFn = dismiss;
         },

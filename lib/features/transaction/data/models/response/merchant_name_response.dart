@@ -18,13 +18,19 @@ class MerchantDataResponse extends BaseResponse<MerchantData?> {
 
 class MerchantData {
   final String merchantName;
+  final bool isRecurringPayment;
   final TerminalData terminalData;
 
-  MerchantData({required this.merchantName, required this.terminalData});
+  MerchantData({
+    required this.merchantName,
+    required this.terminalData,
+    this.isRecurringPayment = false,
+  });
 
   factory MerchantData.fromJson(Map<String, dynamic> json) {
     return MerchantData(
       merchantName: json['merchantName'],
+      isRecurringPayment: json['isRecurringPayment'],
       terminalData: TerminalData.fromJson(json['terminalData']),
     );
   }
@@ -33,6 +39,7 @@ class MerchantData {
     return {
       'merchantName': merchantName,
       'terminalData': terminalData.toJson(),
+      'isRecurringPayment': isRecurringPayment,
     };
   }
 }

@@ -14,9 +14,11 @@ import 'package:amwal_pay_sdk/features/card/transaction_manager/amwal_card_trans
 import 'package:amwal_pay_sdk/features/card/transaction_manager/in_app_card_transaction_manager.dart';
 import 'package:amwal_pay_sdk/features/currency_field/data/models/response/currency_response.dart';
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
+import 'package:amwal_pay_sdk/features/transaction/data/models/response/merchant_name_response.dart';
 import 'package:amwal_pay_sdk/features/transaction/domain/use_case/get_transaction_by_Id.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
+import 'package:amwal_pay_sdk/sdk_builder/sdk_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' hide WatchContext;
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -67,6 +69,7 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
   late FocusNode _expireYearNode;
   late FocusNode _cvvNode;
   late PaymentArguments args;
+  late MerchantData _merchantData;
   bool checked = false;
 
   @override
@@ -86,6 +89,9 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
         name: widget.currency,
         id: widget.currencyId.toString(),
       ),
+    );
+    _merchantData = CacheStorageHandler.instance.read(
+      CacheKeys.merchantData,
     );
     if (NetworkConstants.isSdkInApp) {
       widget.cubit.getCustomerTokens(
@@ -192,7 +198,8 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
                     const SizedBox(
                       height: 16,
                     ),
-                    if (NetworkConstants.isSdkInApp)
+                    if (NetworkConstants.isSdkInApp &&
+                        _merchantData.isRecurringPayment)
                       Row(
                         children: [
                           GestureDetector(

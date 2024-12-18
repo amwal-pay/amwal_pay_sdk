@@ -48,7 +48,7 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
   String? email;
   String? originalTransactionId;
 
-  bool isTokenized = true;
+  bool isTokenized = false;
   CustomerToken? customerToken;
 
   String? _validateExpDate() {
