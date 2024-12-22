@@ -24,6 +24,7 @@ class InputFieldWidget extends StatefulWidget {
     this.onChange,
     this.decoration,
     this.readOnly = false,
+    this.done = false,
     this.initialValue,
     this.focusNode,
     this.hint = 'required_field',
@@ -37,6 +38,7 @@ class InputFieldWidget extends StatefulWidget {
   final bool isRequired;
   final bool isEmail;
   final bool isNumber;
+  final bool? done;
   final bool isEnglish;
   final bool isMonth;
   final bool isAliasName;
@@ -172,7 +174,7 @@ class _InputFieldWidgetState extends State<InputFieldWidget> {
             validator: FormBuilderValidators.compose(validators),
             maxLines: 1,
             decoration: inputDecoration,
-            textInputAction: TextInputAction.next,
+            textInputAction: (widget.done ?? false) ? TextInputAction.done : TextInputAction.done,
             keyboardType: widget.isNumber ? TextInputType.number : null,
             inputFormatters: [
               if (widget.isNumber == true)
