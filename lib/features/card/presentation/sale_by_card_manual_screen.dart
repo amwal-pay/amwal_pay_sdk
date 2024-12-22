@@ -69,7 +69,7 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
   late FocusNode _expireYearNode;
   late FocusNode _cvvNode;
   late PaymentArguments args;
-  late MerchantData _merchantData;
+    MerchantData? _merchantData;
   bool checked = false;
 
   @override
@@ -199,7 +199,7 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
                       height: 16,
                     ),
                     if (NetworkConstants.isSdkInApp &&
-                        _merchantData.isRecurringPayment)
+                        (_merchantData?.isRecurringPayment ?? false))
                       Row(
                         children: [
                           GestureDetector(

@@ -1,4 +1,7 @@
 import 'package:amwal_pay_sdk/core/base_response/base_response.dart';
+import 'package:intl/intl.dart';
+
+import '../../../../../amwal_sdk_settings/amwal_sdk_setting_container.dart';
 
 class PurchaseResponse extends BaseResponse<PurchaseData> {
   PurchaseResponse({
@@ -124,10 +127,22 @@ class PurchaseData {
         currencyId: map['currencyId']?.toString(),
         merchantId: map['merchantId']?.toString(),
         amount: map['amount']?.toString(),
-        transactionDate: map['transactionDate'] ?? map['transactionTime'] ,
+        transactionDate: formatLastLoggedInDate(
+            map['transactionDate'] ?? map['transactionTime']),
         merchantName: map['merchantName'],
         customerTokenId: map['customerTokenId'],
         customerId: map['customerId']);
+  }
+
+  static String formatLastLoggedInDate(String value) {
+    try {
+      final date = DateTime.parse(value);
+      return DateFormat.yMMMMEEEEd(AmwalSdkSettingContainer.locale)
+          .add_jm()
+          .format(date);
+    } catch (e) {
+      return value;
+    }
   }
 
   factory PurchaseData.fromUri(Uri uri) {
@@ -136,23 +151,23 @@ class PurchaseData {
       transactionId: uri.queryParameters['transactionId'] ?? "",
       terminalId: int.parse(uri.queryParameters['terminalId'] ?? '0'),
       hostResponseData: HostResponseData(
-        transactionId: uri.queryParameters['transactionId']!,
-        rrn: '',
+        transactionId: uri.queryParameters['transactionId'] ?? "",
+        rrn: uri.queryParameters['Rrn'] ?? "",
         stan: '',
-        trackId: '',
-        paymentId: '',
-        accessUrl: null,
+        trackId: uri.queryParameters['TrackId'] ?? "",
+        paymentId: uri.queryParameters['PaymentId'] ?? "",
+        accessUrl: uri.queryParameters['AccessUrl'] ?? "",
       ),
       isOtpRequired: false,
       merchantName: uri.queryParameters['merchantName'] ?? '',
       merchantId: uri.queryParameters['merchantId'] ?? '',
       currency: uri.queryParameters['currency'] ?? '',
       currencyId: uri.queryParameters['currencyId'] ?? '',
-      transactionDate: uri.queryParameters['transactionTime'] ?? '',
+      transactionDate:
+          formatLastLoggedInDate(uri.queryParameters['transactionTime'] ?? ''),
       amount: uri.queryParameters['amount'] ?? '',
       customerTokenId: uri.queryParameters['customerTokenId'] ?? '',
       customerId: uri.queryParameters['customerId'] ?? '',
-
       transactionTypeDisplayName:
           uri.queryParameters['transactionTypeDisplayName'],
     );
