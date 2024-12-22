@@ -31,6 +31,7 @@ dependencies:
   auto_size_text: ^3.0.0
   clickable_list_wheel_view: ^0.2.0
   circular_countdown_timer: ^0.2.3
+  dismiss_keyboard_on_tap: ^2.0.0
   crypto: ^3.0.2
   convert: ^3.1.1
   uuid: ^3.0.7
