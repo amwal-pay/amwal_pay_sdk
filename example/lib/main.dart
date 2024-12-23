@@ -97,10 +97,20 @@ class _DemoScreenState extends State<DemoScreen> {
     required String secureHashValue,
     String? customerId,
   }) async {
+    var webhookUrl = '';
+
+    if (dropdownValue == "SIT") {
+      webhookUrl = 'https://test.amwalpg.com:24443/';
+    } else if (dropdownValue == "UAT") {
+      webhookUrl = 'https://test.amwalpg.com:14443/';
+    } else if (dropdownValue == "PROD") {
+      webhookUrl = 'https://webhook.amwalpg.com/';
+    }
+
     try {
       final dio = Dio(
         BaseOptions(
-          baseUrl: NetworkConstants.testUrlSDK,
+          baseUrl: webhookUrl,
           headers: {
             'authority': 'localhost',
             'accept': 'text/plain',
