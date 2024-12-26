@@ -87,7 +87,7 @@ class SecureHashInterceptor extends Interceptor {
     return convertedMap;
   }
 
-  String clearSecureHash(String secretKey, Map<String, String> data) {
+  static String clearSecureHash(String secretKey, Map<String, String> data) {
     // Remove Secure Hash Value from the model
     data.remove('secureHashValue');
 
@@ -95,7 +95,7 @@ class SecureHashInterceptor extends Interceptor {
     return generateSecureHash(concatedString, secretKey);
   }
 
-  String composeData(Map<String, String> requestParameters) {
+ static String composeData(Map<String, String> requestParameters) {
     try {
       if (requestParameters.isEmpty) return '';
 
@@ -114,7 +114,7 @@ class SecureHashInterceptor extends Interceptor {
     }
   }
 
-  String generateSecureHash(String message, String secretKey) {
+  static String generateSecureHash(String message, String secretKey) {
     try {
       final key = hex.decode(secretKey); // Convert hex key to bytes
 

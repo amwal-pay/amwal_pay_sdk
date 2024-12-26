@@ -3,7 +3,10 @@ import 'dart:async';
 import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
 import 'package:amwal_pay_sdk/amwal_sdk_settings/amwal_sdk_settings.dart';
 import 'package:amwal_pay_sdk/core/networking/constants.dart';
+import 'package:amwal_pay_sdk/core/networking/dio_client.dart';
+import 'package:amwal_pay_sdk/core/networking/secure_hash_interceptor.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
+import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:example/currency_model.dart';
 import 'package:example/drop_down_form.dart';
@@ -22,11 +25,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
+
       data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
       child: MaterialApp(
         title: 'Amwal pay Demo',
         navigatorObservers: [
-          AmwalSdkNavigator.amwalNavigatorObserver,
+          AmwalSdkNavigator.amwalNavigatorObserver,ChuckerFlutter.navigatorObserver
         ],
         theme: ThemeData(
           useMaterial3: false,
@@ -70,10 +74,10 @@ class _DemoScreenState extends State<DemoScreen> {
     _amountController = TextEditingController(text: '50');
     _currencyController = TextEditingController(text: 'OMR');
     _languageController = TextEditingController(text: 'en');
-    _terminalController = TextEditingController(text: '925299');
-    _merchantIdController = TextEditingController(text: '59266');
+    _terminalController = TextEditingController(text: '708393');
+    _merchantIdController = TextEditingController(text: '116194');
     _secureHashController = TextEditingController(
-      text: '1698BC3561925188241E839408D3B0D4F62DCE0BD4F3CCF19CB526F0BB458B69',
+      text: '2B03FCDC101D3F160744342BFBA0BEA0E835EE436B6A985BA30464418392C703',
     );
 
     altBaseurl = NetworkConstants.baseUrlSdk;
@@ -119,11 +123,20 @@ class _DemoScreenState extends State<DemoScreen> {
           },
         ),
       );
+
+      dio.interceptors.add(ChuckerDioInterceptor());
+      DioClient.dio?.interceptors.add(ChuckerDioInterceptor());
+
+       var sec =  SecureHashInterceptor.clearSecureHash(secureHashValue, {
+        'merchantId': merchantId,
+        'customerId': customerId ?? "",
+      });
+
       final response = await dio.post(
         NetworkConstants.getSDKSessionToken,
         data: {
           'merchantId': merchantId,
-          'secureHashValue': secureHashValue,
+          'secureHashValue': sec,
           'customerId': customerId,
         },
       );
@@ -174,6 +187,8 @@ class _DemoScreenState extends State<DemoScreen> {
     if (!valid) return;
 
     final customerId = await _getCustomerId();
+
+
 
     final sessionToken = await getSDKSessionToken(
       merchantId: _merchantIdController.text,
