@@ -233,6 +233,17 @@ class _DemoScreenState extends State<DemoScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Amwal Pay Demo'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: () {
+              SharedPreferences.getInstance().then((instance) {
+                instance.remove('customer_id');
+              });
+              // Add your onPressed code here!
+            },
+          ),
+        ],
       ),
       body: SizedBox(
         width: size.width,
