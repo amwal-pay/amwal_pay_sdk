@@ -77,7 +77,7 @@ class InAppCardTransactionManager extends ICardTransactionManager {
       transactionId,
       otp,
       originTransactionId,
-      true,
+        saleByCardManualCubit.isTokenized,
     );
   }
 

@@ -69,9 +69,9 @@ class _DemoScreenState extends State<DemoScreen> {
     _formKey = GlobalKey<FormState>();
 
     /// card terminal => 6942344
-    /// wallet terminal => 6834180
+    /// wallet terminal => 68341808775
 
-    _amountController = TextEditingController(text: '50');
+    _amountController = TextEditingController(text: '1');
     _currencyController = TextEditingController(text: 'OMR');
     _languageController = TextEditingController(text: 'en');
     _terminalController = TextEditingController(text: '708393');
