@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 class ReceiptHandler {
   const ReceiptHandler._();
+
   static ReceiptHandler get instance => const ReceiptHandler._();
 
   Future<void> showWalletReceipt({
@@ -24,6 +25,7 @@ class ReceiptHandler {
             },
           ),
         ),
+        barrierDismissible: false,
       ),
     );
   }
@@ -48,12 +50,14 @@ class ReceiptHandler {
                       .amwalNavigatorObserver.navigator!.context);
                   Navigator.pop(AmwalSdkNavigator
                       .amwalNavigatorObserver.navigator!.context);
-                  // AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+                  Navigator.pop(AmwalSdkNavigator
+                      .amwalNavigatorObserver.navigator!.context);
                 },
               ),
             ),
           );
         },
+        barrierDismissible: false,
       ),
     );
   }
@@ -62,17 +66,20 @@ class ReceiptHandler {
     required BuildContext context,
     required TransactionDetailsSettings settings,
   }) async {
-    await Navigator.of(context, rootNavigator: true).push(DialogRoute(
-      context: context,
-      builder: (_) {
-        return Localizations(
-          delegates: AppLocalizationsSetup.localizationsDelegates.toList(),
-          locale: settings.locale,
-          child: TransactionStatusDialog(
-            settings: settings,
-          ),
-        );
-      },
-    ));
+    await Navigator.of(context, rootNavigator: true).push(
+      DialogRoute(
+        context: context,
+        builder: (_) {
+          return Localizations(
+            delegates: AppLocalizationsSetup.localizationsDelegates.toList(),
+            locale: settings.locale,
+            child: TransactionStatusDialog(
+              settings: settings,
+            ),
+          );
+        },
+        barrierDismissible: false,
+      ),
+    );
   }
 }
