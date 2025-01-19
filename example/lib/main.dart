@@ -237,6 +237,11 @@ class _DemoScreenState extends State<DemoScreen> {
           IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Customer ID removed')),
+              );
+              // make toast here
+
               SharedPreferences.getInstance().then((instance) {
                 instance.remove('customer_id');
               });
