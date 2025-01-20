@@ -9,6 +9,7 @@ abstract class IAmwalSdkSettings {
   final String transactionId;
   final Locale locale;
   final bool isMocked;
+  final bool isNfc;
   final String amount;
   final String currency;
   final String? merchantName;
@@ -46,6 +47,7 @@ abstract class IAmwalSdkSettings {
     this.flavor,
     this.locale = const Locale('en'),
     this.isMocked = false,
+    this.isNfc = false,
     this.onTokenExpired,
     this.log,
   });
@@ -68,6 +70,7 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
     super.onError,
     super.onTokenExpired,
     super.log,
+    super.isNfc,
     super.flavor,
     super.customerCallback,
   }) : super(
@@ -94,6 +97,7 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
       onCountComplete: json['onCountComplete'],
       locale: json['locale'],
       isMocked: json['isMocked'],
+      isNfc: json['isNfc'],
       onTokenExpired: json['onTokenExpired'],
       flavor: json['flavor'],
     );
@@ -113,6 +117,7 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
       'isMocked': isMocked,
       'countDownInSeconds': countDownInSeconds,
       'flavor': flavor,
+      'isNfc': isNfc,
       'log': log,
     };
   }
@@ -143,6 +148,7 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
     super.sessionToken = '',
     super.customerCallback,
     super.customerId,
+    super.isNfc,
   }) : super(terminalIds: [terminalId], onPay: (_, [__]) {});
 
   factory AmwalSdkSettings.fromJson(Map<String, dynamic> json) {
@@ -161,6 +167,7 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
       // You should handle this according to your logic
       locale: json['locale'],
       isMocked: json['isMocked'],
+      isNfc: json['isNfc'],
       onError: null,
       log: null,
       // You should handle this according to your logic
@@ -179,6 +186,7 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
       'transactionId': transactionId,
       'currency': currency,
       'amount': amount,
+      'isNfc': isNfc,
       'terminalId': terminalId,
       'merchantName': merchantName,
       'locale': locale,

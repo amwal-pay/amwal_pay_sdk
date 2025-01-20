@@ -19,6 +19,9 @@ import 'package:flutter/material.dart';
 
 import 'core/ui/error_dialog.dart';
 import 'core/ui/loading_dialog.dart';
+import 'features/card/presentation/sale_by_card_contact_less_screen.dart';
+import 'features/currency_field/data/models/response/currency_response.dart';
+import 'features/payment_argument.dart';
 import 'features/transaction/data/repository/transaction_repository_impl.dart';
 import 'localization/app_localizations_setup.dart';
 
@@ -226,40 +229,61 @@ class AmwalPaySdk {
   }
 
   Future<void> _openAmwalSdkScreen(AmwalSdkSettings settings) async {
-    await AmwalSdkNavigator.amwalNavigatorObserver.navigator!.push(
-      MaterialPageRoute(
-        builder: (_) {
-          return MaterialApp(
-            localeResolutionCallback:
-                AppLocalizationsSetup.localeResolutionCallback,
-            localizationsDelegates:
-                AppLocalizationsSetup.localizationsDelegates,
-            supportedLocales: AppLocalizationsSetup.supportedLocales,
-            debugShowCheckedModeBanner: false,
-            locale: settings.locale,
-            theme: ThemeData(
-              useMaterial3: false,
-            ),
-            home: AmwalPayScreen(
-              arguments: AmwalSdkArguments(
-                onResponse: settings.onResponse,
-                customerId: settings.customerId,
-                customerCallback: settings.customerCallback,
-                onPay: settings.onPay,
-                amount: settings.amount,
-                terminalId: settings.terminalIds.single,
-                currency: settings.currency,
-                transactionId: settings.transactionId,
-                currencyId: 512,
-                merchantId: int.parse(settings.merchantId),
-                getTransactionFunction:
-                    settings.getTransactionFunction ?? (_) async => null,
+    if (settings.isNfc) {
+      final paymentArguments = PaymentArguments(
+        amount: settings.amount,
+        terminalId: settings.terminalId,
+        currencyData: CurrencyData(
+          id: settings.currency,
+          idN: 0,
+          name: 'OMR',
+        ),
+        merchantId: int.parse(settings.merchantId),
+        transactionId: settings.transactionId,
+      );
+
+      await AmwalSdkNavigator.instance.toCardContactLessOptionScreen(
+        RouteSettings(arguments: paymentArguments),
+        AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context,
+        settings.locale,
+        settings.onPay,
+      );
+    } else {
+      await AmwalSdkNavigator.amwalNavigatorObserver.navigator!.push(
+        MaterialPageRoute(
+          builder: (_) {
+            return MaterialApp(
+              localeResolutionCallback:
+                  AppLocalizationsSetup.localeResolutionCallback,
+              localizationsDelegates:
+                  AppLocalizationsSetup.localizationsDelegates,
+              supportedLocales: AppLocalizationsSetup.supportedLocales,
+              debugShowCheckedModeBanner: false,
+              locale: settings.locale,
+              theme: ThemeData(
+                useMaterial3: false,
               ),
-            ),
-          );
-        },
-      ),
-    );
+              home: AmwalPayScreen(
+                arguments: AmwalSdkArguments(
+                  onResponse: settings.onResponse,
+                  customerId: settings.customerId,
+                  customerCallback: settings.customerCallback,
+                  onPay: settings.onPay,
+                  amount: settings.amount,
+                  terminalId: settings.terminalIds.single,
+                  currency: settings.currency,
+                  transactionId: settings.transactionId,
+                  currencyId: 512,
+                  merchantId: int.parse(settings.merchantId),
+                  getTransactionFunction:
+                      settings.getTransactionFunction ?? (_) async => null,
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    }
   }
 }
 
