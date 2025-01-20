@@ -56,6 +56,7 @@ class _DemoScreenState extends State<DemoScreen> {
   late TextEditingController _terminalController;
   late TextEditingController _secureHashController;
   late TextEditingController _languageController;
+  late TextEditingController _transactionTypeController;
 
   late GlobalKey<FormState> _formKey;
   late String altBaseurl;
@@ -208,7 +209,7 @@ class _DemoScreenState extends State<DemoScreen> {
         terminalId: _terminalController.text,
         locale: Locale(_languageController.text),
         isMocked: false,
-        isNfc: true,
+        isNfc: (_transactionTypeController.text == 'NFC' ?   true : false),
         customerCallback: _onCustomerId,
         customerId: customerId,
         onResponse: _onResponse,
@@ -316,6 +317,20 @@ class _DemoScreenState extends State<DemoScreen> {
                             _languageController.text = currencyId ?? '';
                           },
                         ),
+                        DropdownForm<String>(
+                          title: 'Transaction Type',
+                          options: const [
+                            'NFC',
+                            'CARD || Wallet',
+                          ],
+                          valueMapper: (lang) => lang,
+                          nameMapper: (lang) => lang,
+                          initialValue: 'CARD || Wallet',
+                          onChanged: (type) {
+                            _transactionTypeController.text = type ?? '';
+                          },
+                        ),
+
                         TextForm(
                           title: "Secret Key",
                           controller: _secureHashController,
