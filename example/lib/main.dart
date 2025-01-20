@@ -208,7 +208,7 @@ class _DemoScreenState extends State<DemoScreen> {
         terminalId: _terminalController.text,
         locale: Locale(_languageController.text),
         isMocked: false,
-        isNfc: false,
+        isNfc: true,
         customerCallback: _onCustomerId,
         customerId: customerId,
         onResponse: _onResponse,

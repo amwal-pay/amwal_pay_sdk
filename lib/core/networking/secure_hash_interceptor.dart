@@ -104,7 +104,10 @@ class SecureHashInterceptor extends Interceptor {
         ..sort((a, b) => a.key.compareTo(b.key));
 
       // Remove null values
-      sortedParameters.removeWhere((entry) => entry.value == null);
+     sortedParameters.removeWhere((entry) => entry.value == null);
+
+
+      sortedParameters.removeWhere((entry) => entry.value.isEmpty);
 
       return sortedParameters
           .map((entry) => '${entry.key}=${entry.value}')

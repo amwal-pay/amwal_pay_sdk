@@ -230,23 +230,33 @@ class AmwalPaySdk {
 
   Future<void> _openAmwalSdkScreen(AmwalSdkSettings settings) async {
     if (settings.isNfc) {
-      final paymentArguments = PaymentArguments(
-        amount: settings.amount,
-        terminalId: settings.terminalId,
-        currencyData: CurrencyData(
-          id: settings.currency,
-          idN: 0,
-          name: 'OMR',
+      await AmwalSdkNavigator.amwalNavigatorObserver.navigator!.push(
+        MaterialPageRoute(
+          builder: (_) {
+            return MaterialApp(
+              localeResolutionCallback:
+                  AppLocalizationsSetup.localeResolutionCallback,
+              localizationsDelegates:
+                  AppLocalizationsSetup.localizationsDelegates,
+              supportedLocales: AppLocalizationsSetup.supportedLocales,
+              debugShowCheckedModeBanner: false,
+              locale: settings.locale,
+              theme: ThemeData(
+                useMaterial3: false,
+              ),
+              home: SaleByCardContactLessScreen(
+                amount: settings.amount,
+                terminalId: settings.terminalId,
+                currencyId: int.tryParse(settings.currency) ?? 512,
+                currency: 'OMR',
+                merchantId: int.parse(settings.merchantId),
+                transactionId: settings.transactionId,
+                locale: settings.locale,
+                onPay: settings.onPay,
+              ),
+            );
+          },
         ),
-        merchantId: int.parse(settings.merchantId),
-        transactionId: settings.transactionId,
-      );
-
-      await AmwalSdkNavigator.instance.toCardContactLessOptionScreen(
-        RouteSettings(arguments: paymentArguments),
-        AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context,
-        settings.locale,
-        settings.onPay,
       );
     } else {
       await AmwalSdkNavigator.amwalNavigatorObserver.navigator!.push(
