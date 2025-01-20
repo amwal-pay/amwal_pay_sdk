@@ -75,6 +75,7 @@ class _DemoScreenState extends State<DemoScreen> {
     _amountController = TextEditingController(text: '1');
     _currencyController = TextEditingController(text: 'OMR');
     _languageController = TextEditingController(text: 'en');
+    _transactionTypeController = TextEditingController(text: 'CARD || Wallet');
     _terminalController = TextEditingController(text: '708393');
     _merchantIdController = TextEditingController(text: '116194');
     _secureHashController = TextEditingController(
