@@ -124,7 +124,7 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
   AmwalSdkSettings({
     super.onResponse,
     super.token = '',
-    required super.secureHashValue,
+      super.secureHashValue,
     required super.merchantId,
     required super.transactionId,
     required super.currency,

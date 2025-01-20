@@ -205,7 +205,6 @@ class _DemoScreenState extends State<DemoScreen> {
         amount: _amountController.text,
         transactionId: const Uuid().v1(),
         merchantId: _merchantIdController.text,
-        secureHashValue: _secureHashController.text,
         terminalId: _terminalController.text,
         locale: Locale(_languageController.text),
         isMocked: false,
