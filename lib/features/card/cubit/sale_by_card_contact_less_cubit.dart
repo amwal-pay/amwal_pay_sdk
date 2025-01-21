@@ -14,6 +14,8 @@ import 'package:debit_credit_card_widget/debit_credit_card_widget.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../../../core/networking/constants.dart';
+
 class SaleByCardContactLessCubit extends SaleByCardManualCubit {
   int setupStatusIndex = 0;
   String setupMessage = "Initializing SDK..";
@@ -53,7 +55,9 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
       }
       return nfcStatus!;
     } catch (e, s) {
-      FirebaseCrashlytics.instance.recordError(e, s);
+      if (!NetworkConstants.isSdkInApp) {
+        FirebaseCrashlytics.instance.recordError(e, s);
+      }
       nfcStatus = NFCStatus.notAvailable;
       setupMessage = "nfc_unavailable".translate(
         context.mounted ? context : context,
@@ -83,18 +87,24 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
         );
         terminateNFC();
       }
-      FirebaseCrashlytics.instance.recordError(scanResult['error'], null);
+      if (!NetworkConstants.isSdkInApp) {
+        FirebaseCrashlytics.instance.recordError(scanResult['error'], null);
+      }
       return left(scanResult['error']);
     } else {
       if (cardInfo == null) {
         await terminateNFC();
-        FirebaseCrashlytics.instance.log(scanResult.toString());
+        if (!NetworkConstants.isSdkInApp) {
+          FirebaseCrashlytics.instance.log(scanResult.toString());
+        }
         try {
           scanResult['cardExpiry'] = _convertArabicToEnglishNumbers(
             scanResult['cardExpiry'] ?? '',
           );
         } catch (e) {
-          FirebaseCrashlytics.instance.recordError(scanResult, null);
+          if (!NetworkConstants.isSdkInApp) {
+            FirebaseCrashlytics.instance.recordError(scanResult, null);
+          }
         }
 
         cardInfo = CardInfo.fromJson(scanResult);

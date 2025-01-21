@@ -162,10 +162,17 @@ class AmwalSDK : FlutterPlugin, ActivityAware, MethodCallHandler, NfcAdapter.Rea
             jsonObject.addProperty("cardNumber", data.cardNumber)
             val outputFormat = SimpleDateFormat("MM/yy", Locale.ENGLISH)
 
-            jsonObject.addProperty("cardExpiry",  outputFormat.format(data.expireDate))
-            jsonObject.addProperty("holderFirstname", data.holderFirstname)
-            jsonObject.addProperty("holderLastname", data.holderLastname)
+            if (data.expireDate != null){
+                jsonObject.addProperty("cardExpiry",  outputFormat.format(data.expireDate))
+            }
+            if(data.holderFirstname !=null){
+                jsonObject.addProperty("holderFirstname", data.holderFirstname)
+            }
+            if(data.holderLastname !=null){
+                jsonObject.addProperty("holderLastname", data.holderLastname)
+            }
         }catch (e : Exception){
+            print(e);
 
         }
         apiResult?.success(jsonObject.toString())
@@ -202,7 +209,6 @@ class AmwalSDK : FlutterPlugin, ActivityAware, MethodCallHandler, NfcAdapter.Rea
              //    .setTerminal(terminal)
                 .build()
             // Card data
-            // Card data
             val cardData = parser.readEmvCard();
 
             parser.readEmvCard().cardNumber
@@ -217,6 +223,7 @@ class AmwalSDK : FlutterPlugin, ActivityAware, MethodCallHandler, NfcAdapter.Rea
             isoDep.close()
         } catch (e: IOException) {
             e.printStackTrace()
+            print(e);
             // Play sound
             ToneGenerator(AudioManager.STREAM_MUSIC, 100).startTone(ToneGenerator.TONE_DTMF_P, 500)
             // Send error
