@@ -131,7 +131,7 @@ class _DemoScreenState extends State<DemoScreen> {
 
        var sec =  SecureHashInterceptor.clearSecureHash(secureHashValue, {
         'merchantId': merchantId,
-        'customerId': customerId ?? "",
+        'customerId': customerId ,
       });
 
       final response = await dio.post(

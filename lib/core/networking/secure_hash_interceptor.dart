@@ -87,7 +87,7 @@ class SecureHashInterceptor extends Interceptor {
     return convertedMap;
   }
 
-  static String clearSecureHash(String secretKey, Map<String, String> data) {
+  static String clearSecureHash(String secretKey, Map<String, dynamic> data) {
     // Remove Secure Hash Value from the model
     data.remove('secureHashValue');
 
@@ -95,7 +95,7 @@ class SecureHashInterceptor extends Interceptor {
     return generateSecureHash(concatedString, secretKey);
   }
 
- static String composeData(Map<String, String> requestParameters) {
+ static String composeData(Map<String, dynamic> requestParameters) {
     try {
       if (requestParameters.isEmpty) return '';
 
@@ -107,7 +107,7 @@ class SecureHashInterceptor extends Interceptor {
      sortedParameters.removeWhere((entry) => entry.value == null);
 
 
-      sortedParameters.removeWhere((entry) => entry.value.isEmpty);
+      // sortedParameters.removeWhere((entry) => entry.value.isEmpty);
 
       return sortedParameters
           .map((entry) => '${entry.key}=${entry.value}')
