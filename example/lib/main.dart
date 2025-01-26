@@ -81,7 +81,7 @@ class _DemoScreenState extends State<DemoScreen> {
     _secureHashController = TextEditingController(
       text: '2B03FCDC101D3F160744342BFBA0BEA0E835EE436B6A985BA30464418392C703',
     );
-
+    dropdownValue = 'UAT';
     sdkEnv = Environment.UAT;
    }
 
