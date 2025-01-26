@@ -68,7 +68,7 @@ class AmwalPaySdk {
       settings.flavor,
     );
 
-    SDKNetworkConstants.setEnvironment(settings.environment ?? Environment.PROD , settings.isSoftPOS);
+    SDKNetworkConstants.setEnvironment(settings.environment ?? Environment.PROD);
 
 
     HttpOverrides.global = MyHttpOverrides();
