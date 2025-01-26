@@ -1,4 +1,3 @@
-```markdown
 # Amwal Pay SDK
 
 The **Amwal Pay SDK** is a Flutter-based SDK designed to simplify online payments. It supports multiple payment methods, including wallet-based payments (via mobile number, alias, QR code, or NFC) and card payments. This SDK is highly customizable and easy to integrate into your Flutter applications.
