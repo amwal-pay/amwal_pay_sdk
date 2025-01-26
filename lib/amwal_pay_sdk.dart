@@ -68,7 +68,7 @@ class AmwalPaySdk {
       settings.flavor,
     );
 
-    SDKNetworkConstants.setEnvironment(settings.environment ?? Environment.PROD);
+    SDKNetworkConstants.setEnvironment(settings.environment ?? Environment.PROD , settings.isSoftPOS);
 
 
     HttpOverrides.global = MyHttpOverrides();
@@ -232,7 +232,7 @@ class AmwalPaySdk {
   }
 
   Future<void> _openAmwalSdkScreen(AmwalSdkSettings settings) async {
-    if (settings.isNfc) {
+    if (settings.isSoftPOS) {
       await AmwalSdkNavigator.amwalNavigatorObserver.navigator!.push(
         MaterialPageRoute(
           builder: (_) {

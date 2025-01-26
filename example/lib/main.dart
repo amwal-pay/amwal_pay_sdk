@@ -200,7 +200,7 @@ class _DemoScreenState extends State<DemoScreen> {
         terminalId: _terminalController.text,
         locale: Locale(_languageController.text),
         isMocked: false,
-        isNfc: (_transactionTypeController.text == 'NFC' ?   true : false),
+        isSoftPOS: (_transactionTypeController.text == 'NFC' ?   true : false),
         customerCallback: _onCustomerId,
         customerId: customerId,
         onResponse: _onResponse,

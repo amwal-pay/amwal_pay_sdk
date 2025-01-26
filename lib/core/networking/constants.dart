@@ -20,7 +20,7 @@ class SDKNetworkConstants {
 
   static String get url => isSdkInApp ? _baseUrlSdk : _baseUrl;
 
-  static void setEnvironment(Environment environment) {
+  static void setEnvironment(Environment environment, bool? isSoftPOS) {
     switch (environment) {
       case Environment.UAT:
         SDKNetworkConstants._baseUrlSdk = _UATUrlSdk;

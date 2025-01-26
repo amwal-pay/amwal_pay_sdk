@@ -10,7 +10,7 @@ abstract class IAmwalSdkSettings {
   final String transactionId;
   final Locale locale;
   final bool isMocked;
-  final bool isNfc;
+  final bool isSoftPOS;
   final String amount;
   final String currency;
   final String? merchantName;
@@ -51,7 +51,7 @@ abstract class IAmwalSdkSettings {
     this.flavor,
     this.locale = const Locale('en'),
     this.isMocked = false,
-    this.isNfc = false,
+    this.isSoftPOS = false,
     this.onTokenExpired,
     this.log,
     this.environment,
@@ -75,7 +75,7 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
     super.onError,
     super.onTokenExpired,
     super.log,
-    super.isNfc,
+    super.isSoftPOS,
     super.flavor,
     super.customerCallback,
   }) : super(
@@ -102,7 +102,7 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
       onCountComplete: json['onCountComplete'],
       locale: json['locale'],
       isMocked: json['isMocked'],
-      isNfc: json['isNfc'],
+      isSoftPOS: json['isNfc'],
       onTokenExpired: json['onTokenExpired'],
       flavor: json['flavor'],
     );
@@ -122,7 +122,7 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
       'isMocked': isMocked,
       'countDownInSeconds': countDownInSeconds,
       'flavor': flavor,
-      'isNfc': isNfc,
+      'isNfc': isSoftPOS,
       'log': log,
     };
   }
@@ -153,7 +153,7 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
     super.sessionToken = '',
     super.customerCallback,
     super.customerId,
-    super.isNfc,
+    super.isSoftPOS,
     super.environment,
   }) : super(terminalIds: [terminalId], onPay: (_, [__]) {});
 
@@ -173,7 +173,7 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
       // You should handle this according to your logic
       locale: json['locale'],
       isMocked: json['isMocked'],
-      isNfc: json['isNfc'],
+      isSoftPOS: json['isNfc'],
       onError: null,
       log: null,
       // You should handle this according to your logic
@@ -192,7 +192,7 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
       'transactionId': transactionId,
       'currency': currency,
       'amount': amount,
-      'isNfc': isNfc,
+      'isNfc': isSoftPOS,
       'terminalId': terminalId,
       'merchantName': merchantName,
       'locale': locale,
