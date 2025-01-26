@@ -68,6 +68,9 @@ class AmwalPaySdk {
       settings.flavor,
     );
 
+    NetworkConstants.setEnvironment(settings.environment ?? Environment.PROD);
+
+
     HttpOverrides.global = MyHttpOverrides();
     final networkService = NetworkServiceBuilder.instance.setupNetworkService(
       settings.isMocked,

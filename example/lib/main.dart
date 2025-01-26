@@ -59,7 +59,7 @@ class _DemoScreenState extends State<DemoScreen> {
   late TextEditingController _transactionTypeController;
 
   late GlobalKey<FormState> _formKey;
-  late String altBaseurl;
+  late Environment sdkEnv;
   late String dropdownValue;
 
   Timer? _timer;
@@ -82,21 +82,10 @@ class _DemoScreenState extends State<DemoScreen> {
       text: '2B03FCDC101D3F160744342BFBA0BEA0E835EE436B6A985BA30464418392C703',
     );
 
-    altBaseurl = NetworkConstants.baseUrlSdk;
-    dropdownValue = _getDropdownValueFromAltBaseUrl(altBaseurl);
-  }
+    sdkEnv = Environment.UAT;
+   }
 
-  String _getDropdownValueFromAltBaseUrl(String altBaseUrl) {
-    if (altBaseUrl == NetworkConstants.SITUrlSdk) {
-      return 'SIT';
-    } else if (altBaseUrl == NetworkConstants.UATUrlSdk) {
-      return 'UAT';
-    } else if (altBaseUrl == NetworkConstants.PRODUrlSdk) {
-      return 'PROD';
-    } else {
-      return 'None';
-    }
-  }
+
 
   Future<String?> getSDKSessionToken({
     required String merchantId,
@@ -202,6 +191,7 @@ class _DemoScreenState extends State<DemoScreen> {
 
     await AmwalPaySdk.instance.initSdk(
       settings: AmwalSdkSettings(
+        environment: sdkEnv,
         sessionToken: sessionToken ?? '',
         currency: _currencyController.text,
         amount: _amountController.text,
@@ -214,6 +204,7 @@ class _DemoScreenState extends State<DemoScreen> {
         customerCallback: _onCustomerId,
         customerId: customerId,
         onResponse: _onResponse,
+
       ),
     );
   }
@@ -359,31 +350,25 @@ class _DemoScreenState extends State<DemoScreen> {
                                   dropdownValue = newValue!;
                                   switch (dropdownValue) {
                                     case 'SIT':
-                                      altBaseurl = NetworkConstants.SITUrlSdk;
+                                      sdkEnv = Environment.SIT;
                                       break;
                                     case 'UAT':
-                                      altBaseurl = NetworkConstants.UATUrlSdk;
+                                      sdkEnv =Environment.UAT;
                                       break;
                                     case 'PROD':
-                                      altBaseurl = NetworkConstants.PRODUrlSdk;
+                                      sdkEnv = Environment.PROD;
                                       break;
                                     default:
-                                      altBaseurl = '';
+                                      sdkEnv = Environment.PROD;
                                       break;
                                   }
 
-                                  NetworkConstants.baseUrlSdk = altBaseurl;
                                 });
                               },
-                              items: <String>[
-                                'None',
-                                'SIT',
-                                'UAT',
-                                'PROD'
-                              ].map<DropdownMenuItem<String>>((String value) {
+                              items: Environment.values.map<DropdownMenuItem<String>>((Environment env) {
                                 return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
+                                  value: env.name,
+                                  child: Text(env.name),
                                 );
                               }).toList(),
                             ),

@@ -1,3 +1,4 @@
+import 'package:amwal_pay_sdk/core/networking/constants.dart';
 import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,9 @@ abstract class IAmwalSdkSettings {
   final String? merchantName;
   final String? flavor;
   final String sessionToken;
+
+    Environment? environment = Environment.PROD;
+
   final OnPayCallback onPay;
   final OnPayCallback? onCountComplete;
   final GetTransactionFunction? getTransactionFunction;
@@ -50,6 +54,7 @@ abstract class IAmwalSdkSettings {
     this.isNfc = false,
     this.onTokenExpired,
     this.log,
+    this.environment,
   });
 }
 
@@ -129,7 +134,7 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
   AmwalSdkSettings({
     super.onResponse,
     super.token = '',
-      super.secureHashValue,
+    super.secureHashValue,
     required super.merchantId,
     required super.transactionId,
     required super.currency,
@@ -149,6 +154,7 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
     super.customerCallback,
     super.customerId,
     super.isNfc,
+    super.environment,
   }) : super(terminalIds: [terminalId], onPay: (_, [__]) {});
 
   factory AmwalSdkSettings.fromJson(Map<String, dynamic> json) {
