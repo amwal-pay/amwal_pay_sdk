@@ -124,7 +124,7 @@ class _DemoScreenState extends State<DemoScreen> {
       });
 
       final response = await dio.post(
-        NetworkConstants.getSDKSessionToken,
+        SDKNetworkConstants.getSDKSessionToken,
         data: {
           'merchantId': merchantId,
           'secureHashValue': sec,

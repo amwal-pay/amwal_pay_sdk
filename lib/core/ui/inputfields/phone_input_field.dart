@@ -102,7 +102,7 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
                 Expanded(
                   flex: 1,
                   child: Image.network(
-                    NetworkConstants.countryFlag(
+                    SDKNetworkConstants.countryFlag(
                       _selectedCountry?.values.single ?? 'OM',
                     ),
                   ),

@@ -22,7 +22,7 @@ class DioClient {
   ) {
     dio = Dio(
       BaseOptions(
-        baseUrl: NetworkConstants.url,
+        baseUrl: SDKNetworkConstants.url,
         connectTimeout: const Duration(seconds: 60),
         receiveTimeout: const Duration(seconds: 60),
       ),

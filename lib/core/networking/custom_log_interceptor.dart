@@ -34,11 +34,11 @@ class CustomLogInterceptor extends Interceptor {
     options.headers['version'] = packageInfo.version;
     options.headers['build_number'] = packageInfo.buildNumber;
     options.headers['Accept-Language'] = language;
-    if (NetworkConstants.isSdkInApp) {
+    if (SDKNetworkConstants.isSdkInApp) {
       final token = CacheStorageHandler.instance.read(CacheKeys.sessionToken);
       if (options.uri
           .toString()
-          .contains(NetworkConstants.getSDKSessionToken)) {
+          .contains(SDKNetworkConstants.getSDKSessionToken)) {
         options.headers['authority'] = 'localhost';
         options.headers['accept'] = 'text/plain';
       } else {

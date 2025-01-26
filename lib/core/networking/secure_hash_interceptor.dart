@@ -39,7 +39,7 @@ class SecureHashInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     final data = _voidHandleTerminalId(options);
-    if (NetworkConstants.isSdkInApp) {
+    if (SDKNetworkConstants.isSdkInApp) {
       data['requestDateTime'] =
           DateFormat('yyyyMMddHHmmss').format(DateTime.now());
       final interceptedOptions = options.copyWith(data: data);

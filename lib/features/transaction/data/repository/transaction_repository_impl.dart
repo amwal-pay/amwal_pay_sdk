@@ -17,7 +17,7 @@ class TransactionRepositoryImpl extends TransactionRepository {
   ) async {
     await Future.delayed(const Duration(seconds: 3));
     return await _networkService.invokeRequest(
-      endpoint: NetworkConstants.getTransactionByIdEndpoint,
+      endpoint: SDKNetworkConstants.getTransactionByIdEndpoint,
       converter: OneTransactionResponse.fromJson,
       method: HttpMethod.post,
       data: data,
@@ -30,7 +30,7 @@ class TransactionRepositoryImpl extends TransactionRepository {
   ) async {
     Map<String, dynamic> data2 = Map<String, dynamic>.from(data);
     return await _networkService.invokeRequest(
-      endpoint: NetworkConstants.getMerchantNameEndpoint,
+      endpoint: SDKNetworkConstants.getMerchantNameEndpoint,
       converter: MerchantDataResponse.fromJson,
       method: HttpMethod.post,
       data: data2,

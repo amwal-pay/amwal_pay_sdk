@@ -100,7 +100,7 @@ class _ScanQrToPayWidgetState extends State<ScanQrToPayWidget> {
             ) ??
             '';
         if (transactionId.isEmpty) return;
-        if (NetworkConstants.isSdkInApp) {
+        if (SDKNetworkConstants.isSdkInApp) {
           settings = await _getTransactionById(transactionId);
         } else {
           settings = await widget.getTransactionFunction(transactionId);

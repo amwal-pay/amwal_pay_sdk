@@ -50,7 +50,7 @@ mixin SaleByWalletActionsMixin on ApiView<SaleByWalletCubit> {
     required String transactionId,
     required int merchantId,
   }) async {
-    if (NetworkConstants.isSdkInApp) {
+    if (SDKNetworkConstants.isSdkInApp) {
       final getTransactionUseCase =
           WalletInjector.instance.get<GetOneTransactionByIdUseCase>();
       final oneTransactionResponse = await getTransactionUseCase.invoke({

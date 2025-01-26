@@ -37,7 +37,7 @@ class AmwalPaySdk {
     required AmwalSdkSettings settings,
   }) async {
     AmwalSdkSettingContainer.locale = settings.locale;
-    NetworkConstants.isSdkInApp = true;
+    SDKNetworkConstants.isSdkInApp = true;
     await SdkBuilder.instance.initCacheStorage();
     await CacheStorageHandler.instance.write(
       CacheKeys.sessionToken,
@@ -68,7 +68,7 @@ class AmwalPaySdk {
       settings.flavor,
     );
 
-    NetworkConstants.setEnvironment(settings.environment ?? Environment.PROD);
+    SDKNetworkConstants.setEnvironment(settings.environment ?? Environment.PROD);
 
 
     HttpOverrides.global = MyHttpOverrides();

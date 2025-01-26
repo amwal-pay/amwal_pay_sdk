@@ -297,7 +297,7 @@ class SaleByCardManualCubit extends ICubit<PurchaseResponse>
         onConfirm: (token, cvv) async {
           customerToken = token;
           if (token == null) return;
-          if (NetworkConstants.isSdkInApp) {
+          if (SDKNetworkConstants.isSdkInApp) {
             await InAppCardTransactionManager(
               customerId: customerId,
               customerTokenId: customerToken?.customerTokenId,

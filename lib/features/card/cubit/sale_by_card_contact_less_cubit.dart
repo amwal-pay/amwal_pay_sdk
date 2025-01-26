@@ -55,7 +55,7 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
       }
       return nfcStatus!;
     } catch (e, s) {
-      if (!NetworkConstants.isSdkInApp) {
+      if (!SDKNetworkConstants.isSdkInApp) {
         FirebaseCrashlytics.instance.recordError(e, s);
       }
       nfcStatus = NFCStatus.notAvailable;
@@ -87,14 +87,14 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
         );
         terminateNFC();
       }
-      if (!NetworkConstants.isSdkInApp) {
+      if (!SDKNetworkConstants.isSdkInApp) {
         FirebaseCrashlytics.instance.recordError(scanResult['error'], null);
       }
       return left(scanResult['error']);
     } else {
       if (cardInfo == null) {
         await terminateNFC();
-        if (!NetworkConstants.isSdkInApp) {
+        if (!SDKNetworkConstants.isSdkInApp) {
           FirebaseCrashlytics.instance.log(scanResult.toString());
         }
         try {
@@ -102,7 +102,7 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
             scanResult['cardExpiry'] ?? '',
           );
         } catch (e) {
-          if (!NetworkConstants.isSdkInApp) {
+          if (!SDKNetworkConstants.isSdkInApp) {
             FirebaseCrashlytics.instance.recordError(scanResult, null);
           }
         }

@@ -93,7 +93,7 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
 
     cubit.cardInfo = CardInfo.fromJson(scanResult);
     cubit.fillCardData(cubit.cardInfo!);
-    if (NetworkConstants.isSdkInApp) {
+    if (SDKNetworkConstants.isSdkInApp) {
       InAppCardTransactionManager(
         context: context,
         paymentArguments: cubit.arg!,

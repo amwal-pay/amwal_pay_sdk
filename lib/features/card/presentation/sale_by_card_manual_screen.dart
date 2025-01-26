@@ -93,7 +93,7 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
     _merchantData = CacheStorageHandler.instance.read(
       CacheKeys.merchantData,
     );
-    if (NetworkConstants.isSdkInApp) {
+    if (SDKNetworkConstants.isSdkInApp) {
       widget.cubit.getCustomerTokens(
         context,
         (cb) {
@@ -198,7 +198,7 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
                     const SizedBox(
                       height: 16,
                     ),
-                    if (NetworkConstants.isSdkInApp &&
+                    if (SDKNetworkConstants.isSdkInApp &&
                         (_merchantData?.isRecurringPayment ?? false))
                       Row(
                         children: [
@@ -241,7 +241,7 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
                         final isValid =
                             widget.cubit.formKey.currentState!.validate();
                         if (isValid) {
-                          if (NetworkConstants.isSdkInApp) {
+                          if (SDKNetworkConstants.isSdkInApp) {
                             await InAppCardTransactionManager(
                               customerCallback: widget.customerCallback,
                               onResponse: widget.onResponse,

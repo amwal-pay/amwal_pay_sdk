@@ -1,7 +1,7 @@
-class NetworkConstants {
-  const NetworkConstants._();
-  static String baseUrl = 'https://merchantapp.amwalpg.com/';
-  static String baseUrlSdk = 'https://merchantapp.amwalpg.com:8443/';
+class SDKNetworkConstants {
+  const SDKNetworkConstants._();
+  static String _baseUrl = 'https://merchantapp.amwalpg.com/';
+  static String _baseUrlSdk = 'https://merchantapp.amwalpg.com:8443/';
   static const _PRODUrlSdk = 'https://merchantapp.amwalpg.com:8443/';
   static const _SITUrlSdk = 'https://test.amwalpg.com:22443/';
   static const _UATUrlSdk = 'https://test.amwalpg.com:12443/';
@@ -18,21 +18,38 @@ class NetworkConstants {
   static const isMockupMode = false;
   static bool isSdkInApp = false;
 
-  static String get url => isSdkInApp ? baseUrlSdk : baseUrl;
+  static String get url => isSdkInApp ? _baseUrlSdk : _baseUrl;
 
   static void setEnvironment(Environment environment) {
     switch (environment) {
       case Environment.UAT:
-        NetworkConstants.baseUrlSdk = _UATUrlSdk;
+        SDKNetworkConstants._baseUrlSdk = _UATUrlSdk;
         break;
       case Environment.SIT:
-        NetworkConstants.baseUrlSdk =_SITUrlSdk;
+        SDKNetworkConstants._baseUrlSdk =_SITUrlSdk;
         break;
       case Environment.PROD:
-        NetworkConstants.baseUrlSdk = _PRODUrlSdk;
+        SDKNetworkConstants._baseUrlSdk = _PRODUrlSdk;
         break;
     }
   }
 
 }
 enum Environment { UAT, SIT, PROD }
+
+
+
+extension EnvironmentExtension on Environment {
+  static Environment fromString(String environment) {
+    switch (environment.toUpperCase()) {
+      case 'UAT':
+        return Environment.UAT;
+      case 'SIT':
+        return Environment.SIT;
+      case 'PROD':
+        return Environment.PROD;
+      default:
+        throw ArgumentError('Invalid environment: $environment');
+    }
+  }
+}

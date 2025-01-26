@@ -64,7 +64,7 @@ class SaleByCardRepositoryImpl extends ISaleByCardRepository {
     CustomerTokenRequest request,
   ) async {
     return await networkService.invokeRequest(
-      endpoint: NetworkConstants.getCustomerTokens,
+      endpoint: SDKNetworkConstants.getCustomerTokens,
       method: HttpMethod.post,
       converter: CustomerTokenResponse.fromJson,
       data: {},
