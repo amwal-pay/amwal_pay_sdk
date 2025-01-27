@@ -1,5 +1,6 @@
 class SDKNetworkConstants {
   const SDKNetworkConstants._();
+
   static String _baseUrl = 'https://merchantapp.amwalpg.com/';
   static String _baseUrlSdk = 'https://merchantapp.amwalpg.com:8443/';
   static const _PRODUrlSdk = 'https://merchantapp.amwalpg.com:8443/';
@@ -20,23 +21,27 @@ class SDKNetworkConstants {
 
   static String get url => isSdkInApp ? _baseUrlSdk : _baseUrl;
 
-  static void setEnvironment(Environment environment) {
-    switch (environment) {
-      case Environment.UAT:
-        SDKNetworkConstants._baseUrlSdk = _UATUrlSdk;
-        break;
-      case Environment.SIT:
-        SDKNetworkConstants._baseUrlSdk =_SITUrlSdk;
-        break;
-      case Environment.PROD:
-        SDKNetworkConstants._baseUrlSdk = _PRODUrlSdk;
-        break;
+  static void setEnvironment( {Environment? environment,String? baseUrl}) {
+    if (isSdkInApp) {
+      switch (environment ?? Environment.PROD) {
+        case Environment.UAT:
+          SDKNetworkConstants._baseUrlSdk = _UATUrlSdk;
+          break;
+        case Environment.SIT:
+          SDKNetworkConstants._baseUrlSdk = _SITUrlSdk;
+          break;
+        case Environment.PROD:
+          SDKNetworkConstants._baseUrlSdk = _PRODUrlSdk;
+          break;
+      }
+    }
+    else {
+      _baseUrl = baseUrl ?? url ;
+      _baseUrlSdk = baseUrl ?? url;
     }
   }
-
 }
 enum Environment { UAT, SIT, PROD }
-
 
 
 extension EnvironmentExtension on Environment {

@@ -68,7 +68,7 @@ class AmwalPaySdk {
       settings.flavor,
     );
 
-    SDKNetworkConstants.setEnvironment(settings.environment ?? Environment.PROD);
+    SDKNetworkConstants.setEnvironment(environment:  settings.environment ?? Environment.PROD);
 
 
     HttpOverrides.global = MyHttpOverrides();

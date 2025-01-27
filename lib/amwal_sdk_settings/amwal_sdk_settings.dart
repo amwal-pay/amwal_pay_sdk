@@ -77,6 +77,7 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
     super.log,
     super.isSoftPOS,
     super.flavor,
+    super.environment,
     super.customerCallback,
   }) : super(
           amount: '',
