@@ -36,7 +36,7 @@ class _ThreeDSWebViewPageState extends State<ThreeDSWebViewPage> {
               final transactionId = uri.queryParameters['transactionId']!;
               final purchaseData = PurchaseData.fromUri(uri);
               Navigator.of(context).pop();
-              widget.onTransactionIdFound(transactionId);
+              // widget.onTransactionIdFound(transactionId);
               widget.onTransactionFound(purchaseData);
             }
           },
