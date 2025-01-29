@@ -290,7 +290,7 @@ class _DemoScreenState extends State<DemoScreen> {
                           isNumeric: true,
                           maxLength: 6,
                           validator: (value) {
-                            if (double.parse(value!) < 1.0) {
+                            if (double.parse(value!) < 0.001) {
                               return 'Invalid Amount';
                             } else {
                               return null;
