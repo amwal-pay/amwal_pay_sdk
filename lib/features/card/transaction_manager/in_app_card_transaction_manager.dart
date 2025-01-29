@@ -402,7 +402,7 @@ class InAppCardTransactionManager extends ICardTransactionManager {
       transactionId: oneTransaction.id,
       details: {
         'merchant_name_label': oneTransaction.merchantName,
-        'ref_no': oneTransaction.idN,
+        'ref_no': oneTransaction.gatewayTransactionReference ?? oneTransaction.idN,
         'merchant_id': oneTransaction.merchantId,
         'terminal_id': oneTransaction.terminalId,
         'date_time': oneTransaction.transactionTime?.formatDate(context),
@@ -432,7 +432,7 @@ class InAppCardTransactionManager extends ICardTransactionManager {
       transactionId: purchaseData.transactionId,
       details: {
         'merchant_name_label': purchaseData.merchantName,
-        'ref_no': purchaseData.hostResponseData.rrn,
+        'ref_no': purchaseData.gatewayTransactionReference ?? purchaseData.hostResponseData.rrn,
         'merchant_id': purchaseData.merchantId,
         'terminal_id': purchaseData.terminalId,
         'date_time': purchaseData.transactionDate,

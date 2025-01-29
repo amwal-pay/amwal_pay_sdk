@@ -19,6 +19,7 @@ class OneTransactionResponse extends BaseResponse<OneTransaction> {
 class OneTransaction {
   final int idN;
   final String? id;
+  final String? gatewayTransactionReference;
   final String? transactionTime;
   final num amount;
   final num totalAmount;
@@ -72,6 +73,7 @@ class OneTransaction {
     data['cvV2'] = cvV2;
     data['cardHolderName'] = cardHolderName;
     data['cardHolderEmail'] = cardHolderEmail;
+    data['gatewayTransactionReference'] = gatewayTransactionReference;
     data['cardHolderMobile'] = cardHolderMobile;
     data['responseCodeName'] = responseCodeName;
     data['isRefunded'] = isRefunded;
@@ -117,6 +119,7 @@ class OneTransaction {
     required this.convFees,
     this.transactionActions,
     this.cardNumber,
+    this.gatewayTransactionReference,
      this.cvV2,
     this.cardHolderName,
     this.cardHolderEmail,
@@ -330,6 +333,7 @@ class OneTransaction {
       'cardNumber': cardNumber,
       'cvV2': cvV2,
       'cardHolderName': cardHolderName,
+      'gatewayTransactionReference': gatewayTransactionReference,
       'cardHolderEmail': cardHolderEmail,
       'cardHolderMobile': cardHolderMobile,
       'responseCodeName': responseCodeName,
@@ -370,6 +374,7 @@ class OneTransaction {
       idN: map['idN'] as int,
       id: map['id'] as String?,
       transactionTime: map['transactionTime'] as String?,
+      gatewayTransactionReference: map['gatewayTransactionReference'] as String?,
       amount: map['amount'] as num,
       totalAmount: map['totalAmount'] as int,
       tips: map['tips'] as int,

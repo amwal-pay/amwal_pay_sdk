@@ -261,7 +261,7 @@ class AmwalCardTransactionManager extends ICardTransactionManager {
       transactionId: purchaseData.transactionId,
       details: {
         'merchant_name_label': purchaseData.merchantName,
-        'ref_no': purchaseData.hostResponseData.rrn,
+        'ref_no': purchaseData.gatewayTransactionReference ?? purchaseData.hostResponseData.rrn,
         'merchant_id': purchaseData.merchantId,
         'terminal_id': purchaseData.terminalId,
         'date_time': purchaseData.transactionDate,

@@ -62,7 +62,7 @@ class _ScanQrToPayWidgetState extends State<ScanQrToPayWidget> {
       globalTranslator: (string) => string.translate(context),
       details: {
         'merchant_name_label': oneTransaction.merchantName,
-        'ref_no': oneTransaction.idN,
+        'ref_no': oneTransaction.gatewayTransactionReference ?? oneTransaction.idN,
         'merchant_id': oneTransaction.merchantId,
         'terminal_id': oneTransaction.terminalId,
         'date_time': oneTransaction.transactionTime?.formatDate(context),
