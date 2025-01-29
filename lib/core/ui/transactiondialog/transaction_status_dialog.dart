@@ -32,10 +32,12 @@ class TransactionStatusDialog extends StatefulWidget {
 
 class _TransactionStatusDialogState extends State<TransactionStatusDialog> {
   late ScreenshotController _screenshotController;
+
   TransactionDetailsSettings get settings => widget.settings;
   late Map<String, dynamic> dialogDetails;
   Map<String, dynamic>? dueAmount;
   bool _isSharing = false;
+
   @override
   void initState() {
     super.initState();
@@ -163,9 +165,14 @@ class _TransactionStatusDialogState extends State<TransactionStatusDialog> {
                 ],
               ),
               const SizedBox(height: 10),
-              ...settings.details?.keys.map<Widget>(
-                    (title) {
-                      final value = settings.details![title].toString();
+              ...settings.details?.entries
+                      .where((entry) =>
+                          entry.value != null &&
+                          entry.value.toString().isNotEmpty)
+                      .map<Widget>(
+                    (entry) {
+                      final title = entry.key;
+                      final value = entry.value.toString();
                       return TransactionDetailWidget(
                         title: title,
                         value: value,
