@@ -421,12 +421,12 @@ class InAppCardTransactionManager extends ICardTransactionManager {
     PurchaseData purchaseData,
     BuildContext context,
   ) {
-    final amount = num.parse(purchaseData.amount!).toStringAsFixed(3);
+    final amount = (num.tryParse((purchaseData.amount ?? "0")) ?? 0).toStringAsFixed(3);
     final amountString =
         '  $amount ${purchaseData.currency?.translate(context)}';
     return TransactionDetailsSettings(
       locale: AmwalSdkSettingContainer.locale,
-      amount: num.parse(purchaseData.amount!),
+      amount: num.tryParse(purchaseData.amount ?? "0") ?? 0,
       transactionDisplayName: purchaseData.transactionTypeDisplayName ?? "",
       isSuccess: purchaseData.message.toLowerCase() != 'canceled',
       transactionStatus: purchaseData.message.toLowerCase() != 'canceled'

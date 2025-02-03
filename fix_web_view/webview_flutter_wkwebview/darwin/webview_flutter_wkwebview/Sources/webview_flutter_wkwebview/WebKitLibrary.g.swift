@@ -4076,7 +4076,7 @@ final class PigeonApiWKNavigationDelegate: PigeonApiProtocolWKNavigationDelegate
         let code: String = listResponse[0] as! String
         let message: String? = nilOrValue(listResponse[1])
         let details: String? = nilOrValue(listResponse[2])
-        completion(.failure(PigeonError(code: code, message: message, details: details)))
+          completion(.success(Void()))
       } else {
         completion(.success(Void()))
       }
