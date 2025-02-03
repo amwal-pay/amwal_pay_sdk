@@ -35,7 +35,7 @@ class PurchaseData {
   final String? merchantName;
   final bool isOtpRequired;
   final String? customerId;
-  final String? gatewayTransactionReference;
+  // final String? gatewayTransactionReference;
   final String? customerTokenId;
   final HostResponseData hostResponseData;
 
@@ -55,7 +55,7 @@ class PurchaseData {
     this.amount,
     this.currencyId,
     this.merchantName,
-    this.gatewayTransactionReference,
+    // this.gatewayTransactionReference,
     this.transactionDate,
   });
 
@@ -103,7 +103,7 @@ class PurchaseData {
       currencyId: currencyId,
       customerId: customerId,
       customerTokenId: customerTokenId,
-      gatewayTransactionReference: gatewayTransactionReference,
+      // gatewayTransactionReference: gatewayTransactionReference,
     );
   }
 
@@ -112,7 +112,7 @@ class PurchaseData {
       'terminalId': terminalId,
       'message': message,
       'transactionId': transactionId,
-      'gatewayTransactionReference': gatewayTransactionReference,
+      // 'gatewayTransactionReference': gatewayTransactionReference,
       'hostResponseData': hostResponseData.toMap(),
       'isOtpRequired': isOtpRequired,
     };
@@ -136,7 +136,7 @@ class PurchaseData {
             map['transactionDate'] ?? map['transactionTime']),
         merchantName: map['merchantName'],
         customerTokenId: map['customerTokenId'],
-        gatewayTransactionReference: map['gatewayTransactionReference'],
+        // gatewayTransactionReference: map['gatewayTransactionReference'],
         customerId: map['customerId']);
   }
 
@@ -155,7 +155,7 @@ class PurchaseData {
     return PurchaseData(
       message: 'success',
       transactionId: uri.queryParameters['transactionId'] ?? "",
-      gatewayTransactionReference: uri.queryParameters['gatewayTransactionReference'] ?? "",
+      // gatewayTransactionReference: uri.queryParameters['gatewayTransactionReference'] ?? "",
       terminalId: int.parse(uri.queryParameters['terminalId'] ?? '0'),
       hostResponseData: HostResponseData(
         transactionId: uri.queryParameters['transactionId'] ?? "",
