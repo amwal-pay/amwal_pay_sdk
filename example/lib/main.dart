@@ -102,9 +102,7 @@ class _DemoScreenState extends State<DemoScreen> {
       webhookUrl = 'https://webhook.amwalpg.com/';
     }
 
-    if(customerId == null || customerId.isEmpty || customerId == "null" ) {
-      customerId = null;
-    }
+
 
     try {
       final dio = Dio(
@@ -182,10 +180,12 @@ class _DemoScreenState extends State<DemoScreen> {
     final valid = _formKey.currentState!.validate();
     if (!valid) return;
 
-    final customerId = await _getCustomerId();
+    var customerId = await _getCustomerId();
 
 
-
+    if(customerId == null || customerId.isEmpty || customerId == "null" ) {
+      customerId = null;
+    }
     final sessionToken = await getSDKSessionToken(
       merchantId: _merchantIdController.text,
       secureHashValue: _secureHashController.text,
