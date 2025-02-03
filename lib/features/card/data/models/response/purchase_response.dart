@@ -35,7 +35,7 @@ class PurchaseData {
   final String? merchantName;
   final bool isOtpRequired;
   final String? customerId;
-  // final String? gatewayTransactionReference;
+  final String? gatewayTransactionReference;
   final String? customerTokenId;
   final HostResponseData hostResponseData;
 
@@ -55,7 +55,7 @@ class PurchaseData {
     this.amount,
     this.currencyId,
     this.merchantName,
-    // this.gatewayTransactionReference,
+    this.gatewayTransactionReference,
     this.transactionDate,
   });
 
@@ -103,7 +103,7 @@ class PurchaseData {
       currencyId: currencyId,
       customerId: customerId,
       customerTokenId: customerTokenId,
-      // gatewayTransactionReference: gatewayTransactionReference,
+      gatewayTransactionReference: gatewayTransactionReference,
     );
   }
 
@@ -112,7 +112,7 @@ class PurchaseData {
       'terminalId': terminalId,
       'message': message,
       'transactionId': transactionId,
-      // 'gatewayTransactionReference': gatewayTransactionReference,
+      'gatewayTransactionReference': gatewayTransactionReference,
       'hostResponseData': hostResponseData.toMap(),
       'isOtpRequired': isOtpRequired,
     };
@@ -136,47 +136,83 @@ class PurchaseData {
             map['transactionDate'] ?? map['transactionTime']),
         merchantName: map['merchantName'],
         customerTokenId: map['customerTokenId'],
-        // gatewayTransactionReference: map['gatewayTransactionReference'],
+        gatewayTransactionReference: map['gatewayTransactionReference'],
         customerId: map['customerId']);
   }
 
-  static String formatLastLoggedInDate(String value) {
+  static String formatLastLoggedInDate(String? value) {
     try {
+      if(value == null) return '';
       final date = DateTime.parse(value);
       return DateFormat.yMMMMEEEEd(AmwalSdkSettingContainer.locale)
           .add_jm()
           .format(date);
     } catch (e) {
-      return value;
+      return value ?? "";
     }
   }
 
   factory PurchaseData.fromUri(Uri uri) {
     return PurchaseData(
       message: 'success',
-      transactionId: uri.queryParameters['transactionId'] ?? "",
-      // gatewayTransactionReference: uri.queryParameters['gatewayTransactionReference'] ?? "",
-      terminalId: int.parse(uri.queryParameters['terminalId'] ?? '0'),
+      transactionId: uri.queryParameters.containsKey('transactionId')
+          ? uri.queryParameters['transactionId']!
+          : "",
+      gatewayTransactionReference:
+          uri.queryParameters.containsKey('gatewayTransactionReference')
+              ? uri.queryParameters['gatewayTransactionReference']!
+              : "",
+      terminalId: int.parse(uri.queryParameters.containsKey('terminalId')
+          ? uri.queryParameters['terminalId']!
+          : '0'),
       hostResponseData: HostResponseData(
-        transactionId: uri.queryParameters['transactionId'] ?? "",
-        rrn: uri.queryParameters['Rrn'] ?? "",
+        transactionId: uri.queryParameters.containsKey('transactionId')
+            ? uri.queryParameters['transactionId']!
+            : "",
+        rrn: uri.queryParameters.containsKey('Rrn')
+            ? uri.queryParameters['Rrn']!
+            : "",
         stan: '',
-        trackId: uri.queryParameters['TrackId'] ?? "",
-        paymentId: uri.queryParameters['PaymentId'] ?? "",
-        accessUrl: uri.queryParameters['AccessUrl'] ?? "",
+        trackId: uri.queryParameters.containsKey('TrackId')
+            ? uri.queryParameters['TrackId']!
+            : "",
+        paymentId: uri.queryParameters.containsKey('PaymentId')
+            ? uri.queryParameters['PaymentId']!
+            : "",
+        accessUrl: uri.queryParameters.containsKey('AccessUrl')
+            ? uri.queryParameters['AccessUrl']!
+            : "",
       ),
       isOtpRequired: false,
-      merchantName: uri.queryParameters['merchantName'] ?? '',
-      merchantId: uri.queryParameters['merchantId'] ?? '',
-      currency: uri.queryParameters['currency'] ?? '',
-      currencyId: uri.queryParameters['currencyId'] ?? '',
-      transactionDate:
-          formatLastLoggedInDate(uri.queryParameters['transactionTime'] ?? ''),
-      amount: uri.queryParameters['amount'] ?? '',
-      customerTokenId: uri.queryParameters['customerTokenId'] ?? '',
-      customerId: uri.queryParameters['customerId'] ?? '',
+      merchantName: uri.queryParameters.containsKey('merchantName')
+          ? uri.queryParameters['merchantName']!
+          : '',
+      merchantId: uri.queryParameters.containsKey('merchantId')
+          ? uri.queryParameters['merchantId']!
+          : '',
+      currency: uri.queryParameters.containsKey('currency')
+          ? uri.queryParameters['currency']!
+          : '',
+      currencyId: uri.queryParameters.containsKey('currencyId')
+          ? uri.queryParameters['currencyId']!
+          : '',
+      transactionDate: formatLastLoggedInDate(
+          uri.queryParameters.containsKey('transactionTime')
+              ? uri.queryParameters['transactionTime']
+              : ''),
+      amount: uri.queryParameters.containsKey('amount')
+          ? uri.queryParameters['amount']
+          : '',
+      customerTokenId: uri.queryParameters.containsKey('customerTokenId')
+          ? uri.queryParameters['customerTokenId']
+          : '',
+      customerId: uri.queryParameters.containsKey('customerId')
+          ? uri.queryParameters['customerId']!
+          : '',
       transactionTypeDisplayName:
-          uri.queryParameters['transactionTypeDisplayName'],
+      uri.queryParameters.containsKey('transactionTypeDisplayName')
+          ? uri.queryParameters['transactionTypeDisplayName'] : '',
+
     );
   }
 
