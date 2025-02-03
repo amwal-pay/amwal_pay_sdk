@@ -156,7 +156,13 @@ class InAppCardTransactionManager extends ICardTransactionManager {
         builder: (context) => ThreeDSWebViewPage(
           url: url,
           onTransactionFound: (purchaseData) async {
-            customerCallback?.call(purchaseData.customerId);
+            if(purchaseData.customerId != null && purchaseData.customerId!.isNotEmpty &&
+                purchaseData.customerId != "null"
+            ) {
+              customerCallback?.call(purchaseData.customerId);
+            }
+
+
             onResponse?.call(purchaseData.toMap().toString());
 
             await receiptAfterComplete(
