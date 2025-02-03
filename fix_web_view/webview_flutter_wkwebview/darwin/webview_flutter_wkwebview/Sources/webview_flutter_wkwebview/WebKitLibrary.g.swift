@@ -4322,57 +4322,44 @@ final class PigeonApiWKNavigationDelegate: PigeonApiProtocolWKNavigationDelegate
         completion: @escaping (Result<AuthenticationChallengeResponse, PigeonError>) -> Void
     ) {
         if pigeonRegistrar.ignoreCallsToDart {
-            completion(
-                .failure(
-                    PigeonError(
-                        code: "ignore-calls-error",
-                        message: "Calls to Dart are being ignored.",
-                        details: ""
-                    )
+            completion(.failure(
+                PigeonError(
+                    code: "ignore-calls-error",
+                    message: "Calls to Dart are being ignored.",
+                    details: nil
                 )
-            )
+            ))
             return
         }
 
         let binaryMessenger = pigeonRegistrar.binaryMessenger
         let codec = pigeonRegistrar.codec
         let channelName = "dev.flutter.pigeon.webview_flutter_wkwebview.WKNavigationDelegate.didReceiveAuthenticationChallenge"
-        let channel = FlutterBasicMessageChannel(
-            name: channelName, binaryMessenger: binaryMessenger, codec: codec
-        )
+        let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
 
         channel.sendMessage([pigeonInstanceArg, webViewArg, challengeArg] as [Any?]) { response in
-            guard let listResponse = response as? [Any?] else {
+            // Debugging log
+            print("Received response from Flutter: \(String(describing: response))")
+
+            guard let listResponse = response as? [Any?], !listResponse.isEmpty else {
                 completion(.failure(createConnectionError(withChannelName: channelName)))
                 return
             }
 
-            guard !listResponse.isEmpty else {
-                completion(
-                    .failure(
-                        PigeonError(
-                            code: "null-error",
-                            message: "Flutter API returned null value for non-null return type.",
-                            details: ""
-                        )
-                    )
-                )
-                return
-            }
-
             if listResponse.count > 1, let code = listResponse[0] as? String {
-                let message: String? = nilOrValue(listResponse[1]) as String?
-                let details: String? = nilOrValue(listResponse[2]) as String?
+                let message = nilOrValue(listResponse[1]) as? String
+                let details = nilOrValue(listResponse[2]) as? String
                 completion(.failure(PigeonError(code: code, message: message, details: details)))
             } else if let result = listResponse[0] as? AuthenticationChallengeResponse {
                 completion(.success(result))
             } else {
+                // Handle unexpected response type to avoid crashing
                 completion(
                     .failure(
                         PigeonError(
                             code: "invalid-response",
                             message: "Unexpected response type from Flutter.",
-                            details: "\(listResponse)"
+                            details: "\(String(describing: listResponse))"
                         )
                     )
                 )
