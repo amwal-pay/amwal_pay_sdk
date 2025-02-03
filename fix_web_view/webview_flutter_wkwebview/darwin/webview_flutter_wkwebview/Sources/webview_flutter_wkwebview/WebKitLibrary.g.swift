@@ -4316,46 +4316,99 @@ final class PigeonApiWKNavigationDelegate: PigeonApiProtocolWKNavigationDelegate
 
   /// Asks the delegate to respond to an authentication challenge.
     func didReceiveAuthenticationChallenge(
-       pigeonInstance pigeonInstanceArg: WKNavigationDelegate, webView webViewArg: WKWebView,
-       challenge challengeArg: URLAuthenticationChallenge,
-       completion: @escaping (Result<AuthenticationChallengeResponse, PigeonError>) -> Void
-     ) {
-       if pigeonRegistrar.ignoreCallsToDart {
-         completion(
-           .failure(
-             PigeonError(
-               code: "ignore-calls-error",
-               message: "Calls to Dart are being ignored.", details: "")))
-         return
-       }
-       let binaryMessenger = pigeonRegistrar.binaryMessenger
-       let codec = pigeonRegistrar.codec
-       let channelName: String =
-         "dev.flutter.pigeon.webview_flutter_wkwebview.WKNavigationDelegate.didReceiveAuthenticationChallenge"
-       let channel = FlutterBasicMessageChannel(
-         name: channelName, binaryMessenger: binaryMessenger, codec: codec)
-       channel.sendMessage([pigeonInstanceArg, webViewArg, challengeArg] as [Any?]) { response in
-         guard let listResponse = response as? [Any?] else {
-           completion(.failure(createConnectionError(withChannelName: channelName)))
-           return
-         }
-         if listResponse.count > 1 {
-           let code: String = listResponse[0] as! String
-           let message: String? = nilOrValue(listResponse[1])
-           let details: String? = nilOrValue(listResponse[2])
-           completion(.failure(PigeonError(code: code, message: message, details: details)))
-         } else if listResponse[0] == nil {
-           completion(
-             .failure(
-               PigeonError(
-                 code: "null-error",
-                 message: "Flutter api returned null value for non-null return value.", details: "")))
-         } else {
-           let result = listResponse[0] as! AuthenticationChallengeResponse
-           completion(.success(result))
-         }
-       }
-     }
+        pigeonInstance pigeonInstanceArg: WKNavigationDelegate,
+        webView webViewArg: WKWebView,
+        challenge challengeArg: URLAuthenticationChallenge,
+        completion: @escaping (Result<AuthenticationChallengeResponse, PigeonError>) -> Void
+    ) {
+        if pigeonRegistrar.ignoreCallsToDart {
+            completion(
+                .failure(
+                    PigeonError(
+                        code: "ignore-calls-error",
+                        message: "Calls to Dart are being ignored.",
+                        details: "")))
+            return
+        }
+        
+        let binaryMessenger = pigeonRegistrar.binaryMessenger
+        let codec = pigeonRegistrar.codec
+        let channelName = "dev.flutter.pigeon.webview_flutter_wkwebview.WKNavigationDelegate.didReceiveAuthenticationChallenge"
+        let channel = FlutterBasicMessageChannel(
+            name: channelName,
+            binaryMessenger: binaryMessenger,
+            codec: codec)
+        
+        // Safely wrap the parameters
+        let messageParams: [Any] = [
+            pigeonInstanceArg,
+            webViewArg,
+            challengeArg
+        ]
+        
+        channel.sendMessage(messageParams) { response in
+            // Handle nil response
+            guard let response = response else {
+                completion(.failure(PigeonError(
+                    code: "response-error",
+                    message: "No response received from Flutter",
+                    details: ""
+                )))
+                return
+            }
+            
+            // Safely cast response to array
+            guard let listResponse = response as? [Any?] else {
+                completion(.failure(createConnectionError(withChannelName: channelName)))
+                return
+            }
+            
+            // Validate response array is not empty
+            guard !listResponse.isEmpty else {
+                completion(.failure(PigeonError(
+                    code: "empty-response",
+                    message: "Empty response received from Flutter",
+                    details: ""
+                )))
+                return
+            }
+            
+            // Handle error response
+            if listResponse.count > 1,
+               let code = listResponse[0] as? String {
+                let message = (listResponse[1] as? String) ?? nil
+                let details = (listResponse[2] as? String) ?? nil
+                completion(.failure(PigeonError(
+                    code: code,
+                    message: message,
+                    details: details
+                )))
+                return
+            }
+            
+            // Handle nil result
+            guard let firstElement = listResponse[0] else {
+                completion(.failure(PigeonError(
+                    code: "null-error",
+                    message: "Flutter api returned null value for non-null return value.",
+                    details: ""
+                )))
+                return
+            }
+            
+            // Safely cast to AuthenticationChallengeResponse
+            guard let result = firstElement as? AuthenticationChallengeResponse else {
+                completion(.failure(PigeonError(
+                    code: "cast-error",
+                    message: "Could not cast response to AuthenticationChallengeResponse",
+                    details: ""
+                )))
+                return
+            }
+            
+            completion(.success(result))
+        }
+    }
 
 }
 protocol PigeonApiDelegateNSObject {
