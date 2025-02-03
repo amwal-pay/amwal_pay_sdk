@@ -33,7 +33,7 @@ class _ThreeDSWebViewPageState extends State<ThreeDSWebViewPage> {
           onPageFinished: (String url) {
             final Uri uri = Uri.parse(url);
             if (uri.queryParameters.containsKey('transactionId')) {
-              final transactionId = uri.queryParameters['transactionId']!;
+
               final purchaseData = PurchaseData.fromUri(uri);
               Navigator.of(context).pop();
               // widget.onTransactionIdFound(transactionId);

@@ -102,6 +102,10 @@ class _DemoScreenState extends State<DemoScreen> {
       webhookUrl = 'https://webhook.amwalpg.com/';
     }
 
+    if(customerId == null || customerId.isEmpty || customerId == "null" ) {
+      customerId = null;
+    }
+
     try {
       final dio = Dio(
         BaseOptions(
@@ -135,7 +139,8 @@ class _DemoScreenState extends State<DemoScreen> {
         return response.data['data']['sessionToken'];
       }
     } on DioException catch (e) {
-      final errorMessage = e.response!.data['errorList'].join(',');
+      final errorList = e.response?.data['errorList'];
+      final errorMessage = (errorList != null) ? errorList.join(',') : 'Unknown error';
       await _showErrorDialog(errorMessage);
       return null;
     } catch (e) {
