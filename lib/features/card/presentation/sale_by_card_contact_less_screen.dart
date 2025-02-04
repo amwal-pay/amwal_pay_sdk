@@ -172,7 +172,7 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
       appBar: !widget.showAppBar
           ? null
           : AppBar(
-              backgroundColor: whiteColor,
+              backgroundColor: primaryColor,
               leading: InkWell(
                 onTap: Navigator.of(context).pop,
                 child: const Icon(
@@ -186,7 +186,7 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
                 ),
                 key: const Key('cardDetails'),
                 style: const TextStyle(
-                  color: blackColor,
+                  color: Colors.white,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
