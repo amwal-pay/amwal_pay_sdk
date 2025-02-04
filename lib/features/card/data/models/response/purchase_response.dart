@@ -154,7 +154,9 @@ class PurchaseData {
 
   factory PurchaseData.fromUri(Uri uri) {
     return PurchaseData(
-      message: 'success',
+      message: uri.queryParameters.containsKey('isSuccess')
+          ? ((uri.queryParameters['isSuccess'].toString()) == "true" ? "success":"canceled" )?? ""
+          : "",
       transactionId: uri.queryParameters.containsKey('transactionId')
           ? uri.queryParameters['transactionId'] ?? ""
           : "",
