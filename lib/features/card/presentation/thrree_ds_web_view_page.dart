@@ -31,9 +31,9 @@ class _ThreeDSWebViewPageState extends State<ThreeDSWebViewPage> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onPageFinished: (String url) {
-            final Uri uri = Uri.parse(url);
-            if (uri.queryParameters.containsKey('transactionId')) {
-              final transactionId = uri.queryParameters['transactionId']!;
+            final Uri? uri = Uri.tryParse(url);
+            if (uri!= null && uri.queryParameters.containsKey('transactionId')) {
+                debugPrint(url);
               final purchaseData = PurchaseData.fromUri(uri);
               Navigator.of(context).pop();
               // widget.onTransactionIdFound(transactionId);
@@ -55,7 +55,7 @@ class _ThreeDSWebViewPageState extends State<ThreeDSWebViewPage> {
       backgroundColor: lightGeryColor,
       appBar: AppBar(
         title: const Text('3DS Authentication'),
-        backgroundColor: whiteColor,
+        backgroundColor: primaryColor,
       ),
       body: WebViewWidget(controller: _controller),
     );

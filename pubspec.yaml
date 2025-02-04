@@ -43,9 +43,10 @@ dependencies:
   nfc_manager: ^3.4.0
   dartz: ^0.10.1
   debit_credit_card_widget: ^1.0.2
-  webview_flutter: ^4.10.0
+#  webview_flutter: ^4.10.0
   firebase_crashlytics: ^3.4.9
-
+  webview_flutter:
+    path: fix_web_view/webview_flutter
 
 dev_dependencies:
   flutter_test:

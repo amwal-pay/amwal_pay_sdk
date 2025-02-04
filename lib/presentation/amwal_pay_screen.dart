@@ -14,8 +14,59 @@ class AmwalPayScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final canCardTransaction = MerchantStore.instance
+        .getMerchantData()
+        ?.terminalData
+        .canCardTransaction ??
+        false;
+    final canWalletTransaction = MerchantStore.instance
+        .getMerchantData()
+        ?.terminalData
+        .canWalletTransaction ??
+        false;
+
+    final tabs = <Tab>[];
+    final tabViews = <Widget>[];
+
+    if (canCardTransaction) {
+      tabs.add(Tab(text: 'card'.translate(context)));
+      tabViews.add(SaleByCardManualScreen(
+        onResponse: arguments.onResponse,
+        onPay: arguments.onPay,
+        locale: arguments.locale,
+        amount: arguments.amount,
+        terminalId: arguments.terminalId,
+        currency: arguments.currency,
+        currencyId: arguments.currencyId,
+        merchantId: arguments.merchantId,
+        transactionId: arguments.transactionId,
+        customerCallback: arguments.customerCallback,
+        showAppBar: false,
+        translator: (txt) => txt.translate(context),
+        customerId: arguments.customerId,
+      ));
+    }
+
+    if (canWalletTransaction) {
+      tabs.add(Tab(text: 'wallet_label'.translate(context)));
+      tabViews.add(SaleByWalletPayingOptions(
+        getTransactionFunction: arguments.getTransactionFunction,
+        onPay: arguments.onPay,
+        onCountComplete: arguments.onCountComplete ?? (_, [__]) {},
+        amount: arguments.amount,
+        terminalId: arguments.terminalId,
+        currency: arguments.currency,
+        currencyId: arguments.currencyId,
+        merchantId: arguments.merchantId,
+        transactionId: arguments.transactionId,
+        showAppBar: false,
+        translator: (txt) => txt.translate(context),
+        countDownInSeconds: 90,
+      ));
+    }
+
     return DefaultTabController(
-      length: 2,
+      length: tabs.length,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
@@ -28,68 +79,9 @@ class AmwalPayScreen extends StatelessWidget {
             ),
           ),
           title: const Text('Amwal Pay'),
-          bottom: TabBar(tabs: [
-            if (MerchantStore.instance
-                    .getMerchantData()
-                    ?.terminalData
-                    .canCardTransaction ??
-                false)
-              Tab(
-                text: 'card'.translate(context),
-              ),
-            if (MerchantStore.instance
-                    .getMerchantData()
-                    ?.terminalData
-                    .canWalletTransaction ??
-                false)
-              Tab(
-                text: 'wallet_label'.translate(context),
-              ),
-          ]),
+          bottom: TabBar(tabs: tabs),
         ),
-        body: TabBarView(
-          children: [
-            if (MerchantStore.instance
-                    .getMerchantData()
-                    ?.terminalData
-                    .canCardTransaction ??
-                false)
-              SaleByCardManualScreen(
-                onResponse: arguments.onResponse,
-                onPay: arguments.onPay,
-                locale: arguments.locale,
-                amount: arguments.amount,
-                terminalId: arguments.terminalId,
-                currency: arguments.currency,
-                currencyId: arguments.currencyId,
-                merchantId: arguments.merchantId,
-                transactionId: arguments.transactionId,
-                customerCallback: arguments.customerCallback,
-                showAppBar: false,
-                translator: (txt) => txt.translate(context),
-                customerId: arguments.customerId,
-              ),
-            if (MerchantStore.instance
-                    .getMerchantData()
-                    ?.terminalData
-                    .canWalletTransaction ??
-                false)
-              SaleByWalletPayingOptions(
-                getTransactionFunction: arguments.getTransactionFunction,
-                onPay: arguments.onPay,
-                onCountComplete: arguments.onCountComplete ?? (_, [__]) {},
-                amount: arguments.amount,
-                terminalId: arguments.terminalId,
-                currency: arguments.currency,
-                currencyId: arguments.currencyId,
-                merchantId: arguments.merchantId,
-                transactionId: arguments.transactionId,
-                showAppBar: false,
-                translator: (txt) => txt.translate(context),
-                countDownInSeconds: 90,
-              ),
-          ],
-        ),
+        body: TabBarView(children: tabViews),
       ),
     );
   }

@@ -102,6 +102,8 @@ class _DemoScreenState extends State<DemoScreen> {
       webhookUrl = 'https://webhook.amwalpg.com/';
     }
 
+
+
     try {
       final dio = Dio(
         BaseOptions(
@@ -135,7 +137,8 @@ class _DemoScreenState extends State<DemoScreen> {
         return response.data['data']['sessionToken'];
       }
     } on DioException catch (e) {
-      final errorMessage = e.response!.data['errorList'].join(',');
+      final errorList = e.response?.data['errorList'];
+      final errorMessage = (errorList != null) ? errorList.join(',') : 'Unknown error';
       await _showErrorDialog(errorMessage);
       return null;
     } catch (e) {
@@ -177,10 +180,12 @@ class _DemoScreenState extends State<DemoScreen> {
     final valid = _formKey.currentState!.validate();
     if (!valid) return;
 
-    final customerId = await _getCustomerId();
+    var customerId = await _getCustomerId();
 
 
-
+    if(customerId == null || customerId.isEmpty || customerId == "null" ) {
+      customerId = null;
+    }
     final sessionToken = await getSDKSessionToken(
       merchantId: _merchantIdController.text,
       secureHashValue: _secureHashController.text,
