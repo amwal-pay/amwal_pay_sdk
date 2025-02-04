@@ -20,9 +20,9 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven { url = uri("https://jitpack.io") }
-        maven {
-            url = uri("/Users/ahmed.ganna/AndroidStudioProjects/amwal_pay_sdk/amwal_sdk_flutter_module/build/host/outputs/repo")
-        }
+//        maven {
+//            url = uri("${settingsDir.parent}/amwal_sdk_flutter_module/build/host/outputs/repo")
+//        }
         maven {
             url = uri("https://storage.googleapis.com/download.flutter.io")
         }
