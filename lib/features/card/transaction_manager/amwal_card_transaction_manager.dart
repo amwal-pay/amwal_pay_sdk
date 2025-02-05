@@ -246,15 +246,16 @@ class AmwalCardTransactionManager extends ICardTransactionManager {
     PurchaseData purchaseData,
     BuildContext context,
   ) {
-    final amount = num.parse(purchaseData.amount!).toStringAsFixed(3);
+
+    final amount = (num.tryParse(purchaseData.amount ?? "0") ?? 0).toStringAsFixed(3);
     final amountString =
         '  $amount ${purchaseData.currency?.translate(context) ?? ''}';
     return TransactionDetailsSettings(
       locale: AmwalSdkSettingContainer.locale,
-      amount: num.parse(purchaseData.amount!),
+      amount: num.tryParse(purchaseData.amount ?? "0") ?? 0,
       transactionDisplayName: purchaseData.transactionTypeDisplayName ?? "",
-      isSuccess: true,
-      transactionStatus: TransactionStatus.success,
+      isSuccess: purchaseData.message != 'canceled',
+      transactionStatus: purchaseData.message == 'canceled' ? TransactionStatus.failed : TransactionStatus.success,
       transactionType: purchaseData.message,
       isTransactionDetails: false,
       globalTranslator: (string) => string.translate(context),
