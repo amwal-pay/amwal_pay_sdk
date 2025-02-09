@@ -126,6 +126,12 @@ class _SelectCardBottomSheetState extends State<SelectCardBottomSheet> {
       const Expanded(flex: 4, child: SizedBox()),
       AppButton(
         onPressed: () {
+          if(_cvv == null || _cvv!.isEmpty){
+            SnackBar(content: Text('please_enter_cvv'.translate(context)));
+            return;
+          }
+
+
           widget.onConfirm(_selectedCustomerToken, _cvv);
           Navigator.of(context).pop();
         },

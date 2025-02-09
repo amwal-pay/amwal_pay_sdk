@@ -153,5 +153,6 @@
   "enter_valid_phone": "Enter Valid Phone Number",
   "wallet_amount_tooltip": "Enter the total amount the payer needs to pay.",
   "save_card": "Save Card For Future Payments",
-  "add_new_card": "Add New Card"
+  "add_new_card": "Add New Card",
+  "please_enter_cvv": "Please enter cvv"
 }
