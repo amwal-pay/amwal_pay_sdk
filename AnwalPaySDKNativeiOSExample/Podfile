@@ -1,6 +1,8 @@
 # Uncomment the next line to define a global platform for your project
 #platform :ios, '12.0' # Recommended minimum iOS version
 
+compileFlutterModule = true  # Set this flag to true or false
+
 flutter_application_path = '../amwal_sdk_flutter_module'
 load File.join(flutter_application_path, '.ios', 'Flutter', 'podhelper.rb')
 
@@ -8,8 +10,11 @@ load File.join(flutter_application_path, '.ios', 'Flutter', 'podhelper.rb')
 target 'AnwalPaySDKNativeiOSExample' do
   use_frameworks! # Required for Flutter modules
 
-   install_all_flutter_pods(flutter_application_path) # Ensure this is inside the target
-
+   if compileFlutterModule
+       install_all_flutter_pods(flutter_application_path) # Use local Flutter module
+     else
+       pod 'AmwalSDK', '1.0.0' # Replace with the correct version
+     end
 end
 
 
