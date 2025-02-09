@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../../core/resources/color/colors.dart';
+import '../../../navigator/sdk_navigator.dart';
 
 class ThreeDSWebViewPage extends StatefulWidget {
   final String url;
@@ -35,7 +36,7 @@ class _ThreeDSWebViewPageState extends State<ThreeDSWebViewPage> {
             if (uri!= null && uri.queryParameters.containsKey('transactionId')) {
                 debugPrint(url);
               final purchaseData = PurchaseData.fromUri(uri);
-              Navigator.of(context).pop();
+              AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
               // widget.onTransactionIdFound(transactionId);
               widget.onTransactionFound(purchaseData);
             }

@@ -28,7 +28,7 @@ struct AnwalPaySDKNativeiOSExampleApp: App {
                                            config: config,
                                            onResponse: { _ in },
                                            onCustomerId: { _ in }
-                                       )
+                                       ) .navigationBarHidden(true)
                                    }
                                }
             }

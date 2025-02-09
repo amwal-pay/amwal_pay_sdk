@@ -58,7 +58,7 @@ class AmwalSDK {
         GeneratedPluginRegistrant.register(with: flutterEngine!)
 
         let flutterViewController = FlutterViewController(engine: flutterEngine!, nibName: nil, bundle: nil)
-
+        flutterViewController.modalPresentationStyle = .fullScreen
 
         return flutterViewController
     }

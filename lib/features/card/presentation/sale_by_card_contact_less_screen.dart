@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../core/loader_mixin.dart';
+import '../../../navigator/sdk_navigator.dart';
 import '../../transaction/domain/use_case/get_transaction_by_Id.dart';
 import '../data/models/response/CardInfo.dart';
 import '../dependency/injector.dart';
@@ -174,7 +175,7 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
           : AppBar(
               backgroundColor: primaryColor,
               leading: InkWell(
-                onTap: Navigator.of(context).pop,
+                onTap: AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop,
                 child: const Icon(
                   Icons.arrow_back_ios_rounded,
                 ),

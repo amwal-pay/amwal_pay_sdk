@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 
+import '../../../../navigator/sdk_navigator.dart';
+
 class OTPEntryDialog extends StatefulWidget {
   final String verifyString;
   final String otpVerificationString;
@@ -51,7 +53,7 @@ class _FourBoxOTPEntryDialogState extends State<OTPEntryDialog> {
               Align(
                 alignment: AlignmentDirectional.centerEnd,
                 child: IconButton(
-                  onPressed: Navigator.of(context).pop,
+                  onPressed: AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop,
                   icon: const Icon(Icons.clear),
                 ),
               ),

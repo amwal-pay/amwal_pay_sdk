@@ -88,11 +88,13 @@ void _customerCallback(String? data) {
 
 // Define the onResponse function
 void _onResponse(String? response) {
-  debugPrint("SDK Response: $response");
+  print("SDK Response: $response");
   platform.invokeMethod<int>('onResponse',{
     "response":response
   });
-  SystemNavigator.pop(animated: false);
+  if(response == null){
+    SystemNavigator.pop(animated: false);
+  }
 }
 
 
