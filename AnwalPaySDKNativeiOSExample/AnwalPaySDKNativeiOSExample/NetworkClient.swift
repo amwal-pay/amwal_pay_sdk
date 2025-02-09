@@ -34,18 +34,22 @@ class NetworkClient {
         // Async Network Call
         DispatchQueue.global(qos: .userInitiated).async {
             do {
-                var dataMap: [String: String?] = [
+                var dataMap: [String: Any?] = [
                     "merchantId": merchantId,
                     "customerId": customerId
                 ]
                 
+                
                 let secureHash = SecureHashUtil.clearSecureHash(secretKey: secureHashValue, data: &dataMap)
                 
-                let jsonBody: [String: Any] = [
+                var jsonBody: [String: Any] = [
                     "merchantId": merchantId,
                     "secureHashValue": secureHash,
-                    "customerId": customerId ?? ""
                 ]
+                if((customerId) != nil){
+                    jsonBody["customerId"] = customerId
+                    
+                }
                 
                 guard let url = URL(string: "\(webhookUrl)Membership/GetSDKSessionToken") else {
                     DispatchQueue.main.async {

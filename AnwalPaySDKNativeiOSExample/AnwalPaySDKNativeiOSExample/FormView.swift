@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct FormView: View {
+    
     var onSubmit: (PaymentFormViewModel) -> Void  // Closure to handle config
 
 
@@ -87,7 +88,7 @@ struct FormView: View {
                     }
                     .padding()
                     .navigationTitle("Payment Form")
-                }
+                }.padding(.horizontal)
             }
         }
 
@@ -124,6 +125,8 @@ struct CustomDropdown: View {
             Text(title)
                 .font(.subheadline)
                 .foregroundColor(.gray)
+                              .frame(maxWidth: .infinity, alignment: .leading)
+
 
             Picker(title, selection: Binding(
                 get: { selectedValue },
@@ -132,14 +135,15 @@ struct CustomDropdown: View {
                 }
             )) {
                 ForEach(options, id: \.self) { option in
-                    Text(option).tag(option)
+                    Text(option)   .frame(maxWidth: .infinity, alignment: .leading)
+                        .tag(option)
                 }
-            }
+            } .frame(maxWidth: .infinity, alignment: .leading)
             .pickerStyle(MenuPickerStyle())
             .padding()
             .background(RoundedRectangle(cornerRadius: 8).strokeBorder(Color.gray, lineWidth: 1))
             .padding(.bottom, 8)
-        }
-        .frame(width: UIScreen.main.bounds.width)
+        } .frame(maxWidth: .infinity, alignment: .leading)
+       
     }
 }

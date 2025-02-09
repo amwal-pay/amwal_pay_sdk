@@ -1,46 +1,42 @@
-//
-//  SecureHashUtil.swift
-//  AnwalPaySDKNativeiOSExample
-//
-//  Created by Ahmed Ganna on 09.02.25.
-//
-
-
 import Foundation
 import CommonCrypto
 
 class SecureHashUtil {
 
-    /// Removes the `secureHashValue` key from the dictionary, composes the data, and generates a secure hash.
-    static func clearSecureHash(secretKey: String, data: inout [String: String?]) -> String {
+    /// Removes `secureHashValue`, composes the data, and generates a secure hash.
+    static func clearSecureHash(secretKey: String, data: inout [String: Any?]) -> String {
         data.removeValue(forKey: "secureHashValue")
         let concatenatedString = composeData(requestParameters: data)
         return generateSecureHash(message: concatenatedString, secretKey: secretKey)
     }
 
     /// Composes the data into a sorted and concatenated string.
-    private static func composeData(requestParameters: [String: String?]) -> String {
+    private static func composeData(requestParameters: [String: Any?]) -> String {
         guard !requestParameters.isEmpty else { return "" }
 
-        // Sort the parameters by key in ascending order
+        // Sort parameters by key in ascending order and remove nil values
         let sortedParameters = requestParameters
-            .sorted { $0.key < $1.key }
             .filter { $0.value != nil } // Remove entries with nil values
+            .sorted { $0.key < $1.key }
 
-        // Join the key-value pairs into a single string separated by `&`
+        // Join key-value pairs into a single string
         return sortedParameters
-            .map { "\($0.key)=\($0.value!)" }
+            .map { "\($0.key)=\($0.value!)" } // Safely unwrap since nil values are removed
             .joined(separator: "&")
     }
 
     /// Generates a secure hash using HMAC-SHA256.
     private static func generateSecureHash(message: String, secretKey: String) -> String {
         guard let keyData = secretKey.hexToBytes() else { return "" }
+        guard let messageData = message.data(using: .utf8) else { return "" }
 
         var digest = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
-        CCHmac(CCHmacAlgorithm(kCCHmacAlgSHA256), keyData, keyData.count, message, message.count, &digest)
+        keyData.withUnsafeBytes { keyBytes in
+            messageData.withUnsafeBytes { messageBytes in
+                CCHmac(CCHmacAlgorithm(kCCHmacAlgSHA256), keyBytes.baseAddress, keyBytes.count, messageBytes.baseAddress, messageBytes.count, &digest)
+            }
+        }
 
-        // Convert the digest to a hexadecimal string and uppercase it
         return digest.map { String(format: "%02x", $0) }.joined().uppercased()
     }
 }
@@ -51,7 +47,7 @@ extension String {
     func hexToBytes() -> [UInt8]? {
         var hex = self
         if hex.count % 2 != 0 {
-            hex = "0" + hex
+            hex = "0" + hex // Ensure even-length string
         }
 
         var bytes = [UInt8]()
