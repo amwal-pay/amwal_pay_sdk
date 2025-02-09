@@ -1,7 +1,7 @@
-
 import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
 import 'package:amwal_pay_sdk/amwal_sdk_settings/amwal_sdk_settings.dart';
 import 'package:amwal_pay_sdk/core/networking/constants.dart';
+import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
@@ -10,17 +10,15 @@ import 'RootNavigatorObserver.dart';
 
 const platform = MethodChannel('amwal.sdk/functions');
 
-
 void main(List<String> args) {
-
- if (args.isEmpty) {
+  if (args.isEmpty) {
     debugPrint("No args provided."); // Send Error event
     return;
   }
 
- debugPrint("Native args $args");
+  debugPrint("Native args $args");
 
- String jsonInput = args[0]; // Read JSON from command-line args
+  String jsonInput = args[0]; // Read JSON from command-line args
   try {
     Config config = Config.fromJson(jsonInput);
     runApp(const MyApp());
@@ -31,26 +29,27 @@ void main(List<String> args) {
 }
 
 class MyApp extends StatelessWidget {
-
-
   const MyApp({super.key});
-
 
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
-
       data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
-      child: MaterialApp(
-        navigatorObservers: [
-          RootNavigatorObserver(),
-          AmwalSdkNavigator.amwalNavigatorObserver
-        ],
-        theme: ThemeData(
-          useMaterial3: false,
-          primarySwatch: Colors.blue,
+      child: Container(
+        color: primaryColor, // Set the primary color here
+        child: SafeArea(
+          child: MaterialApp(
+              navigatorObservers: [
+                RootNavigatorObserver(),
+                AmwalSdkNavigator.amwalNavigatorObserver
+              ],
+              theme: ThemeData(
+                  useMaterial3: false,
+                  primarySwatch: Colors.blue,
+                  scaffoldBackgroundColor: primaryColor),
+              home: const SizedBox.shrink() // No UI,
+              ),
         ),
-        home:  const SizedBox.shrink()// No UI,
       ),
     );
   }
@@ -76,27 +75,18 @@ Future<void> _initializeAmwalSdk(Config config) async {
   );
 }
 
-
 // Define the customerCallback function
 void _customerCallback(String? data) {
   debugPrint("Customer Callback: $data");
-  platform.invokeMethod<int>('onCustomerId',{
-    "customerId":data
-  });
+  platform.invokeMethod<int>('onCustomerId', {"customerId": data});
   SystemNavigator.pop(animated: false);
 }
 
 // Define the onResponse function
 void _onResponse(String? response) {
   print("SDK Response: $response");
-  platform.invokeMethod<int>('onResponse',{
-    "response":response
-  });
-  if(response == null){
+  platform.invokeMethod<int>('onResponse', {"response": response});
+  if (response == null) {
     SystemNavigator.pop(animated: false);
   }
 }
-
-
-
-
