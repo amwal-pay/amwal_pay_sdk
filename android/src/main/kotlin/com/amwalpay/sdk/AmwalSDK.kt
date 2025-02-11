@@ -2,6 +2,7 @@ package com.amwalpay.sdk
 
 import android.app.Activity
 import android.media.AudioManager
+import android.media.MediaPlayer
 import android.media.ToneGenerator
 import android.nfc.NfcAdapter
 import android.nfc.Tag
@@ -179,6 +180,8 @@ class AmwalSDK : FlutterPlugin, ActivityAware, MethodCallHandler, NfcAdapter.Rea
     }
 
     private fun parsedError(message: String?): String? {
+        ToneGenerator(AudioManager.STREAM_ALARM, 100).startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 500)            // Send error
+
         val jsonObject: JsonObject = JsonObject()
         jsonObject.addProperty("success", false)
         jsonObject.addProperty("error", message)
@@ -215,7 +218,8 @@ class AmwalSDK : FlutterPlugin, ActivityAware, MethodCallHandler, NfcAdapter.Rea
              // debug
             Log.i(TAG, cardData.toString())
             // Play sound
-            ToneGenerator(AudioManager.STREAM_MUSIC, 100).startTone(ToneGenerator.TONE_DTMF_P, 500)
+            val mediaPlayer = MediaPlayer.create(activity,  R.raw.beep)
+            mediaPlayer.start()
             // Read card
             sendCardInfo(cardData)
             isScanning = false
@@ -225,8 +229,6 @@ class AmwalSDK : FlutterPlugin, ActivityAware, MethodCallHandler, NfcAdapter.Rea
             e.printStackTrace()
             print(e);
             // Play sound
-            ToneGenerator(AudioManager.STREAM_MUSIC, 100).startTone(ToneGenerator.TONE_DTMF_P, 500)
-            // Send error
             apiResult!!.success(parsedError("Issue with card read"))
             isScanning = false
             nfcAdapter!!.disableReaderMode(activity)

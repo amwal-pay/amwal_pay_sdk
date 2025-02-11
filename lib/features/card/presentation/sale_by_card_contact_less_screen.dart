@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../core/loader_mixin.dart';
+import '../../../core/ui/buttons/app_button.dart';
 import '../../../navigator/sdk_navigator.dart';
 import '../../transaction/domain/use_case/get_transaction_by_Id.dart';
 import '../data/models/response/CardInfo.dart';
@@ -77,6 +78,7 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
       context,
       widget.translator,
     );
+    setState(() {});
     if (status != NFCStatus.enabled) return;
     await initCardScanListener();
     setState(() {});
@@ -138,11 +140,10 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
     );
     cardScannedOrFail.fold(
       (l) {
-        showSnackMessage(
-          context,
-          l.toString(),
-          ["OK", () {}],
-        );
+        cubit.errorMessage = l;
+        cubit.setupMessage = "error_occurred"
+            .translate(context, globalTranslator: widget.translator);
+        setState(() {});
       },
       (r) {
         cubit.setupMessage = "Scanning completed".translate(
@@ -209,7 +210,7 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
                 : const SizedBox.shrink(),
           ),
           const SizedBox(height: 16),
-          (widget.cubit.cardInfo != null)
+          (widget.cubit.cardInfo != null )
               ? Expanded(
                   child: Center(
                     child: Padding(
@@ -217,9 +218,8 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
                       child: DebitCreditCardWidget(
                         cardHolderName:
                             ("${widget.cubit.cardInfo!.holderFirstname ?? ""} ${widget.cubit.cardInfo!.holderLastname ?? ""}"),
-                        cardNumber:
-                            widget.cubit.cardInfo!.cardNumber.toString(),
-                        cardExpiry: widget.cubit.cardInfo!.cardExpiry!
+                        cardNumber: widget.cubit.cardInfo?.cardNumber?.replaceAll(RegExp(r'\d(?=\d{4})'), '*') ?? "",
+                        cardExpiry: widget.cubit.cardInfo!.cardExpiry?? ""
                             .replaceFirst('/', '')
                             .toString(),
                         cardBrand: widget.cubit.getCardBrand(
@@ -235,29 +235,34 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
                       children: [
                         // Button show only in debug to fire testNfcAPI()
                         if (kDebugMode)
-                          ElevatedButton(
-                            onPressed: testNfcAPI,
-                            child: const Text('Test NFC API'),
+                          SizedBox(
+                            child: ElevatedButton(
+                              onPressed: testNfcAPI,
+                              child: const Text('Test NFC API'),
+                            ),
                           ),
 
                         const SizedBox(height: 20),
                         Padding(
                           padding: const EdgeInsets.only(left: 28.0),
                           child: SvgPicture.asset(
-                            AppAssets.contactLessImageIcon,
+                            cubit.errorMessage == null
+                                ? AppAssets.contactLessImageIcon
+                                : AppAssets.error,
                             package: 'amwal_pay_sdk',
                           ),
                         ),
                         const SizedBox(height: 20),
-                        Text(
-                          'tap_the_card_or_phone_msg'.translate(
-                            context,
-                            globalTranslator: widget.translator,
+                        if (cubit.errorMessage == null)
+                          Text(
+                            'tap_the_card_or_phone_msg'.translate(
+                              context,
+                              globalTranslator: widget.translator,
+                            ),
+                            style: const TextStyle(
+                              fontSize: 18,
+                            ),
                           ),
-                          style: const TextStyle(
-                            fontSize: 18,
-                          ),
-                        ),
                         const SizedBox(height: 20),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -270,6 +275,38 @@ class _SaleByCardContactLessScreen extends State<SaleByCardContactLessScreen> {
                             ),
                           ),
                         ),
+
+                        const SizedBox(height: 50),
+
+                        if (cubit.errorMessage != null)
+                          SizedBox(
+                            height: 50,
+                            child: AppButton(
+                              onPressed: () => {
+                                widget.cubit.tryAgain(
+                                  context,
+                                  widget.translator,
+                                  widget.dismissDialog,
+                                  widget.onPay,
+                                  widget.log,
+                                  () {
+                                    setState(() {});
+                                  },
+                                )
+                              },
+                              child: Text(
+                                'Try again'.translate(
+                                  context,
+                                  globalTranslator: widget.translator,
+                                ),
+                                style: const TextStyle(
+                                  color: whiteColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          )
                       ],
                     ),
                   ),

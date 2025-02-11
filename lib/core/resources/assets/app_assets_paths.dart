@@ -43,5 +43,6 @@ class AppAssets {
   static const divCircleLeft = 'lib/assets/images/div_circle_left.png';
   static const flashIcon = 'lib/assets/svg/flash_icon.svg';
   static const logOutIcon = 'lib/assets/svg/logout_icon.svg';
+  static const error = 'lib/assets/svg/error.svg';
   static const transactionIcon = 'lib/assets/svg/transaction_icon.svg';
 }
