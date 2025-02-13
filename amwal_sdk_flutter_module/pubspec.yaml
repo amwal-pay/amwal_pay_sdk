@@ -88,5 +88,5 @@ flutter:
   # identifiers, which may be completely independent or the same as these.
   module:
     androidX: true
-    androidPackage: com.example.amwal_sdk_flutter_module
-    iosBundleIdentifier: com.example.amwalSdkFlutterModule
+    androidPackage: com.amwal-pay.flutter
+    iosBundleIdentifier: com.amwal-pay.flutter
