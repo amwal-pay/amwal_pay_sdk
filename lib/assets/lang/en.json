@@ -154,5 +154,6 @@
   "wallet_amount_tooltip": "Enter the total amount the payer needs to pay.",
   "save_card": "Save Card For Future Payments",
   "add_new_card": "Add New Card",
-  "please_enter_cvv": "Please enter cvv"
+  "please_enter_cvv": "Please enter cvv",
+  "error_occurred": "Card Read Error: Please retry"
 }
