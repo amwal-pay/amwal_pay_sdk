@@ -19,6 +19,7 @@ import '../../../core/networking/constants.dart';
 class SaleByCardContactLessCubit extends SaleByCardManualCubit {
   int setupStatusIndex = 0;
   String setupMessage = "Initializing SDK..";
+  String? errorMessage = null;
   CardInfo? cardInfo;
   PaymentArguments? arg;
   NFCStatus? nfcStatus;
@@ -43,11 +44,19 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
           globalTranslator: globalTranslator,
         );
       } else if (nfcStatus == NFCStatus.notAvailable) {
+        errorMessage =  "nfc_unavailable".translate(
+          context.mounted ? context : context,
+          globalTranslator: globalTranslator,
+        );
         setupMessage = "nfc_unavailable".translate(
           context.mounted ? context : context,
           globalTranslator: globalTranslator,
         );
       } else {
+        errorMessage =  "nfc_unavailable".translate(
+          context.mounted ? context : context,
+          globalTranslator: globalTranslator,
+        );
         setupMessage = "nfc_unavailable_massage".translate(
           context.mounted ? context : context,
           globalTranslator: globalTranslator,
@@ -58,6 +67,10 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
       if (!SDKNetworkConstants.isSdkInApp) {
         FirebaseCrashlytics.instance.recordError(e, s);
       }
+      errorMessage =  "nfc_unavailable".translate(
+        context.mounted ? context : context,
+        globalTranslator: globalTranslator,
+      );
       nfcStatus = NFCStatus.notAvailable;
       setupMessage = "nfc_unavailable".translate(
         context.mounted ? context : context,
@@ -74,23 +87,18 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
     OnPayCallback? onPay,
     EventCallback? log,
   ) async {
-    final scanResult = await NFCManager.instance.startNFCScan();
-    if (!scanResult['success']) {
-      await terminateNFC();
-      if (context.mounted) {
-        startNFCScan(
-          context,
-          translator,
-          dismissDialog,
-          onPay,
-          log,
-        );
-        terminateNFC();
-      }
+   final scanResult = await NFCManager.instance.startNFCScan();
+
+    // var scanResult = {
+    //
+    //   "error": "asdasdsadsadsadad",
+    //   "success": false,
+    // };
+    if (!(scanResult['success'] as bool)) {
       if (!SDKNetworkConstants.isSdkInApp) {
         FirebaseCrashlytics.instance.recordError(scanResult['error'], null);
       }
-      return left(scanResult['error']);
+      return left((scanResult['error'] as String));
     } else {
       if (cardInfo == null) {
         await terminateNFC();
@@ -99,7 +107,7 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
         }
         try {
           scanResult['cardExpiry'] = _convertArabicToEnglishNumbers(
-            scanResult['cardExpiry'] ?? '',
+            (scanResult['cardExpiry'] as String? )?? '',
           );
         } catch (e) {
           if (!SDKNetworkConstants.isSdkInApp) {
@@ -235,4 +243,33 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
     cvV2 = "";
     emit(ICubitState.success(uiModel: PurchaseResponse(success: true)));
   }
+
+
+
+    tryAgain(
+      BuildContext context,
+      String Function(String p1)? translator,
+      void Function(BuildContext context) dismissDialog,
+      OnPayCallback? onPay,
+      EventCallback? log,   Function() setstatu) async {
+      errorMessage = null;
+      setupMessage = "Initializing SDK..";
+      await terminateNFC();
+      await checkNFCStatus(context, translator);
+      if (context.mounted) {
+        startNFCScan(
+          context,
+          translator,
+          dismissDialog,
+          onPay,
+          log,
+        );
+
+      }
+      setstatu();
+    }
+
+
+
+
 }

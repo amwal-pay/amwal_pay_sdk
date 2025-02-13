@@ -24,6 +24,8 @@ import 'package:flutter_bloc/flutter_bloc.dart' hide WatchContext;
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
+import '../../../navigator/sdk_navigator.dart';
+
 class SaleByCardManualScreen extends StatefulApiView<SaleByCardManualCubit>
     with LoaderMixin {
   final String amount;
@@ -130,7 +132,7 @@ class _SaleByCardManualScreenState extends State<SaleByCardManualScreen> {
             : AppBar(
                 backgroundColor: whiteColor,
                 leading: InkWell(
-                  onTap: Navigator.of(context).pop,
+                  onTap: AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop,
                   child: const Icon(
                     Icons.arrow_back_ios_rounded,
                   ),

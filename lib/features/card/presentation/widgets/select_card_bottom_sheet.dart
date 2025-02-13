@@ -6,6 +6,8 @@ import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
+import '../../../../navigator/sdk_navigator.dart';
+
 class SelectCardBottomSheet extends StatefulWidget {
   final List<CustomerToken> tokens;
   final CustomerToken? initialValue;
@@ -133,7 +135,7 @@ class _SelectCardBottomSheetState extends State<SelectCardBottomSheet> {
 
 
           widget.onConfirm(_selectedCustomerToken, _cvv);
-          Navigator.of(context).pop();
+          AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
         },
         child: Text(
           'confirm'.translate(context),
@@ -143,7 +145,7 @@ class _SelectCardBottomSheetState extends State<SelectCardBottomSheet> {
       AppButton(
         onPressed: () {
           widget.onConfirm(null, null);
-          Navigator.of(context).pop();
+          AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
         },
         child: Text(
           'add_new_card'.translate(context),
