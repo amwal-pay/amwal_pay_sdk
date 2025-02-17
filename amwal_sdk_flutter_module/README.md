@@ -14,3 +14,8 @@ compileFlutterModule=true
 make sure [pubspec.yaml](pubspec.yaml) pubspec pub get
 
 in another Android native project locally 
+
+
+After Building AAR move /build/outputs/repo to amwalsdk
+it should look like this 
+![img.png](img.png)

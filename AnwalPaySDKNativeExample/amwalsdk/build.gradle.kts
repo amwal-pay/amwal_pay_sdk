@@ -1,12 +1,23 @@
 import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
 import com.vanniktech.maven.publish.SonatypeHost
-import org.gradle.internal.impldep.org.junit.experimental.categories.Categories.CategoryFilter.include
+
+
+repositories {
+    google()
+    mavenCentral()
+    maven("https://storage.googleapis.com/download.flutter.io")
+    maven {
+        url = uri("$rootDir/repo") // Updated to point to the `repo` folder in the module directory
+    }
+}
+
 
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
     id("com.vanniktech.maven.publish") version "0.30.0"
+    id("signing")
 }
 
 android {
@@ -23,7 +34,10 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
         create("profile") {
             initWith(buildTypes.getByName("debug"))
@@ -39,23 +53,25 @@ android {
 
 }
 
+signing {
+    useGpgCmd()  // Use the GPG command line tool to sign the artifacts
+}
+
 dependencies {
-    val compileFlutterModule : Boolean = gradle.extra["compileFlutterModule"] as Boolean
+    val compileFlutterModule: Boolean = gradle.extra["compileFlutterModule"] as Boolean
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.kotlinx.serialization.json)
-    if (compileFlutterModule) {
-        implementation(project(":flutter"))
-    }else{
-        debugImplementation("com.amwal-pay.flutter:flutter_debug:1.0")
-        add("profileImplementation", "com.amwal-pay.flutter:flutter_profile:1.0")
-        releaseImplementation("com.amwal-pay.flutter:flutter_release:1.0")
-    }
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    debugImplementation("com.amwal_pay.flutter:flutter_debug:1.0")
+    add("profileImplementation", "com.amwal_pay.flutter:flutter_profile:1.0")
+    releaseImplementation("com.amwal_pay.flutter:flutter_release:1.0")
+
+
 }
 
 mavenPublishing {
@@ -63,14 +79,16 @@ mavenPublishing {
 
     signAllPublications()
 
-    configure(AndroidSingleVariantLibrary(
-        // the published variant
-        variant = "release",
-        // whether to publish a sources jar
-        sourcesJar = false,
-        // whether to publish a javadoc jar
-        publishJavadocJar = true,
-    ))
+    configure(
+        AndroidSingleVariantLibrary(
+            // the published variant
+            variant = "release",
+            // whether to publish a sources jar
+            sourcesJar = false,
+            // whether to publish a javadoc jar
+            publishJavadocJar = true,
+        )
+    )
 
     coordinates("com.amwal-pay", "amwal-sdk", "1.0.0")
 
@@ -102,3 +120,4 @@ mavenPublishing {
         }
     }
 }
+
