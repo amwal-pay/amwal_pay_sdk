@@ -51,3 +51,4 @@ example/pubspec.lock
 
 # FVM Version Cache
 android/.gradle
+/publish_build/
