@@ -33,9 +33,14 @@ class AmwalPaySdk {
 
   static AmwalPaySdk get instance => const AmwalPaySdk._();
 
+  static AmwalSdkSettings? settings;
   Future<void> initSdk({
     required AmwalSdkSettings settings,
   }) async {
+    AmwalPaySdk.settings = settings;
+
+
+
     AmwalSdkSettingContainer.locale = settings.locale;
     SDKNetworkConstants.isSdkInApp = true;
     await SdkBuilder.instance.initCacheStorage();

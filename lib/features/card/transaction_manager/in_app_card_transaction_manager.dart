@@ -159,11 +159,11 @@ class InAppCardTransactionManager extends ICardTransactionManager {
             if(purchaseData.customerId != null && purchaseData.customerId!.isNotEmpty &&
                 purchaseData.customerId != "null"
             ) {
-              customerCallback?.call(purchaseData.customerId);
+              AmwalPaySdk.settings?.customerCallback?.call(purchaseData.customerId);
             }
 
 
-            onResponse?.call(purchaseData.toMap().toString());
+            AmwalPaySdk.settings?.onResponse?.call(purchaseData.toMap().toString());
 
             await receiptAfterComplete(
               purchaseData.transactionId,
