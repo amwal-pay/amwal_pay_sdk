@@ -68,6 +68,7 @@
   "successful":"Successful",
   "OMR": "OMR",
   "ref_no": "Reference No.",
+  "otp_error": "Incorrect OTP. You will be redirected to the payment page to try again",
   "transaction_by_label": "Transaction By",
   "phone_number": "Phone Number",
   "wallet_mobile_number": "Wallet Phone Number",
