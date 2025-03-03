@@ -33,14 +33,6 @@ workflows:
           else
             echo "amwal_sdk.zip not found!" && exit 1
           fi
-      - name: Create workspace directory
-        script: |
-          echo "Creating /workspace directory..."
-          mkdir -p /workspace
-      - name: Move amwal_sdk.zip to workspace
-        script: |
-          echo "Moving amwal_sdk.zip to /workspace for artifact storage..."
-          mv ./amwal_sdk.zip /workspace/
       - name: Upload to Maven
         script: |
           echo "Running publish.sh..."
