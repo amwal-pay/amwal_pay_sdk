@@ -1,3 +1,5 @@
 .fvm/
 AnwalPaySDKNativeExample/.gitignore
 AnwalPaySDKNativeExample/amwalsdk/
+build.sh
+assemble.py
