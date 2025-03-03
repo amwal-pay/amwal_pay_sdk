@@ -4,7 +4,6 @@ import shutil
 import hashlib
 import subprocess
 import zipfile
-import requests
 import re
 import hashlib
 
@@ -553,41 +552,6 @@ def search_and_update_poms(base_dir, group_id_value, artifact_id_value, new_vers
 
 
 
-def upload_zip(api_url, api_key, file_path, timeout=3000):
-    """
-    Uploads a ZIP file to the specified API endpoint.
-
-    :param api_url: The API endpoint URL.
-    :param api_key: The API key (Base64-encoded username:password).
-    :param file_path: The path to the ZIP file to upload.
-    :param timeout: Timeout for the request in seconds (default: 300 seconds).
-    :return: Response object containing the API's response.
-    """
-    # Headers for the request
-    headers = {
-        "accept": "text/plain",
-        "Authorization": f"Basic {api_key}",
-    }
-
-    # File to upload
-    try:
-        with open(file_path, "rb") as file:
-            files = {"bundle": file}
-            # Sending the POST request with extended timeout
-            response = requests.post(api_url, headers=headers, files=files, timeout=timeout)
-
-        # Return the response object for further handling
-        return response
-    except FileNotFoundError:
-        print(f"Error: The file at {file_path} was not found.")
-        return None
-    except requests.Timeout:
-        print("Error: The request timed out.")
-        return None
-    except requests.RequestException as e:
-        print(f"An error occurred during the upload: {e}")
-        return None
-
 
 import os
 import xml.etree.ElementTree as ET
@@ -662,8 +626,6 @@ if __name__ == "__main__":
     version = get_version_from_pubspec()  # Get version from pubspec.yaml
     output_zip_file = "amwal_sdk.zip"
     amwal_pay_folder = "amwal-pay"
-    API_URL = "https://central.sonatype.com/api/v1/publisher/upload"
-    API_KEY = "P9owjrka:KJy8OMMjQb/jK5IZc1YckjrbU9IH7VaU4KAf67uLK5Wh="
 
     # Step 1: Remove debug/profile folders
     remove_folders(base_directory)
@@ -683,9 +645,3 @@ if __name__ == "__main__":
     # Step 5: Zip the relevant folder (com.amwal-pay)
     zip_amwal_pay_only(base_directory, amwal_pay_folder, output_zip_file)
 
-    # Step 6: Upload the ZIP file
-    response = upload_zip(API_URL, API_KEY, output_zip_file)
-    if response and response.status_code == 200:
-        print(f"Upload successful: {response.json()}")
-    else:
-        print(f"Upload failed: {response.status_code if response else 'No response'}")
