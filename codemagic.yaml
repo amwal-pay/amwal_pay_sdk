@@ -11,6 +11,15 @@ workflows:
           echo "Running build.sh..."
           chmod +x build.sh
           ./build.sh
+      - name: Install GPG
+        script: |
+          echo "Installing GPG..."
+          if [ "$(uname)" = "Darwin" ]; then
+            brew install gnupg || echo "GPG already installed."
+          else
+            sudo apt-get update && sudo apt-get install -y gnupg
+          fi
+          gpg --version
       - name: Run assemble.py
         script: |
           echo "Running assemble.py..."

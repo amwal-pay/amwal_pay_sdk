@@ -1,10 +1,14 @@
 import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
 import com.vanniktech.maven.publish.SonatypeHost
+import java.io.File
+import java.util.regex.Pattern // Add this import to resolve Pattern
+
 
 
 // Function to extract version from pubspec.yaml
 fun getVersionFromPubspec(): String {
-    val rootDir = project.rootDir
+    // Navigate two levels up from the current project root
+    val rootDir = project.rootDir.parentFile?.parentFile ?: project.rootDir
     val pubspecFile = File(rootDir, "pubspec.yaml")
 
     if (!pubspecFile.exists()) {
@@ -30,6 +34,7 @@ fun getVersionFromPubspec(): String {
         return "1.0.1"
     }
 }
+
 
 // Get version from pubspec.yaml
 val sdkVersion = getVersionFromPubspec()
