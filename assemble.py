@@ -5,6 +5,36 @@ import hashlib
 import subprocess
 import zipfile
 import requests
+import re
+
+
+def get_version_from_pubspec():
+    """
+    Extracts the version from pubspec.yaml file.
+    
+    :return: The version string or default "1.0.2" if not found.
+    """
+    try:
+        pubspec_path = "pubspec.yaml"
+        if not os.path.exists(pubspec_path):
+            print(f"Warning: {pubspec_path} not found. Using default version.")
+            return "1.0.2"
+            
+        with open(pubspec_path, 'r') as file:
+            content = file.read()
+            
+        # Use regex to find the version line
+        match = re.search(r'version:\s*(\d+\.\d+\.\d+)', content)
+        if match:
+            version = match.group(1)
+            print(f"Extracted version from pubspec.yaml: {version}")
+            return version
+        else:
+            print("Warning: Version not found in pubspec.yaml. Using default version.")
+            return "1.0.2"
+    except Exception as e:
+        print(f"Error reading pubspec.yaml: {e}. Using default version.")
+        return "1.0.2"
 
 
 def remove_folders(base_dir):
@@ -406,7 +436,7 @@ if __name__ == "__main__":
     # Define paths and configurations
     base_directory = "publish_build"  # Update with the correct directory
     namespace = "com.amwal-pay"  # Namespace for Maven artifacts
-    version = "1.0.2"  # Version of the artifacts
+    version = get_version_from_pubspec()  # Get version from pubspec.yaml
     output_zip_file = "amwal_sdk.zip"
     amwal_pay_folder = "amwal-pay"
     API_URL = "https://central.sonatype.com/api/v1/publisher/upload"

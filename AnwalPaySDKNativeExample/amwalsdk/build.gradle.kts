@@ -2,6 +2,38 @@ import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
 import com.vanniktech.maven.publish.SonatypeHost
 
 
+// Function to extract version from pubspec.yaml
+fun getVersionFromPubspec(): String {
+    val rootDir = project.rootDir
+    val pubspecFile = File(rootDir, "pubspec.yaml")
+
+    if (!pubspecFile.exists()) {
+        println("Warning: pubspec.yaml not found at ${pubspecFile.absolutePath}. Using default version.")
+        return "1.0.1"
+    }
+
+    try {
+        val pubspecContent = pubspecFile.readText()
+        val versionPattern = Pattern.compile("version:\\s*(\\d+\\.\\d+\\.\\d+)")
+        val matcher = versionPattern.matcher(pubspecContent)
+
+        if (matcher.find()) {
+            val version = matcher.group(1)
+            println("Extracted version from pubspec.yaml: $version")
+            return version
+        } else {
+            println("Warning: Version not found in pubspec.yaml. Using default version.")
+            return "1.0.1"
+        }
+    } catch (e: Exception) {
+        println("Error reading pubspec.yaml: ${e.message}. Using default version.")
+        return "1.0.1"
+    }
+}
+
+// Get version from pubspec.yaml
+val sdkVersion = getVersionFromPubspec()
+
 repositories {
     google()
     mavenCentral()
@@ -102,7 +134,7 @@ mavenPublishing {
         )
     )
 
-    coordinates("com.amwal_pay", "amwal_sdk", "1.0.1")
+    coordinates("com.amwal_pay", "amwal_sdk", sdkVersion)
 
 
     // the following is optional
@@ -140,54 +172,5 @@ mavenPublishing {
         }
     }
 }
-
-//afterEvaluate {
-//    publishing {
-//        publications {
-//            withType<MavenPublication> {
-//                // List of all AAR files you want to publish
-//                val aarFiles = listOf(
-//                    file("repo/dev/fluttercommunity/plus/packageinfo/package_info_plus_release/1.0/package_info_plus_release-1.0.aar"),
-//                    file("repo/dev/fluttercommunity/plus/share/share_plus_release/1.0/share_plus_release-1.0.aar"),
-//                    file("repo/fman/ge/smart_auth/smart_auth_release/1.0/smart_auth_release-1.0.aar"),
-//                    file("repo/io/flutter/plugins/nfc_manager/nfc_manager_release/1.0/nfc_manager_release-1.0.aar"),
-//                    file("repo/io/flutter/plugins/pathprovider/path_provider_android_release/1.0/path_provider_android_release-1.0.aar"),
-//                    file("repo/io/flutter/plugins/sharedpreferences/shared_preferences_android_release/1.0/shared_preferences_android_release-1.0.aar"),
-//                    file("repo/io/flutter/plugins/webviewflutter/webview_flutter_android_release/1.0/webview_flutter_android_release-1.0.aar"),
-//                    file("repo/io/flutter/plugins/firebase/crashlytics/firebase_crashlytics_release/1.0/firebase_crashlytics_release-1.0.aar"),
-//                    file("repo/io/flutter/plugins/firebase/core/firebase_core_release/1.0/firebase_core_release-1.0.aar"),
-//                    file("repo/com/amwal_pay/flutter/flutter_release/1.0/flutter_release-1.0.aar"),
-//                    // Add other AAR files here
-//                )
-//
-//                aarFiles.forEach { aarFile ->
-//                    val fileName = aarFile.nameWithoutExtension
-//                    val parts = fileName.split("-")
-//
-//                    val pluginName = parts[parts.size - 2] // Extract the plugin name
-//                    val version = parts[parts.size - 1]  // Extract the version
-//
-//                    println("Publishing AAR for plugin: $pluginName, version: $version")
-//
-//                    // Determine the groupId based on the file name
-//                    val groupId = when {
-//                        fileName.contains("flutter_release") -> "com.amwal-pay.flutter"
-//                        else -> "com.amwal-pay" // Default groupId for other AARs
-//                    }
-//
-//                    // Ensure unique artifactId and classifier to avoid duplication
-//                    val artifactId = pluginName // ArtifactId should be unique for each file
-//                    val classifier = if (fileName.contains("flutter_release")) "flutter" else null
-//
-//                    // Publish the AAR with its own coordinates
-//                    artifact(aarFile) {
-//                        this.classifier = pluginName // Optionally set classifier
-//                        this.extension = "aar"      // Set the extension to "aar"
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
 
 
