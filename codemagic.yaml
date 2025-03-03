@@ -1,0 +1,23 @@
+workflows:
+  custom_build:
+    name: Custom Build Workflow
+    environment:
+      flutter: stable # Specify the Flutter version if needed
+      vars:
+        CUSTOM_ENV_VAR: "CustomValue"
+    scripts:
+      - name: Run build.sh
+        script: |
+          echo "Running build.sh..."
+          chmod +x build.sh
+          ./build.sh
+      - name: Run assemble.py
+        script: |
+          echo "Running assemble.py..."
+          python3 assemble.py
+    artifacts:
+      - /workspace/*.zip # Save all zip files in the root directory as artifacts
+    publishing:
+      email:
+        recipients:
+          - your_email@example.com
