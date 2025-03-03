@@ -13,3 +13,7 @@ fix issues
 Convert all 
 ## 1.0.6
 Fix Issues
+## 1.0.7
+Fix Issues
+## 1.0.8
+Fix Issues
