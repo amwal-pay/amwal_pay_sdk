@@ -31,6 +31,7 @@ workflows:
             echo "amwal_sdk.zip found!"
           else
             echo "amwal_sdk.zip not found!" && exit 1
+          fi
       - name: Move amwal_sdk.zip to workspace
         script: |
           echo "Moving amwal_sdk.zip to /workspace for artifact storage..."
