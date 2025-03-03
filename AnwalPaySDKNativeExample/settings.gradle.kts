@@ -40,7 +40,7 @@ fun checkPropertyInLocalProperties(propertyName: String, defaultValue: Boolean):
     return defaultValue
 }
 
-val compileFlutterModule = checkPropertyInLocalProperties("compileFlutterModule",false)
+val compileFlutterModule = checkPropertyInLocalProperties("compileFlutterModule",true)
 
 gradle.extra["compileFlutterModule"] = compileFlutterModule
 
