@@ -76,10 +76,10 @@ class _DemoScreenState extends State<DemoScreen> {
     _currencyController = TextEditingController(text: 'OMR');
     _languageController = TextEditingController(text: 'en');
     _transactionTypeController = TextEditingController(text: 'CARD || Wallet');
-    _terminalController = TextEditingController(text: '708393');
-    _merchantIdController = TextEditingController(text: '116194');
+    _terminalController = TextEditingController(text: '811018');
+    _merchantIdController = TextEditingController(text: '84131');
     _secureHashController = TextEditingController(
-      text: '2B03FCDC101D3F160744342BFBA0BEA0E835EE436B6A985BA30464418392C703',
+      text: '8570CEED656C8818E4A7CE04F22206358F272DAD5F0227D322B654675ABF8F83',
     );
     dropdownValue = 'UAT';
     sdkEnv = Environment.UAT;

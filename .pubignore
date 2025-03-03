@@ -14,9 +14,3 @@ example/.fvm/**
 
 AnwalPaySDKNativeExample/**
 AnwalPaySDKNativeiOSExample/**
-.dart_tool
-.idea
-*.lock
-android/.gradle
-android/build
-*.DS_Store
