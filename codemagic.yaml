@@ -23,6 +23,7 @@ workflows:
       - name: Run assemble.py
         script: |
           echo "Running assemble.py..."
+          pip install requests
           python3 assemble.py
       - name: Verify amwal_sdk.zip
         script: |
@@ -32,6 +33,10 @@ workflows:
           else
             echo "amwal_sdk.zip not found!" && exit 1
           fi
+      - name: Create workspace directory
+        script: |
+          echo "Creating /workspace directory..."
+          mkdir -p /workspace
       - name: Move amwal_sdk.zip to workspace
         script: |
           echo "Moving amwal_sdk.zip to /workspace for artifact storage..."
