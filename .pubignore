@@ -3,3 +3,4 @@ AnwalPaySDKNativeExample/.gitignore
 AnwalPaySDKNativeExample/amwalsdk/
 build.sh
 assemble.py
+pub-credentials.json
