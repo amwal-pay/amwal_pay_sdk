@@ -76,10 +76,12 @@ group_ids_to_replace = [
     "fman.ge.smart_auth",
     "io.flutter.plugins.webviewflutter",
     "io.flutter.plugins.firebase.core",
-    "com.amwal_pay.flutter"
+    "com.amwal_pay.flutter",
+    "com.amwalpay.sdk",
 ]
 
 new_group_id = "com.amwal-pay"
+
 
 def process_pom_file(file_path):
     """
@@ -100,6 +102,10 @@ def process_pom_file(file_path):
             group_id = dependency.find("maven:groupId", namespace)
             artifact_id = dependency.find("maven:artifactId", namespace)
 
+            # Skip processing if groupId is "io.flutter"
+            if group_id is not None and group_id.text == "io.flutter":
+                continue
+
             # Replace groupId if it matches the target list
             if group_id is not None and group_id.text in group_ids_to_replace:
                 group_id.text = new_group_id
@@ -116,6 +122,9 @@ def process_pom_file(file_path):
             print(f"Updated: {file_path}")
     except Exception as e:
         print(f"Error processing {file_path}: {e}")
+
+# Example usage
+
 
 def process_directory(directory):
     """
@@ -400,13 +409,77 @@ def upload_zip(api_url, api_key, file_path):
         print(f"An error occurred: {e}")
         return None
 
+import os
+import xml.etree.ElementTree as ET
+
+def update_pom_dependency_version(pom_file, group_id_value, artifact_id_value, new_version):
+    """
+    Updates the version of a specific dependency in a `.pom` file.
+
+    Args:
+        pom_file (str): The path to the `.pom` file.
+        group_id_value (str): The <groupId> value to match.
+        artifact_id_value (str): The <artifactId> value to match.
+        new_version (str): The new version to set for the dependency.
+    """
+    try:
+        tree = ET.parse(pom_file)
+        root = tree.getroot()
+
+        # Define the namespace used in the POM file
+        ns = {'maven': 'http://maven.apache.org/POM/4.0.0'}
+        ET.register_namespace('', 'http://maven.apache.org/POM/4.0.0')
+
+        # Find all dependencies
+        dependencies = root.findall('.//maven:dependency', ns)
+
+        updated = False
+        for dependency in dependencies:
+            group_id = dependency.find('maven:groupId', ns)
+            artifact_id = dependency.find('maven:artifactId', ns)
+            version = dependency.find('maven:version', ns)
+
+            if (
+                group_id is not None and group_id.text == group_id_value and
+                artifact_id is not None and artifact_id.text == artifact_id_value
+            ):
+                # Update version if found
+                if version is not None:
+                    version.text = new_version
+                    updated = True
+
+        if updated:
+            tree.write(pom_file, encoding='utf-8', xml_declaration=True)
+            print(f"Updated {pom_file}: {group_id_value}:{artifact_id_value} -> {new_version}")
+        else:
+            print(f"No matching dependency found in {pom_file}")
+    except Exception as e:
+        print(f"Error updating {pom_file}: {e}")
+
+
+def search_and_update_poms(base_dir, group_id_value, artifact_id_value, new_version):
+    """
+    Recursively searches for `.pom` files in the given directory and updates the version of a specific dependency.
+
+    Args:
+        base_dir (str): The base directory to search in.
+        group_id_value (str): The <groupId> value to match.
+        artifact_id_value (str): The <artifactId> value to match.
+        new_version (str): The new version to set for the dependency.
+    """
+    for root, _, files in os.walk(base_dir):
+        for file in files:
+            if file.endswith('.pom'):
+                pom_file_path = os.path.join(root, file)
+                update_pom_dependency_version(pom_file_path, group_id_value, artifact_id_value, new_version)
+
 
 
 if __name__ == "__main__":
     # Define paths and configurations
     base_directory = "publish_build"  # Update with the correct directory
     namespace = "com.amwal-pay"  # Namespace for Maven artifacts
-    version = "1.0.2"  # Version of the artifacts
+    version = "1.0.4"  # Version of the artifacts
     output_zip_file = "amwal_sdk.zip"
     amwal_pay_folder = "amwal-pay"
     API_URL = "https://central.sonatype.com/api/v1/publisher/upload"
@@ -421,6 +494,9 @@ if __name__ == "__main__":
     # Step 3: Process .pom files to ensure they are correctly formatted
     find_all_poms(base_directory, namespace)
 
+    process_directory(base_directory)
+
+    search_and_update_poms(base_directory, namespace, "flutter", version)
     # Step 4: Sign and generate checksums for artifacts
     sign_and_update_checksums(base_directory)
 
