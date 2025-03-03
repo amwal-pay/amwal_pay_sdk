@@ -19,6 +19,12 @@ FLUTTER_BUILD_NUMBER="1.0.5"
 mkdir -p "$PUBLISH_DIR"
 
 # Step 1: Build and publish Native SDK
+
+
+cd "$FLUTTER_MODULE_DIR" || die "Error: Native example directory not found."
+
+flutter pub get || die "Flutter pub get Failed!!"
+
 cd "$NATIVE_EXAMPLE_DIR" || die "Error: Native example directory not found."
 echo "Building and publishing Native SDK..."
 
