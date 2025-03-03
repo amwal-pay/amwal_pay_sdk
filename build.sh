@@ -124,3 +124,4 @@ fi
 # Completion message
 echo "Native and Flutter builds have been processed. Files are in $PUBLISH_DIR."
 read -p "Press [Enter] to exit..." key
+exit 0
