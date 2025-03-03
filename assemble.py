@@ -553,13 +553,14 @@ def search_and_update_poms(base_dir, group_id_value, artifact_id_value, new_vers
 
 
 
-def upload_zip(api_url, api_key, file_path):
+def upload_zip(api_url, api_key, file_path, timeout=3000):
     """
     Uploads a ZIP file to the specified API endpoint.
 
     :param api_url: The API endpoint URL.
     :param api_key: The API key (Base64-encoded username:password).
     :param file_path: The path to the ZIP file to upload.
+    :param timeout: Timeout for the request in seconds (default: 300 seconds).
     :return: Response object containing the API's response.
     """
     # Headers for the request
@@ -572,17 +573,21 @@ def upload_zip(api_url, api_key, file_path):
     try:
         with open(file_path, "rb") as file:
             files = {"bundle": file}
-            # Sending the POST request
-            response = requests.post(api_url, headers=headers, files=files)
+            # Sending the POST request with extended timeout
+            response = requests.post(api_url, headers=headers, files=files, timeout=timeout)
 
         # Return the response object for further handling
         return response
     except FileNotFoundError:
         print(f"Error: The file at {file_path} was not found.")
         return None
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    except requests.Timeout:
+        print("Error: The request timed out.")
         return None
+    except requests.RequestException as e:
+        print(f"An error occurred during the upload: {e}")
+        return None
+
 
 import os
 import xml.etree.ElementTree as ET

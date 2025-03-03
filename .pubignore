@@ -4,3 +4,4 @@ AnwalPaySDKNativeExample/amwalsdk/
 build.sh
 assemble.py
 pub-credentials.json
+publish.sh
