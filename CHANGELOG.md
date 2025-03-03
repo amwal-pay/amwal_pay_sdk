@@ -7,5 +7,9 @@ add android sdk and fix issues
 add image sdk and fix issues
 
 
+## 0.0.49
+fix issues
 ## 0.1.0
 Convert all 
+## 1.0.6
+Fix Issues
