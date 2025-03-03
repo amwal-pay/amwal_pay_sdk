@@ -20,9 +20,10 @@ response=$(curl -s -o /dev/null -w "%{http_code}" \
     -F "bundle=@$FILE_PATH")
 
 # Check the response
-if [[ "$response" -eq 200 ]]; then
+if [[ "$response" -eq 201 ]]; then
     echo "File uploaded successfully!"
+    exist 0
 else
     echo "Upload failed with HTTP status code $response."
+    exit 1
 fi
-read -p "Press [Enter] to exit..." key
