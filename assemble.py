@@ -282,11 +282,90 @@ def create_checksum_files(file_path):
 def sign_and_update_checksums(base_dir):
     """
     Recursively signs all .aar, .jar, and .pom files in the given base directory using GPG,
-    and updates their checksum files.
+    and updates their checksum files. The GPG key is hardcoded and imported dynamically.
     :param base_dir: The base directory to search for files.
     """
     gpg_passphrase = "amwal@2025"  # Replace with your GPG passphrase
 
+    # Hardcoded GPG private key
+    GPG_PRIVATE_KEY = """
+    -----BEGIN PGP PRIVATE KEY BLOCK-----
+    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
+QtVx1DfjNsCVo+ewDB7WwHwczQSd6g==
+=3+sS
+    -----END PGP PRIVATE KEY BLOCK-----
+    """
+
+    # Import the hardcoded GPG key
+    try:
+        print("Importing GPG private key...")
+        subprocess.run(
+            ["gpg", "--batch", "--import"],
+            input=GPG_PRIVATE_KEY.encode("utf-8"),
+            check=True
+        )
+        print("GPG key imported successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error importing GPG key: {e}")
+        return
+    except Exception as e:
+        print(f"Unexpected error importing GPG key: {e}")
+        return
+
+    # Process files and sign them
     for root, dirs, files in os.walk(base_dir):
         for file in files:
             if file.endswith(('.aar', '.jar', '.pom')):
