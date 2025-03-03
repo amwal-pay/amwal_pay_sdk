@@ -479,7 +479,7 @@ if __name__ == "__main__":
     # Define paths and configurations
     base_directory = "publish_build"  # Update with the correct directory
     namespace = "com.amwal-pay"  # Namespace for Maven artifacts
-    version = "1.0.4"  # Version of the artifacts
+    version = "1.0.5"  # Version of the artifacts
     output_zip_file = "amwal_sdk.zip"
     amwal_pay_folder = "amwal-pay"
     API_URL = "https://central.sonatype.com/api/v1/publisher/upload"

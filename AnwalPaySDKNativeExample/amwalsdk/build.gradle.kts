@@ -102,7 +102,7 @@ mavenPublishing {
         )
     )
 
-    coordinates("com.amwal_pay", "amwal_sdk", "1.0.1")
+    coordinates("com.amwal_pay", "amwal_sdk", "1.0.5")
 
 
     // the following is optional

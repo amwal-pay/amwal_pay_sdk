@@ -13,7 +13,7 @@ FLUTTER_MODULE_DIR="$ROOT_DIR/amwal_sdk_flutter_module"
 NATIVE_EXAMPLE_DIR="$ROOT_DIR/AnwalPaySDKNativeExample"
 PUBLISH_DIR="$ROOT_DIR/publish_build"
 
-FLUTTER_BUILD_NUMBER="1.0.4"
+FLUTTER_BUILD_NUMBER="1.0.5"
 
 # Create the publish directory
 mkdir -p "$PUBLISH_DIR"
