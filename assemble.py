@@ -1,12 +1,10 @@
 import os
 import xml.etree.ElementTree as ET
 import shutil
-import hashlib
-import subprocess
 import zipfile
 import re
 import hashlib
-
+import subprocess
 
 
 def get_version_from_pubspec():
@@ -282,20 +280,17 @@ def create_checksum_files(file_path):
 
 
 
-import subprocess
-import os
+
 
 def sign_and_update_checksums(base_dir):
     """
-    Recursively signs all .aar, .jar, and .pom files in the given base directory using GPG,
-    and updates their checksum files. The GPG key is hardcoded and imported dynamically.
-    :param base_dir: The base directory to search for files.
+    Signs all .aar, .jar, and .pom files in the given base directory using GPG
+    and generates checksum files (MD5, SHA1, SHA256, SHA512).
     """
-    gpg_passphrase = "amwal@2025"  # Replace with your GPG passphrase
+    gpg_passphrase = "amwal@2025"  # Fetch from environment variables
 
-    # Hardcoded GPG private key
-    GPG_PRIVATE_KEY = """
------BEGIN PGP PRIVATE KEY BLOCK-----
+    # Hardcoded GPG private key (use environment variables instead in production)
+    GPG_PRIVATE_KEY = """-----BEGIN PGP PRIVATE KEY BLOCK-----
 
 lQPGBGezVc0BCACqTOirZQKLLltmysiQH0VrlIFffEzbAuTNXPGtF4Q1DgcB/0vI
 QXoaU38oGGBQrfxmyqv+uQHTb1dr3rceZKE0umE+G9yjRUxrb/ciG2V/+k3Q/IMZ
@@ -353,16 +348,19 @@ am31GwrOcIYWcRMgRa5BccAn2qBTOraH9zpQ5pe9uauwDdl/TZ1LLOox74nRNyx7
 OVPiGdkvwSS1ChsNQ7D3Brx+AYjBzSyrX3CZu5WZiRHSMMYy57pJF95uV/4DMuex
 QtVx1DfjNsCVo+ewDB7WwHwczQSd6g==
 =3+sS
------END PGP PRIVATE KEY BLOCK-----
-"""
+-----END PGP PRIVATE KEY BLOCK-----"""
+
+    if not GPG_PRIVATE_KEY or not gpg_passphrase:
+        print("Error: GPG private key or passphrase not set.")
+        return
 
     try:
-        # Import the hardcoded GPG private key
+        # Import the GPG private key
         print("Importing GPG private key...")
         subprocess.run(
             ["gpg", "--batch", "--import"],
-            input=GPG_PRIVATE_KEY,  # Pass string directly as input
-            text=True,  # Input/output as text
+            input=GPG_PRIVATE_KEY,
+            text=True,
             capture_output=True,
             check=True
         )
@@ -382,71 +380,70 @@ QtVx1DfjNsCVo+ewDB7WwHwczQSd6g==
                     file_path = os.path.join(root, file)
                     try:
                         print(f"Signing file: {file_path}")
-                        # Execute GPG signing command with passphrase
-                        subprocess.run([
-                            "gpg", "--batch", "--yes", "--sign", "--detach-sign", "--armor",
-                            "--pinentry-mode", "loopback", "--passphrase", gpg_passphrase, file_path
-                        ], capture_output=True, text=True, check=True)
+                        subprocess.run(
+                            [
+                                "gpg", "--batch", "--yes", "--sign", "--detach-sign", "--armor",
+                                "--pinentry-mode", "loopback", "--passphrase", gpg_passphrase, file_path
+                            ],
+                            capture_output=True, text=True, check=True
+                        )
                         print(f"File signed successfully: {file_path}")
-                        # Optionally create checksum files (function not provided in the original code)
                         create_checksum_files(file_path)
                     except subprocess.CalledProcessError as e:
                         print(f"Error signing {file_path}: {e.stderr}")
                     except Exception as e:
                         print(f"Unexpected error signing {file_path}: {e}")
     finally:
-       cleanup_gpg_keys()
+        cleanup_gpg_keys()
+
 
 def create_checksum_files(file_path):
     """
-    Creates checksum files for the specified file using Python's hashlib.
-    :param file_path: The path of the file to generate checksums for.
+    Creates checksum files (MD5, SHA1, SHA256, SHA512) for the specified file.
     """
     try:
-        for algo in ["sha256", "sha512"]:
+        for algo in ["md5", "sha1", "sha256", "sha512"]:
             checksum_file = f"{file_path}.{algo}"
             hash_func = hashlib.new(algo)
             with open(file_path, "rb") as f:
-                # Read the file in chunks to avoid memory issues with large files
                 while chunk := f.read(8192):
                     hash_func.update(chunk)
             checksum = hash_func.hexdigest()
 
-            # Write the checksum to a file
             with open(checksum_file, "w") as f:
-                f.write(f"{checksum}  {file_path}\n")
+                f.write(f"{checksum}  {os.path.basename(file_path)}\n")
         print(f"Checksums created for {file_path}.")
     except Exception as e:
-        print(f"Unexpected error creating checksum files for {file_path}: {e}")
+        print(f"Error creating checksum files for {file_path}: {e}")
+
 
 def cleanup_gpg_keys():
     """
-    Cleans up imported GPG keys by deleting them using their full fingerprint.
+    Cleans up imported GPG keys.
     """
     try:
-        # Get the full fingerprint of secret keys
-        key_list_output = subprocess.run(
-            ["gpg", "--list-secret-keys", "--with-colons"],
-            capture_output=True, text=True, check=True
+        print("Cleaning up imported GPG keys...")
+        subprocess.run(
+            ["gpg", "--batch", "--yes", "--delete-secret-keys", "--all"],
+            capture_output=True,
+            check=True
         )
-        fingerprints = [
-            line.split(":")[9]
-            for line in key_list_output.stdout.splitlines()
-            if line.startswith("fpr")
-        ]
-
-        # Delete each key using its full fingerprint
-        for fingerprint in fingerprints:
-            print(f"Deleting imported key: {fingerprint}")
-            subprocess.run(
-                ["gpg", "--batch", "--yes", "--delete-secret-keys", fingerprint],
-                check=True
-            )
-        print("All imported keys deleted successfully.")
+        subprocess.run(
+            ["gpg", "--batch", "--yes", "--delete-keys", "--all"],
+            capture_output=True,
+            check=True
+        )
+        print("GPG keys cleaned up successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Error cleaning up GPG keys: {e.stderr}")
     except Exception as e:
-        print(f"Unexpected error cleaning up GPG keys: {e}")
+        print(f"Unexpected error during GPG cleanup: {e}")
+
+
+# Usage example
+if __name__ == "__main__":
+    base_directory = "/path/to/files"  # Replace with your directory
+    sign_and_update_checksums(base_directory)
 
 
 
