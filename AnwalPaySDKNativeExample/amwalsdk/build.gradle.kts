@@ -68,12 +68,12 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    if (compileFlutterModule) {
+//    if (compileFlutterModule) {
         implementation(project(":flutter"))
-    }else {
-        debugImplementation("com.amwal_pay.flutter:flutter_debug:1.0.1")
-        add("profileImplementation", "com.amwal_pay.flutter:flutter_profile:1.0.1")
-        releaseImplementation("com.amwal_pay.flutter:flutter_release:1.0.1")
+//    }else {
+//        debugImplementation("com.amwal_pay.flutter:flutter_debug:1.0.1")
+//        add("profileImplementation", "com.amwal_pay.flutter:flutter_profile:1.0.1")
+//        releaseImplementation("com.amwal_pay.flutter:flutter_release:1.0.1")
     }
 
 
