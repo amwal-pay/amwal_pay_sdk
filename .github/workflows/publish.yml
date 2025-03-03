@@ -28,9 +28,20 @@ jobs:
   
   publish:
     needs: cleanup
+    runs-on: ubuntu-latest
     permissions:
       id-token: write # Required for authentication using OIDC
-    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
-    with:
-      # working-directory: path/to/package/within/repository
-      force: true
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dart-lang/setup-dart@v1
+      
+      - name: Setup credentials
+        run: dart pub token add https://pub.dev --env-var PUB_DEV_PUBLISH_ACCESS_TOKEN
+      
+      - name: Install dependencies
+        run: dart pub get
+      
+      - name: Force publish
+        run: dart pub publish --force
+        env:
+          PUB_DEV_PUBLISH_ACCESS_TOKEN: ${{ secrets.PUB_DEV_PUBLISH_ACCESS_TOKEN }}
