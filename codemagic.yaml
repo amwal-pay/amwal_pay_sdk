@@ -6,11 +6,6 @@ workflows:
       vars:
         CUSTOM_ENV_VAR: "CustomValue"
     scripts:
-      - name: Run build_pub_dev.sh
-        script: |
-          echo "Running build_pub_dev.sh..."
-          chmod +x build_pub_dev.sh
-          ./build_pub_dev.sh
       - name: Run build.sh
         script: |
           echo "Running build.sh..."
@@ -43,7 +38,11 @@ workflows:
           echo "Running publish.sh..."
           chmod +x publish.sh
           ./publish.sh
-
+      - name: Run build_pub_dev.sh
+        script: |
+          echo "Running build_pub_dev.sh..."
+          chmod +x build_pub_dev.sh
+          ./build_pub_dev.sh
     artifacts:
       - /workspace/amwal_sdk.zip # Save amwal_sdk.zip as an artifact
     publishing:
