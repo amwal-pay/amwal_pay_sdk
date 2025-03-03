@@ -6,9 +6,42 @@ on:
       - 'v[0-9]+.[0-9]+.[0-9]+*'
 
 jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Remove build scripts
+        run: |
+          if [ -f "build.sh" ]; then
+            echo "Removing build.sh..."
+            rm build.sh
+          fi
+          
+          if [ -f "assemble.py" ]; then
+            echo "Removing assemble.py..."
+            rm assemble.py
+          fi
+          
+          echo "Build scripts removed successfully!"
+  
   publish:
+    needs: cleanup
+    runs-on: ubuntu-latest
     permissions:
       id-token: write # Required for authentication using OIDC
-    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
-    # with:
-    #   working-directory: path/to/package/within/repository
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dart-lang/setup-dart@v1
+      
+      - name: Setup credentials
+        run: dart pub token add https://pub.dev --env-var PUB_DEV_PUBLISH_ACCESS_TOKEN
+      
+      - name: Install dependencies
+        run: dart pub get
+      
+      - name: Force publish
+        run: dart pub publish --force
+        env:
+          PUB_DEV_PUBLISH_ACCESS_TOKEN: ${{ secrets.PUB_DEV_PUBLISH_ACCESS_TOKEN }}
