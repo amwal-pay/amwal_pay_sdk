@@ -22,7 +22,7 @@ response=$(curl -s -o /dev/null -w "%{http_code}" \
 # Check the response
 if [[ "$response" -eq 201 ]]; then
     echo "File uploaded successfully!"
-    exist 0
+    exit 0
 else
     echo "Upload failed with HTTP status code $response."
     exit 1
