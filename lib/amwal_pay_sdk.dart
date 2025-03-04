@@ -20,8 +20,6 @@ import 'package:flutter/material.dart';
 import 'core/ui/error_dialog.dart';
 import 'core/ui/loading_dialog.dart';
 import 'features/card/presentation/sale_by_card_contact_less_screen.dart';
-import 'features/currency_field/data/models/response/currency_response.dart';
-import 'features/payment_argument.dart';
 import 'features/transaction/data/repository/transaction_repository_impl.dart';
 import 'localization/app_localizations_setup.dart';
 

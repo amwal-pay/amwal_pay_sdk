@@ -58,6 +58,6 @@ fi
 
 # Publish the package
 echo "Publishing package to pub.dev..."
-flutter pub publish --force
+dart pub publish --force
 
 echo "Successfully published $PACKAGE_NAME to pub.dev"
