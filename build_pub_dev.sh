@@ -45,19 +45,10 @@ echo "Credentials configured successfully"
 # Navigate to package directory
 cd "$PACKAGE_PATH"
 
-# Verify package is ready for publishing
-echo "Verifying package..."
-flutter pub publish --dry-run
-
-# Prompt for confirmation
-read -p "Ready to publish $PACKAGE_NAME to pub.dev. Continue? (y/n): " CONFIRM
-if [ "$CONFIRM" != "y" ]; then
-  echo "Publication aborted"
-  exit 0
-fi
 
 # Publish the package
 echo "Publishing package to pub.dev..."
-dart pub publish --force
+flutter pub publish --force
+
 
 echo "Successfully published $PACKAGE_NAME to pub.dev"
