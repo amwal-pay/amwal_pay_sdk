@@ -397,24 +397,6 @@ QtVx1DfjNsCVo+ewDB7WwHwczQSd6g==
         cleanup_gpg_keys()
 
 
-def create_checksum_files(file_path):
-    """
-    Creates checksum files (MD5, SHA1, SHA256, SHA512) for the specified file.
-    """
-    try:
-        for algo in ["md5", "sha1", "sha256", "sha512"]:
-            checksum_file = f"{file_path}.{algo}"
-            hash_func = hashlib.new(algo)
-            with open(file_path, "rb") as f:
-                while chunk := f.read(8192):
-                    hash_func.update(chunk)
-            checksum = hash_func.hexdigest()
-
-            with open(checksum_file, "w") as f:
-                f.write(f"{checksum}  {os.path.basename(file_path)}\n")
-        print(f"Checksums created for {file_path}.")
-    except Exception as e:
-        print(f"Error creating checksum files for {file_path}: {e}")
 
 
 def cleanup_gpg_keys():

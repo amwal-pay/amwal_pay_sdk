@@ -6,13 +6,13 @@ import java.util.regex.Pattern // Add this import to resolve Pattern
 
 
 
-// Function to extract version from pubspec.yaml
 fun getVersionFromPubspec(): String {
-    // Navigate two levels up from the current project root
-    val rootDir = project.rootDir.parentFile?.parentFile ?: project.rootDir
-    val pubspecFile = File(rootDir, "pubspec.yaml")
+    // Resolve path to the `amwal_pay_sdk` directory
+    val amwalPaySdkDir = project.rootDir.parentFile
+    println("_______________________$amwalPaySdkDir")
+    val pubspecFile = File(amwalPaySdkDir, "pubspec.yaml")
 
-    if (!pubspecFile.exists()) {
+    if (amwalPaySdkDir == null || !pubspecFile.exists()) {
         println("Warning: pubspec.yaml not found at ${pubspecFile.absolutePath}. Using default version.")
         return "1.0.1"
     }
@@ -35,6 +35,7 @@ fun getVersionFromPubspec(): String {
         return "1.0.1"
     }
 }
+
 
 
 // Get version from pubspec.yaml
