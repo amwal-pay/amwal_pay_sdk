@@ -1,5 +1,4 @@
 # FVM related files
-.fvm/**
 example/.fvm/**
 
 # iOS/XCode specific files
@@ -11,7 +10,6 @@ example/.fvm/**
 # Any other specific files from your list
 **/magix_museum.jks
 
-
 AnwalPaySDKNativeExample/**
 AnwalPaySDKNativeiOSExample/**
 .dart_tool
@@ -20,3 +18,9 @@ AnwalPaySDKNativeiOSExample/**
 android/.gradle
 android/build
 *.DS_Store
+
+# FVM Version Cache
+.fvm/
+.fvm
+build
+.fvm
