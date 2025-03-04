@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name             = 'AmwalSDK'
+  s.name             = 'amwalsdk'
   s.version          = '1.0.0'
   s.summary          = 'Payment SDK for Amwal integration'
   s.description      = <<-DESC
@@ -22,7 +22,7 @@ A comprehensive payment SDK that enables Flutter integration for Amwal payment s
   # s.resources = 'AmwalSDK/Resources/**/*'
 
   # Specify dependencies
-  s.dependency 'Flutter', '1.0.0'
+  # s.dependency 'Flutter', '1.0.0'
 
 
   # Preserve Flutter module

@@ -13,7 +13,7 @@ target 'AnwalPaySDKNativeiOSExample' do
    if compileFlutterModule
        install_all_flutter_pods(flutter_application_path) # Use local Flutter module
      else
-       pod 'AmwalSDK', '1.0.0' # Replace with the correct version
+       pod 'amwalsdk', '1.0.0' # Replace with the correct version
      end
 end
 
