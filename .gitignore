@@ -10,8 +10,7 @@ example/.fvm/**
 # Any other specific files from your list
 **/magix_museum.jks
 
-AnwalPaySDKNativeExample/**
-AnwalPaySDKNativeiOSExample/**
+
 .dart_tool
 .idea
 *.lock
