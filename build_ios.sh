@@ -11,7 +11,6 @@ VERSION=$(grep '^version:' "$PROJECT_ROOT/pubspec.yaml" | awk '{print $2}')
 GITHUB_REPO="https://github.com/amwal-pay/AnwalPaySDKNativeiOSExample.git"
 
 # Static GitHub Token (Replace <your-github-token> with the actual token)
-GITHUB_TOKEN="<your-github-token>"  # Replace with your actual GitHub token
 
 # Step 1: Build for iOS devices
 echo "Building for iOS devices..."
