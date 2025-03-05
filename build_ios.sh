@@ -9,7 +9,7 @@ PROJECT_ROOT="$SCRIPT_DIR"
 OUTPUT_DIR="$PROJECT_ROOT/AmwalSDKBuild"
 VERSION=$(grep '^version:' "$PROJECT_ROOT/pubspec.yaml" | awk '{print $2}')
 GITHUB_REPO="https://github.com/amwal-pay/AnwalPaySDKNativeiOSExample.git"
-GITHUB_TOKEN="<your-github-token>"  # Replace with your actual GitHub token
+
 
 # Step 1: Build for iOS devices
 echo "Building for iOS devices..."
