@@ -13,7 +13,7 @@ A comprehensive payment SDK that enables Flutter integration for Amwal payment s
   s.author           = { 'Amwal Pay' => 'amr.elskaan@amwal-pay.com' }
   
   s.source           = { 
-    :http => 'https://github.com/amwal-pay/AnwalPaySDKNativeiOSExample/releases/download/1.0.0/AmwalSDK.xcframework.zip',
+    :http => 'https://github.com/amwal-pay/AnwalPaySDKNativeiOSExample/releases/download/1.0.1/AmwalSDK.xcframework.zip',
     :type => 'zip'
   }
 
