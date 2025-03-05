@@ -12,7 +12,7 @@ MODULE_DIR="$PROJECT_ROOT/amwal_sdk_flutter_module"
 OUTPUT_DIR="$PROJECT_ROOT/AmwalSDKBuild"
 PODSPEC_PATH="$PROJECT_ROOT/AnwalPaySDKNativeiOSExample/amwalsdk.podspec"
 PUBSPEC_PATH="$PROJECT_ROOT/pubspec.yaml"
-IOS_PROJECT="$PROJECT_ROOT/AnwalPaySDKNativeiOSExample.xcodeproj"
+IOS_PROJECT="$PROJECT_ROOT/AnwalPaySDKNativeiOSExample/AnwalPaySDKNativeiOSExample.xcodeproj"
 SCHEME_NAME="amwalsdk"
 
 # Step 1: Extract the version from pubspec.yaml
