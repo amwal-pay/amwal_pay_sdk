@@ -26,7 +26,7 @@ xcodebuild archive \
 # Step 2: Build for iOS Simulator
 echo "Building for iOS Simulator..."
 xcodebuild archive \
-  -project "$PROJECT_ROOT/AnwalPaySDKNativeiOSExample.xcodeproj" \
+  -project "$PROJECT_ROOT/AnwalPaySDKNativeiOSExample/AnwalPaySDKNativeiOSExample.xcodeproj" \
   -scheme "amwalsdk" \
   -configuration Release \
   -destination "generic/platform=iOS Simulator" \
