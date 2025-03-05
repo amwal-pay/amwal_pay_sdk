@@ -58,14 +58,13 @@ fi
 # Step 7: Update the podspec with the extracted version
 if [[ -f "$PODSPEC_PATH" ]]; then
     echo "Updating podspec version to $VERSION in $PODSPEC_PATH..."
-    sed -i.bak "s/^\(\s*s\.version\s*=\s*\).*/\1'$VERSION'/" "$PODSPEC_PATH"
-    rm "$PODSPEC_PATH.bak"
+    # For macOS compatibility
+    sed -i '' "s/s\.version[[:space:]]*=[[:space:]]*'[^']*'/s.version          = '$VERSION'/" "$PODSPEC_PATH"
     echo "Podspec version updated successfully."
 else
     echo "Error: $PODSPEC_PATH not found."
     exit 1
 fi
-
 # Step 8: Navigate back to the project root
 cd "$PROJECT_ROOT"
 
@@ -74,6 +73,9 @@ git init
 git add .
 git commit -m "Local commit for podspec validation"
 git tag $VERSION
+
+echo "git tag version  $VERSION"
+
 
 # Set up CocoaPods trunk session for CI/CD
 # Create .netrc file with authentication token from environment variable
