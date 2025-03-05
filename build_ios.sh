@@ -69,10 +69,14 @@ if [[ ! -d .git ]]; then
 fi
 git remote remove origin || true
 git remote add origin "$GITHUB_REPO"
+
+# Ensure the branch is named 'main'
+git checkout -b main || git checkout main
+
 git add AmwalSDK.xcframework
 git commit -m "Add XCFramework version $VERSION"
 git tag "$VERSION"
-git push --tags origin main --force
+git push --set-upstream origin main --force --tags
 echo "XCFramework pushed to GitHub repository successfully."
 
 # Step 7: Update the podspec with the extracted version
