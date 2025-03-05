@@ -20,10 +20,10 @@ A comprehensive payment SDK that enables Flutter integration for Amwal payment s
   # s.public_header_files = 'amwalsdk/**/*.h'
   
   # List all XCFrameworks explicitly
-  s.vendored_frameworks = 'amwalsdk/Flutter/Release/*.xcframework'
+  s.vendored_frameworks = 'amwalsdk/Flutter/*.xcframework'
 
   # Preserve Flutter module
-  s.preserve_paths = 'amwalsdk/Flutter/Release/**/*'
+  s.preserve_paths = 'amwalsdk/Flutter/**/*'
   
   # These settings help avoid framework conflicts
   s.xcconfig = { 
