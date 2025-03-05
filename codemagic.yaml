@@ -6,6 +6,11 @@ workflows:
       vars:
         CUSTOM_ENV_VAR: "CustomValue"
     scripts:
+      - name: Run build_ios
+        script: |
+          echo "Running Build IOS..."
+          chmod +x build_ios.sh
+          ./build_ios.sh
       - name: Run build_pub_dev.sh
         script: |
           echo "Running build_pub_dev.sh..."
