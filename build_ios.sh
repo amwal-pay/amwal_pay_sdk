@@ -13,6 +13,7 @@ OUTPUT_DIR="$PROJECT_ROOT/AnwalPaySDKNativeiOSExample/amwalsdk/Flutter"
 PODSPEC_PATH="$PROJECT_ROOT/AnwalPaySDKNativeiOSExample/amwalsdk.podspec"
 PUBSPEC_PATH="$PROJECT_ROOT/pubspec.yaml"
 IOS_DIR="$PROJECT_ROOT/AnwalPaySDKNativeiOSExample"
+GITHUB_REPO="https://github.com/amwal-pay/AnwalPaySDKNativeiOSExample.git"
 
 # Ensure necessary environment variables are set
 if [[ -z "$GITHUB_TOKEN" || -z "$COCOAPODS_USERNAME" || -z "$COCOAPODS_PASSWORD" ]]; then
@@ -93,7 +94,14 @@ xcodebuild -create-xcframework \
 
 echo "XCFramework created successfully at $OUTPUT_DIR/AmwalSDK.xcframework."
 
-# Step 10: Update the podspec with the extracted version
+# Step 10: Compress the XCFramework
+echo "Compressing XCFramework..."
+cd "$OUTPUT_DIR"
+XCFRAMEWORK_ZIP="AmwalSDK-$VERSION.zip"
+zip -r "$XCFRAMEWORK_ZIP" "AmwalSDK.xcframework"
+echo "XCFramework compressed successfully into $XCFRAMEWORK_ZIP."
+
+# Step 11: Update the podspec with the extracted version
 if [[ -f "$PODSPEC_PATH" ]]; then
     echo "Updating podspec version to $VERSION in $PODSPEC_PATH..."
     sed -i '' "s/s\.version[[:space:]]*=[[:space:]]*'[^']*'/s.version          = '$VERSION'/" "$PODSPEC_PATH"
@@ -103,17 +111,17 @@ else
     exit 1
 fi
 
-# Step 11: Set up CocoaPods trunk session for CI/CD
+# Step 12: Set up CocoaPods trunk session for CI/CD
 echo "Setting up CocoaPods trunk authentication..."
 echo "machine trunk.cocoapods.org
   login $COCOAPODS_USERNAME
   password $COCOAPODS_PASSWORD" > ~/.netrc
 chmod 0600 ~/.netrc
 
-# Step 12: Navigate back to the iOS project root
+# Step 13: Navigate back to the iOS project root
 cd "$IOS_DIR"
 
-# Step 13: Set up git repository for podspec validation
+# Step 14: Set up git repository for podspec validation
 BRANCH_NAME="release-$VERSION"
 echo "Setting up Git branch $BRANCH_NAME..."
 git init
@@ -123,22 +131,21 @@ git commit -m "Local commit for podspec validation"
 git tag "$VERSION"
 
 echo "Git tag version $VERSION"
-# Step 15: Push XCFramework to GitHub
+
+# Step 15: Push compressed XCFramework to GitHub
 echo "Pushing XCFramework to GitHub repository..."
 cd "$OUTPUT_DIR"
 
 git init
-git remote add origin "https://${GITHUB_TOKEN}@${GITHUB_REPO#https://}"
+git remote add origin "$GITHUB_REPO"
 git checkout -b "$BRANCH_NAME"
-git add AmwalSDK.xcframework
-git commit -m "Add XCFramework version $VERSION"
+git add "$XCFRAMEWORK_ZIP"
+git commit -m "Add compressed XCFramework version $VERSION"
 git tag "$VERSION"
 git push --tags origin "$BRANCH_NAME" --force
-echo "XCFramework pushed to GitHub repository successfully."
+echo "Compressed XCFramework pushed to GitHub repository successfully."
 
-# Step 14: Push podspec to CocoaPods trunk
+# Step 16: Push podspec to CocoaPods trunk
 echo "Pushing podspec to CocoaPods trunk..."
 pod trunk push "$PODSPEC_PATH"
 echo "Podspec pushed successfully."
-
-
