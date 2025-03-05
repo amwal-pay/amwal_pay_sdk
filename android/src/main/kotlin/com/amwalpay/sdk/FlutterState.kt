@@ -4,6 +4,7 @@ import android.content.Context
 import io.flutter.embedding.android.KeyData.CHANNEL
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodChannel
+import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.view.TextureRegistry
 
 class FlutterState(
@@ -15,7 +16,7 @@ class FlutterState(
 ) {
     private val methodChannel: MethodChannel = MethodChannel(binaryMessenger, "com_amwalpay_sdk")
 
-    fun startListening(methodCallHandler: AmwalSDK?) {
+    fun startListening(methodCallHandler: MethodCallHandler?) {
         methodChannel.setMethodCallHandler(methodCallHandler)
     }
 
