@@ -8,7 +8,8 @@ A comprehensive payment SDK that enables Flutter integration for Amwal payment s
   s.homepage         = 'https://www.amwal-pay.com'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Your Name' => 'amr.elskaan@amwal-pay.com' }
-  s.source           = { :git => 'https://github.com/amwal-pay/amwal_pay_sdk', :tag => s.version.to_s }
+  s.source = { :git => '.', :tag => s.version  }
+
 
   s.ios.deployment_target = '12.0'
   s.swift_version = '5.0'
