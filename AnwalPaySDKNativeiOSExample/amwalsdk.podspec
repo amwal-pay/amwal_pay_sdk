@@ -16,7 +16,7 @@ A comprehensive payment SDK that enables Flutter integration for Amwal payment s
   # Include all Swift files
   s.source_files = 'amwalsdk/**/*.{swift,h}'
   s.public_header_files = 'amwalsdk/**/*.h'
-  s.vendored_frameworks = 'amwalsdk/Flutter/*.xcframework'
+s.vendored_frameworks = 'amwalsdk/Flutter/*.xcframework'
 
   # Include resources if needed
   # s.resources = 'AmwalSDK/Resources/**/*'
