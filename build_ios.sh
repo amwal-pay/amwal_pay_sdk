@@ -90,15 +90,15 @@ echo "Creating XCFramework..."
 xcodebuild -create-xcframework \
   -framework "$OUTPUT_DIR/AmwalSDK-iOS.xcarchive/Products/Library/Frameworks/amwalsdk.framework" \
   -framework "$OUTPUT_DIR/AmwalSDK-iOS-Simulator.xcarchive/Products/Library/Frameworks/amwalsdk.framework" \
-  -output "$OUTPUT_DIR/AmwalSDK.xcframework"
+  -output "$OUTPUT_DIR/amwalsdk.xcframework"
 
-echo "XCFramework created successfully at $OUTPUT_DIR/AmwalSDK.xcframework."
+echo "XCFramework created successfully at $OUTPUT_DIR/amwalsdk.xcframework."
 
 # Step 10: Compress the XCFramework
 echo "Compressing XCFramework..."
 cd "$OUTPUT_DIR"
 XCFRAMEWORK_ZIP="AmwalSDK-$VERSION.zip"
-zip -r "$XCFRAMEWORK_ZIP" "AmwalSDK.xcframework"
+zip -r "$XCFRAMEWORK_ZIP" "amwalsdk.xcframework"
 echo "XCFramework compressed successfully into $XCFRAMEWORK_ZIP."
 
 # Step 11: Update the podspec with the extracted version
