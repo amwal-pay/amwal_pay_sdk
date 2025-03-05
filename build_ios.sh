@@ -34,6 +34,7 @@ echo "Building Flutter iOS framework in release mode..."
 flutter build ios-framework --no-debug --no-profile --release --output="$OUTPUT_DIR"
 echo "Build completed successfully. Frameworks are available in $OUTPUT_DIR"
 
+find "$OUTPUT_DIR" -type d -exec chmod 755 {} \;
 # Step 5: Navigate back to the project root
 cd "$PROJECT_ROOT"
 

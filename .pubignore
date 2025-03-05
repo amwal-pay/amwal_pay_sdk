@@ -6,3 +6,4 @@ assemble.py
 pub-credentials.json
 publish.sh
 build_pub_dev.sh
+build_ios.sh
