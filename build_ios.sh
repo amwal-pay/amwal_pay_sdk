@@ -85,4 +85,4 @@ chmod 0600 ~/.netrc
 
 # Push the podspec to CocoaPods trunk
 echo "Pushing podspec to CocoaPods trunk..."
-pod trunk push amwalsdk.podspec
+pod trunk push "$PODSPEC_PATH"
