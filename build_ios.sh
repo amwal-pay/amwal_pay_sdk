@@ -10,7 +10,7 @@ SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 PROJECT_ROOT="$SCRIPT_DIR"
 MODULE_DIR="$PROJECT_ROOT/amwal_sdk_flutter_module"
 OUTPUT_DIR="$PROJECT_ROOT/AnwalPaySDKNativeiOSExample/amwalsdk"
-PODSPEC_PATH="$OUTPUT_DIR/amwalsdk.podspec"
+PODSPEC_PATH="$PROJECT_ROOT/AnwalPaySDKNativeiOSExample/amwalsdk.podspec"
 
 # Step 1: Navigate to the Flutter module directory
 if [[ -d "$MODULE_DIR" ]]; then
