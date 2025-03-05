@@ -10,7 +10,7 @@ SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 PROJECT_ROOT="$SCRIPT_DIR"
 MODULE_DIR="$PROJECT_ROOT/amwal_sdk_flutter_module"
 OUTPUT_DIR="$PROJECT_ROOT/AnwalPaySDKNativeiOSExample/amwalsdk"
-PODSPEC_PATH="$OUTPUT_DIR/amwalsdk.podspec"
+PODSPEC_PATH="$PROJECT_ROOT/AnwalPaySDKNativeiOSExample/amwalsdk.podspec"
 
 # Step 1: Navigate to the Flutter module directory
 if [[ -d "$MODULE_DIR" ]]; then
@@ -34,7 +34,6 @@ echo "Building Flutter iOS framework in release mode..."
 flutter build ios-framework --no-debug --no-profile --release --output="$OUTPUT_DIR"
 echo "Build completed successfully. Frameworks are available in $OUTPUT_DIR"
 
-find "$OUTPUT_DIR" -type d -exec chmod 755 {} \;
 # Step 5: Navigate back to the project root
 cd "$PROJECT_ROOT"
 
