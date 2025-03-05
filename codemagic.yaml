@@ -2,6 +2,8 @@ workflows:
   custom_build:
     name: Custom Build Workflow
     environment:
+      groups:
+        - A
       flutter: stable # Specify the Flutter version if needed
       vars:
         CUSTOM_ENV_VAR: "CustomValue"
