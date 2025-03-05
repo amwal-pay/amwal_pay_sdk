@@ -1,6 +1,8 @@
 .fvm/
 AnwalPaySDKNativeExample/.gitignore
 AnwalPaySDKNativeExample/amwalsdk/
+AnwalPaySDKNativeExample/
+AnwalPaySDKNativeExample/
 build.sh
 assemble.py
 pub-credentials.json
