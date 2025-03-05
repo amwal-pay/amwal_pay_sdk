@@ -16,7 +16,7 @@ GITHUB_TOKEN="<your-github-token>"  # Replace with your actual GitHub token
 # Step 1: Build for iOS devices
 echo "Building for iOS devices..."
 xcodebuild archive \
-  -project "$PROJECT_ROOT/AnwalPaySDKNativeiOSExample.xcodeproj" \
+  -project "$PROJECT_ROOT/AnwalPaySDKNativeiOSExample/AnwalPaySDKNativeiOSExample.xcodeproj" \
   -scheme "amwalsdk" \
   -configuration Release \
   -destination "generic/platform=iOS" \
