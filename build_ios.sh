@@ -66,6 +66,19 @@ else
     echo "Error: $PODSPEC_PATH not found."
     exit 1
 fi
+
+
+
+# Set up CocoaPods trunk session for CI/CD
+# Create .netrc file with authentication token from environment variable
+echo "Setting up CocoaPods trunk authentication..."
+echo "machine trunk.cocoapods.org
+  login amr.elskaan@amwal-pay.com
+  password 8a950312db84f3534bf6e01e27c70595" > ~/.netrc
+chmod 0600 ~/.netrc
+
+
+
 # Step 8: Navigate back to the project root
 cd "$IOS_DIR"
 
@@ -78,13 +91,7 @@ git tag $VERSION
 echo "git tag version  $VERSION"
 
 
-# Set up CocoaPods trunk session for CI/CD
-# Create .netrc file with authentication token from environment variable
-echo "Setting up CocoaPods trunk authentication..."
-echo "machine trunk.cocoapods.org
-  login amr.elskaan@amwal-pay.com
-  password 8a950312db84f3534bf6e01e27c70595" > ~/.netrc
-chmod 0600 ~/.netrc
+
 
 # Push the podspec to CocoaPods trunk
 echo "Pushing podspec to CocoaPods trunk..."
