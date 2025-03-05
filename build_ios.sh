@@ -13,8 +13,7 @@ OUTPUT_DIR="$PROJECT_ROOT/AnwalPaySDKNativeiOSExample/amwalsdk/Flutter"
 PODSPEC_PATH="$PROJECT_ROOT/AnwalPaySDKNativeiOSExample/amwalsdk.podspec"
 PUBSPEC_PATH="$PROJECT_ROOT/pubspec.yaml"
 IOS_DIR="$PROJECT_ROOT/AnwalPaySDKNativeiOSExample"
-GITHUB_REPO="https://${GITHUB_TOKEN}@github.com/amwal-pay/AnwalPaySDKNativeiOSExample.git"
-
+GITHUB_API_URL="https://api.github.com/repos/amwal-pay/AnwalPaySDKNativeiOSExample"
 
 # Ensure necessary environment variables are set
 if [[ -z "$GITHUB_TOKEN" || -z "$COCOAPODS_USERNAME" || -z "$COCOAPODS_PASSWORD" ]]; then
@@ -119,34 +118,36 @@ echo "machine trunk.cocoapods.org
   password $COCOAPODS_PASSWORD" > ~/.netrc
 chmod 0600 ~/.netrc
 
-# Step 13: Navigate back to the iOS project root
-cd "$IOS_DIR"
+# Step 13: Create a GitHub release and upload the XCFramework
+echo "Creating GitHub release..."
+RELEASE_RESPONSE=$(curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" \
+    -H "Content-Type: application/json" \
+    -d "{
+          \"tag_name\": \"v$VERSION\",
+          \"target_commitish\": \"main\",
+          \"name\": \"Amwal SDK $VERSION\",
+          \"body\": \"Release of version $VERSION.\",
+          \"draft\": false,
+          \"prerelease\": false
+        }" \
+    "$GITHUB_API_URL/releases")
 
-# Step 14: Set up git repository for podspec validation
-BRANCH_NAME="release-$VERSION"
-echo "Setting up Git branch $BRANCH_NAME..."
-git init
-git checkout -b "$BRANCH_NAME"
-git add .
-git commit -m "Local commit for podspec validation"
-git tag "$VERSION"
+UPLOAD_URL=$(echo "$RELEASE_RESPONSE" | grep -oP '"upload_url": "\K[^"]*' | sed 's/{.*//')
 
-echo "Git tag version $VERSION"
+if [[ -z "$UPLOAD_URL" ]]; then
+    echo "Error: Failed to create a release. Response: $RELEASE_RESPONSE"
+    exit 1
+fi
 
-# Step 15: Push compressed XCFramework to GitHub
-echo "Pushing XCFramework to GitHub repository..."
-cd "$OUTPUT_DIR"
+echo "Uploading XCFramework zip to GitHub release..."
+curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" \
+    -H "Content-Type: application/zip" \
+    --data-binary @"$OUTPUT_DIR/$XCFRAMEWORK_ZIP" \
+    "$UPLOAD_URL?name=$XCFRAMEWORK_ZIP"
 
-git init
-git remote add origin "$GITHUB_REPO"
-git checkout -b "$BRANCH_NAME"
-git add "$XCFRAMEWORK_ZIP"
-git commit -m "Add compressed XCFramework version $VERSION"
-git tag "$VERSION"
-git push --tags origin "$BRANCH_NAME" --force
-echo "Compressed XCFramework pushed to GitHub repository successfully."
+echo "GitHub release created and XCFramework uploaded successfully."
 
-# Step 16: Push podspec to CocoaPods trunk
+# Step 14: Push podspec to CocoaPods trunk
 echo "Pushing podspec to CocoaPods trunk..."
 pod trunk push "$PODSPEC_PATH"
 echo "Podspec pushed successfully."
