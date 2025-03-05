@@ -12,6 +12,7 @@ MODULE_DIR="$PROJECT_ROOT/amwal_sdk_flutter_module"
 OUTPUT_DIR="$PROJECT_ROOT/AnwalPaySDKNativeiOSExample/amwalsdk/Flutter"
 PODSPEC_PATH="$PROJECT_ROOT/AnwalPaySDKNativeiOSExample/amwalsdk.podspec"
 PUBSPEC_PATH="$PROJECT_ROOT/pubspec.yaml"
+IOS_DIR="$PROJECT_ROOT/AnwalPaySDKNativeiOSExample"
 
 # Step 1: Navigate to the Flutter module directory
 if [[ -d "$MODULE_DIR" ]]; then
@@ -66,7 +67,7 @@ else
     exit 1
 fi
 # Step 8: Navigate back to the project root
-cd "$PROJECT_ROOT"
+cd "$IOS_DIR"
 
 # Set up git repository for podspec validation
 git init
