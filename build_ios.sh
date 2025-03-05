@@ -9,8 +9,7 @@ PROJECT_ROOT="$SCRIPT_DIR"
 OUTPUT_DIR="$PROJECT_ROOT/AmwalSDKBuild"
 VERSION=$(grep '^version:' "$PROJECT_ROOT/pubspec.yaml" | awk '{print $2}')
 GITHUB_REPO="https://github.com/amwal-pay/AnwalPaySDKNativeiOSExample.git"
-
-# Static GitHub Token (Replace <your-github-token> with the actual token)
+GITHUB_TOKEN="<your-github-token>"  # Replace with your actual GitHub token
 
 # Step 1: Build for iOS devices
 echo "Building for iOS devices..."
@@ -49,13 +48,15 @@ cd "$OUTPUT_DIR"
 
 # Configure Git
 git init
+git checkout -b main  # Create and switch to the 'main' branch
 git remote add origin "https://${GITHUB_TOKEN}@${GITHUB_REPO#https://}"
 git add AmwalSDK.xcframework
 git commit -m "Add XCFramework version $VERSION"
 git tag "$VERSION"
 
 # Push to GitHub
-git push --tags origin main --force
+git push --set-upstream origin main
+git push --tags
 echo "XCFramework pushed to GitHub repository successfully."
 
 # Step 5: Update and Publish Podspec
