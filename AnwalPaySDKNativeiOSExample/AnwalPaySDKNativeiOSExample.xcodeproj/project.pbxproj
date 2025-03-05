@@ -23,6 +23,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		C54BF1EC2D78FDFD002D6192 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F127914E2D57A71A0073F075 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -44,34 +54,70 @@
 		F12CE4DB2D555FAF00B5425E /* AnwalPaySDKNativeiOSExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AnwalPaySDKNativeiOSExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		F127914A2D57A71A0073F075 /* Exceptions for "amwalsdk" folder in "amwalsdk" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		C54BF1ED2D78FDFD002D6192 /* Exceptions for "amwalsdk" folder in "Embed Frameworks" phase from "amwalsdk" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			attributesByRelativePath = {
+				Flutter/App.xcframework = (CodeSignOnCopy, RemoveHeadersOnCopy, );
+				Flutter/FBLPromises.xcframework = (CodeSignOnCopy, RemoveHeadersOnCopy, );
+				Flutter/FirebaseCore.xcframework = (CodeSignOnCopy, RemoveHeadersOnCopy, );
+				Flutter/FirebaseCoreExtension.xcframework = (CodeSignOnCopy, RemoveHeadersOnCopy, );
+				Flutter/FirebaseCoreInternal.xcframework = (CodeSignOnCopy, RemoveHeadersOnCopy, );
+				Flutter/FirebaseCrashlytics.xcframework = (CodeSignOnCopy, RemoveHeadersOnCopy, );
+				Flutter/FirebaseInstallations.xcframework = (CodeSignOnCopy, RemoveHeadersOnCopy, );
+				Flutter/FirebaseRemoteConfigInterop.xcframework = (CodeSignOnCopy, RemoveHeadersOnCopy, );
+				Flutter/FirebaseSessions.xcframework = (CodeSignOnCopy, RemoveHeadersOnCopy, );
+				Flutter/Flutter.xcframework = (CodeSignOnCopy, RemoveHeadersOnCopy, );
+				Flutter/FlutterPluginRegistrant.xcframework = (CodeSignOnCopy, RemoveHeadersOnCopy, );
+				Flutter/GoogleDataTransport.xcframework = (CodeSignOnCopy, RemoveHeadersOnCopy, );
+				Flutter/GoogleUtilities.xcframework = (CodeSignOnCopy, RemoveHeadersOnCopy, );
+				Flutter/Promises.xcframework = (CodeSignOnCopy, RemoveHeadersOnCopy, );
+				Flutter/firebase_core.xcframework = (CodeSignOnCopy, RemoveHeadersOnCopy, );
+				Flutter/firebase_crashlytics.xcframework = (CodeSignOnCopy, RemoveHeadersOnCopy, );
+				Flutter/nanopb.xcframework = (CodeSignOnCopy, RemoveHeadersOnCopy, );
+				Flutter/nfc_manager.xcframework = (CodeSignOnCopy, RemoveHeadersOnCopy, );
+				Flutter/package_info_plus.xcframework = (CodeSignOnCopy, RemoveHeadersOnCopy, );
+				Flutter/path_provider_foundation.xcframework = (CodeSignOnCopy, RemoveHeadersOnCopy, );
+				Flutter/share_plus.xcframework = (CodeSignOnCopy, RemoveHeadersOnCopy, );
+				Flutter/shared_preferences_foundation.xcframework = (CodeSignOnCopy, RemoveHeadersOnCopy, );
+				Flutter/smart_auth.xcframework = (CodeSignOnCopy, RemoveHeadersOnCopy, );
+				Flutter/webview_flutter_wkwebview.xcframework = (CodeSignOnCopy, RemoveHeadersOnCopy, );
+			};
+			buildPhase = C54BF1EC2D78FDFD002D6192 /* Embed Frameworks */;
 			membershipExceptions = (
-				AmwalSDK.swift,
-				Config.swift,
+				Flutter/App.xcframework,
+				Flutter/FBLPromises.xcframework,
+				Flutter/firebase_core.xcframework,
+				Flutter/firebase_crashlytics.xcframework,
+				Flutter/FirebaseCore.xcframework,
+				Flutter/FirebaseCoreExtension.xcframework,
+				Flutter/FirebaseCoreInternal.xcframework,
+				Flutter/FirebaseCrashlytics.xcframework,
+				Flutter/FirebaseInstallations.xcframework,
+				Flutter/FirebaseRemoteConfigInterop.xcframework,
+				Flutter/FirebaseSessions.xcframework,
+				Flutter/Flutter.xcframework,
+				Flutter/FlutterPluginRegistrant.xcframework,
+				Flutter/GoogleDataTransport.xcframework,
+				Flutter/GoogleUtilities.xcframework,
+				Flutter/nanopb.xcframework,
+				Flutter/nfc_manager.xcframework,
+				Flutter/package_info_plus.xcframework,
+				Flutter/path_provider_foundation.xcframework,
+				Flutter/Promises.xcframework,
+				Flutter/share_plus.xcframework,
+				Flutter/shared_preferences_foundation.xcframework,
+				Flutter/smart_auth.xcframework,
+				Flutter/webview_flutter_wkwebview.xcframework,
 			);
-			publicHeaders = (
-				amwalsdk.h,
-			);
-			target = F127913F2D57A71A0073F075 /* amwalsdk */;
 		};
-		F1310C842D58BC1500DBFE2C /* Exceptions for "amwalsdk" folder in "AnwalPaySDKNativeiOSExample" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				AmwalSDK.swift,
-				Config.swift,
-			);
-			target = F12CE4DA2D555FAF00B5425E /* AnwalPaySDKNativeiOSExample */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		F12791412D57A71A0073F075 /* amwalsdk */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				F1310C842D58BC1500DBFE2C /* Exceptions for "amwalsdk" folder in "AnwalPaySDKNativeiOSExample" target */,
-				F127914A2D57A71A0073F075 /* Exceptions for "amwalsdk" folder in "amwalsdk" target */,
+				C54BF1ED2D78FDFD002D6192 /* Exceptions for "amwalsdk" folder in "Embed Frameworks" phase from "amwalsdk" target */,
 			);
 			path = amwalsdk;
 			sourceTree = "<group>";
@@ -161,6 +207,7 @@
 				F127913C2D57A71A0073F075 /* Sources */,
 				F127913D2D57A71A0073F075 /* Frameworks */,
 				F127913E2D57A71A0073F075 /* Resources */,
+				C54BF1EC2D78FDFD002D6192 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -179,13 +226,10 @@
 			buildConfigurationList = F12CE4EB2D555FB100B5425E /* Build configuration list for PBXNativeTarget "AnwalPaySDKNativeiOSExample" */;
 			buildPhases = (
 				AF8B108C06A20642527AC81E /* [CP] Check Pods Manifest.lock */,
-				F04DF1B9ECF7CD828DC2FC0C /* [CP-User] Run Flutter Build amwal_sdk_flutter_module Script */,
 				F12CE4D72D555FAF00B5425E /* Sources */,
 				F12CE4D82D555FAF00B5425E /* Frameworks */,
 				F12CE4D92D555FAF00B5425E /* Resources */,
 				F127914E2D57A71A0073F075 /* Embed Frameworks */,
-				35968E1A6820507D03B94AE2 /* [CP] Embed Pods Frameworks */,
-				00862BCC184C6DEA6FA392C2 /* [CP-User] Embed Flutter Build amwal_sdk_flutter_module Script */,
 			);
 			buildRules = (
 			);
@@ -256,33 +300,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		00862BCC184C6DEA6FA392C2 /* [CP-User] Embed Flutter Build amwal_sdk_flutter_module Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			name = "[CP-User] Embed Flutter Build amwal_sdk_flutter_module Script";
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "set -e\nset -u\nsource \"${SRCROOT}/../amwal_sdk_flutter_module/.ios/Flutter/flutter_export_environment.sh\"\nexport VERBOSE_SCRIPT_LOGGING=1 && \"$FLUTTER_ROOT\"/packages/flutter_tools/bin/xcode_backend.sh embed_and_thin";
-		};
-		35968E1A6820507D03B94AE2 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-AnwalPaySDKNativeiOSExample/Pods-AnwalPaySDKNativeiOSExample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-AnwalPaySDKNativeiOSExample/Pods-AnwalPaySDKNativeiOSExample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AnwalPaySDKNativeiOSExample/Pods-AnwalPaySDKNativeiOSExample-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		AF8B108C06A20642527AC81E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -304,16 +321,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		F04DF1B9ECF7CD828DC2FC0C /* [CP-User] Run Flutter Build amwal_sdk_flutter_module Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			name = "[CP-User] Run Flutter Build amwal_sdk_flutter_module Script";
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "set -e\nset -u\nsource \"${SRCROOT}/../amwal_sdk_flutter_module/.ios/Flutter/flutter_export_environment.sh\"\nexport VERBOSE_SCRIPT_LOGGING=1 && \"$FLUTTER_ROOT\"/packages/flutter_tools/bin/xcode_backend.sh build";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -350,6 +357,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_ASSET_PATHS = "amwalsdk/AmwalSDK.swift amwalsdk/Config.swift amwalsdk/amwalsdk.docc amwalsdk/amwalsdk.h";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -384,6 +392,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_ASSET_PATHS = "amwalsdk/AmwalSDK.swift amwalsdk/Config.swift amwalsdk/amwalsdk.docc amwalsdk/amwalsdk.h";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import amwalsdk
 
 // ViewModel class conforming to ObservableObject
 class PaymentFormViewModel: ObservableObject {    
