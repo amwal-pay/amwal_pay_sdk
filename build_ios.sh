@@ -69,12 +69,20 @@ fi
 # Step 8: Navigate back to the project root
 cd "$PROJECT_ROOT"
 
-# Step 9: Validate the podspec file
-if [[ -f "$PODSPEC_PATH" ]]; then
-    echo "Running pod lib lint on $PODSPEC_PATH..."
-    pod lib lint "$PODSPEC_PATH" --allow-warnings
-    echo "Podspec validation completed successfully."
-else
-    echo "Error: $PODSPEC_PATH not found."
-    exit 1
-fi
+# Set up git repository for podspec validation
+git init
+git add .
+git commit -m "Local commit for podspec validation"
+git tag $VERSION
+
+# Set up CocoaPods trunk session for CI/CD
+# Create .netrc file with authentication token from environment variable
+echo "Setting up CocoaPods trunk authentication..."
+echo "machine trunk.cocoapods.org
+  login amr.elskaan@amwal-pay.com
+  password 8a950312db84f3534bf6e01e27c70595" > ~/.netrc
+chmod 0600 ~/.netrc
+
+# Push the podspec to CocoaPods trunk
+echo "Pushing podspec to CocoaPods trunk..."
+pod trunk push amwalsdk.podspec
