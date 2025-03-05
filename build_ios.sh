@@ -123,12 +123,6 @@ git commit -m "Local commit for podspec validation"
 git tag "$VERSION"
 
 echo "Git tag version $VERSION"
-
-# Step 14: Push podspec to CocoaPods trunk
-echo "Pushing podspec to CocoaPods trunk..."
-pod trunk push "$PODSPEC_PATH"
-echo "Podspec pushed successfully."
-
 # Step 15: Push XCFramework to GitHub
 echo "Pushing XCFramework to GitHub repository..."
 cd "$OUTPUT_DIR"
@@ -141,3 +135,10 @@ git commit -m "Add XCFramework version $VERSION"
 git tag "$VERSION"
 git push --tags origin "$BRANCH_NAME" --force
 echo "XCFramework pushed to GitHub repository successfully."
+
+# Step 14: Push podspec to CocoaPods trunk
+echo "Pushing podspec to CocoaPods trunk..."
+pod trunk push "$PODSPEC_PATH"
+echo "Podspec pushed successfully."
+
+
