@@ -13,7 +13,8 @@ OUTPUT_DIR="$PROJECT_ROOT/AnwalPaySDKNativeiOSExample/amwalsdk/Flutter"
 PODSPEC_PATH="$PROJECT_ROOT/AnwalPaySDKNativeiOSExample/amwalsdk.podspec"
 PUBSPEC_PATH="$PROJECT_ROOT/pubspec.yaml"
 IOS_DIR="$PROJECT_ROOT/AnwalPaySDKNativeiOSExample"
-GITHUB_REPO="https://github.com/amwal-pay/AnwalPaySDKNativeiOSExample.git"
+GITHUB_REPO="https://${GITHUB_TOKEN}@github.com/amwal-pay/AnwalPaySDKNativeiOSExample.git"
+
 
 # Ensure necessary environment variables are set
 if [[ -z "$GITHUB_TOKEN" || -z "$COCOAPODS_USERNAME" || -z "$COCOAPODS_PASSWORD" ]]; then
