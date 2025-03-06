@@ -94,16 +94,16 @@ echo "Creating XCFramework..."
 xcodebuild -create-xcframework \
   -framework "$OUTPUT_DIR/AmwalSDK-iOS.xcarchive/Products/Library/Frameworks/amwalsdk.framework" \
   -framework "$OUTPUT_DIR/AmwalSDK-iOS-Simulator.xcarchive/Products/Library/Frameworks/amwalsdk.framework" \
-  -output "$OUTPUT_DIR/amwalsdk.xcframework"
+  -output "$OUTPUT_DIR/AmwalSDK.xcframework"
 
-echo "XCFramework created successfully at $OUTPUT_DIR/amwalsdk.xcframework."
+echo "XCFramework created successfully at $OUTPUT_DIR/AmwalSDK.xcframework."
 
-# Step 8: Create the XCFramework
-echo "Creating XCFramework..."
-xcodebuild -create-xcframework \
-    -framework "$OUTPUT_DIR/AmwalSDK-generic_platform=iOS.xcarchive/Products/Library/Frameworks/amwalsdk.framework" \
-    -framework "$OUTPUT_DIR/AmwalSDK-generic_platform=iOS_Simulator.xcarchive/Products/Library/Frameworks/amwalsdk.framework" \
-    -output "$OUTPUT_DIR/amwalsdk.xcframework"
+# Step 10: Compress the XCFramework
+echo "Compressing XCFramework..."
+cd "$OUTPUT_DIR"
+XCFRAMEWORK_ZIP="AmwalSDK-$VERSION.zip"
+zip -r "$XCFRAMEWORK_ZIP" "AmwalSDK.xcframework"
+echo "XCFramework compressed successfully into $XCFRAMEWORK_ZIP."
 
 # Step 9: Compress the XCFramework
 XCFRAMEWORK_ZIP="AmwalSDK-$VERSION.zip"
