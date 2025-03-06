@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'amwalsdk'
-  s.version          = '1.0.18'
+  s.version          = '1.0.21'
   s.summary          = 'Payment SDK for Amwal integration'
   s.description      = <<-DESC
 A comprehensive payment SDK that enables Flutter integration for Amwal payment solutions.
@@ -13,7 +13,7 @@ A comprehensive payment SDK that enables Flutter integration for Amwal payment s
   s.author           = { 'Amwal Pay' => 'amr.elskaan@amwal-pay.com' }
   
   s.source           = { 
-    :http => "https://github.com/amwal-pay/AnwalPaySDKNativeiOSExample/releases/download/#{s.version}/AmwalSDK.xcframework.zip",
+    :http => "https://github.com/amwal-pay/AnwalPaySDKNativeiOSExample/releases/download/v#{s.version}/AmwalSDK-#{s.version}.zip",
     :type => 'zip'
   }
 
