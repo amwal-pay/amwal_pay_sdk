@@ -67,23 +67,36 @@ else
     exit 1
 fi
 
-# Step 7: Build for iOS devices and Simulator
-for DESTINATION in "generic/platform=iOS" "generic/platform=iOS Simulator"; do
-    ARCHIVE_PATH="$OUTPUT_DIR/AmwalSDK-$(echo "$DESTINATION" | tr '/' '_')"
-    echo "Building for $DESTINATION..."
-    xcodebuild archive \
-        -project "$IOS_DIR/AnwalPaySDKNativeiOSExample.xcodeproj" \
-        -scheme "amwalsdk" \
-        -configuration Release \
-        -destination "$DESTINATION" \
-        -archivePath "$ARCHIVE_PATH" \
-        SKIP_INSTALL=NO \
-        BUILD_LIBRARY_FOR_DISTRIBUTION=YES
-    if [[ ! -d "$ARCHIVE_PATH.xcarchive" ]]; then
-        echo "Error: Archive failed for $DESTINATION."
-        exit 1
-    fi
-done
+# Step 7: Build for iOS devices
+echo "Building for iOS devices..."
+xcodebuild archive \
+  -project "$IOS_DIR/AnwalPaySDKNativeiOSExample.xcodeproj" \
+  -scheme "amwalsdk" \
+  -configuration Release \
+  -destination "generic/platform=iOS" \
+  -archivePath "$OUTPUT_DIR/AmwalSDK-iOS" \
+  SKIP_INSTALL=NO \
+  BUILD_LIBRARY_FOR_DISTRIBUTION=YES
+
+# Step 8: Build for iOS Simulator
+echo "Building for iOS Simulator..."
+xcodebuild archive \
+  -project "$IOS_DIR/AnwalPaySDKNativeiOSExample.xcodeproj" \
+  -scheme "amwalsdk" \
+  -configuration Release \
+  -destination "generic/platform=iOS Simulator" \
+  -archivePath "$OUTPUT_DIR/AmwalSDK-iOS-Simulator" \
+  SKIP_INSTALL=NO \
+  BUILD_LIBRARY_FOR_DISTRIBUTION=YES
+
+# Step 9: Create the XCFramework
+echo "Creating XCFramework..."
+xcodebuild -create-xcframework \
+  -framework "$OUTPUT_DIR/AmwalSDK-iOS.xcarchive/Products/Library/Frameworks/amwalsdk.framework" \
+  -framework "$OUTPUT_DIR/AmwalSDK-iOS-Simulator.xcarchive/Products/Library/Frameworks/amwalsdk.framework" \
+  -output "$OUTPUT_DIR/amwalsdk.xcframework"
+
+echo "XCFramework created successfully at $OUTPUT_DIR/amwalsdk.xcframework."
 
 # Step 8: Create the XCFramework
 echo "Creating XCFramework..."
