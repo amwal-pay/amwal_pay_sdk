@@ -147,7 +147,16 @@ curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" \
     --data-binary @"$OUTPUT_DIR/$XCFRAMEWORK_ZIP" \
     "$UPLOAD_URL?name=$XCFRAMEWORK_ZIP"
 
-# Step 12: Push podspec to CocoaPods trunk
+# Step 12: Set up CocoaPods trunk session for CI/CD
+echo "Setting up CocoaPods trunk authentication..."
+echo "machine trunk.cocoapods.org
+  login $COCOAPODS_USERNAME
+  password $COCOAPODS_PASSWORD" > ~/.netrc
+chmod 0600 ~/.netrc
+
+
+
+# Step 13: Push podspec to CocoaPods trunk
 echo "Pushing podspec to CocoaPods trunk..."
 pod trunk push "$PODSPEC_PATH"
 echo "Podspec pushed successfully."
