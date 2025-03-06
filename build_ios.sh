@@ -105,11 +105,7 @@ XCFRAMEWORK_ZIP="AmwalSDK-$VERSION.zip"
 zip -r "$XCFRAMEWORK_ZIP" "AmwalSDK.xcframework"
 echo "XCFramework compressed successfully into $XCFRAMEWORK_ZIP."
 
-# Step 9: Compress the XCFramework
-XCFRAMEWORK_ZIP="AmwalSDK-$VERSION.zip"
-echo "Compressing XCFramework into $XCFRAMEWORK_ZIP..."
-cd "$OUTPUT_DIR"
-zip -r "$XCFRAMEWORK_ZIP" "amwalsdk.xcframework"
+
 
 # Step 10: Update podspec with the extracted version
 if [[ -f "$PODSPEC_PATH" ]]; then
