@@ -102,7 +102,7 @@ echo "XCFramework created successfully at $OUTPUT_DIR/AmwalSDK.xcframework."
 echo "Compressing XCFramework..."
 cd "$OUTPUT_DIR"
 XCFRAMEWORK_ZIP="AmwalSDK-$VERSION.zip"
-zip -r "$XCFRAMEWORK_ZIP" "AmwalSDK.xcframework"
+zip -X -r -q -9 "$XCFRAMEWORK_ZIP" "AmwalSDK.xcframework"
 echo "XCFramework compressed successfully into $XCFRAMEWORK_ZIP."
 
 
