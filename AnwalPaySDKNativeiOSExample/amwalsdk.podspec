@@ -32,18 +32,32 @@ A comprehensive payment SDK that enables Flutter integration for Amwal payment s
   # This is important for handling the static framework properly
   s.static_framework = true
   
+  # Ensure embedded frameworks are included
+  s.xcconfig = { 
+    'LD_RUNPATH_SEARCH_PATHS' => '@executable_path/Frameworks @loader_path/Frameworks' 
+  }
+  
+  # Specify resource bundles to include
+  s.resource_bundles = { 
+    'AmwalSDK' => ['AmwalSDK.xcframework/**/*.{swift,h,modulemap}']
+  }
+  
   # Explicitly exclude any architecture issues
   s.pod_target_xcconfig = {
     'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64',
     'VALID_ARCHS' => 'arm64 x86_64',
     'ENABLE_BITCODE' => 'NO',
-    'OTHER_LDFLAGS' => '-ObjC'
+    'OTHER_LDFLAGS' => '-ObjC -all_load',
+    'HEADER_SEARCH_PATHS' => '$(inherited) "${PODS_ROOT}/AmwalSDK.xcframework/Headers"',
+    'FRAMEWORK_SEARCH_PATHS' => '$(inherited) "${PODS_ROOT}/AmwalSDK.xcframework/Frameworks"',
+    'DEFINES_MODULE' => 'YES',
+    'CLANG_ENABLE_MODULES' => 'YES'
   }
   
   s.user_target_xcconfig = {
     'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64',
     'VALID_ARCHS' => 'arm64 x86_64',
     'ENABLE_BITCODE' => 'NO',
-    'OTHER_LDFLAGS' => '-ObjC'
+    'OTHER_LDFLAGS' => '-ObjC -all_load'
   }
 end

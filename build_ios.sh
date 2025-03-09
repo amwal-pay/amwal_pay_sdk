@@ -70,13 +70,28 @@ fi
 # Step 7: Create a temporary directory to properly organize all necessary files
 TEMP_DIR="$IOS_DIR/temp_build"
 mkdir -p "$TEMP_DIR"
+mkdir -p "$TEMP_DIR/Headers"
+mkdir -p "$TEMP_DIR/Modules"
 
 # Copy all required source files to the temp directory
 echo "Copying essential source files..."
-cp "$IOS_DIR/amwalsdk/amwalsdk.h" "$TEMP_DIR/"
+cp "$IOS_DIR/amwalsdk/amwalsdk.h" "$TEMP_DIR/Headers/"
 cp "$IOS_DIR/amwalsdk/AmwalSDK.swift" "$TEMP_DIR/"
 cp "$IOS_DIR/amwalsdk/Config.swift" "$TEMP_DIR/"
-cp "$IOS_DIR/amwalsdk/amwalsdk.md" "$TEMP_DIR/" 2>/dev/null || echo "Note: amwalsdk.md not found, skipping"
+if [ -f "$IOS_DIR/amwalsdk/amwalsdk.md" ]; then
+    cp "$IOS_DIR/amwalsdk/amwalsdk.md" "$TEMP_DIR/"
+fi
+
+# Create module map to ensure headers are properly exposed
+echo "Creating module map..."
+cat > "$TEMP_DIR/Modules/module.modulemap" << EOL
+framework module amwalsdk {
+  umbrella header "amwalsdk.h"
+  
+  export *
+  module * { export * }
+}
+EOL
 
 # Make sure to copy all Flutter dependencies to be embedded
 echo "Copying Flutter dependencies..."
@@ -94,7 +109,9 @@ xcodebuild archive \
   SKIP_INSTALL=NO \
   BUILD_LIBRARY_FOR_DISTRIBUTION=YES \
   OTHER_LDFLAGS="-ObjC" \
-  EMBEDDED_CONTENT_CONTAINS_SWIFT=YES
+  EMBEDDED_CONTENT_CONTAINS_SWIFT=YES \
+  CLANG_ENABLE_MODULES=YES \
+  DEFINES_MODULE=YES
 
 # Step 9: Build for iOS Simulator with embedded dependencies
 echo "Building for iOS Simulator..."
@@ -107,24 +124,59 @@ xcodebuild archive \
   SKIP_INSTALL=NO \
   BUILD_LIBRARY_FOR_DISTRIBUTION=YES \
   OTHER_LDFLAGS="-ObjC" \
-  EMBEDDED_CONTENT_CONTAINS_SWIFT=YES
+  EMBEDDED_CONTENT_CONTAINS_SWIFT=YES \
+  CLANG_ENABLE_MODULES=YES \
+  DEFINES_MODULE=YES
 
-# Step 10: Check if necessary files are included in the built framework
+# Step 10: Check if necessary files are included in the built framework and manually add if needed
 DEVICE_FRAMEWORK="$OUTPUT_DIR/AmwalSDK-iOS.xcarchive/Products/Library/Frameworks/amwalsdk.framework"
 SIMULATOR_FRAMEWORK="$OUTPUT_DIR/AmwalSDK-iOS-Simulator.xcarchive/Products/Library/Frameworks/amwalsdk.framework"
 
-echo "Verifying framework content..."
-if [ ! -f "$DEVICE_FRAMEWORK/Headers/amwalsdk.h" ]; then
-    echo "Warning: amwalsdk.h not found in device framework, copying manually..."
-    mkdir -p "$DEVICE_FRAMEWORK/Headers"
-    cp "$TEMP_DIR/amwalsdk.h" "$DEVICE_FRAMEWORK/Headers/"
-fi
+echo "Verifying and correcting framework content..."
 
-if [ ! -f "$SIMULATOR_FRAMEWORK/Headers/amwalsdk.h" ]; then
-    echo "Warning: amwalsdk.h not found in simulator framework, copying manually..."
-    mkdir -p "$SIMULATOR_FRAMEWORK/Headers"
-    cp "$TEMP_DIR/amwalsdk.h" "$SIMULATOR_FRAMEWORK/Headers/"
-fi
+# Function to ensure files exist in the framework
+ensure_files_exist() {
+    local framework_path=$1
+    
+    # Ensure Headers directory exists
+    mkdir -p "$framework_path/Headers"
+    
+    # Copy header file
+    if [ ! -f "$framework_path/Headers/amwalsdk.h" ]; then
+        echo "Adding amwalsdk.h to $(basename "$framework_path")"
+        cp "$TEMP_DIR/Headers/amwalsdk.h" "$framework_path/Headers/"
+    fi
+    
+    # Ensure Modules directory exists
+    mkdir -p "$framework_path/Modules"
+    
+    # Add module map if missing
+    if [ ! -f "$framework_path/Modules/module.modulemap" ]; then
+        echo "Adding module.modulemap to $(basename "$framework_path")"
+        cp "$TEMP_DIR/Modules/module.modulemap" "$framework_path/Modules/"
+    fi
+    
+    # Ensure Swift files are included
+    local swift_files=("AmwalSDK.swift" "Config.swift")
+    for swift_file in "${swift_files[@]}"; do
+        # Swift files get compiled, so we look for their symbols in the binary
+        # Just check file exists in temp directory
+        if [ -f "$TEMP_DIR/$swift_file" ]; then
+            echo "Verified $swift_file is available for compilation"
+        else
+            echo "Warning: $swift_file not found in temp directory"
+        fi
+    done
+    
+    # Copy all Flutter XCFrameworks into the Frameworks directory
+    mkdir -p "$framework_path/Frameworks"
+    echo "Adding Flutter dependencies to $(basename "$framework_path")/Frameworks"
+    cp -R "$TEMP_DIR/Frameworks/"*.xcframework "$framework_path/Frameworks/"
+}
+
+# Fix both device and simulator frameworks
+ensure_files_exist "$DEVICE_FRAMEWORK"
+ensure_files_exist "$SIMULATOR_FRAMEWORK"
 
 # Step 11: Create the XCFramework with embedded frameworks
 echo "Creating XCFramework with embedded dependencies..."
