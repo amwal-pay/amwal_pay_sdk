@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'amwalsdk'
-  s.version          = '1.0.21'
+  s.version          = '1.0.22'
   s.summary          = 'Payment SDK for Amwal integration'
   s.description      = <<-DESC
 A comprehensive payment SDK that enables Flutter integration for Amwal payment solutions.
@@ -23,6 +23,9 @@ A comprehensive payment SDK that enables Flutter integration for Amwal payment s
   # Make sure the path to the framework is correct after extraction
   s.vendored_frameworks = 'AmwalSDK.xcframework'
   
+  # Preserve paths for all content within the framework
+  s.preserve_paths = 'AmwalSDK.xcframework/**/*'
+  
   # Add frameworks that the SDK depends on
   s.frameworks = 'UIKit', 'Foundation'
   
@@ -33,12 +36,14 @@ A comprehensive payment SDK that enables Flutter integration for Amwal payment s
   s.pod_target_xcconfig = {
     'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64',
     'VALID_ARCHS' => 'arm64 x86_64',
-    'ENABLE_BITCODE' => 'NO'
+    'ENABLE_BITCODE' => 'NO',
+    'OTHER_LDFLAGS' => '-ObjC'
   }
   
   s.user_target_xcconfig = {
     'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64',
     'VALID_ARCHS' => 'arm64 x86_64',
-    'ENABLE_BITCODE' => 'NO'
+    'ENABLE_BITCODE' => 'NO',
+    'OTHER_LDFLAGS' => '-ObjC'
   }
 end
