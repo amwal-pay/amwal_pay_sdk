@@ -55,7 +55,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-		C54BF1ED2D78FDFD002D6192 /* Exceptions for "amwalsdk" folder in "Embed Frameworks" phase from "amwalsdk" target */ = {
+		F1C868C52D7D9A2B007C1966 /* Exceptions for "amwalsdk" folder in "Embed Frameworks" phase from "amwalsdk" target */ = {
 			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
 			attributesByRelativePath = {
 				Flutter/App.xcframework = (CodeSignOnCopy, RemoveHeadersOnCopy, );
@@ -117,7 +117,7 @@
 		F12791412D57A71A0073F075 /* amwalsdk */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				C54BF1ED2D78FDFD002D6192 /* Exceptions for "amwalsdk" folder in "Embed Frameworks" phase from "amwalsdk" target */,
+				F1C868C52D7D9A2B007C1966 /* Exceptions for "amwalsdk" folder in "Embed Frameworks" phase from "amwalsdk" target */,
 			);
 			path = amwalsdk;
 			sourceTree = "<group>";
@@ -225,7 +225,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F12CE4EB2D555FB100B5425E /* Build configuration list for PBXNativeTarget "AnwalPaySDKNativeiOSExample" */;
 			buildPhases = (
-				AF8B108C06A20642527AC81E /* [CP] Check Pods Manifest.lock */,
+				3D61283E69C04BD9BADD7F33 /* [CP] Check Pods Manifest.lock */,
 				F12CE4D72D555FAF00B5425E /* Sources */,
 				F12CE4D82D555FAF00B5425E /* Frameworks */,
 				F12CE4D92D555FAF00B5425E /* Resources */,
@@ -300,7 +300,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		AF8B108C06A20642527AC81E /* [CP] Check Pods Manifest.lock */ = {
+		3D61283E69C04BD9BADD7F33 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -380,6 +380,7 @@
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 x86_64";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -415,6 +416,7 @@
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 x86_64";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
