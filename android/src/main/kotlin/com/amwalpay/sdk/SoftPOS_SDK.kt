@@ -7,8 +7,9 @@ import android.nfc.NfcAdapter
 import android.util.Log
 import com.amwal_pay.softpos.DeviceConfigs
 import com.amwal_pay.softpos.ReceiptData
-import com.amwal_pay.softpos.VacServices
-import com.amwal_pay.softpos.VacTransaction
+import com.amwal_pay.softpos.Result
+import com.amwal_pay.softpos.SoftPosSDK
+import com.amwal_pay.softpos.TransactionResult
 import com.amwal_pay.softpos.client.Configuration
 import com.amwal_pay.softpos.enums.TransactionType
 import com.github.devnied.emvnfccard.model.EmvCard
@@ -33,22 +34,13 @@ class SoftPOS_SDK : FlutterPlugin, ActivityAware, MethodCallHandler{
     var isScanning: Boolean = false
     var apiCall: MethodCall? = null
     var apiResult: MethodChannel.Result? = null
-    var vacServices : VacServices? = null
-    var vacTransaction : VacTransaction? = null
+    lateinit var softPosSdk: SoftPosSDK
     private var activity: Activity? = null
 
     private var flutterState: FlutterState? = null
-
+    private val deviceConfigs = DeviceConfigs(Configuration.STORE_PROFILE_ID, Configuration.KERNEL_PROFILE_ID)
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         activity = binding.activity
-        val storeProfileId = Configuration.STORE_PROFILE_ID
-        val kernelProfileId = Configuration.KERNEL_PROFILE_ID
-        val deviceConfigs = DeviceConfigs(storeProfileId, kernelProfileId)
-        activity?.let {
-            vacServices = VacServices(deviceConfigs ,it)
-            vacTransaction = VacTransaction(it)
-        }
-
     }
 
     override fun onDetachedFromActivityForConfigChanges() {}
@@ -78,6 +70,7 @@ class SoftPOS_SDK : FlutterPlugin, ActivityAware, MethodCallHandler{
             },
             binding.textureRegistry
         )
+        softPosSdk = SoftPosSDK(binding.applicationContext)
         flutterState?.startListening(this)
     }
 
@@ -116,21 +109,21 @@ class SoftPOS_SDK : FlutterPlugin, ActivityAware, MethodCallHandler{
             return
         }
         CoroutineScope(Dispatchers.IO).launch {
-            vacTransaction?.pay(activity!!, amount, TransactionType.PURCHASE)?.collect {
+            softPosSdk?.pay(activity!!, amount, TransactionType.PURCHASE)?.collect {
                 when (it) {
-                    is VacTransaction.TransactionResult.Approved -> withContext(Dispatchers.Main){
+                    is TransactionResult.Approved -> withContext(Dispatchers.Main){
                         sendReceiptInfo(true,it.receiptData)
                     }
 
-                    is VacTransaction.TransactionResult.Declined -> withContext(Dispatchers.Main){
+                    is TransactionResult.Declined -> withContext(Dispatchers.Main){
                         sendReceiptInfo(false,it.receiptData)
                     }
 
-                    is VacTransaction.TransactionResult.Failed -> withContext(Dispatchers.Main){
+                    is TransactionResult.Failed -> withContext(Dispatchers.Main){
                         parsedError(it.error.message)
                     }
 
-                    is VacTransaction.TransactionResult.ShowMessage -> withContext(Dispatchers.Main){
+                    is TransactionResult.ShowMessage -> withContext(Dispatchers.Main){
                         var messageText = ""
                         for (message in it.message) {
                             messageText += message
@@ -138,7 +131,7 @@ class SoftPOS_SDK : FlutterPlugin, ActivityAware, MethodCallHandler{
                         parsedError(messageText)
                     }
 
-                    is VacTransaction.TransactionResult.Aborted -> {
+                    is TransactionResult.Aborted -> {
                         parsedError(it.message)
                     }
                 }
@@ -168,25 +161,25 @@ class SoftPOS_SDK : FlutterPlugin, ActivityAware, MethodCallHandler{
     }
 
     private fun initVac(res: MethodChannel.Result) {
-        if(vacServices == null){
+        if(softPosSdk == null){
             res.success(0)
         }
         CoroutineScope(Dispatchers.IO).launch {
-            vacServices?.initVacThinClient()?.collect { result ->
+            softPosSdk?.initVacThinClient(deviceConfigs)?.collect { result ->
                 when (result) {
-                    is VacServices.Result.Success -> withContext(Dispatchers.Main){
+                    is Result.Success -> withContext(Dispatchers.Main){
                         res.success(2)
                     }
 
-                    is VacServices.Result.InProgress -> withContext(Dispatchers.Main){
+                    is Result.InProgress -> withContext(Dispatchers.Main){
 
                     }
 
-                    is VacServices.Result.Error -> withContext(Dispatchers.Main){
+                    is Result.Error -> withContext(Dispatchers.Main){
                         res.success(1)
                     }
 
-                    is VacServices.Result.NotEligible -> {
+                    is Result.NotEligible -> {
                         var eMessage = ""
                         for (r in result.messages){
                             eMessage.plus("${r.message}\n")
