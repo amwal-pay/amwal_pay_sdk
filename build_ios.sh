@@ -74,7 +74,7 @@ xcodebuild archive \
   -scheme "amwalsdk" \
   -configuration Release \
   -destination "generic/platform=iOS" \
-  -archivePath "$OUTPUT_DIR/AmwalSDK-iOS" \
+  -archivePath "$OUTPUT_DIR/amwalsdk-iOS" \
   SKIP_INSTALL=NO \
   BUILD_LIBRARY_FOR_DISTRIBUTION=YES
 
@@ -85,24 +85,24 @@ xcodebuild archive \
   -scheme "amwalsdk" \
   -configuration Release \
   -destination "generic/platform=iOS Simulator" \
-  -archivePath "$OUTPUT_DIR/AmwalSDK-iOS-Simulator" \
+  -archivePath "$OUTPUT_DIR/amwalsdk-iOS-Simulator" \
   SKIP_INSTALL=NO \
   BUILD_LIBRARY_FOR_DISTRIBUTION=YES
 
 # Step 9: Create the XCFramework
 echo "Creating XCFramework..."
 xcodebuild -create-xcframework \
-  -framework "$OUTPUT_DIR/AmwalSDK-iOS.xcarchive/Products/Library/Frameworks/amwalsdk.framework" \
-  -framework "$OUTPUT_DIR/AmwalSDK-iOS-Simulator.xcarchive/Products/Library/Frameworks/amwalsdk.framework" \
-  -output "$OUTPUT_DIR/AmwalSDK.xcframework"
+  -framework "$OUTPUT_DIR/amwalsdk-iOS.xcarchive/Products/Library/Frameworks/amwalsdk.framework" \
+  -framework "$OUTPUT_DIR/amwalsdk-iOS-Simulator.xcarchive/Products/Library/Frameworks/amwalsdk.framework" \
+  -output "$OUTPUT_DIR/amwalsdk.xcframework"
 
-echo "XCFramework created successfully at $OUTPUT_DIR/AmwalSDK.xcframework."
+echo "XCFramework created successfully at $OUTPUT_DIR/amwalsdk.xcframework."
 
 # Step 10: Compress the XCFramework
 echo "Compressing XCFramework..."
 cd "$OUTPUT_DIR"
-XCFRAMEWORK_ZIP="AmwalSDK-$VERSION.zip"
-zip -X -r -q -9 "$XCFRAMEWORK_ZIP" "AmwalSDK.xcframework"
+XCFRAMEWORK_ZIP="amwalsdk-$VERSION.zip"
+zip -X -r -q -9 "$XCFRAMEWORK_ZIP" "amwalsdk.xcframework"
 echo "XCFramework compressed successfully into $XCFRAMEWORK_ZIP."
 
 
@@ -123,7 +123,7 @@ RELEASE_RESPONSE=$(curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" \
     -d "{
           \"tag_name\": \"v$VERSION\",
           \"target_commitish\": \"main\",
-          \"name\": \"Amwal SDK $VERSION\",
+          \"name\": \"amwalsdk $VERSION\",
           \"body\": \"Release of version $VERSION.\",
           \"draft\": false,
           \"prerelease\": false
