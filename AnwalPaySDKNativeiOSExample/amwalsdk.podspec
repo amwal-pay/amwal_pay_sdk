@@ -20,22 +20,25 @@ A comprehensive payment SDK that enables Flutter integration for Amwal payment s
   s.ios.deployment_target = '12.0'
   s.swift_version = '5.0'
   
-  # Make sure the path to the framework is correct after extraction
-  s.vendored_frameworks = 'AmwalSDK.xcframework'
-  
+  # Framework for Debug and Release
+  s.vendored_frameworks = {
+    'Debug' => 'Frameworks/Debug/AmwalSDK.xcframework',
+    'Release' => 'Frameworks/Release/AmwalSDK.xcframework'
+  }
+
   # Add frameworks that the SDK depends on
   s.frameworks = 'UIKit', 'Foundation'
-  
-  # This is important for handling the static framework properly
+
+  # Static framework configuration
   s.static_framework = true
-  
-  # Explicitly exclude any architecture issues
+
+  # Handle architecture exclusions
   s.pod_target_xcconfig = {
     'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64',
     'VALID_ARCHS' => 'arm64 x86_64',
     'ENABLE_BITCODE' => 'NO'
   }
-  
+
   s.user_target_xcconfig = {
     'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64',
     'VALID_ARCHS' => 'arm64 x86_64',
