@@ -4,7 +4,7 @@
 FLUTTER_PROJECT_PATH="amwal_sdk_flutter_module"
 OUTPUT_DIR="Frameworks"
 DEST_DIR="../AnwalPaySDKNativeiOSExample/Frameworks"
-XCODE_PROJECT="AnwalPaySDKNativeiOSExample.xcodeproj"
+XCODE_PROJECT="AnwalPaySDKNativeiOSExample/AnwalPaySDKNativeiOSExample.xcodeproj"
 AMWALSDK_SCHEME="amwalsdk"
 
 # Step 1: Clean previous builds
@@ -14,7 +14,7 @@ rm -rf "$OUTPUT_DIR"
 # Step 2: Build Flutter Framework
 echo "Building Flutter framework..."
 cd "$FLUTTER_PROJECT_PATH"
-flutter build ios-framework \
+flutter build ios-framework --no-profile\
     --output="../$OUTPUT_DIR"
 cd ..
 
