@@ -1,0 +1,133 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -project AnwalPaySDKNativeiOSExample/AnwalPaySDKNativeiOSExample.xcodeproj -scheme amwalsdk -configuration Release -sdk iphoneos BUILD_DIR=amwalsdk/build clean build
+
+User defaults from command line:
+    IDEPackageSupportUseBuiltinSCM = YES
+
+Build settings from command line:
+    BUILD_DIR = amwalsdk/build
+    SDKROOT = iphoneos18.2
+
+--- xcodebuild: WARNING: Using the first of multiple matching destinations:
+{ platform:iOS, id:dvtdevice-DVTiPhonePlaceholder-iphoneos:placeholder, name:Any iOS Device }
+{ platform:macOS, arch:arm64, variant:Designed for [iPad,iPhone], id:00008112-001C30E11AA3401E, name:My Mac }
+{ platform:macOS, arch:arm64, variant:Mac Catalyst, id:00008112-001C30E11AA3401E, name:My Mac }
+{ platform:macOS, arch:x86_64, variant:Mac Catalyst, id:00008112-001C30E11AA3401E, name:My Mac }
+{ platform:iOS Simulator, id:dvtdevice-DVTiOSDeviceSimulatorPlaceholder-iphonesimulator:placeholder, name:Any iOS Simulator Device }
+{ platform:macOS, variant:Mac Catalyst, name:Any Mac }
+
+** CLEAN SUCCEEDED **
+
+--- xcodebuild: WARNING: Using the first of multiple matching destinations:
+{ platform:iOS, id:dvtdevice-DVTiPhonePlaceholder-iphoneos:placeholder, name:Any iOS Device }
+{ platform:macOS, arch:arm64, variant:Designed for [iPad,iPhone], id:00008112-001C30E11AA3401E, name:My Mac }
+{ platform:macOS, arch:arm64, variant:Mac Catalyst, id:00008112-001C30E11AA3401E, name:My Mac }
+{ platform:macOS, arch:x86_64, variant:Mac Catalyst, id:00008112-001C30E11AA3401E, name:My Mac }
+{ platform:iOS Simulator, id:dvtdevice-DVTiOSDeviceSimulatorPlaceholder-iphonesimulator:placeholder, name:Any iOS Simulator Device }
+{ platform:macOS, variant:Mac Catalyst, name:Any Mac }
+{ platform:iOS Simulator, id:10596205-F378-4902-9DF2-FE6C240089CD, OS:18.3.1, name:iPad (10th generation) }
+{ platform:iOS Simulator, id:10596205-F378-4902-9DF2-FE6C240089CD, OS:18.3.1, name:iPad (10th generation) }
+{ platform:iOS Simulator, id:7DDC2E8D-DA3C-445B-8C57-4F7CF9DFA683, OS:18.3.1, name:iPad (A16) }
+{ platform:iOS Simulator, id:7DDC2E8D-DA3C-445B-8C57-4F7CF9DFA683, OS:18.3.1, name:iPad (A16) }
+{ platform:iOS Simulator, id:C3C8D6F8-1DD9-49A4-9082-37956D9059E5, OS:18.3.1, name:iPad Air 11-inch (M2) }
+{ platform:iOS Simulator, id:C3C8D6F8-1DD9-49A4-9082-37956D9059E5, OS:18.3.1, name:iPad Air 11-inch (M2) }
+{ platform:iOS Simulator, id:987D4B75-E515-468D-918F-12DD8C167A17, OS:18.3.1, name:iPad Air 11-inch (M3) }
+{ platform:iOS Simulator, id:987D4B75-E515-468D-918F-12DD8C167A17, OS:18.3.1, name:iPad Air 11-inch (M3) }
+{ platform:iOS Simulator, id:3D57A8AA-C323-4CB9-BE1A-D6E97E272701, OS:18.3.1, name:iPad Air 13-inch (M2) }
+{ platform:iOS Simulator, id:3D57A8AA-C323-4CB9-BE1A-D6E97E272701, OS:18.3.1, name:iPad Air 13-inch (M2) }
+{ platform:iOS Simulator, id:1B893F95-F206-46EE-BD03-F3DBC3433618, OS:18.3.1, name:iPad Air 13-inch (M3) }
+{ platform:iOS Simulator, id:1B893F95-F206-46EE-BD03-F3DBC3433618, OS:18.3.1, name:iPad Air 13-inch (M3) }
+{ platform:iOS Simulator, id:713F56C3-0C43-4126-ABE1-BFE59F8458A6, OS:18.3.1, name:iPad Pro 11-inch (M4) }
+{ platform:iOS Simulator, id:713F56C3-0C43-4126-ABE1-BFE59F8458A6, OS:18.3.1, name:iPad Pro 11-inch (M4) }
+{ platform:iOS Simulator, id:E5B699C2-32E6-4E32-8D8A-DAE870E96C02, OS:18.3.1, name:iPad Pro 13-inch (M4) }
+{ platform:iOS Simulator, id:E5B699C2-32E6-4E32-8D8A-DAE870E96C02, OS:18.3.1, name:iPad Pro 13-inch (M4) }
+{ platform:iOS Simulator, id:D12663EC-F624-4592-9C43-B764E371B49E, OS:18.3.1, name:iPad mini (A17 Pro) }
+{ platform:iOS Simulator, id:D12663EC-F624-4592-9C43-B764E371B49E, OS:18.3.1, name:iPad mini (A17 Pro) }
+{ platform:iOS Simulator, id:E1184ADD-9912-4303-B03A-858B2AB912F9, OS:18.3.1, name:iPhone 16 }
+{ platform:iOS Simulator, id:E1184ADD-9912-4303-B03A-858B2AB912F9, OS:18.3.1, name:iPhone 16 }
+{ platform:iOS Simulator, id:2B834598-F46D-4EE3-AAB7-5438FF45ABC2, OS:18.3.1, name:iPhone 16 Plus }
+{ platform:iOS Simulator, id:2B834598-F46D-4EE3-AAB7-5438FF45ABC2, OS:18.3.1, name:iPhone 16 Plus }
+{ platform:iOS Simulator, id:A54C7D8F-7325-4150-AEB0-1272DB10499C, OS:18.3.1, name:iPhone 16 Pro }
+{ platform:iOS Simulator, id:A54C7D8F-7325-4150-AEB0-1272DB10499C, OS:18.3.1, name:iPhone 16 Pro }
+{ platform:iOS Simulator, id:9F3EB646-51BF-4D8E-8711-A5A2B281F0E1, OS:18.3.1, name:iPhone 16 Pro Max }
+{ platform:iOS Simulator, id:9F3EB646-51BF-4D8E-8711-A5A2B281F0E1, OS:18.3.1, name:iPhone 16 Pro Max }
+{ platform:iOS Simulator, id:737125A8-E18D-4580-9D41-F99E2F8917DA, OS:18.3.1, name:iPhone 16e }
+{ platform:iOS Simulator, id:737125A8-E18D-4580-9D41-F99E2F8917DA, OS:18.3.1, name:iPhone 16e }
+{ platform:iOS Simulator, id:37813E6E-D6DB-49A6-A374-1B83851F7A17, OS:18.3.1, name:iPhone SE (3rd generation) }
+{ platform:iOS Simulator, id:37813E6E-D6DB-49A6-A374-1B83851F7A17, OS:18.3.1, name:iPhone SE (3rd generation) }
+Prepare packages
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (1 target)
+    Target 'amwalsdk' in project 'AnwalPaySDKNativeiOSExample' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.2.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.2.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+ReadFileContents /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/share/docc/features.json
+
+Build description signature: ccd0693a5479c7041266fb05cbe51d43
+Build description path: /Users/anaselmansory/Library/Developer/Xcode/DerivedData/AnwalPaySDKNativeiOSExample-chiuaxqtgpkobkgrzhmwmyavrtlf/Build/Intermediates.noindex/XCBuildData/ccd0693a5479c7041266fb05cbe51d43.xcbuilddata
+warning: duplicate output file '/Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework.dSYM' on task: ProcessXCFramework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/Frameworks/Flutter.xcframework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework ios
+warning: duplicate output file '/Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework.dSYM/Contents' on task: ProcessXCFramework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/Frameworks/Flutter.xcframework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework ios
+warning: duplicate output file '/Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework.dSYM/Contents/Info.plist' on task: ProcessXCFramework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/Frameworks/Flutter.xcframework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework ios
+warning: duplicate output file '/Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework.dSYM/Contents/Resources' on task: ProcessXCFramework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/Frameworks/Flutter.xcframework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework ios
+warning: duplicate output file '/Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework.dSYM/Contents/Resources/DWARF' on task: ProcessXCFramework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/Frameworks/Flutter.xcframework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework ios
+warning: duplicate output file '/Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework.dSYM/Contents/Resources/DWARF/Flutter' on task: ProcessXCFramework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/Frameworks/Flutter.xcframework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework ios
+warning: duplicate output file '/Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework.dSYM/Contents/Resources/Relocations' on task: ProcessXCFramework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/Frameworks/Flutter.xcframework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework ios
+warning: duplicate output file '/Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework.dSYM/Contents/Resources/Relocations/aarch64' on task: ProcessXCFramework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/Frameworks/Flutter.xcframework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework ios
+warning: duplicate output file '/Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework.dSYM/Contents/Resources/Relocations/aarch64/Flutter.yml' on task: ProcessXCFramework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/Frameworks/Flutter.xcframework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework ios
+error: Multiple commands produce '/Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework.dSYM'
+    note: Command: ProcessXCFramework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/Frameworks/App.xcframework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/App.framework ios
+    note: Command: ProcessXCFramework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/Frameworks/Flutter.xcframework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework ios
+error: Multiple commands produce '/Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework.dSYM/Contents'
+    note: Command: ProcessXCFramework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/Frameworks/App.xcframework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/App.framework ios
+    note: Command: ProcessXCFramework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/Frameworks/Flutter.xcframework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework ios
+error: Multiple commands produce '/Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework.dSYM/Contents/Info.plist'
+    note: Command: ProcessXCFramework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/Frameworks/App.xcframework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/App.framework ios
+    note: Command: ProcessXCFramework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/Frameworks/Flutter.xcframework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework ios
+error: Multiple commands produce '/Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework.dSYM/Contents/Resources'
+    note: Command: ProcessXCFramework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/Frameworks/App.xcframework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/App.framework ios
+    note: Command: ProcessXCFramework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/Frameworks/Flutter.xcframework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework ios
+error: Multiple commands produce '/Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework.dSYM/Contents/Resources/DWARF'
+    note: Command: ProcessXCFramework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/Frameworks/App.xcframework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/App.framework ios
+    note: Command: ProcessXCFramework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/Frameworks/Flutter.xcframework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework ios
+error: Multiple commands produce '/Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework.dSYM/Contents/Resources/DWARF/Flutter'
+    note: Command: ProcessXCFramework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/Frameworks/App.xcframework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/App.framework ios
+    note: Command: ProcessXCFramework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/Frameworks/Flutter.xcframework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework ios
+error: Multiple commands produce '/Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework.dSYM/Contents/Resources/Relocations'
+    note: Command: ProcessXCFramework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/Frameworks/App.xcframework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/App.framework ios
+    note: Command: ProcessXCFramework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/Frameworks/Flutter.xcframework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework ios
+error: Multiple commands produce '/Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework.dSYM/Contents/Resources/Relocations/aarch64'
+    note: Command: ProcessXCFramework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/Frameworks/App.xcframework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/App.framework ios
+    note: Command: ProcessXCFramework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/Frameworks/Flutter.xcframework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework ios
+error: Multiple commands produce '/Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework.dSYM/Contents/Resources/Relocations/aarch64/Flutter.yml'
+    note: Command: ProcessXCFramework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/Frameworks/App.xcframework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/App.framework ios
+    note: Command: ProcessXCFramework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/Frameworks/Flutter.xcframework /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/amwalsdk/build/Release-iphoneos/Flutter.framework ios
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.2.sdk /Users/anaselmansory/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphoneos18.2-22C146-d5b9239ec3bf5b3adbecdf21472871e3.sdkstatcache
+    cd /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/AnwalPaySDKNativeiOSExample.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.2.sdk -o /Users/anaselmansory/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphoneos18.2-22C146-d5b9239ec3bf5b3adbecdf21472871e3.sdkstatcache
+
+CreateBuildDirectory /Users/anaselmansory/Library/Developer/Xcode/DerivedData/AnwalPaySDKNativeiOSExample-chiuaxqtgpkobkgrzhmwmyavrtlf/Build/Products
+    cd /Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/AnwalPaySDKNativeiOSExample.xcodeproj
+    builtin-create-build-directory /Users/anaselmansory/Library/Developer/Xcode/DerivedData/AnwalPaySDKNativeiOSExample-chiuaxqtgpkobkgrzhmwmyavrtlf/Build/Products
+
+note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'amwalsdk' from project 'AnwalPaySDKNativeiOSExample')
+/Users/anaselmansory/StudioProjects/amwal_pay_sdk/AnwalPaySDKNativeiOSExample/AnwalPaySDKNativeiOSExample.xcodeproj: warning: DEFINES_MODULE was set, but no umbrella header could be found to generate the module map (in target 'amwalsdk' from project 'AnwalPaySDKNativeiOSExample')
+warning: Run script build phase 'Run Script' will be run during every build because it does not specify any outputs. To address this issue, either add output dependencies to the script phase, or configure it to run in every build by unchecking "Based on dependency analysis" in the script phase. (in target 'amwalsdk' from project 'AnwalPaySDKNativeiOSExample')
+** BUILD FAILED **
+
+
+The following build commands failed:
+	Building project AnwalPaySDKNativeiOSExample with scheme amwalsdk and configuration Release
+(1 failure)
