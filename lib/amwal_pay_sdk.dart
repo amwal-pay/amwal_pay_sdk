@@ -39,8 +39,6 @@ class AmwalPaySdk {
   }) async {
     AmwalPaySdk.settings = settings;
 
-
-
     AmwalSdkSettingContainer.locale = settings.locale;
     SDKNetworkConstants.isSdkInApp = true;
     await SdkBuilder.instance.initCacheStorage();
@@ -73,8 +71,8 @@ class AmwalPaySdk {
       settings.flavor,
     );
 
-    SDKNetworkConstants.setEnvironment(environment:  settings.environment ?? Environment.PROD);
-
+    SDKNetworkConstants.setEnvironment(
+        environment: settings.environment ?? Environment.PROD);
 
     HttpOverrides.global = MyHttpOverrides();
     final networkService = NetworkServiceBuilder.instance.setupNetworkService(
@@ -224,6 +222,29 @@ class AmwalPaySdk {
   Future<void> openCardScreen(AmwalInAppSdkSettings settings) async {
     final cardSdk = await _initCardSdk(settings: settings);
     AmwalSdkSettingContainer.locale = settings.locale;
+    AmwalPaySdk.settings = AmwalSdkSettings(
+      token: settings.token,
+      secureHashValue: settings.secureHashValue,
+      merchantId: settings.merchantId,
+      transactionId: settings.transactionId,
+      currency: '', // Card SDK doesn't require currency
+      amount: '', // Card SDK doesn't require amount
+      terminalId: settings.terminalIds.first,
+      merchantName: settings.merchantName,
+      getTransactionFunction: settings.getTransactionFunction,
+      onCountComplete: settings.onCountComplete,
+      locale: settings.locale,
+      isMocked: settings.isMocked,
+      onError: settings.onError,
+      log: settings.log,
+      onTokenExpired: settings.onTokenExpired,
+      countDownInSeconds: settings.countDownInSeconds,
+      flavor: settings.flavor,
+      isSoftPOS: settings.isSoftPOS,
+      environment: settings.environment,
+        maxTransactionAmount:settings.maxTransactionAmount
+
+    );
     await CacheStorageHandler.instance.write(
       CacheKeys.merchant_flavor,
       settings.flavor,

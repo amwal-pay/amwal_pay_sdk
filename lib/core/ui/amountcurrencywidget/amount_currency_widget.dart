@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
+import '../../../amwal_pay_sdk.dart';
+
 class AmountCurrencyWidget extends StatelessWidget {
   final AmountCurrencyWidgetCubit cubit;
 
@@ -48,6 +50,12 @@ class AmountCurrencyWidget extends StatelessWidget {
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: FormBuilderValidators.compose(
                     [
+                      FormBuilderValidators.max(
+                        AmwalPaySdk.settings?.maxTransactionAmount ?? 5000,
+                        errorText: 'max_transaction_amount_exceeded'.translate(
+                          context,
+                        ),
+                      ),
                       FormBuilderValidators.numeric(),
                       FormBuilderValidators.min(
                         0.1,

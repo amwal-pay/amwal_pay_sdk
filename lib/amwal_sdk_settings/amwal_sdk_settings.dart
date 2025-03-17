@@ -15,6 +15,7 @@ abstract class IAmwalSdkSettings {
   final String currency;
   final String? merchantName;
   final String? flavor;
+  final double? maxTransactionAmount;
   final String sessionToken;
 
     Environment? environment = Environment.PROD;
@@ -44,6 +45,7 @@ abstract class IAmwalSdkSettings {
     required this.amount,
     required this.onPay,
     this.countDownInSeconds = 90,
+    this.maxTransactionAmount = 5000,
     this.getTransactionFunction,
     this.onError,
     this.onCountComplete,
@@ -69,6 +71,7 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
     required super.onPay,
     super.getTransactionFunction,
     super.countDownInSeconds = 90,
+    super.maxTransactionAmount = 5000,
     super.onCountComplete,
     super.locale,
     super.isMocked,
@@ -79,6 +82,7 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
     super.flavor,
     super.environment,
     super.customerCallback,
+
   }) : super(
           amount: '',
           currency: '',
@@ -90,6 +94,7 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
   factory AmwalInAppSdkSettings.fromJson(Map<String, dynamic> json) {
     return AmwalInAppSdkSettings(
       token: json['token'],
+      maxTransactionAmount: json['maxTransactionAmount'],
       secureHashValue: json['secureHashValue'],
       merchantId: json['merchantId'],
       terminalIds: json['terminalIds'] ?? [],
@@ -120,6 +125,7 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
       'amount': amount,
       'merchantName': merchantName,
       'locale': locale,
+      'maxTransactionAmount': maxTransactionAmount,
       'isMocked': isMocked,
       'countDownInSeconds': countDownInSeconds,
       'flavor': flavor,
@@ -155,7 +161,7 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
     super.customerCallback,
     super.customerId,
     super.isSoftPOS,
-    super.environment,
+    super.environment,super.maxTransactionAmount,
   }) : super(terminalIds: [terminalId], onPay: (_, [__]) {});
 
   factory AmwalSdkSettings.fromJson(Map<String, dynamic> json) {
