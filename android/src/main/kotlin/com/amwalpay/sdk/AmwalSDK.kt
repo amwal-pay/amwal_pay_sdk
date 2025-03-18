@@ -105,53 +105,71 @@ class AmwalSDK : FlutterPlugin, ActivityAware, MethodCallHandler, NfcAdapter.Rea
         }
         flutterState?.stopListening()
         flutterState = null
-        if (nfcAdapter != null) {
-            nfcAdapter!!.disableReaderMode(activity)
-            if (isScanning) {
+        safeDisableNfcReaderMode()
+    }
 
+    private fun safeDisableNfcReaderMode() {
+        try {
+            if (activity?.isFinishing == false && activity?.isDestroyed == false) {
+                nfcAdapter?.disableReaderMode(activity)
+                isScanning = false
             }
+        } catch (e: IllegalStateException) {
+            Log.w(TAG, "Activity is already destroyed, skipping NFC cleanup")
+        } catch (e: Exception) {
+            Log.e(TAG, "Error during NFC cleanup", e)
         }
     }
 
-
     private fun terminate(result: MethodChannel.Result) {
-        nfcAdapter?.disableReaderMode(activity)
-        isScanning = false
+        safeDisableNfcReaderMode()
         result.success(true)
     }
 
     private fun initNFC(result: MethodChannel.Result) {
-        nfcAdapter = NfcAdapter.getDefaultAdapter(activity)
-        if (nfcAdapter == null) {
+        try {
+            nfcAdapter = NfcAdapter.getDefaultAdapter(activity)
+            if (nfcAdapter == null) {
+                result.success(0)
+                return
+            }
+            if (!nfcAdapter!!.isEnabled()) {
+                result.success(1)
+                return
+            }
+            result.success(2)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error initializing NFC", e)
             result.success(0)
-
-            return
         }
-        if (!nfcAdapter!!.isEnabled()) {
-            result.success(1)
-
-            return
-        }
-        result.success(2)
     }
 
     private fun initListen(res: MethodChannel.Result, call: MethodCall?) {
-        if (isScanning) {
-            res.success(parsedError("One read operation already running"))
-            return
+        try {
+            if (isScanning) {
+                res.success(parsedError("One read operation already running"))
+                return
+            }
+            if (nfcAdapter == null) {
+                res.success(parsedError("NFC Not Yet Ready"))
+                return
+            }
+            if (activity?.isFinishing == true || activity?.isDestroyed == true) {
+                res.success(parsedError("Activity is no longer active"))
+                return
+            }
+            apiResult = res
+            apiCall = call
+            isScanning = true
+            val options: Bundle = Bundle()
+            options.putInt(NfcAdapter.EXTRA_READER_PRESENCE_CHECK_DELAY, 250)
+            val nfcFlags: Int =
+                NfcAdapter.FLAG_READER_NFC_A or NfcAdapter.FLAG_READER_NFC_B or NfcAdapter.FLAG_READER_NFC_F or NfcAdapter.FLAG_READER_NFC_V or NfcAdapter.FLAG_READER_NO_PLATFORM_SOUNDS
+            nfcAdapter!!.enableReaderMode(activity, this, nfcFlags, options)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error initializing NFC listener", e)
+            res.success(parsedError("Failed to initialize NFC listener"))
         }
-        if (nfcAdapter == null) {
-            res.success(parsedError("NFC Not Yet Ready"))
-            return
-        }
-        apiResult = res
-        apiCall = call
-        isScanning = true
-        val options: Bundle = Bundle()
-        options.putInt(NfcAdapter.EXTRA_READER_PRESENCE_CHECK_DELAY, 250)
-        val nfcFlags: Int =
-            NfcAdapter.FLAG_READER_NFC_A or NfcAdapter.FLAG_READER_NFC_B or NfcAdapter.FLAG_READER_NFC_F or NfcAdapter.FLAG_READER_NFC_V or NfcAdapter.FLAG_READER_NO_PLATFORM_SOUNDS
-        nfcAdapter!!.enableReaderMode(activity, this, nfcFlags, options)
     }
 
     fun sendCardInfo(data: EmvCard) {
