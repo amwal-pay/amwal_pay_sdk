@@ -2,7 +2,7 @@
 
 # Variables
 API_URL="https://central.sonatype.com/api/v1/publisher/upload" # Replace with your API URL
-API_KEY="eXhpN3dKYzg6Sy9ibWZRS3hCbW9GT083ZkN6Zk11RDI0SDNPRHovRlJIMFJBdEUzMi8rQys=" # Replace with your Base64-encoded API key
+API_KEY="b0NWd010MS86K2wyenRLMnJVR3J5enU0SndQYzVmL0tYZkwwcHVsRFJ2UHlaTlBrVE5PL08=" # Replace with your Base64-encoded API key
 FILE_PATH="amwal_sdk.zip" # Replace with the file path
 
 # Check if the file exists
