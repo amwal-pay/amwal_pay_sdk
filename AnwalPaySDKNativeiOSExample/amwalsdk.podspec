@@ -1,47 +1,21 @@
 Pod::Spec.new do |s|
   s.name             = 'amwalsdk'
-  s.version          = '1.0.21'
-  s.summary          = 'Payment SDK for Amwal integration'
-  s.description      = <<-DESC
-A comprehensive payment SDK that enables Flutter integration for Amwal payment solutions.
-                       DESC
+  s.version          = '1.0.31'
+  s.summary          = 'AMWAL SDK for iOS'
+  s.description      = 'The AMWAL SDK provides features for payment integration in iOS applications.'
   s.homepage         = 'https://github.com/amwal-pay/AnwalPaySDKNativeiOSExample'
-  
-  # Change license to avoid file reference
-  s.license          = { :type => 'MIT', :text => 'Copyright (c) 2024 Amwal Pay. All rights reserved.' }
-  
+  s.license          = { :type => 'MIT' }
   s.author           = { 'Amwal Pay' => 'amr.elskaan@amwal-pay.com' }
-  
-  s.source           = { 
-    :http => "https://github.com/amwal-pay/AnwalPaySDKNativeiOSExample/releases/download/v#{s.version}/amwalsdk-#{s.version}.zip",
-    :type => 'zip'
-  }
+  s.platform         = :ios, '12.0'
+  s.swift_version    = '5.0'
 
-  s.ios.deployment_target = '12.0'
-  s.swift_version = '5.0'
-  
-  # Framework for Debug and Release
-  s.vendored_frameworks = {
-    'Debug' => 'Frameworks/Debug/AmwalSDK.xcframework',
-    'Release' => 'Frameworks/Release/AmwalSDK.xcframework'
-  }
+  s.source           = { :path => "." }
+  s.vendored_frameworks = 'amwalsdk.framework'
+  s.preserve_paths = 'amwalsdk.framework/Frameworks/*.framework'
 
-  # Add frameworks that the SDK depends on
-  s.frameworks = 'UIKit', 'Foundation'
-
-  # Static framework configuration
-  s.static_framework = true
-
-  # Handle architecture exclusions
-  s.pod_target_xcconfig = {
-    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64',
-    'VALID_ARCHS' => 'arm64 x86_64',
-    'ENABLE_BITCODE' => 'NO'
-  }
-
-  s.user_target_xcconfig = {
-    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64',
-    'VALID_ARCHS' => 'arm64 x86_64',
-    'ENABLE_BITCODE' => 'NO'
+  s.xcconfig = {
+    'ENABLE_BITCODE' => 'NO',
+    'FRAMEWORK_SEARCH_PATHS' => '$(inherited) $(PODS_ROOT)/amwalsdk/amwalsdk.framework/Frameworks',
+    'OTHER_LDFLAGS' => '$(inherited) -framework Flutter -framework FlutterPluginRegistrant'
   }
 end
