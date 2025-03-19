@@ -56,21 +56,25 @@ flutter pub get
 echo "Building Flutter iOS framework in release mode..."
 flutter build ios-framework --no-debug --no-profile --release --output="$OUTPUT_DIR"
 
+# Step 6: Ensure frameworks were built successfully
+RELEASE_DIR="$OUTPUT_DIR/Release"
+if [[ -d "$RELEASE_DIR" ]]; then
+    echo "Moving frameworks from $RELEASE_DIR to $OUTPUT_DIR..."
+    mv "$RELEASE_DIR/"* "$OUTPUT_DIR/"
+    rm -r "$RELEASE_DIR"
+else
+    echo "Error: Release directory not found. Build might have failed."
+    exit 1
+fi
 
-
-
-
-
-# Step 10: Compress the XCFramework
-echo "Compressing XCFramework..."
+# Step 7: Compress the entire amwalsdk folder (not just the Flutter subfolder)
+echo "Compressing amwalsdk folder..."
 cd "$IOS_DIR"
 XCFRAMEWORK_ZIP="amwalsdk-$VERSION.zip"
 zip -X -r -q -9 "$XCFRAMEWORK_ZIP" "amwalsdk"
-echo "XCFramework compressed successfully into $XCFRAMEWORK_ZIP."
+echo "amwalsdk folder compressed successfully into $XCFRAMEWORK_ZIP."
 
-
-
-# Step 10: Update podspec with the extracted version
+# Step 8: Update podspec with the extracted version
 if [[ -f "$PODSPEC_PATH" ]]; then
     echo "Updating podspec version to $VERSION..."
     sed -i '' "s/s\.version[[:space:]]*=[[:space:]]*'[^']*'/s.version          = '$VERSION'/" "$PODSPEC_PATH"
@@ -79,7 +83,7 @@ else
     exit 1
 fi
 
-# Step 11: Create a GitHub release and upload the XCFramework
+# Step 9: Create a GitHub release and upload the amwalsdk ZIP
 echo "Creating GitHub release..."
 RELEASE_RESPONSE=$(curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" \
     -H "Content-Type: application/json" \
@@ -100,22 +104,20 @@ if [[ -z "$UPLOAD_URL" ]]; then
     exit 1
 fi
 
-echo "Uploading XCFramework zip to GitHub release..."
+echo "Uploading amwalsdk ZIP to GitHub release..."
 curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" \
     -H "Content-Type: application/zip" \
-    --data-binary @"$OUTPUT_DIR/$XCFRAMEWORK_ZIP" \
+    --data-binary @"$XCFRAMEWORK_ZIP" \
     "$UPLOAD_URL?name=$XCFRAMEWORK_ZIP"
 
-# Step 12: Set up CocoaPods trunk session for CI/CD
+# Step 10: Set up CocoaPods trunk session for CI/CD
 echo "Setting up CocoaPods trunk authentication..."
 echo "machine trunk.cocoapods.org
   login $COCOAPODS_USERNAME
   password $COCOAPODS_PASSWORD" > ~/.netrc
 chmod 0600 ~/.netrc
 
-
-
-# Step 13: Push podspec to CocoaPods trunk
+# Step 11: Push podspec to CocoaPods trunk
 echo "Pushing podspec to CocoaPods trunk..."
 pod trunk push "$PODSPEC_PATH"
 echo "Podspec pushed successfully."
