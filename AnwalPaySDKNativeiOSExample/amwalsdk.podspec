@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.pod_target_xcconfig = { 'SWIFT_OPTIMIZATION_LEVEL' => '-Onone' }
 
   s.source           = {
-    :http => "https://github.com/amwal-pay/AnwalPaySDKNativeiOSExample/releases/download/v#{s.version}/amwalsdk-#{s.version}.zip",
+    :http => "https://github.com/amwal-pay/AnwalPaySDKNativeiOSExample/releases/download/v#{s.version}/amwalsdk-release.zip",
     :type => 'zip'
   }
   s.source_files     = 'amwalsdk/*.{h,m,swift}'
