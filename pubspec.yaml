@@ -1,6 +1,6 @@
 name: amwal_pay_sdk
 description: amwal pay sdk
-version: 1.0.31
+version: 1.0.35
 homepage: "https://github.com/amwal-pay/amwal_pay_sdk"
 
 environment:
