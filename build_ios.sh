@@ -67,12 +67,12 @@ else
     exit 1
 fi
 
-# Step 7: Compress the entire amwalsdk folder (not just the Flutter subfolder)
-echo "Compressing amwalsdk folder..."
+# Step 7: Compress the entire amwalsdk folder and the podspec file together
+echo "Compressing amwalsdk folder and podspec file..."
 cd "$IOS_DIR"
 XCFRAMEWORK_ZIP="amwalsdk-$VERSION.zip"
-zip -X -r -q -9 "$XCFRAMEWORK_ZIP" "amwalsdk"
-echo "amwalsdk folder compressed successfully into $XCFRAMEWORK_ZIP."
+zip -X -r -q -9 "$XCFRAMEWORK_ZIP" "amwalsdk" "amwalsdk.podspec"
+echo "amwalsdk folder and podspec compressed successfully into $XCFRAMEWORK_ZIP."
 
 # Step 8: Update podspec with the extracted version
 if [[ -f "$PODSPEC_PATH" ]]; then
