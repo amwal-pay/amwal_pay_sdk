@@ -22,6 +22,7 @@ import 'core/ui/loading_dialog.dart';
 import 'features/card/presentation/sale_by_card_contact_less_screen.dart';
 import 'features/transaction/data/repository/transaction_repository_impl.dart';
 import 'localization/app_localizations_setup.dart';
+import 'package:amwal_pay_sdk/core/logger/amwal_logger.dart';
 
 export 'package:amwal_pay_sdk/features/receipt/receipt_handler.dart';
 export 'package:amwal_pay_sdk/navigator/sdk_navigator.dart';
@@ -37,7 +38,9 @@ class AmwalPaySdk {
   }) async {
     AmwalPaySdk.settings = settings;
 
-
+    if (settings.logger != null) {
+      AmwalLogger.setLogger(settings.logger!);
+    }
 
     AmwalSdkSettingContainer.locale = settings.locale;
     SDKNetworkConstants.isSdkInApp = true;
@@ -71,8 +74,8 @@ class AmwalPaySdk {
       settings.flavor,
     );
 
-    SDKNetworkConstants.setEnvironment(environment:  settings.environment ?? Environment.PROD);
-
+    SDKNetworkConstants.setEnvironment(
+        environment: settings.environment ?? Environment.PROD);
 
     HttpOverrides.global = MyHttpOverrides();
     final networkService = NetworkServiceBuilder.instance.setupNetworkService(

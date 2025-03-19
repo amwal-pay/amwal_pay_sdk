@@ -11,8 +11,8 @@ import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:amwal_pay_sdk/service/nfc_manager.dart';
 import 'package:dartz/dartz.dart';
 import 'package:debit_credit_card_widget/debit_credit_card_widget.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:amwal_pay_sdk/core/logger/amwal_logger.dart';
 
 import '../../../core/networking/constants.dart';
 
@@ -44,7 +44,7 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
           globalTranslator: globalTranslator,
         );
       } else if (nfcStatus == NFCStatus.notAvailable) {
-        errorMessage =  "nfc_unavailable".translate(
+        errorMessage = "nfc_unavailable".translate(
           context.mounted ? context : context,
           globalTranslator: globalTranslator,
         );
@@ -53,7 +53,7 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
           globalTranslator: globalTranslator,
         );
       } else {
-        errorMessage =  "nfc_unavailable".translate(
+        errorMessage = "nfc_unavailable".translate(
           context.mounted ? context : context,
           globalTranslator: globalTranslator,
         );
@@ -65,9 +65,9 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
       return nfcStatus!;
     } catch (e, s) {
       if (!SDKNetworkConstants.isSdkInApp) {
-        FirebaseCrashlytics.instance.recordError(e, s);
+        AmwalLogger.logError(e, s);
       }
-      errorMessage =  "nfc_unavailable".translate(
+      errorMessage = "nfc_unavailable".translate(
         context.mounted ? context : context,
         globalTranslator: globalTranslator,
       );
@@ -87,7 +87,7 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
     OnPayCallback? onPay,
     EventCallback? log,
   ) async {
-   final scanResult = await NFCManager.instance.startNFCScan();
+    final scanResult = await NFCManager.instance.startNFCScan();
 
     // var scanResult = {
     //
@@ -96,22 +96,22 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
     // };
     if (!(scanResult['success'] as bool)) {
       if (!SDKNetworkConstants.isSdkInApp) {
-        FirebaseCrashlytics.instance.recordError(scanResult['error'], null);
+        AmwalLogger.logError(scanResult['error'], null);
       }
       return left((scanResult['error'] as String));
     } else {
       if (cardInfo == null) {
         await terminateNFC();
         if (!SDKNetworkConstants.isSdkInApp) {
-          FirebaseCrashlytics.instance.log(scanResult.toString());
+          AmwalLogger.logError(scanResult.toString(), null);
         }
         try {
           scanResult['cardExpiry'] = _convertArabicToEnglishNumbers(
-            (scanResult['cardExpiry'] as String? )?? '',
+            (scanResult['cardExpiry'] as String?) ?? '',
           );
         } catch (e) {
           if (!SDKNetworkConstants.isSdkInApp) {
-            FirebaseCrashlytics.instance.recordError(scanResult, null);
+            AmwalLogger.logError(scanResult, null);
           }
         }
 
@@ -244,32 +244,26 @@ class SaleByCardContactLessCubit extends SaleByCardManualCubit {
     emit(ICubitState.success(uiModel: PurchaseResponse(success: true)));
   }
 
-
-
-    tryAgain(
+  tryAgain(
       BuildContext context,
       String Function(String p1)? translator,
       void Function(BuildContext context) dismissDialog,
       OnPayCallback? onPay,
-      EventCallback? log,   Function() setstatu) async {
-      errorMessage = null;
-      setupMessage = "Initializing SDK..";
-      await terminateNFC();
-      await checkNFCStatus(context, translator);
-      if (context.mounted) {
-        startNFCScan(
-          context,
-          translator,
-          dismissDialog,
-          onPay,
-          log,
-        );
-
-      }
-      setstatu();
+      EventCallback? log,
+      Function() setstatu) async {
+    errorMessage = null;
+    setupMessage = "Initializing SDK..";
+    await terminateNFC();
+    await checkNFCStatus(context, translator);
+    if (context.mounted) {
+      startNFCScan(
+        context,
+        translator,
+        dismissDialog,
+        onPay,
+        log,
+      );
     }
-
-
-
-
+    setstatu();
+  }
 }

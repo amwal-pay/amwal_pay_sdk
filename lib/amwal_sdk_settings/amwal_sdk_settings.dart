@@ -1,6 +1,7 @@
 import 'package:amwal_pay_sdk/core/networking/constants.dart';
 import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:flutter/material.dart';
+import 'package:amwal_pay_sdk/core/logger/amwal_logger.dart';
 
 abstract class IAmwalSdkSettings {
   final String token;
@@ -16,8 +17,9 @@ abstract class IAmwalSdkSettings {
   final String? merchantName;
   final String? flavor;
   final String sessionToken;
+  final AmwalLoggerFunction? logger;
 
-    Environment? environment = Environment.PROD;
+  Environment? environment = Environment.PROD;
 
   final OnPayCallback onPay;
   final OnPayCallback? onCountComplete;
@@ -48,6 +50,7 @@ abstract class IAmwalSdkSettings {
     this.onError,
     this.onCountComplete,
     this.merchantName,
+    this.logger,
     this.flavor,
     this.locale = const Locale('en'),
     this.isMocked = false,
