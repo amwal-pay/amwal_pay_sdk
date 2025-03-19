@@ -10,7 +10,10 @@ Pod::Spec.new do |s|
   s.swift_version    = '5.0'
   s.pod_target_xcconfig = { 'SWIFT_OPTIMIZATION_LEVEL' => '-Onone' }
 
-  s.source           = { :path => "." }
+  s.source           = {
+    :http => "https://github.com/amwal-pay/AnwalPaySDKNativeiOSExample/releases/download/v#{s.version}/amwalsdk-#{s.version}.zip",
+    :type => 'zip'
+  }
   s.source_files     = 'amwalsdk/*.{h,m,swift}'
   s.resource_bundles = {
     'amwalsdk' => ['amwalsdk/**/*.{storyboard,xib,xcassets,json,png,jpg,strings,ttf,otf}']
