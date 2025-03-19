@@ -56,53 +56,16 @@ flutter pub get
 echo "Building Flutter iOS framework in release mode..."
 flutter build ios-framework --no-debug --no-profile --release --output="$OUTPUT_DIR"
 
-# Step 6: Ensure frameworks were built successfully
-RELEASE_DIR="$OUTPUT_DIR/Release"
-if [[ -d "$RELEASE_DIR" ]]; then
-    echo "Moving frameworks from $RELEASE_DIR to $OUTPUT_DIR..."
-    mv "$RELEASE_DIR/"* "$OUTPUT_DIR/"
-    rm -r "$RELEASE_DIR"
-else
-    echo "Error: Release directory not found. Build might have failed."
-    exit 1
-fi
 
-# Step 7: Build for iOS devices
-echo "Building for iOS devices..."
-xcodebuild archive \
-  -project "$IOS_DIR/AnwalPaySDKNativeiOSExample.xcodeproj" \
-  -scheme "amwalsdk" \
-  -configuration Release \
-  -destination "generic/platform=iOS" \
-  -archivePath "$OUTPUT_DIR/amwalsdk-iOS" \
-  SKIP_INSTALL=NO \
-  BUILD_LIBRARY_FOR_DISTRIBUTION=YES
 
-# Step 8: Build for iOS Simulator
-echo "Building for iOS Simulator..."
-xcodebuild archive \
-  -project "$IOS_DIR/AnwalPaySDKNativeiOSExample.xcodeproj" \
-  -scheme "amwalsdk" \
-  -configuration Release \
-  -destination "generic/platform=iOS Simulator" \
-  -archivePath "$OUTPUT_DIR/amwalsdk-iOS-Simulator" \
-  SKIP_INSTALL=NO \
-  BUILD_LIBRARY_FOR_DISTRIBUTION=YES
 
-# Step 9: Create the XCFramework
-echo "Creating XCFramework..."
-xcodebuild -create-xcframework \
-  -framework "$OUTPUT_DIR/amwalsdk-iOS.xcarchive/Products/Library/Frameworks/amwalsdk.framework" \
-  -framework "$OUTPUT_DIR/amwalsdk-iOS-Simulator.xcarchive/Products/Library/Frameworks/amwalsdk.framework" \
-  -output "$OUTPUT_DIR/amwalsdk.xcframework"
 
-echo "XCFramework created successfully at $OUTPUT_DIR/amwalsdk.xcframework."
 
 # Step 10: Compress the XCFramework
 echo "Compressing XCFramework..."
-cd "$OUTPUT_DIR"
+cd "$IOS_DIR"
 XCFRAMEWORK_ZIP="amwalsdk-$VERSION.zip"
-zip -X -r -q -9 "$XCFRAMEWORK_ZIP" "amwalsdk.xcframework"
+zip -X -r -q -9 "$XCFRAMEWORK_ZIP" "amwalsdk"
 echo "XCFramework compressed successfully into $XCFRAMEWORK_ZIP."
 
 
