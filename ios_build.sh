@@ -5,7 +5,7 @@ DEST_DIR="AnwalPaySDKNativeiOSExample/amwalsdk"
 ZIP_OUTPUT_DIR="zipped_frameworks"
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 PUBSPEC_PATH="pubspec.yaml"
-PODSPEC_PATH="$SCRIPT_DIR/AnwalPaySDKNativeiOSExample/amwalsdk.podspec"
+PODSPEC_PATH="$SCRIPT_DIR/AnwalPaySDKNativeiOSExample/amwalsdk/amwalsdk.podspec"
 
 # Step 1: Build Flutter Framework
 echo "Building Flutter framework..."
