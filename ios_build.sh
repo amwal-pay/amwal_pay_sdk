@@ -1,7 +1,3 @@
-Based on our previous discussion, I'll help you revert to the latest working version of the script with the key changes we made. Here's the updated version:
-
-```bash:/Users/amrsaied/Documents/Flutter/Amwal/mobile/amwal_pay_sdk_amwal/ios_build.sh
-#!/bin/bash
 
 # Paths
 FLUTTER_PROJECT_PATH="amwal_sdk_flutter_module"
