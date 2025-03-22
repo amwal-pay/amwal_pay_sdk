@@ -21,19 +21,25 @@ Pod::Spec.new do |s|
   # Common configurations
   s.pod_target_xcconfig = {
     'SWIFT_OPTIMIZATION_LEVEL' => '-Onone',
-    'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES'
+    'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES',
+    'ENABLE_BITCODE' => 'NO',
+    'VALID_ARCHS' => 'arm64 arm64e x86_64',
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => '',
+    'ONLY_ACTIVE_ARCH' => 'YES'
   }
 
   # Debug configuration
   s.subspec 'Debug' do |debug|
     debug.vendored_frameworks = 'Flutter/Debug/*.xcframework'
     debug.xcconfig = {
-      'ENABLE_BITCODE' => 'NO',
-      'FRAMEWORK_SEARCH_PATHS' => '$(inherited) ${PODS_ROOT}/amwalsdk/Flutter/Debug',
+      'FRAMEWORK_SEARCH_PATHS' => '$(inherited) "${PODS_ROOT}/amwalsdk/Flutter/Debug"',
       'OTHER_LDFLAGS' => '$(inherited) -framework Flutter -framework FlutterPluginRegistrant',
-      'VALID_ARCHS' => 'arm64 x86_64',
-      'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64',
-      'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES'
+      'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES',
+      'SWIFT_INCLUDE_PATHS' => '$(inherited) "${PODS_ROOT}/amwalsdk/Flutter/Debug"',
+      'DEFINES_MODULE' => 'YES',
+      'SWIFT_INSTALL_OBJC_HEADER' => 'NO',
+      'VALID_ARCHS' => 'arm64 arm64e x86_64',
+      'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => ''
     }
   end
 
@@ -41,12 +47,14 @@ Pod::Spec.new do |s|
   s.subspec 'Release' do |release|
     release.vendored_frameworks = 'Flutter/Release/*.xcframework'
     release.xcconfig = {
-      'ENABLE_BITCODE' => 'NO',
-      'FRAMEWORK_SEARCH_PATHS' => '$(inherited) ${PODS_ROOT}/amwalsdk/Flutter/Release',
+      'FRAMEWORK_SEARCH_PATHS' => '$(inherited) "${PODS_ROOT}/amwalsdk/Flutter/Release"',
       'OTHER_LDFLAGS' => '$(inherited) -framework Flutter -framework FlutterPluginRegistrant',
-      'VALID_ARCHS' => 'arm64 x86_64',
-      'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64',
-      'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES'
+      'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES',
+      'SWIFT_INCLUDE_PATHS' => '$(inherited) "${PODS_ROOT}/amwalsdk/Flutter/Release"',
+      'DEFINES_MODULE' => 'YES',
+      'SWIFT_INSTALL_OBJC_HEADER' => 'NO',
+      'VALID_ARCHS' => 'arm64 arm64e x86_64',
+      'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => ''
     }
   end
 
