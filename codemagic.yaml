@@ -1,0 +1,59 @@
+workflows:
+  custom_build:
+    name: Custom Build Workflow
+    environment:
+      groups:
+        - A
+      flutter: stable # Specify the Flutter version if needed
+      vars:
+        CUSTOM_ENV_VAR: "CustomValue"
+    scripts:
+      - name: Run build_ios
+        script: |
+          echo "Running Build IOS..."
+          chmod +x ios_build.sh
+          ./ios_build.sh
+      - name: Run build_pub_dev.sh
+        script: |
+          echo "Running build_pub_dev.sh..."
+          chmod +x build_pub_dev.sh
+          ./build_pub_dev.sh
+      - name: Run build.sh
+        script: |
+          echo "Running build.sh..."
+          chmod +x build.sh
+          ./build.sh
+      - name: Install GPG
+        script: |
+          echo "Installing GPG..."
+          if [ "$(uname)" = "Darwin" ]; then
+            brew install gnupg || echo "GPG already installed."
+          else
+            sudo apt-get update && sudo apt-get install -y gnupg
+          fi
+          gpg --version
+      - name: Run assemble.py
+        script: |
+          echo "Running assemble.py..."
+          pip install requests
+          python3 assemble.py
+      - name: Verify amwal_sdk.zip
+        script: |
+          echo "Checking if amwal_sdk.zip exists..."
+          if [ -f ./amwal_sdk.zip ]; then
+            echo "amwal_sdk.zip found!"
+          else
+            echo "amwal_sdk.zip not found!" && exit 1
+          fi
+      - name: Upload to Maven
+        script: |
+          echo "Running publish.sh..."
+          chmod +x publish.sh
+          ./publish.sh
+
+    artifacts:
+      - /workspace/amwal_sdk.zip # Save amwal_sdk.zip as an artifact
+    publishing:
+      email:
+        recipients:
+          - your_email@example.com

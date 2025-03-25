@@ -1,6 +1,6 @@
 name: amwal_pay_sdk
 description: amwal pay sdk
-version: 0.0.48
+version: 1.0.66
 homepage: "https://github.com/amwal-pay/amwal_pay_sdk"
 
 environment:
@@ -44,9 +44,13 @@ dependencies:
   dartz: ^0.10.1
   debit_credit_card_widget: ^1.0.2
 #  webview_flutter: ^4.10.0
-  firebase_crashlytics: ^3.4.9
-  webview_flutter:
-    path: fix_web_view/webview_flutter
+  webview_flutter: ^4.10.0
+#  webview_flutter:
+#    path: fix_web_view/webview_flutter
+
+false_secrets:
+  - "**/magix_museum.jks"
+
 
 dev_dependencies:
   flutter_test:

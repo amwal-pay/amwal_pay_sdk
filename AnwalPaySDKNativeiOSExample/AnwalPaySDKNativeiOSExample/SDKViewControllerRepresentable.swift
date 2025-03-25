@@ -8,7 +8,7 @@
 
 import SwiftUI
 import Flutter
-
+import amwalsdk
 struct SDKViewControllerRepresentable: UIViewControllerRepresentable {
     var config: Config
     var onResponse: (String?) -> Void

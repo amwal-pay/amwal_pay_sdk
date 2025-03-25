@@ -1,54 +1,27 @@
-# Miscellaneous
-*.class
-*.log
-*.pyc
-*.swp
-.DS_Store
-.atom/
-.buildlog/
-.history
-.svn/
-migrate_working_dir/
+# FVM related files
+example/.fvm/**
 
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
+# iOS/XCode specific files
+**/*.xcworkspace/**
+**/*.xcuserstate
+**/xcuserdata/**
+**/**/UserInterfaceState.xcuserstate
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
+# Any other specific files from your list
+**/magix_museum.jks
 
-# Flutter/Dart/Pub related
-# Libraries should not include pubspec.lock, per https://dart.dev/guides/libraries/private-files#pubspeclock.
-/pubspec.lock
-**/doc/api/
-.dart_tool/
-.idea/
-.packages
-build/
+
+.dart_tool
 .idea
-android/local.properties
-linux/flutter/ephemeral/.plugin_symlinks
-.flutter-plugins
-.flutter-plugins-dependencies
-android/local.properties
-ios/Flutter/Generated.xcconfig
-ios/Flutter/flutter_export_environment.sh
-linux/flutter/ephemeral/.plugin_symlinks/path_provider_linux
-linux/flutter/ephemeral/.plugin_symlinks/share_plus
-linux/flutter/ephemeral/.plugin_symlinks/shared_preferences_linux
-linux/flutter/ephemeral/.plugin_symlinks/url_launcher_linux
-linux/flutter/ephemeral/.plugin_symlinks/smart_auth
-macos/Flutter/ephemeral/Flutter-Generated.xcconfig
-macos/Flutter/ephemeral/flutter_export_environment.sh
-.flutter-plugins
-.flutter-plugins-dependencies
 *.lock
-example/pubspec.lock
-.ios/Runner.xcworkspace/xcuserdata/amrsaied.xcuserdatad/UserInterfaceState.xcuserstate
+android/.gradle
+android/build
+*.DS_Store
 
 # FVM Version Cache
-android/.gradle
-/publish_build/
+.fvm/
+.fvm
+build
+.fvm
+AnwalPaySDKNativeiOSExample/Pods
+AnwalPaySDKNativeiOSExample/amwalsdk/Flutter

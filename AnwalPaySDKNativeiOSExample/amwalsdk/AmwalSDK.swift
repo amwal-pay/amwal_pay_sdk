@@ -10,10 +10,13 @@ import SwiftUI
 import Flutter
 import FlutterPluginRegistrant
 
-class AmwalSDK {
+public class AmwalSDK {
     private var flutterEngine: FlutterEngine?
+    public init() {
+        // Any initialization code if needed
+    }
 
-    func createViewController(
+    public  func createViewController(
         config:Config,
         onResponse: @escaping (String?) -> Void,
         onCustomerId: @escaping (String) -> Void

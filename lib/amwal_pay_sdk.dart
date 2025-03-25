@@ -20,10 +20,9 @@ import 'package:flutter/material.dart';
 import 'core/ui/error_dialog.dart';
 import 'core/ui/loading_dialog.dart';
 import 'features/card/presentation/sale_by_card_contact_less_screen.dart';
-import 'features/currency_field/data/models/response/currency_response.dart';
-import 'features/payment_argument.dart';
 import 'features/transaction/data/repository/transaction_repository_impl.dart';
 import 'localization/app_localizations_setup.dart';
+import 'package:amwal_pay_sdk/core/logger/amwal_logger.dart';
 
 export 'package:amwal_pay_sdk/features/receipt/receipt_handler.dart';
 export 'package:amwal_pay_sdk/navigator/sdk_navigator.dart';
@@ -39,7 +38,9 @@ class AmwalPaySdk {
   }) async {
     AmwalPaySdk.settings = settings;
 
-
+    if (settings.logger != null) {
+      AmwalLogger.setLogger(settings.logger!);
+    }
 
     AmwalSdkSettingContainer.locale = settings.locale;
     SDKNetworkConstants.isSdkInApp = true;
@@ -73,8 +74,8 @@ class AmwalPaySdk {
       settings.flavor,
     );
 
-    SDKNetworkConstants.setEnvironment(environment:  settings.environment ?? Environment.PROD);
-
+    SDKNetworkConstants.setEnvironment(
+        environment: settings.environment ?? Environment.PROD);
 
     HttpOverrides.global = MyHttpOverrides();
     final networkService = NetworkServiceBuilder.instance.setupNetworkService(
@@ -224,6 +225,29 @@ class AmwalPaySdk {
   Future<void> openCardScreen(AmwalInAppSdkSettings settings) async {
     final cardSdk = await _initCardSdk(settings: settings);
     AmwalSdkSettingContainer.locale = settings.locale;
+    AmwalPaySdk.settings = AmwalSdkSettings(
+      token: settings.token,
+      secureHashValue: settings.secureHashValue,
+      merchantId: settings.merchantId,
+      transactionId: settings.transactionId,
+      currency: '', // Card SDK doesn't require currency
+      amount: '', // Card SDK doesn't require amount
+      terminalId: settings.terminalIds.first,
+      merchantName: settings.merchantName,
+      getTransactionFunction: settings.getTransactionFunction,
+      onCountComplete: settings.onCountComplete,
+      locale: settings.locale,
+      isMocked: settings.isMocked,
+      onError: settings.onError,
+      log: settings.log,
+      onTokenExpired: settings.onTokenExpired,
+      countDownInSeconds: settings.countDownInSeconds,
+      flavor: settings.flavor,
+      isSoftPOS: settings.isSoftPOS,
+      environment: settings.environment,
+        maxTransactionAmount:settings.maxTransactionAmount
+
+    );
     await CacheStorageHandler.instance.write(
       CacheKeys.merchant_flavor,
       settings.flavor,

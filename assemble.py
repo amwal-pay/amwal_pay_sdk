@@ -1,10 +1,39 @@
 import os
 import xml.etree.ElementTree as ET
 import shutil
+import zipfile
+import re
 import hashlib
 import subprocess
-import zipfile
-import requests
+
+
+def get_version_from_pubspec():
+    """
+    Extracts the version from pubspec.yaml file.
+
+    :return: The version string or default "1.0.2" if not found.
+    """
+    try:
+        pubspec_path = "pubspec.yaml"
+        if not os.path.exists(pubspec_path):
+            print(f"Warning: {pubspec_path} not found. Using default version.")
+            return "1.0.2"
+
+        with open(pubspec_path, 'r') as file:
+            content = file.read()
+
+        # Use regex to find the version line
+        match = re.search(r'version:\s*(\d+\.\d+\.\d+)', content)
+        if match:
+            version = match.group(1)
+            print(f"Extracted version from pubspec.yaml: {version}")
+            return version
+        else:
+            print("Warning: Version not found in pubspec.yaml. Using default version.")
+            return "1.0.2"
+    except Exception as e:
+        print(f"Error reading pubspec.yaml: {e}. Using default version.")
+        return "1.0.2"
 
 
 def remove_folders(base_dir):
@@ -76,10 +105,12 @@ group_ids_to_replace = [
     "fman.ge.smart_auth",
     "io.flutter.plugins.webviewflutter",
     "io.flutter.plugins.firebase.core",
-    "com.amwal_pay.flutter"
+    "com.amwal_pay.flutter",
+    "com.amwalpay.sdk",
 ]
 
 new_group_id = "com.amwal-pay"
+
 
 def process_pom_file(file_path):
     """
@@ -100,6 +131,10 @@ def process_pom_file(file_path):
             group_id = dependency.find("maven:groupId", namespace)
             artifact_id = dependency.find("maven:artifactId", namespace)
 
+            # Skip processing if groupId is "io.flutter"
+            if group_id is not None and group_id.text == "io.flutter":
+                continue
+
             # Replace groupId if it matches the target list
             if group_id is not None and group_id.text in group_ids_to_replace:
                 group_id.text = new_group_id
@@ -116,6 +151,9 @@ def process_pom_file(file_path):
             print(f"Updated: {file_path}")
     except Exception as e:
         print(f"Error processing {file_path}: {e}")
+
+# Example usage
+
 
 def process_directory(directory):
     """
@@ -240,31 +278,155 @@ def create_checksum_files(file_path):
             f.write(checksum)
         print(f"Generated {algo} checksum: {checksum_file}")
 
+
+
+
+
 def sign_and_update_checksums(base_dir):
     """
-    Recursively signs all .aar, .jar, and .pom files in the given base directory using GPG,
-    and updates their checksum files.
-    :param base_dir: The base directory to search for files.
+    Signs all .aar, .jar, and .pom files in the given base directory using GPG
+    and generates checksum files (MD5, SHA1, SHA256, SHA512).
     """
-    gpg_passphrase = "amwal@2025"  # Replace with your GPG passphrase
+    gpg_passphrase = "amwal@2025"  # Fetch from environment variables
 
-    for root, dirs, files in os.walk(base_dir):
-        for file in files:
-            if file.endswith(('.aar', '.jar', '.pom')):
-                file_path = os.path.join(root, file)
-                try:
-                    print(f"Signing file: {file_path}")
-                    # Execute GPG signing command with passphrase
-                    subprocess.run([
-                        "gpg", "--batch", "--yes", "--sign", "--detach-sign", "--armor",
-                        "--pinentry-mode", "loopback", "--passphrase", gpg_passphrase, file_path
-                    ], check=True)
-                    # Create checksum files
-                    create_checksum_files(file_path)
-                except subprocess.CalledProcessError as e:
-                    print(f"Error signing {file_path}: {e}")
-                except Exception as e:
-                    print(f"Unexpected error signing {file_path}: {e}")
+    # Hardcoded GPG private key (use environment variables instead in production)
+    GPG_PRIVATE_KEY = """-----BEGIN PGP PRIVATE KEY BLOCK-----
+
+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
+QtVx1DfjNsCVo+ewDB7WwHwczQSd6g==
+=3+sS
+-----END PGP PRIVATE KEY BLOCK-----"""
+
+    if not GPG_PRIVATE_KEY or not gpg_passphrase:
+        print("Error: GPG private key or passphrase not set.")
+        return
+
+    try:
+        # Import the GPG private key
+        print("Importing GPG private key...")
+        subprocess.run(
+            ["gpg", "--batch", "--import"],
+            input=GPG_PRIVATE_KEY,
+            text=True,
+            capture_output=True,
+            check=True
+        )
+        print("GPG key imported successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error importing GPG key: {e.stderr}")
+        return
+    except Exception as e:
+        print(f"Unexpected error importing GPG key: {e}")
+        return
+
+    try:
+        # Process files and sign them
+        for root, dirs, files in os.walk(base_dir):
+            for file in files:
+                if file.endswith(('.aar', '.jar', '.pom')):
+                    file_path = os.path.join(root, file)
+                    try:
+                        print(f"Signing file: {file_path}")
+                        subprocess.run(
+                            [
+                                "gpg", "--batch", "--yes", "--sign", "--detach-sign", "--armor",
+                                "--pinentry-mode", "loopback", "--passphrase", gpg_passphrase, file_path
+                            ],
+                            capture_output=True, text=True, check=True
+                        )
+                        print(f"File signed successfully: {file_path}")
+                        create_checksum_files(file_path)
+                    except subprocess.CalledProcessError as e:
+                        print(f"Error signing {file_path}: {e.stderr}")
+                    except Exception as e:
+                        print(f"Unexpected error signing {file_path}: {e}")
+    finally:
+        cleanup_gpg_keys()
+
+
+
+
+def cleanup_gpg_keys():
+    """
+    Cleans up imported GPG keys.
+    """
+    try:
+        print("Cleaning up imported GPG keys...")
+        subprocess.run(
+            ["gpg", "--batch", "--yes", "--delete-secret-keys", "--all"],
+            capture_output=True,
+            check=True
+        )
+        subprocess.run(
+            ["gpg", "--batch", "--yes", "--delete-keys", "--all"],
+            capture_output=True,
+            check=True
+        )
+        print("GPG keys cleaned up successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error cleaning up GPG keys: {e.stderr}")
+    except Exception as e:
+        print(f"Unexpected error during GPG cleanup: {e}")
+
+
+# Usage example
+if __name__ == "__main__":
+    base_directory = "/path/to/files"  # Replace with your directory
+    sign_and_update_checksums(base_directory)
+
 
 
 def zip_amwal_pay_only(base_dir, subfolder, output_zip):
@@ -369,36 +531,70 @@ def search_and_update_poms(base_dir, group_id_value, artifact_id_value, new_vers
 
 
 
-def upload_zip(api_url, api_key, file_path):
-    """
-    Uploads a ZIP file to the specified API endpoint.
 
-    :param api_url: The API endpoint URL.
-    :param api_key: The API key (Base64-encoded username:password).
-    :param file_path: The path to the ZIP file to upload.
-    :return: Response object containing the API's response.
-    """
-    # Headers for the request
-    headers = {
-        "accept": "text/plain",
-        "Authorization": f"Basic {api_key}",
-    }
+import os
+import xml.etree.ElementTree as ET
 
-    # File to upload
+def update_pom_dependency_version(pom_file, group_id_value, artifact_id_value, new_version):
+    """
+    Updates the version of a specific dependency in a `.pom` file.
+
+    Args:
+        pom_file (str): The path to the `.pom` file.
+        group_id_value (str): The <groupId> value to match.
+        artifact_id_value (str): The <artifactId> value to match.
+        new_version (str): The new version to set for the dependency.
+    """
     try:
-        with open(file_path, "rb") as file:
-            files = {"bundle": file}
-            # Sending the POST request
-            response = requests.post(api_url, headers=headers, files=files)
+        tree = ET.parse(pom_file)
+        root = tree.getroot()
 
-        # Return the response object for further handling
-        return response
-    except FileNotFoundError:
-        print(f"Error: The file at {file_path} was not found.")
-        return None
+        # Define the namespace used in the POM file
+        ns = {'maven': 'http://maven.apache.org/POM/4.0.0'}
+        ET.register_namespace('', 'http://maven.apache.org/POM/4.0.0')
+
+        # Find all dependencies
+        dependencies = root.findall('.//maven:dependency', ns)
+
+        updated = False
+        for dependency in dependencies:
+            group_id = dependency.find('maven:groupId', ns)
+            artifact_id = dependency.find('maven:artifactId', ns)
+            version = dependency.find('maven:version', ns)
+
+            if (
+                group_id is not None and group_id.text == group_id_value and
+                artifact_id is not None and artifact_id.text == artifact_id_value
+            ):
+                # Update version if found
+                if version is not None:
+                    version.text = new_version
+                    updated = True
+
+        if updated:
+            tree.write(pom_file, encoding='utf-8', xml_declaration=True)
+            print(f"Updated {pom_file}: {group_id_value}:{artifact_id_value} -> {new_version}")
+        else:
+            print(f"No matching dependency found in {pom_file}")
     except Exception as e:
-        print(f"An error occurred: {e}")
-        return None
+        print(f"Error updating {pom_file}: {e}")
+
+
+def search_and_update_poms(base_dir, group_id_value, artifact_id_value, new_version):
+    """
+    Recursively searches for `.pom` files in the given directory and updates the version of a specific dependency.
+
+    Args:
+        base_dir (str): The base directory to search in.
+        group_id_value (str): The <groupId> value to match.
+        artifact_id_value (str): The <artifactId> value to match.
+        new_version (str): The new version to set for the dependency.
+    """
+    for root, _, files in os.walk(base_dir):
+        for file in files:
+            if file.endswith('.pom'):
+                pom_file_path = os.path.join(root, file)
+                update_pom_dependency_version(pom_file_path, group_id_value, artifact_id_value, new_version)
 
 
 
@@ -406,11 +602,9 @@ if __name__ == "__main__":
     # Define paths and configurations
     base_directory = "publish_build"  # Update with the correct directory
     namespace = "com.amwal-pay"  # Namespace for Maven artifacts
-    version = "1.0.2"  # Version of the artifacts
+    version = get_version_from_pubspec()  # Get version from pubspec.yaml
     output_zip_file = "amwal_sdk.zip"
     amwal_pay_folder = "amwal-pay"
-    API_URL = "https://central.sonatype.com/api/v1/publisher/upload"
-    API_KEY = "P9owjrka:KJy8OMMjQb/jK5IZc1YckjrbU9IH7VaU4KAf67uLK5Wh="
 
     # Step 1: Remove debug/profile folders
     remove_folders(base_directory)
@@ -421,15 +615,12 @@ if __name__ == "__main__":
     # Step 3: Process .pom files to ensure they are correctly formatted
     find_all_poms(base_directory, namespace)
 
+    process_directory(base_directory)
+
+    search_and_update_poms(base_directory, namespace, "flutter", version)
     # Step 4: Sign and generate checksums for artifacts
     sign_and_update_checksums(base_directory)
 
     # Step 5: Zip the relevant folder (com.amwal-pay)
     zip_amwal_pay_only(base_directory, amwal_pay_folder, output_zip_file)
 
-    # Step 6: Upload the ZIP file
-    response = upload_zip(API_URL, API_KEY, output_zip_file)
-    if response and response.status_code == 200:
-        print(f"Upload successful: {response.json()}")
-    else:
-        print(f"Upload failed: {response.status_code if response else 'No response'}")

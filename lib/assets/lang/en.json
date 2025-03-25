@@ -68,6 +68,7 @@
   "successful":"Successful",
   "OMR": "OMR",
   "ref_no": "Reference No.",
+  "otp_error": "Incorrect OTP. You will be redirected to the payment page to try again",
   "transaction_by_label": "Transaction By",
   "phone_number": "Phone Number",
   "wallet_mobile_number": "Wallet Phone Number",
@@ -155,5 +156,7 @@
   "save_card": "Save Card For Future Payments",
   "add_new_card": "Add New Card",
   "please_enter_cvv": "Please enter cvv",
-  "error_occurred": "Card Read Error: Please retry"
+  "error_occurred": "Card Read Error: Please retry",
+  "max_transaction_amount_exceeded": "Amount exceeds your maximum transaction limit"
+
 }

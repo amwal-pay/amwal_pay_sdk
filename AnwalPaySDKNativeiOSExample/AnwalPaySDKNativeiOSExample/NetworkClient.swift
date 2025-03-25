@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import CryptoKit
+import amwalsdk
 
 class NetworkClient {
 

@@ -13,12 +13,25 @@ FLUTTER_MODULE_DIR="$ROOT_DIR/amwal_sdk_flutter_module"
 NATIVE_EXAMPLE_DIR="$ROOT_DIR/AnwalPaySDKNativeExample"
 PUBLISH_DIR="$ROOT_DIR/publish_build"
 
-FLUTTER_BUILD_NUMBER="1.0.2"
+PUBSPEC_PATH="$ROOT_DIR/pubspec.yaml"
+if [ -f "$PUBSPEC_PATH" ]; then
+    FLUTTER_BUILD_NUMBER=$(grep -m 1 "version:" "$PUBSPEC_PATH" | sed -E 's/version: *([0-9]+\.[0-9]+\.[0-9]+).*/\1/g')
+    echo "Extracted version from pubspec.yaml: $FLUTTER_BUILD_NUMBER"
+else
+    FLUTTER_BUILD_NUMBER="1.0.5"  # Default fallback
+    echo "pubspec.yaml not found at $PUBSPEC_PATH. Using default version: $FLUTTER_BUILD_NUMBER"
+fi
 
 # Create the publish directory
 mkdir -p "$PUBLISH_DIR"
 
 # Step 1: Build and publish Native SDK
+
+
+cd "$FLUTTER_MODULE_DIR" || die "Error: Native example directory not found."
+
+flutter pub get || die "Flutter pub get Failed!!"
+
 cd "$NATIVE_EXAMPLE_DIR" || die "Error: Native example directory not found."
 echo "Building and publishing Native SDK..."
 
@@ -118,3 +131,4 @@ fi
 # Completion message
 echo "Native and Flutter builds have been processed. Files are in $PUBLISH_DIR."
 read -p "Press [Enter] to exit..." key
+exit 0

@@ -203,11 +203,12 @@ class InAppCardTransactionManager extends ICardTransactionManager {
         if (purchaseDataOrFail.isLeft()) {
           errorCounter++;
           transactionId = const Uuid().v1();
-          if (errorCounter >= 3) {
+          if (errorCounter >= 0) {
+
             if (dialogContext.mounted) {
               Navigator.of(dialogContext).pop();
               AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
-              AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+              // AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
               if (AmwalSdkNavigator.amwalNavigatorObserver.navigator != null) {
                 final context =
                     AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context;
@@ -228,7 +229,7 @@ class InAppCardTransactionManager extends ICardTransactionManager {
                     child: ErrorDialog(
                       locale: AmwalSdkSettingContainer.locale,
                       title: "err".translate(context) ?? '',
-                      message: "transaction_cancel".translate(context),
+                      message: "otp_error".translate(context) ?? '',
                       resetState: () {
                         AmwalSdkNavigator.amwalNavigatorObserver.navigator!
                             .pop();

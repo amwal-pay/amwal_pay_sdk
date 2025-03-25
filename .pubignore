@@ -1,0 +1,12 @@
+.fvm/
+AnwalPaySDKNativeExample/.gitignore
+AnwalPaySDKNativeExample/amwalsdk/
+AnwalPaySDKNativeExample/
+AnwalPaySDKNativeExample/
+build.sh
+assemble.py
+pub-credentials.json
+publish.sh
+build_pub_dev.sh
+build_ios.sh
+AnwalPaySDKNativeiOSExample/amwalsdk.podspec

@@ -76,24 +76,24 @@ class AmwalSDK : FlutterPlugin, ActivityAware, MethodCallHandler, NfcAdapter.Rea
             return
         }
 
-            when (call.method) {
-                "init" -> {
-                    initNFC(result)
-                    return
-                }
-
-                "listen" -> {
-                    initListen(result, call)
-                    return
-                 }
-
-                "terminate" -> {
-                    terminate(result)
-                    return
-                 }
+        when (call.method) {
+            "init" -> {
+                initNFC(result)
+                return
             }
-            result.notImplemented()
+
+            "listen" -> {
+                initListen(result, call)
+                return
+            }
+
+            "terminate" -> {
+                terminate(result)
+                return
+            }
         }
+        result.notImplemented()
+    }
 
 
 
@@ -209,13 +209,13 @@ class AmwalSDK : FlutterPlugin, ActivityAware, MethodCallHandler, NfcAdapter.Rea
             val parser: EmvTemplate = EmvTemplate.Builder() //
                 .setProvider(provider) // Define provider
                 .setConfig(config) // Define config
-             //    .setTerminal(terminal)
+                //    .setTerminal(terminal)
                 .build()
             // Card data
             val cardData = parser.readEmvCard();
 
             parser.readEmvCard().cardNumber
-             // debug
+            // debug
             Log.i(TAG, cardData.toString())
             // Play sound
             val mediaPlayer = MediaPlayer.create(activity,  R.raw.beep)

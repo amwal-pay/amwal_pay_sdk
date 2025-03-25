@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import amwalsdk
 @main
 struct AnwalPaySDKNativeiOSExampleApp: App {
 

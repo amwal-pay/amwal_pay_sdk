@@ -25,12 +25,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
-
       data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
       child: MaterialApp(
         title: 'Amwal pay Demo',
         navigatorObservers: [
-          AmwalSdkNavigator.amwalNavigatorObserver,ChuckerFlutter.navigatorObserver
+          AmwalSdkNavigator.amwalNavigatorObserver,
+          ChuckerFlutter.navigatorObserver
         ],
         theme: ThemeData(
           useMaterial3: false,
@@ -63,6 +63,7 @@ class _DemoScreenState extends State<DemoScreen> {
   late String dropdownValue;
 
   Timer? _timer;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -76,16 +77,14 @@ class _DemoScreenState extends State<DemoScreen> {
     _currencyController = TextEditingController(text: 'OMR');
     _languageController = TextEditingController(text: 'en');
     _transactionTypeController = TextEditingController(text: 'CARD || Wallet');
-    _terminalController = TextEditingController(text: '708393');
-    _merchantIdController = TextEditingController(text: '116194');
+    _terminalController = TextEditingController(text: '811018');
+    _merchantIdController = TextEditingController(text: '84131');
     _secureHashController = TextEditingController(
-      text: '2B03FCDC101D3F160744342BFBA0BEA0E835EE436B6A985BA30464418392C703',
+      text: '8570CEED656C8818E4A7CE04F22206358F272DAD5F0227D322B654675ABF8F83',
     );
     dropdownValue = 'UAT';
     sdkEnv = Environment.UAT;
-   }
-
-
+  }
 
   Future<String?> getSDKSessionToken({
     required String merchantId,
@@ -101,8 +100,6 @@ class _DemoScreenState extends State<DemoScreen> {
     } else if (dropdownValue == "PROD") {
       webhookUrl = 'https://webhook.amwalpg.com/';
     }
-
-
 
     try {
       final dio = Dio(
@@ -120,9 +117,9 @@ class _DemoScreenState extends State<DemoScreen> {
       dio.interceptors.add(ChuckerDioInterceptor());
       DioClient.dio?.interceptors.add(ChuckerDioInterceptor());
 
-       var sec =  SecureHashInterceptor.clearSecureHash(secureHashValue, {
+      var sec = SecureHashInterceptor.clearSecureHash(secureHashValue, {
         'merchantId': merchantId,
-        'customerId': customerId ,
+        'customerId': customerId,
       });
 
       final response = await dio.post(
@@ -138,7 +135,8 @@ class _DemoScreenState extends State<DemoScreen> {
       }
     } on DioException catch (e) {
       final errorList = e.response?.data['errorList'];
-      final errorMessage = (errorList != null) ? errorList.join(',') : 'Unknown error';
+      final errorMessage =
+          (errorList != null) ? errorList.join(',') : 'Unknown error';
       await _showErrorDialog(errorMessage);
       return null;
     } catch (e) {
@@ -177,55 +175,48 @@ class _DemoScreenState extends State<DemoScreen> {
   }
 
   Future<void> initPayment() async {
-    final valid = _formKey.currentState!.validate();
-    if (!valid) return;
+    try {
+      final valid = _formKey.currentState!.validate();
+      if (!valid) return;
 
-    var customerId = await _getCustomerId();
+      var customerId = await _getCustomerId();
 
-
-    if(customerId == null || customerId.isEmpty || customerId == "null" ) {
-      customerId = null;
-    }
-    final sessionToken = await getSDKSessionToken(
-      merchantId: _merchantIdController.text,
-      secureHashValue: _secureHashController.text,
-      customerId: customerId,
-    );
-
-    if (sessionToken == null) return;
-
-    await AmwalPaySdk.instance.initSdk(
-      settings: AmwalSdkSettings(
-        environment: sdkEnv,
-        sessionToken: sessionToken ?? '',
-        currency: _currencyController.text,
-        amount: _amountController.text,
-        transactionId: const Uuid().v1(),
+      if (customerId == null || customerId.isEmpty || customerId == "null") {
+        customerId = null;
+      }
+      final sessionToken = await getSDKSessionToken(
         merchantId: _merchantIdController.text,
-        terminalId: _terminalController.text,
-        locale: Locale(_languageController.text),
-        isMocked: false,
-        isSoftPOS: (_transactionTypeController.text == 'NFC' ?   true : false),
-        customerCallback: _onCustomerId,
+        secureHashValue: _secureHashController.text,
         customerId: customerId,
-        onResponse: _onResponse,
+      );
 
-      ),
-    );
+      if (sessionToken == null) return;
 
-    // await AmwalPaySdk.instance.initSdk(
-    //   settings: AmwalSdkSettings(
-    //     environment: sdkEnv,
-    //     currency: _currencyController.text,
-    //     amount: _amountController.text,
-    //     transactionId: const Uuid().v1(),
-    //     merchantId: _merchantIdController.text,
-    //     secureHashValue: _secureHashController.text,
-    //     terminalId: _terminalController.text,
-    //     locale: Locale(_languageController.text),
-    //     isMocked: false,
-    //   ),
-    // );
+      await AmwalPaySdk.instance.initSdk(
+        settings: AmwalSdkSettings(
+          environment: sdkEnv,
+          sessionToken: sessionToken ?? '',
+          currency: _currencyController.text,
+          amount: _amountController.text,
+          transactionId: const Uuid().v1(),
+          merchantId: _merchantIdController.text,
+          terminalId: _terminalController.text,
+          locale: Locale(_languageController.text),
+          isMocked: false,
+          isSoftPOS: (_transactionTypeController.text == 'NFC' ? true : false),
+          customerCallback: _onCustomerId,
+          customerId: customerId,
+          onResponse: _onResponse,
+        ),
+      );
+    } catch (e) {
+      debugPrint('Error during payment: $e');
+      await _showErrorDialog('Something went wrong during payment');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -341,7 +332,6 @@ class _DemoScreenState extends State<DemoScreen> {
                             _transactionTypeController.text = type ?? '';
                           },
                         ),
-
                         TextForm(
                           title: "Secret Key",
                           controller: _secureHashController,
@@ -372,7 +362,7 @@ class _DemoScreenState extends State<DemoScreen> {
                                       sdkEnv = Environment.SIT;
                                       break;
                                     case 'UAT':
-                                      sdkEnv =Environment.UAT;
+                                      sdkEnv = Environment.UAT;
                                       break;
                                     case 'PROD':
                                       sdkEnv = Environment.PROD;
@@ -381,10 +371,11 @@ class _DemoScreenState extends State<DemoScreen> {
                                       sdkEnv = Environment.PROD;
                                       break;
                                   }
-
                                 });
                               },
-                              items: Environment.values.map<DropdownMenuItem<String>>((Environment env) {
+                              items: Environment.values
+                                  .map<DropdownMenuItem<String>>(
+                                      (Environment env) {
                                 return DropdownMenuItem<String>(
                                   value: env.name,
                                   child: Text(env.name),
@@ -399,12 +390,46 @@ class _DemoScreenState extends State<DemoScreen> {
                 ),
               ),
               ElevatedButton(
-                onPressed: () async {
-                  if (_timer?.isActive ?? false) _timer?.cancel();
-                  _timer = Timer(const Duration(milliseconds: 300),
-                      () async => await initPayment());
-                },
-                child: const Text('initiate payment demo'),
+                onPressed: _isLoading
+                    ? null
+                    : () async {
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        if (_timer?.isActive ?? false) _timer?.cancel();
+                        _timer = Timer(const Duration(milliseconds: 300),
+                            () async => await initPayment());
+                      },
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 56),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (_isLoading)
+                      const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
+                      )
+                    else
+                      const Text(
+                        'Initiate Payment Demo',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ],
           ),
