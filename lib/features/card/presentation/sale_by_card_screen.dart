@@ -86,7 +86,7 @@ class _SaleByCardScreenState extends State<SaleByCardScreen> {
         ),
         child: Column(
           children: [
-            AmountCurrencyWidget(cubit: _amountCurrencyWidgetCubit),
+            AmountCurrencyWidget(cubit: _amountCurrencyWidgetCubit, maxTransactionAmount: AmwalPaySdk.settings?.maxTransactionAmount ?? 5000,),
             const SizedBox(height: 16),
             if (_terminals.length != 1)
               DropDownListWidget<String>(

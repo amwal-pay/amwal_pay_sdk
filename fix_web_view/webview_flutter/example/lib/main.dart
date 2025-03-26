@@ -10,7 +10,6 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 // #docregion platform_imports
 // Import for Android features.
@@ -555,14 +554,14 @@ class SampleMenu extends StatelessWidget {
   }
 
   static Future<String> _prepareLocalFile() async {
-    final String tmpDir = (await getTemporaryDirectory()).path;
-    final File indexFile = File(
-        <String>{tmpDir, 'www', 'index.html'}.join(Platform.pathSeparator));
+    // final String tmpDir = (await getTemporaryDirectory()).path;
+    // final File indexFile = File(
+    //     <String>{tmpDir, 'www', 'index.html'}.join(Platform.pathSeparator));
+    //
+    // await indexFile.create(recursive: true);
+    // await indexFile.writeAsString(kLocalExamplePage);
 
-    await indexFile.create(recursive: true);
-    await indexFile.writeAsString(kLocalExamplePage);
-
-    return indexFile.path;
+    return "";
   }
 
   Future<void> _onLogExample() {
