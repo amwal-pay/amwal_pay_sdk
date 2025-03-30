@@ -13,6 +13,8 @@ import 'package:amwal_pay_sdk/navigator/sdk_navigator.dart';
 import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../amwal_pay_sdk.dart';
+
 class SaleByWalletScreen extends StatefulWidget {
   final OnPayCallback onPayCallback;
   final OnPayCallback onCountComplete;
@@ -110,7 +112,11 @@ class _SaleByWalletScreenState extends State<SaleByWalletScreen> {
         ),
         child: Column(
           children: [
-            AmountCurrencyWidget(cubit: amountCubit),
+            AmountCurrencyWidget(
+              cubit: amountCubit,
+              maxTransactionAmount:
+                  AmwalPaySdk.settings?.maxTransactionAmount ?? 5000,
+            ),
             if (terminals.length != 1)
               DropDownListWidget<String>(
                 name: 'Wallet Terminal',

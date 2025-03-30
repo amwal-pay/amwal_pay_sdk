@@ -6,8 +6,6 @@ import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
-import '../../../../navigator/sdk_navigator.dart';
-
 class SelectCardBottomSheet extends StatefulWidget {
   final List<CustomerToken> tokens;
   final CustomerToken? initialValue;
@@ -29,7 +27,6 @@ class _SelectCardBottomSheetState extends State<SelectCardBottomSheet> {
   String? _cvv;
   late FocusNode _cardFocusNode;
 
-
   KeyboardActionsConfig get _keyboardActionsConfig {
     return KeyboardActionsConfig(
       keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
@@ -38,13 +35,13 @@ class _SelectCardBottomSheetState extends State<SelectCardBottomSheet> {
         KeyboardActionsItem(
           focusNode: _cardFocusNode,
           toolbarButtons: [
-                (node) {
+            (node) {
               return GestureDetector(
                 onTap: () => node.unfocus(),
                 child: Container(
                   padding: const EdgeInsets.all(12.0),
                   child: const Text(
-                   "Done",
+                    "Done",
                     style: TextStyle(
                       color: Color(0xFF0978ED), //Done button color
                       fontWeight: FontWeight.bold,
@@ -97,9 +94,7 @@ class _SelectCardBottomSheetState extends State<SelectCardBottomSheet> {
                   child: KeyboardActions(
                       config: _keyboardActionsConfig,
                       disableScroll: true,
-
                       child: InputFieldWidget(
-                        focusNode: _cardFocusNode,
                         key: const Key('ccv'),
                         widgetTitle: 'cvv',
                         widgetTitleIcon: AppAssets.cvvIcon,
@@ -128,14 +123,13 @@ class _SelectCardBottomSheetState extends State<SelectCardBottomSheet> {
       const Expanded(flex: 4, child: SizedBox()),
       AppButton(
         onPressed: () {
-          if(_cvv == null || _cvv!.isEmpty){
+          if (_cvv == null || _cvv!.isEmpty) {
             SnackBar(content: Text('please_enter_cvv'.translate(context)));
             return;
           }
 
-
           widget.onConfirm(_selectedCustomerToken, _cvv);
-          AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+          Navigator.of(context).pop();
         },
         child: Text(
           'confirm'.translate(context),
@@ -145,7 +139,7 @@ class _SelectCardBottomSheetState extends State<SelectCardBottomSheet> {
       AppButton(
         onPressed: () {
           widget.onConfirm(null, null);
-          AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+          Navigator.of(context).pop();
         },
         child: Text(
           'add_new_card'.translate(context),
