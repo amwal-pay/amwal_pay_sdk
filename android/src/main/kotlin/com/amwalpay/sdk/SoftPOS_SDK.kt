@@ -120,7 +120,7 @@ class SoftPOS_SDK : FlutterPlugin, ActivityAware, MethodCallHandler{
                     }
 
                     is TransactionResult.Failed -> withContext(Dispatchers.Main){
-                        parsedError(it.error.message)
+                        parsedError(it.error.messageEn)
                     }
 
                     is TransactionResult.ShowMessage -> withContext(Dispatchers.Main){
@@ -182,7 +182,7 @@ class SoftPOS_SDK : FlutterPlugin, ActivityAware, MethodCallHandler{
                     is Result.NotEligible -> {
                         var eMessage = ""
                         for (r in result.messages){
-                            eMessage.plus("${r.message}\n")
+                            eMessage.plus("${r.messageEn}\n")
 
                         }
                         res.success(1)
