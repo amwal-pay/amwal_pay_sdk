@@ -298,7 +298,7 @@ class _DemoScreenState extends State<DemoScreen> {
                           options: const [
                             CurrencyModel(name: 'OMR', id: '512'),
                           ],
-                          valueMapper: (currency) => currency.id,
+                          valueMapper: (currency) => currency.name,
                           nameMapper: (currency) => currency.name,
                           initialValue:
                               const CurrencyModel(name: 'OMR', id: '512'),
@@ -337,53 +337,63 @@ class _DemoScreenState extends State<DemoScreen> {
                           controller: _secureHashController,
                         ),
                         const SizedBox(height: 8),
-                        const Text("Select Environment"),
+                        // const Text("Select Environment"),
                         const SizedBox(height: 8),
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.grey, // Specify the border color
-                              width: 2.0, // Specify the border width
-                            ),
-                            borderRadius: BorderRadius.circular(
-                              10,
-                            ), // Optional: Add rounded corners
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: DropdownButton<String>(
-                              isExpanded: true,
-                              value: dropdownValue,
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  dropdownValue = newValue!;
-                                  switch (dropdownValue) {
-                                    case 'SIT':
-                                      sdkEnv = Environment.SIT;
-                                      break;
-                                    case 'UAT':
-                                      sdkEnv = Environment.UAT;
-                                      break;
-                                    case 'PROD':
-                                      sdkEnv = Environment.PROD;
-                                      break;
-                                    default:
-                                      sdkEnv = Environment.PROD;
-                                      break;
-                                  }
-                                });
-                              },
-                              items: Environment.values
-                                  .map<DropdownMenuItem<String>>(
-                                      (Environment env) {
-                                return DropdownMenuItem<String>(
-                                  value: env.name,
-                                  child: Text(env.name),
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                        ),
+                        DropdownForm<Environment>(
+                            title: 'Select Environment',
+                            options: Environment.values,
+                            valueMapper: (env) => env.index.toString(),
+                            nameMapper: (env) => env.name,
+                            initialValue: sdkEnv,
+                            onChanged: (type) {
+                              if (type == null) return;
+                              sdkEnv = Environment.values[int.parse(type)];
+                            }),
+                        // Container(
+                        //   decoration: BoxDecoration(
+                        //     border: Border.all(
+                        //       color: Colors.grey, // Specify the border color
+                        //       width: 2.0, // Specify the border width
+                        //     ),
+                        //     borderRadius: BorderRadius.circular(
+                        //       10,
+                        //     ), // Optional: Add rounded corners
+                        //   ),
+                        //   child: Padding(
+                        //     padding: const EdgeInsets.all(4.0),
+                        //     child: DropdownButton<String>(
+                        //       isExpanded: true,
+                        //       value: dropdownValue,
+                        //       onChanged: (String? newValue) {
+                        //         setState(() {
+                        //           dropdownValue = newValue!;
+                        //           switch (dropdownValue) {
+                        //             case 'SIT':
+                        //               sdkEnv = Environment.SIT;
+                        //               break;
+                        //             case 'UAT':
+                        //               sdkEnv = Environment.UAT;
+                        //               break;
+                        //             case 'PROD':
+                        //               sdkEnv = Environment.PROD;
+                        //               break;
+                        //             default:
+                        //               sdkEnv = Environment.PROD;
+                        //               break;
+                        //           }
+                        //         });
+                        //       },
+                        //       items: Environment.values
+                        //           .map<DropdownMenuItem<String>>(
+                        //               (Environment env) {
+                        //         return DropdownMenuItem<String>(
+                        //           value: env.name,
+                        //           child: Text(env.name),
+                        //         );
+                        //       }).toList(),
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
