@@ -16,7 +16,7 @@ public class AmwalSDK {
         // Any initialization code if needed
     }
 
-    public  func createViewController(
+    public func createViewController(
         config:Config,
         onResponse: @escaping (String?) -> Void,
         onCustomerId: @escaping (String) -> Void
@@ -30,9 +30,8 @@ public class AmwalSDK {
             let configJson = try config.toJsonString()
             let args = [configJson]
             flutterEngine?.run(withEntrypoint: nil, libraryURI: nil, initialRoute: nil, entrypointArgs: args)
-        }catch {
+        } catch {
             throw NSError(domain: "amwalsdk", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to convert config to JSON string: \(error.localizedDescription)"])
-
         }
         
         // Set up a method channel for communication

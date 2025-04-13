@@ -1,6 +1,5 @@
 class PurchaseRequest {
   final String pan;
-
   final num amount;
   final int terminalId;
   final int merchantId;
@@ -9,7 +8,8 @@ class PurchaseRequest {
   final String? merchantReference;
   final String dateExpiration;
   final String? refundReason;
-  // final String requestDateTime;
+  final String? requestDateTime;
+  final int? requestSource;
   final String orderCustomerEmail;
   final String? otp;
   final String? orderKey;
@@ -18,13 +18,22 @@ class PurchaseRequest {
   final String? transactionIdentifierValue;
   final String? currencyCode;
   final int? currencyId;
+  final String? currencyCodeName;
   final String? transactionId;
+  final int? paymentViewType;
+  final String? referenceId;
+  final String? deviceInformation;
   final bool isTokenized;
   final String? customerId;
   final String? customerTokenId;
+  bool isApplyRequest;
+  Map<String, dynamic>? applePayPaymentData;
+  bool isSamsungPayRequest;
+  Map<String, dynamic>? samsungPayData;
+  String? sessionToken;
 
 //<editor-fold desc="Data Methods">
-  const PurchaseRequest({
+  PurchaseRequest({
     required this.pan,
     required this.amount,
     required this.terminalId,
@@ -34,6 +43,8 @@ class PurchaseRequest {
     this.merchantReference,
     required this.dateExpiration,
     this.refundReason,
+    this.requestDateTime,
+    this.requestSource,
     required this.orderCustomerEmail,
     this.otp,
     this.orderKey,
@@ -42,10 +53,19 @@ class PurchaseRequest {
     this.transactionIdentifierValue,
     this.currencyCode,
     this.currencyId,
+    this.currencyCodeName,
     this.transactionId,
+    this.paymentViewType,
+    this.referenceId,
+    this.deviceInformation,
     this.isTokenized = false,
     this.customerId,
     this.customerTokenId,
+    this.isApplyRequest = false,
+    this.applePayPaymentData,
+    this.isSamsungPayRequest = false,
+    this.samsungPayData,
+    this.sessionToken,
   });
 
   @override
@@ -62,7 +82,8 @@ class PurchaseRequest {
           merchantReference == other.merchantReference &&
           dateExpiration == other.dateExpiration &&
           refundReason == other.refundReason &&
-          // requestDateTime == other.requestDateTime &&
+          requestDateTime == other.requestDateTime &&
+          requestSource == other.requestSource &&
           orderCustomerEmail == other.orderCustomerEmail &&
           otp == other.otp &&
           orderKey == other.orderKey &&
@@ -70,7 +91,19 @@ class PurchaseRequest {
           transactionIdentifierType == other.transactionIdentifierType &&
           currencyCode == other.currencyCode &&
           currencyId == other.currencyId &&
-          transactionId == other.transactionId);
+          currencyCodeName == other.currencyCodeName &&
+          transactionId == other.transactionId &&
+          paymentViewType == other.paymentViewType &&
+          referenceId == other.referenceId &&
+          deviceInformation == other.deviceInformation &&
+          isTokenized == other.isTokenized &&
+          customerId == other.customerId &&
+          customerTokenId == other.customerTokenId &&
+          isApplyRequest == other.isApplyRequest &&
+          applePayPaymentData == other.applePayPaymentData &&
+          isSamsungPayRequest == other.isSamsungPayRequest &&
+          samsungPayData == other.samsungPayData &&
+          sessionToken == other.sessionToken);
 
   @override
   int get hashCode =>
@@ -83,7 +116,8 @@ class PurchaseRequest {
       merchantReference.hashCode ^
       dateExpiration.hashCode ^
       refundReason.hashCode ^
-      // requestDateTime.hashCode ^
+      requestDateTime.hashCode ^
+      requestSource.hashCode ^
       orderCustomerEmail.hashCode ^
       otp.hashCode ^
       orderKey.hashCode ^
@@ -91,7 +125,19 @@ class PurchaseRequest {
       transactionIdentifierType.hashCode ^
       currencyCode.hashCode ^
       currencyId.hashCode ^
-      transactionId.hashCode;
+      currencyCodeName.hashCode ^
+      transactionId.hashCode ^
+      paymentViewType.hashCode ^
+      referenceId.hashCode ^
+      deviceInformation.hashCode ^
+      isTokenized.hashCode ^
+      customerId.hashCode ^
+      customerTokenId.hashCode ^
+      isApplyRequest.hashCode ^
+      applePayPaymentData.hashCode ^
+      isSamsungPayRequest.hashCode ^
+      samsungPayData.hashCode ^
+      sessionToken.hashCode;
 
   PurchaseRequest copyWith({
     String? pan,
@@ -107,6 +153,7 @@ class PurchaseRequest {
     String? dateExpiration,
     String? refundReason,
     String? requestDateTime,
+    int? requestSource,
     String? orderCustomerEmail,
     String? otp,
     String? orderKey,
@@ -114,7 +161,19 @@ class PurchaseRequest {
     int? transactionIdentifierType,
     String? currencyCode,
     int? currencyId,
+    String? currencyCodeName,
     String? transactionId,
+    int? paymentViewType,
+    String? referenceId,
+    String? deviceInformation,
+    bool? isTokenized,
+    String? customerId,
+    String? customerTokenId,
+    bool? isApplyRequest,
+    Map<String, dynamic>? applePayPaymentData,
+    bool? isSamsungPayRequest,
+    Map<String, dynamic>? samsungPayData,
+    String? sessionToken,
   }) {
     return PurchaseRequest(
       pan: pan ?? this.pan,
@@ -126,6 +185,8 @@ class PurchaseRequest {
       merchantReference: merchantReference ?? this.merchantReference,
       dateExpiration: dateExpiration ?? this.dateExpiration,
       refundReason: refundReason ?? this.refundReason,
+      requestDateTime: requestDateTime ?? this.requestDateTime,
+      requestSource: requestSource ?? this.requestSource,
       orderCustomerEmail: orderCustomerEmail ?? this.orderCustomerEmail,
       otp: otp ?? this.otp,
       orderKey: orderKey ?? this.orderKey,
@@ -134,10 +195,19 @@ class PurchaseRequest {
           transactionIdentifierType ?? this.transactionIdentifierType,
       currencyCode: currencyCode ?? this.currencyCode,
       currencyId: currencyId ?? this.currencyId,
+      currencyCodeName: currencyCodeName ?? this.currencyCodeName,
       transactionId: transactionId ?? this.transactionId,
-      isTokenized: isTokenized,
-      customerId: customerId,
-      customerTokenId: customerTokenId,
+      paymentViewType: paymentViewType ?? this.paymentViewType,
+      referenceId: referenceId ?? this.referenceId,
+      deviceInformation: deviceInformation ?? this.deviceInformation,
+      isTokenized: isTokenized ?? this.isTokenized,
+      customerId: customerId ?? this.customerId,
+      customerTokenId: customerTokenId ?? this.customerTokenId,
+      isApplyRequest: isApplyRequest ?? this.isApplyRequest,
+      applePayPaymentData: applePayPaymentData ?? this.applePayPaymentData,
+      isSamsungPayRequest: isSamsungPayRequest ?? this.isSamsungPayRequest,
+      samsungPayData: samsungPayData ?? this.samsungPayData,
+      sessionToken: sessionToken ?? this.sessionToken,
     );
   }
 
@@ -161,11 +231,23 @@ class PurchaseRequest {
         'cardHolderName': cardHolderName,
         'cvV2': cvV2,
         'dateExpiration': dateExpiration,
+        'requestDateTime': requestDateTime,
+        'requestSource': requestSource,
         'orderCustomerEmail': orderCustomerEmail,
         'clientMail': clientMail,
         'currencyCode': currencyCode,
+        'currencyId': currencyId,
+        'currencyCodeName': currencyCodeName,
         'transactionId': transactionId,
+        'paymentViewType': paymentViewType,
+        'referenceId': referenceId,
+        'deviceInformation': deviceInformation,
         'isTokenized': isTokenized,
+        'isApplyRequest': isApplyRequest,
+        'applePayPaymentData': applePayPaymentData,
+        'isSamsungPayRequest': isSamsungPayRequest,
+        'samsungPayData': samsungPayData,
+        'sessionToken': sessionToken,
       };
 
   Map<String, dynamic> mapToPurchaseStepOneData() {
@@ -198,35 +280,22 @@ class PurchaseRequest {
     return data;
   }
 
-  Map<String, dynamic> mapToPurchaseStepTwoData() {
+  Map<String, dynamic> mapToPurchaseAppleSamsungData() {
     Map<String, dynamic> data = {
-      'pan': pan,
-      'otp': otp,
       'amount': amount,
       'terminalId': terminalId,
       'merchantId': merchantId,
-      'cardHolderName': cardHolderName,
-      'cvV2': cvV2,
-      'dateExpiration': dateExpiration,
-      'currencyCode': currencyCode,
       'transactionId': transactionId,
-      'transactionIdentifierType': transactionIdentifierType,
       'transactionIdentifierValue': transactionIdentifierValue,
       'isTokenized': isTokenized,
+      'isApplyRequest': isApplyRequest,
+      'applePayPaymentData': applePayPaymentData,
+      'isSamsungPayRequest': isSamsungPayRequest,
+      'currencyCode': currencyCode,
+
+      'samsungPayData': samsungPayData,
     };
 
-    if (orderCustomerEmail.isNotEmpty) {
-      data['orderCustomerEmail'] = orderCustomerEmail;
-    }
-
-
-    if (cvV2.isEmpty) {
-      data['transactionMethod'] = "9";
-    }
-
-    if (clientMail.isNotEmpty) {
-      data['clientMail'] = clientMail;
-    }
     return data;
   }
 
@@ -274,6 +343,33 @@ class PurchaseRequest {
       currencyId: map['currencyId'] as int,
       transactionId: map['transactionId'] as String,
     );
+  }
+
+  Map<String, dynamic> mapToPurchaseStepTwoData() {
+    Map<String, dynamic> data = {
+      'pan': pan,
+      'otp': otp,
+      'amount': amount,
+      'terminalId': terminalId,
+      'merchantId': merchantId,
+      'cardHolderName': cardHolderName,
+      'cvV2': cvV2,
+      'dateExpiration': dateExpiration,
+      'currencyCode': currencyCode,
+      'transactionId': transactionId,
+      'transactionIdentifierType': transactionIdentifierType,
+      'transactionIdentifierValue': transactionIdentifierValue,
+      'isTokenized': isTokenized,
+    };
+
+    if (orderCustomerEmail.isNotEmpty) {
+      data['orderCustomerEmail'] = orderCustomerEmail;
+    }
+
+    if (clientMail.isNotEmpty) {
+      data['clientMail'] = clientMail;
+    }
+    return data;
   }
 
 //</editor-fold>

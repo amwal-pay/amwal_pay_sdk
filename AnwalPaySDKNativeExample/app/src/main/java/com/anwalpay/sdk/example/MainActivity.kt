@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
                     terminalId = state.terminalId.value,
                     locale = Locale(state.language.value),
                     customerId = customerId,
-                    isSoftPOS = state.transactionType.value == TransactionType.NFC
+                    transactionType = state.transactionType.value
                 )
                 amwalSDK.start(this@MainActivity,config , onResponse = {
                     Log.d("MainActivity", "Response: $it")

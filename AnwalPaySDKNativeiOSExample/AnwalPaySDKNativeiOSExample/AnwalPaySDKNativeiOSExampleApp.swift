@@ -41,14 +41,34 @@ struct AnwalPaySDKNativeiOSExampleApp: App {
             merchantId: viewModel.merchantId,
             customerId: nil,
             secureHashValue: viewModel.secureHash
-        ) { [self] sessionToken in
+        ) { [this] sessionToken in
             if let token = sessionToken {
                 
                 print("Session token: \(token)")
-                config = Config(environment: viewModel.selectedEnv, sessionToken: token, currency: viewModel.currency, amount: viewModel.amount, merchantId: viewModel.merchantId, terminalId: viewModel.terminalId, locale: viewModel.language, isSoftPOS: viewModel.transactionType == .NFC)
-                                
                 
-            }else {
+                // Map the UI transaction type to the SDK transaction type
+                let sdkTransactionType: Config.TransactionType
+                switch viewModel.transactionType {
+                case .NFC:
+                    sdkTransactionType = .nfc
+                case .CARD_WALLET:
+                    sdkTransactionType = .cardWallet
+                case .APPLE_PAY:
+                    sdkTransactionType = .applePay
+                }
+                
+                config = Config(
+                    environment: viewModel.selectedEnv,
+                    sessionToken: token,
+                    currency: viewModel.currency,
+                    amount: viewModel.amount,
+                    merchantId: viewModel.merchantId,
+                    terminalId: viewModel.terminalId,
+                    locale: viewModel.language,
+                    transactionType: sdkTransactionType
+                )
+                                
+            } else {
                 print("Failed to fetch session token.")
             }
         }

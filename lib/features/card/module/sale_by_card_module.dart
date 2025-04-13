@@ -20,7 +20,7 @@ class SaleByCardModule {
     final getIt = CardInjector.instance.getIt;
 
     /// inject card repository
-    CardInjector.instance.registerLazySingleton<ISaleByCardRepository>(
+    CardInjector.instance.registerLazySingleton<SaleByCardRepositoryImpl>(
       () => SaleByCardRepositoryImpl(
         _networkService,
       ),
@@ -63,6 +63,10 @@ class SaleByCardModule {
         getIt<GetCustomerTokenUseCase>(),
       ),
     );
+
+
+
+
 
     /// inject sale by card cubit
     CardInjector.instance.registerLazySingleton(

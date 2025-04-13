@@ -35,6 +35,20 @@ class SaleByCardRepositoryImpl extends ISaleByCardRepository {
     );
   }
 
+
+  @override
+  Future<NetworkState<PurchaseResponse>> purchaseWithAppleAndSamsung(
+      PurchaseRequest request,
+      ) async {
+    return await networkService.invokeRequest(
+      data: request.mapToPurchaseAppleSamsungData(),
+      method: HttpMethod.post,
+      converter: PurchaseResponse.fromJson,
+      endpoint: SaleByCardConstants.purchaseEndpoint,
+    );
+  }
+
+
   @override
   Future<NetworkState<PurchaseResponse>> purchaseWithOtpStepTwo(
     PurchaseRequest request,

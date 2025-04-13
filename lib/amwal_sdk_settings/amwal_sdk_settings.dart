@@ -1,4 +1,5 @@
 import 'package:amwal_pay_sdk/core/networking/constants.dart';
+import 'package:amwal_pay_sdk/core/enums/transaction_type.dart';
 import 'package:amwal_pay_sdk/presentation/sdk_arguments.dart';
 import 'package:flutter/material.dart';
 import 'package:amwal_pay_sdk/core/logger/amwal_logger.dart';
@@ -11,7 +12,7 @@ abstract class IAmwalSdkSettings {
   final String transactionId;
   final Locale locale;
   final bool isMocked;
-  final bool isSoftPOS;
+  final TransactionType transactionType;
   final String amount;
   final String currency;
   final String? merchantName;
@@ -32,6 +33,8 @@ abstract class IAmwalSdkSettings {
   final void Function(String?)? customerCallback;
   final String? customerId;
   final void Function(String?)? onResponse;
+
+  bool get isSoftPOS => transactionType.isSoftPOS;
 
   IAmwalSdkSettings({
     this.onResponse,
@@ -56,7 +59,7 @@ abstract class IAmwalSdkSettings {
     this.flavor,
     this.locale = const Locale('en'),
     this.isMocked = false,
-    this.isSoftPOS = false,
+    this.transactionType = TransactionType.cardWallet,
     this.onTokenExpired,
     this.log,
     this.environment,
@@ -81,11 +84,10 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
     super.onError,
     super.onTokenExpired,
     super.log,
-    super.isSoftPOS,
+    super.transactionType,
     super.flavor,
     super.environment,
     super.customerCallback,
-
   }) : super(
           amount: '',
           currency: '',
@@ -111,7 +113,9 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
       onCountComplete: json['onCountComplete'],
       locale: json['locale'],
       isMocked: json['isMocked'],
-      isSoftPOS: json['isNfc'],
+      transactionType: json['isNfc'] == true
+          ? TransactionType.nfc
+          : TransactionType.cardWallet,
       onTokenExpired: json['onTokenExpired'],
       flavor: json['flavor'],
     );
@@ -132,7 +136,7 @@ class AmwalInAppSdkSettings extends IAmwalSdkSettings {
       'isMocked': isMocked,
       'countDownInSeconds': countDownInSeconds,
       'flavor': flavor,
-      'isNfc': isSoftPOS,
+      'isNfc': transactionType == TransactionType.nfc,
       'log': log,
     };
   }
@@ -163,8 +167,9 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
     super.sessionToken = '',
     super.customerCallback,
     super.customerId,
-    super.isSoftPOS,
-    super.environment,super.maxTransactionAmount,
+    super.transactionType,
+    super.environment,
+    super.maxTransactionAmount,
   }) : super(terminalIds: [terminalId], onPay: (_, [__]) {});
 
   factory AmwalSdkSettings.fromJson(Map<String, dynamic> json) {
@@ -178,17 +183,15 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
       terminalId: json['terminalId'],
       merchantName: json['merchantName'],
       getTransactionFunction: null,
-      // You should handle this according to your logic
       onCountComplete: null,
-      // You should handle this according to your logic
       locale: json['locale'],
       isMocked: json['isMocked'],
-      isSoftPOS: json['isNfc'],
+      transactionType: json['isNfc'] == true
+          ? TransactionType.nfc
+          : TransactionType.cardWallet,
       onError: null,
       log: null,
-      // You should handle this according to your logic
       onTokenExpired: null,
-      // You should handle this according to your logic
       countDownInSeconds: json['countDownInSeconds'] ?? 90,
       flavor: json['flavor'],
     );
@@ -202,7 +205,7 @@ class AmwalSdkSettings extends IAmwalSdkSettings {
       'transactionId': transactionId,
       'currency': currency,
       'amount': amount,
-      'isNfc': isSoftPOS,
+      'isNfc': transactionType == TransactionType.nfc,
       'terminalId': terminalId,
       'merchantName': merchantName,
       'locale': locale,

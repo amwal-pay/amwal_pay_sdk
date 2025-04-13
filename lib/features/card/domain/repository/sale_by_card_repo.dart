@@ -11,16 +11,24 @@ abstract class ISaleByCardRepository extends BaseRepository {
   Future<NetworkState<PurchaseResponse>> purchase(
     PurchaseRequest request,
   );
+
   Future<NetworkState<PurchaseResponse>> purchaseWithOtpStepOne(
     PurchaseRequest request,
   );
+
   Future<NetworkState<PurchaseResponse>> purchaseWithOtpStepTwo(
     PurchaseRequest request,
   );
+
   Future<NetworkState<PurchaseResponse>> payWithToken(
     PurchaseRequest request,
   );
+
   Future<NetworkState<CustomerTokenResponse>> getCustomerTokens(
     CustomerTokenRequest request,
+  );
+
+  Future<NetworkState<PurchaseResponse>> purchaseWithAppleAndSamsung(
+    PurchaseRequest request,
   );
 }

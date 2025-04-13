@@ -2,11 +2,12 @@ import 'dart:async';
 
 import 'package:amwal_pay_sdk/amwal_pay_sdk.dart';
 import 'package:amwal_pay_sdk/amwal_sdk_settings/amwal_sdk_settings.dart';
+import 'package:amwal_pay_sdk/core/enums/transaction_type.dart';
 import 'package:amwal_pay_sdk/core/networking/constants.dart';
 import 'package:amwal_pay_sdk/core/networking/dio_client.dart';
 import 'package:amwal_pay_sdk/core/networking/secure_hash_interceptor.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
-import 'package:chucker_flutter/chucker_flutter.dart';
+// import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:example/currency_model.dart';
 import 'package:example/drop_down_form.dart';
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
         title: 'Amwal pay Demo',
         navigatorObservers: [
           AmwalSdkNavigator.amwalNavigatorObserver,
-          ChuckerFlutter.navigatorObserver
+          // ChuckerFlutter.navigatorObserver
         ],
         theme: ThemeData(
           useMaterial3: false,
@@ -77,10 +78,10 @@ class _DemoScreenState extends State<DemoScreen> {
     _currencyController = TextEditingController(text: 'OMR');
     _languageController = TextEditingController(text: 'en');
     _transactionTypeController = TextEditingController(text: 'CARD || Wallet');
-    _terminalController = TextEditingController(text: '811018');
-    _merchantIdController = TextEditingController(text: '84131');
+    _terminalController = TextEditingController(text: '570480');
+    _merchantIdController = TextEditingController(text: '120288');
     _secureHashController = TextEditingController(
-      text: '8570CEED656C8818E4A7CE04F22206358F272DAD5F0227D322B654675ABF8F83',
+      text: 'FA8BC1444E76C289EBA5870D99C36FB5E5F1FDF35101FB59EB6687895CD0F636',
     );
     dropdownValue = 'UAT';
     sdkEnv = Environment.UAT;
@@ -114,8 +115,8 @@ class _DemoScreenState extends State<DemoScreen> {
         ),
       );
 
-      dio.interceptors.add(ChuckerDioInterceptor());
-      DioClient.dio?.interceptors.add(ChuckerDioInterceptor());
+      // dio.interceptors.add(ChuckerDioInterceptor());
+      // DioClient.dio?.interceptors.add(ChuckerDioInterceptor());
 
       var sec = SecureHashInterceptor.clearSecureHash(secureHashValue, {
         'merchantId': merchantId,
@@ -203,19 +204,33 @@ class _DemoScreenState extends State<DemoScreen> {
           terminalId: _terminalController.text,
           locale: Locale(_languageController.text),
           isMocked: false,
-          isSoftPOS: (_transactionTypeController.text == 'NFC' ? true : false),
+          transactionType: _getTransactionType(),
           customerCallback: _onCustomerId,
           customerId: customerId,
           onResponse: _onResponse,
         ),
       );
-    } catch (e) {
+    }  catch (e, stackTrace) {
       debugPrint('Error during payment: $e');
+      debugPrint('Stack trace: $stackTrace');
       await _showErrorDialog('Something went wrong during payment');
-    } finally {
+    }  finally {
       setState(() {
         _isLoading = false;
       });
+    }
+  }
+
+  TransactionType _getTransactionType() {
+    switch (_transactionTypeController.text) {
+      case 'NFC':
+        return TransactionType.nfc;
+      case 'APPLE_PAY':
+      case 'GOOGLE_PAY':
+        return TransactionType.appleOrGooglePay;
+      case 'CARD || Wallet':
+      default:
+        return TransactionType.cardWallet;
     }
   }
 
@@ -321,9 +336,15 @@ class _DemoScreenState extends State<DemoScreen> {
                         ),
                         DropdownForm<String>(
                           title: 'Transaction Type',
-                          options: const [
+                          options: [
                             'NFC',
                             'CARD || Wallet',
+                            if (Theme.of(context).platform ==
+                                TargetPlatform.iOS)
+                              'APPLE_PAY',
+                            if (Theme.of(context).platform ==
+                                TargetPlatform.android)
+                              'GOOGLE_PAY',
                           ],
                           valueMapper: (lang) => lang,
                           nameMapper: (lang) => lang,

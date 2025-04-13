@@ -17,9 +17,14 @@ import 'package:amwal_pay_sdk/sdk_builder/network_service_builder.dart';
 import 'package:amwal_pay_sdk/sdk_builder/sdk_builder.dart';
 import 'package:flutter/material.dart';
 
+import 'package:amwal_pay_sdk/features/card/dependency/injector.dart';
+
+import 'core/enums/transaction_type.dart';
 import 'core/ui/error_dialog.dart';
 import 'core/ui/loading_dialog.dart';
 import 'features/card/presentation/sale_by_card_contact_less_screen.dart';
+import 'features/digital_wallet/module/sale_by_apple_pay_module.dart';
+import 'features/digital_wallet/presentation/sale_by_apple_pay_screen.dart';
 import 'features/transaction/data/repository/transaction_repository_impl.dart';
 import 'localization/app_localizations_setup.dart';
 import 'package:amwal_pay_sdk/core/logger/amwal_logger.dart';
@@ -85,7 +90,11 @@ class AmwalPaySdk {
       settings.locale.languageCode,
     );
 
-    SdkBuilder.instance.initSdkModules(networkService);
+    if (settings.transactionType == TransactionType.appleOrGooglePay) {
+      SdkBuilder.instance.initApplePayModules(networkService);
+    } else {
+      SdkBuilder.instance.initSdkModules(networkService);
+    }
 
     checkMerchantProvidedData(networkService, settings);
   }
@@ -243,10 +252,9 @@ class AmwalPaySdk {
       onTokenExpired: settings.onTokenExpired,
       countDownInSeconds: settings.countDownInSeconds,
       flavor: settings.flavor,
-      isSoftPOS: settings.isSoftPOS,
+      transactionType: settings.transactionType,
       environment: settings.environment,
-        maxTransactionAmount:settings.maxTransactionAmount
-
+      maxTransactionAmount: settings.maxTransactionAmount,
     );
     await CacheStorageHandler.instance.write(
       CacheKeys.merchant_flavor,
@@ -261,70 +269,146 @@ class AmwalPaySdk {
   }
 
   Future<void> _openAmwalSdkScreen(AmwalSdkSettings settings) async {
-    if (settings.isSoftPOS) {
-      await AmwalSdkNavigator.amwalNavigatorObserver.navigator!.push(
-        MaterialPageRoute(
-          builder: (_) {
-            return MaterialApp(
-              localeResolutionCallback:
-                  AppLocalizationsSetup.localeResolutionCallback,
-              localizationsDelegates:
-                  AppLocalizationsSetup.localizationsDelegates,
-              supportedLocales: AppLocalizationsSetup.supportedLocales,
-              debugShowCheckedModeBanner: false,
-              locale: settings.locale,
-              theme: ThemeData(
-                useMaterial3: false,
-              ),
-              home: SaleByCardContactLessScreen(
-                amount: settings.amount,
-                terminalId: settings.terminalId,
-                currencyId: int.tryParse(settings.currency) ?? 512,
-                currency: 'OMR',
-                merchantId: int.parse(settings.merchantId),
-                transactionId: settings.transactionId,
+    switch (settings.transactionType) {
+      case TransactionType.nfc:
+        await AmwalSdkNavigator.amwalNavigatorObserver.navigator!.push(
+          MaterialPageRoute(
+            builder: (_) {
+              return MaterialApp(
+                localeResolutionCallback:
+                    AppLocalizationsSetup.localeResolutionCallback,
+                localizationsDelegates:
+                    AppLocalizationsSetup.localizationsDelegates,
+                supportedLocales: AppLocalizationsSetup.supportedLocales,
+                debugShowCheckedModeBanner: false,
                 locale: settings.locale,
-                onPay: settings.onPay,
-              ),
-            );
-          },
-        ),
-      );
-    } else {
-      await AmwalSdkNavigator.amwalNavigatorObserver.navigator!.push(
-        MaterialPageRoute(
-          builder: (_) {
-            return MaterialApp(
-              localeResolutionCallback:
-                  AppLocalizationsSetup.localeResolutionCallback,
-              localizationsDelegates:
-                  AppLocalizationsSetup.localizationsDelegates,
-              supportedLocales: AppLocalizationsSetup.supportedLocales,
-              debugShowCheckedModeBanner: false,
-              locale: settings.locale,
-              theme: ThemeData(
-                useMaterial3: false,
-              ),
-              home: AmwalPayScreen(
-                arguments: AmwalSdkArguments(
-                  onResponse: settings.onResponse,
-                  customerId: settings.customerId,
-                  customerCallback: settings.customerCallback,
-                  onPay: settings.onPay,
-                  amount: settings.amount,
-                  terminalId: settings.terminalIds.single,
-                  currency: settings.currency,
-                  transactionId: settings.transactionId,
-                  currencyId: 512,
-                  merchantId: int.parse(settings.merchantId),
-                  getTransactionFunction:
-                      settings.getTransactionFunction ?? (_) async => null,
+                theme: ThemeData(
+                  useMaterial3: false,
                 ),
-              ),
-            );
-          },
-        ),
-      );
+                home: SaleByCardContactLessScreen(
+                  amount: settings.amount,
+                  terminalId: settings.terminalId,
+                  currencyId: int.tryParse(settings.currency) ?? 512,
+                  currency: 'OMR',
+                  merchantId: int.parse(settings.merchantId),
+                  transactionId: settings.transactionId,
+                  locale: settings.locale,
+                  onPay: settings.onPay,
+                ),
+              );
+            },
+          ),
+        );
+        break;
+      case TransactionType.appleOrGooglePay:
+        // Initialize the network service first
+        final networkService =
+            NetworkServiceBuilder.instance.setupNetworkService(
+          settings.isMocked,
+          settings.secureHashValue,
+          settings.token,
+          settings.locale.languageCode,
+        );
+
+        // Initialize the card module first to ensure its dependencies are registered
+        SdkBuilder.instance.initSdkModules(networkService);
+
+        // Register dependencies for Apple Pay
+        final applePayModule = SaleByApplePayModule(networkService);
+        applePayModule.setup();
+
+        await AmwalSdkNavigator.amwalNavigatorObserver.navigator!.push(
+          MaterialPageRoute(
+            builder: (_) {
+              final context =
+                  AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context;
+              final cubit = applePayModule.createCubit(
+                context: context,
+                onResponse: settings.onResponse ?? (_) {},
+                dismissDialog: () {
+                  AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+                },
+                log: (String message) {
+                  if (settings.log != null) {
+                    settings.log!(message, {});
+                  } else {
+                    print(message);
+                  }
+                },
+              );
+
+              return MaterialApp(
+                localeResolutionCallback:
+                    AppLocalizationsSetup.localeResolutionCallback,
+                localizationsDelegates:
+                    AppLocalizationsSetup.localizationsDelegates,
+                supportedLocales: AppLocalizationsSetup.supportedLocales,
+                debugShowCheckedModeBanner: false,
+                locale: settings.locale,
+                theme: ThemeData(
+                  useMaterial3: false,
+                ),
+                home: SaleByApplePayScreen(
+                  onResponse: settings.onResponse ?? (_) {},
+                  dismissDialog: () {
+                    AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
+                  },
+                  log: (String message) {
+                    if (settings.log != null) {
+                      settings.log!(message, {});
+                    } else {
+                      print(message);
+                    }
+                  },
+                  amount: double.parse(settings.amount),
+                  terminalId: settings.terminalId,
+                  currency: settings.currency,
+                  currencyId: int.tryParse(settings.currency) ?? 512,
+                  merchantId: int.parse(settings.merchantId),
+                  transactionId: settings.transactionId ?? '',
+                ),
+              );
+            },
+          ),
+        );
+        break;
+      case TransactionType.cardWallet:
+      default:
+        await AmwalSdkNavigator.amwalNavigatorObserver.navigator!.push(
+          MaterialPageRoute(
+            builder: (_) {
+              return MaterialApp(
+                localeResolutionCallback:
+                    AppLocalizationsSetup.localeResolutionCallback,
+                localizationsDelegates:
+                    AppLocalizationsSetup.localizationsDelegates,
+                supportedLocales: AppLocalizationsSetup.supportedLocales,
+                debugShowCheckedModeBanner: false,
+                locale: settings.locale,
+                theme: ThemeData(
+                  useMaterial3: false,
+                ),
+                home: AmwalPayScreen(
+                  arguments: AmwalSdkArguments(
+                    onResponse: settings.onResponse,
+                    customerId: settings.customerId,
+                    customerCallback: settings.customerCallback,
+                    onPay: settings.onPay,
+                    amount: settings.amount,
+                    terminalId: settings.terminalIds.single,
+                    currency: settings.currency,
+                    transactionId: settings.transactionId,
+                    currencyId: 512,
+                    merchantId: int.parse(settings.merchantId),
+                    getTransactionFunction:
+                        settings.getTransactionFunction ?? (_) async => null,
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+        break;
     }
   }
 }

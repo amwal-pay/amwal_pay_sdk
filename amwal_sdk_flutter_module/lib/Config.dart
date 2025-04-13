@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:ffi';
 
@@ -11,7 +10,7 @@ class Config {
   final String terminalId;
   final String? customerId;
   final String locale;
-  final bool isSoftPOS;
+  final String transactionType;
 
   Config({
     required this.environment,
@@ -22,7 +21,7 @@ class Config {
     required this.terminalId,
     this.customerId,
     required this.locale,
-    required this.isSoftPOS,
+    required this.transactionType,
   });
 
   // Convert JSON string to Config object
@@ -37,8 +36,7 @@ class Config {
       terminalId: jsonMap['terminalId'],
       customerId: jsonMap['customerId'] as String?,
       locale: jsonMap['locale'],
-      isSoftPOS: jsonMap['isSoftPOS'],
+      transactionType: jsonMap['transactionType'] ?? 'cardWallet',
     );
   }
-
 }

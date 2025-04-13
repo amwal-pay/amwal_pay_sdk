@@ -5,6 +5,7 @@ import 'package:amwal_pay_sdk/core/ui/transactiondialog/transaction_details_sett
 import 'package:amwal_pay_sdk/features/card/cubit/sale_by_card_manual_cubit.dart';
 import 'package:amwal_pay_sdk/features/card/data/models/response/purchase_response.dart';
 import 'package:amwal_pay_sdk/features/card/transaction_manager/i_card_transaction_manager.dart';
+import 'package:amwal_pay_sdk/features/card/transaction_manager/transaction_util_dialog.dart';
 import 'package:amwal_pay_sdk/features/payment_argument.dart';
 import 'package:amwal_pay_sdk/features/transaction/domain/use_case/get_transaction_by_Id.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
@@ -61,7 +62,7 @@ class AmwalCardTransactionManager extends ICardTransactionManager {
       transactionId,
       otp,
       originTransactionId,
-        saleByCardManualCubit.isTokenized,
+      saleByCardManualCubit.isTokenized,
     );
   }
 
@@ -158,37 +159,13 @@ class AmwalCardTransactionManager extends ICardTransactionManager {
           if (errorCounter >= 3) {
             if (dialogContext.mounted) {
               Navigator.of(dialogContext).pop();
-              AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
-              AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
-              if (AmwalSdkNavigator.amwalNavigatorObserver.navigator != null) {
-                final context =
-                    AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context;
-                log?.call('payment_abandoned', {
-                  "user_id": paymentArguments.merchantId,
-                  "transaction_id": transactionId,
-                  "payment_amount": paymentArguments.amount,
-                  "payment_method": 'Pay by Card',
-                  "currency": paymentArguments.currencyData?.name ?? '',
-                });
-                return showDialog(
-                  context: context.mounted ? context : context,
-                  builder: (_) => Localizations(
-                    locale: AmwalSdkSettingContainer.locale,
-                    delegates: const [
-                      ...AppLocalizationsSetup.localizationsDelegates
-                    ],
-                    child: ErrorDialog(
-                      locale: AmwalSdkSettingContainer.locale,
-                      title: "err".translate(context) ?? '',
-                      message: "transaction_cancel".translate(context),
-                      resetState: () {
-                        AmwalSdkNavigator.amwalNavigatorObserver.navigator!
-                            .pop();
-                      },
-                    ),
-                  ),
-                );
-              }
+              TransactionUtilDialog.showTransactionCancellationDialog(
+                merchantId: paymentArguments.merchantId,
+                transactionId: originalTransactionId,
+                amount: paymentArguments.amount,
+                currency: paymentArguments.currencyData!.idN,
+                log: log,
+              );
             }
           }
           return;
@@ -215,16 +192,9 @@ class AmwalCardTransactionManager extends ICardTransactionManager {
   }) async {
     final purchaseDataOrNull = purchaseDataOrFail?.fold((l) => null, (r) => r);
     if (purchaseDataOrNull != null) {
-      final setting = _generateTransactionSettingsFromPurchaseData(
-        purchaseDataOrNull,
-        context,
-      );
-      await ReceiptHandler.instance.showHistoryReceipt(
-        context: AmwalSdkNavigator.amwalNavigatorObserver.navigator!.context,
-        settings: setting.copyWith(onClose: () {
-          AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
-          AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();
-        }),
+      TransactionUtilDialog.showReceiptWithTransactionSettings(
+        purchaseData: purchaseDataOrNull,
+        context: context,
       );
     } else {
       saleByCardManualCubit.showLoader();
@@ -240,34 +210,5 @@ class AmwalCardTransactionManager extends ICardTransactionManager {
         },
       );
     }
-  }
-
-  TransactionDetailsSettings _generateTransactionSettingsFromPurchaseData(
-    PurchaseData purchaseData,
-    BuildContext context,
-  ) {
-
-    final amount = (num.tryParse(purchaseData.amount ?? "0") ?? 0).toStringAsFixed(3);
-    final amountString =
-        '  $amount ${purchaseData.currency?.translate(context) ?? ''}';
-    return TransactionDetailsSettings(
-      locale: AmwalSdkSettingContainer.locale,
-      amount: num.tryParse(purchaseData.amount ?? "0") ?? 0,
-      transactionDisplayName: purchaseData.transactionTypeDisplayName ?? "",
-      isSuccess: purchaseData.message != 'canceled',
-      transactionStatus: purchaseData.message == 'canceled' ? TransactionStatus.failed : TransactionStatus.success,
-      transactionType: purchaseData.message,
-      isTransactionDetails: false,
-      globalTranslator: (string) => string.translate(context),
-      transactionId: purchaseData.transactionId,
-      details: {
-        'merchant_name_label': purchaseData.merchantName,
-        'ref_no': purchaseData.gatewayTransactionReference ?? purchaseData.hostResponseData.rrn,
-        'merchant_id': purchaseData.merchantId,
-        'terminal_id': purchaseData.terminalId,
-        'date_time': purchaseData.transactionDate,
-        'amount': amountString,
-      },
-    );
   }
 }

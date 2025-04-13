@@ -26,6 +26,7 @@ class CardInfoFormWidget extends StatefulApiView<SaleByCardManualCubit> {
     required this.cvvFocusNode,
   }) : super(key: key);
 
+
   @override
   State<CardInfoFormWidget> createState() => _CardInfoFormWidgetState();
 }

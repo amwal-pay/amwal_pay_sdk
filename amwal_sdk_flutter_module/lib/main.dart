@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
 import 'Config.dart';
 import 'RootNavigatorObserver.dart';
+import 'package:amwal_pay_sdk/core/enums/transaction_type.dart';
 
 const platform = MethodChannel('amwal.sdk/functions');
 
@@ -67,7 +68,9 @@ Future<void> _initializeAmwalSdk(Config config) async {
       terminalId: config.terminalId,
       locale: Locale(config.locale),
       isMocked: false,
-      isSoftPOS: config.isSoftPOS,
+      transactionType: config.transactionType == 'nfc'
+          ? TransactionType.nfc
+          : TransactionType.cardWallet,
       customerCallback: _customerCallback,
       customerId: config.customerId,
       onResponse: _onResponse,

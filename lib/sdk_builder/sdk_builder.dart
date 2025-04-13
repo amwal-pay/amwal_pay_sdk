@@ -5,6 +5,8 @@ import 'package:amwal_pay_sdk/features/transaction/module/transaction_module.dar
 import 'package:amwal_pay_sdk/features/wallet/module/sale_by_wallet_module.dart';
 import 'package:get_storage/get_storage.dart';
 
+import '../features/digital_wallet/module/sale_by_apple_pay_module.dart';
+
 class SdkBuilder {
   const SdkBuilder._();
   static SdkBuilder get instance => const SdkBuilder._();
@@ -32,17 +34,26 @@ class SdkBuilder {
     walletModule.setup();
   }
 
+  void initApplePayModules(NetworkService networkService) {
+     final applePayModule = SaleByApplePayModule(networkService);
+
+    applePayModule.setup();
+  }
+
   void initSdkModules(NetworkService networkService) {
     final cardModule = SaleByCardModule(networkService);
     final walletModule = SaleByWalletModule(networkService);
+    final applePayModule = SaleByApplePayModule(networkService);
     final currencyModule = CurrencyBinds(networkService);
     final transactionModule = TransactionModule.both(networkService);
     transactionModule.setup();
     currencyModule.setup();
     walletModule.setup();
     cardModule.setup();
+    applePayModule.setup();
   }
 }
+
 
 class CacheStorageHandler {
   const CacheStorageHandler._();

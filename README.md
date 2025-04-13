@@ -83,7 +83,7 @@ await AmwalPaySdk.instance.initSdk(
     terminalId: 'YOUR_TERMINAL_ID', // Your terminal ID
     locale: Locale('en'), // Locale for the payment (e.g., "en")
     isMocked: false, // Disable mocked data
-    isSoftPOS: false, // Enable NFC if needed
+    transactionType: TransactionType.cardWallet, // Specify the transaction type
     customerCallback: _onCustomerId, // Callback for customer ID
     customerId: customerId, // The customer ID for this transaction
     onResponse: _onResponse, // Callback for the payment response
@@ -114,7 +114,7 @@ You can find a complete example of how to use the Amwal Pay SDK in the [Example 
 | `terminalId`      | Your terminalId                                                                           |
 | `locale`          | The locale for the payment process (e.g., "en" or "ar")                                   |
 | `isMocked`        | Whether to use mocked data (for testing)                                                  |
-| `isSoftPOS`           | Whether  SoftPOS is enabled for the transaction                                           |
+| `transactionType` | The type of transaction (TransactionType.nfc or TransactionType.cardWallet)               |
 | `customerCallback`| The callback function for customer id after finish                                        |
 | `customerId`      | The customer ID for this transaction                                                      |
 | `onResponse`      | The callback function to handle the payment response                                      |

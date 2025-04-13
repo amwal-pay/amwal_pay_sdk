@@ -85,7 +85,7 @@ class AmwalSDK {
         val customerId: String?,
         @Serializable(with = LocaleSerializer::class)
         val locale: Locale,
-        val isSoftPOS: Boolean
+        val transactionType: String
     ){
 
         fun toJsonString(): String {
@@ -94,6 +94,18 @@ class AmwalSDK {
 
         enum class Environment { UAT, SIT, PROD }
         enum class Currency(val value: String) { OMR("omr") }
+        
+        companion object {
+            // Map UI transaction type to SDK transaction type
+            fun mapTransactionType(uiTransactionType: String): String {
+                return when (uiTransactionType) {
+                    "NFC" -> "nfc"
+                    "CARD_WALLET" -> "cardWallet"
+                    "GOOGLE_PAY" -> "googlePay"
+                    else -> "nfc" // Default to NFC
+                }
+            }
+        }
     }
 
 }
