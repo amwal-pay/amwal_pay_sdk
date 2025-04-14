@@ -7,10 +7,21 @@ import 'app_localizations_delegate.dart';
 
 class AppLocalizations {
   final Locale locale;
-
   Map<String, String> localizedStrings = {};
 
-  AppLocalizations(this.locale);
+  // Singleton instance
+  static AppLocalizations? _instance;
+
+  // Private constructor
+  AppLocalizations._(this.locale);
+
+  // Factory constructor to get the singleton instance
+  factory AppLocalizations(Locale locale) {
+    if (_instance == null || _instance!.locale != locale) {
+      _instance = AppLocalizations._(locale);
+    }
+    return _instance!;
+  }
 
   static AppLocalizations? of(BuildContext context) {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);

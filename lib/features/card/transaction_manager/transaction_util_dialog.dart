@@ -1,7 +1,9 @@
 import 'package:amwal_pay_sdk/core/ui/error_dialog.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
+import 'package:amwal_pay_sdk/localization/app_localizations.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
+import 'dart:convert';
 
 import '../../../amwal_sdk_settings/amwal_sdk_setting_container.dart';
 import '../../../core/ui/transactiondialog/transaction.dart';
@@ -12,7 +14,7 @@ import '../../receipt/receipt_handler.dart';
 import '../data/models/response/purchase_response.dart';
 
 class TransactionUtilDialog {
-  static   showTransactionCancellationDialog({
+  static showTransactionCancellationDialog({
     required int merchantId,
     required String transactionId,
     required String amount,
@@ -53,9 +55,9 @@ class TransactionUtilDialog {
   }
 
   static TransactionDetailsSettings generateTransactionSettingsFromPurchaseData(
-      PurchaseData purchaseData,
-      BuildContext context,
-      ) {
+    PurchaseData purchaseData,
+    BuildContext context,
+  ) {
 
     final amount = (num.tryParse(purchaseData.amount ?? "0") ?? 0).toStringAsFixed(3);
     final amountString =
@@ -68,7 +70,7 @@ class TransactionUtilDialog {
       transactionStatus: purchaseData.message == 'canceled' ? TransactionStatus.failed : TransactionStatus.success,
       transactionType: purchaseData.message,
       isTransactionDetails: false,
-      globalTranslator: (string) => string.translate(context),
+      globalTranslator: (string) => _translateString(string),
       transactionId: purchaseData.transactionId,
       details: {
         'merchant_name_label': purchaseData.merchantName,
@@ -79,6 +81,13 @@ class TransactionUtilDialog {
         'amount': amountString,
       },
     );
+  }
+
+  static String _translateString(String string) {
+    return AppLocalizations(
+      AmwalSdkSettingContainer.locale,
+    ).translate(string) ??
+        string;
   }
 
   static Future<void> showReceiptWithTransactionSettings({
