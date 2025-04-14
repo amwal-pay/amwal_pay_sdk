@@ -6,6 +6,8 @@ import 'package:amwal_pay_sdk/features/digital_wallet/cubit/sale_by_digital_wall
 import 'package:amwal_pay_sdk/features/digital_wallet/model/digital_wallet_response.dart';
 import 'package:amwal_pay_sdk/core/apiview/api_view.dart';
 import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
+import 'package:amwal_pay_sdk/features/digital_wallet/constants/digital_wallet_translations.dart';
+import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 
 import '../../wallet/dependency/injector.dart';
 
@@ -59,7 +61,6 @@ class _SaleByApplePayScreenState extends State<SaleByApplePayScreen> {
   }
 
   @override
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: lightGeryColor,
@@ -74,18 +75,18 @@ class _SaleByApplePayScreenState extends State<SaleByApplePayScreen> {
             color: blackColor,
           ),
         ),
-        title: const Row(
+        title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
+            const Icon(
               Icons.apple,
               color: blackColor,
               size: 24,
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             Text(
-              'Apple Pay',
-              style: TextStyle(
+              DigitalWalletTranslations.applePay.translate(context),
+              style: const TextStyle(
                 color: blackColor,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -100,17 +101,18 @@ class _SaleByApplePayScreenState extends State<SaleByApplePayScreen> {
         builder: (context, state) {
           return state.when(
             initial: () => const SizedBox(),
-            loading: () => const Center(
+            loading: () => Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircularProgressIndicator(
+                  const CircularProgressIndicator(
                     color: primaryColor,
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Text(
-                    'Processing your payment...',
-                    style: TextStyle(
+                    DigitalWalletTranslations.processingPayment
+                        .translate(context),
+                    style: const TextStyle(
                       color: blackColor,
                       fontSize: 16,
                     ),
@@ -118,28 +120,30 @@ class _SaleByApplePayScreenState extends State<SaleByApplePayScreen> {
                 ],
               ),
             ),
-            success: (data) => const Center(
+            success: (data) => Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.check_circle,
                     color: Colors.green,
                     size: 64,
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Text(
-                    'Payment Successful!',
-                    style: TextStyle(
+                    DigitalWalletTranslations.paymentSuccessful
+                        .translate(context),
+                    style: const TextStyle(
                       color: blackColor,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
-                    'Thank you for your payment.',
-                    style: TextStyle(
+                    DigitalWalletTranslations.thankYouForPayment
+                        .translate(context),
+                    style: const TextStyle(
                       color: greyColor,
                       fontSize: 16,
                     ),
@@ -158,7 +162,7 @@ class _SaleByApplePayScreenState extends State<SaleByApplePayScreen> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Error: $message',
+                    '${DigitalWalletTranslations.paymentError.translate(context)}: $message',
                     style: const TextStyle(
                       color: redColor,
                       fontSize: 18,
@@ -168,12 +172,12 @@ class _SaleByApplePayScreenState extends State<SaleByApplePayScreen> {
                   const SizedBox(height: 8),
                   if (errorList != null && errorList.isNotEmpty)
                     ...errorList.map((error) => Text(
-                      error,
-                      style: const TextStyle(
-                        color: greyColor,
-                        fontSize: 14,
-                      ),
-                    )),
+                          error,
+                          style: const TextStyle(
+                            color: greyColor,
+                            fontSize: 14,
+                          ),
+                        )),
                 ],
               ),
             ),

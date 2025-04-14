@@ -157,6 +157,14 @@
   "add_new_card": "Add New Card",
   "please_enter_cvv": "Please enter cvv",
   "error_occurred": "Card Read Error: Please retry",
-  "max_transaction_amount_exceeded": "Amount exceeds your maximum transaction limit"
-
+  "max_transaction_amount_exceeded": "Amount exceeds your maximum transaction limit",
+  "apple_pay": "Apple Pay",
+  "processing_payment": "Processing your payment...",
+  "payment_successful": "Payment Successful!",
+  "thank_you_for_payment": "Thank you for your payment.",
+  "payment_error": "Error",
+  "digital_wallet_not_available": "Digital wallet payments are not available on this device",
+  "payment_failed": "Payment failed",
+  "unexpected_error": "An unexpected error occurred",
+  "payment": "Payment"
 }

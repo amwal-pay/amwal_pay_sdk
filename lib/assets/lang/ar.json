@@ -167,6 +167,14 @@
   "add_new_card": "اضف بطاقة جديدة",
   "error_occurred": "خطأ في قراءة البطاقة: يرجى إعادة المحاولة",
   "otp_error": "رمز التحقق غير صحيح. سيتم إعادتك إلى صفحة الدفع للمحاولة مرة أخرى",
-  "max_transaction_amount_exceeded": "تجاوزت الحد الأقصى للمعاملة"
+  "max_transaction_amount_exceeded": "تجاوزت الحد الأقصى للمعاملة",
+  "apple_pay": "آبل باي",
+  "processing_payment": "جاري معالجة الدفع...",
+  "payment_successful": "تم الدفع بنجاح!",
+  "thank_you_for_payment": "شكراً لك على الدفع.",
+  "payment_error": "خطأ",
+  "digital_wallet_not_available": "خدمات المحفظة الرقمية غير متوفرة على هذا الجهاز",
+  "payment_failed": "فشلت عملية الدفع",
+  "unexpected_error": "حدث خطأ غير متوقع"
 }
 
