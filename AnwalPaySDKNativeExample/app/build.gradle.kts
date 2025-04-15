@@ -40,6 +40,7 @@ android {
 }
 
 dependencies {
+    val compileFlutterModule: Boolean = gradle.extra.get("compileFlutterModule") as? Boolean ?: true
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -49,7 +50,13 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(project(":amwalsdk"))
+    if (compileFlutterModule) {
+
+        implementation(project(":amwalsdk"))
+    }else {
+        implementation ("com.amwal-pay:amwal_sdk:+")
+    }
+
     implementation(libs.okhttp)
 
     testImplementation(libs.junit)
