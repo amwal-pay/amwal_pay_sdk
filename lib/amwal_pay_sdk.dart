@@ -8,6 +8,7 @@ import 'package:amwal_pay_sdk/amwal_sdk_settings/amwal_sdk_settings.dart';
 import 'package:amwal_pay_sdk/core/networking/constants.dart';
 import 'package:amwal_pay_sdk/core/networking/network_service.dart';
 import 'package:amwal_pay_sdk/features/card/amwal_salebycard_sdk.dart';
+import 'package:amwal_pay_sdk/features/digital_wallet/presentation/digital_wallet_screen.dart';
 import 'package:amwal_pay_sdk/features/wallet/amwal_salebywallet_sdk.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 import 'package:amwal_pay_sdk/navigator/sdk_navigator.dart';
@@ -24,7 +25,6 @@ import 'core/ui/error_dialog.dart';
 import 'core/ui/loading_dialog.dart';
 import 'features/card/presentation/sale_by_card_contact_less_screen.dart';
 import 'features/digital_wallet/module/sale_by_apple_pay_module.dart';
-import 'features/digital_wallet/presentation/sale_by_apple_pay_screen.dart';
 import 'features/transaction/data/repository/transaction_repository_impl.dart';
 import 'localization/app_localizations_setup.dart';
 import 'package:amwal_pay_sdk/core/logger/amwal_logger.dart';
@@ -348,7 +348,7 @@ class AmwalPaySdk {
                 theme: ThemeData(
                   useMaterial3: false,
                 ),
-                home: SaleByApplePayScreen(
+                home: DigitalWalletScreen(
                   onResponse: settings.onResponse ?? (_) {},
                   dismissDialog: () {
                     AmwalSdkNavigator.amwalNavigatorObserver.navigator!.pop();

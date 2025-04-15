@@ -11,7 +11,7 @@ import 'package:amwal_pay_sdk/localization/locale_utils.dart';
 
 import '../../wallet/dependency/injector.dart';
 
-class SaleByApplePayScreen extends StatefulApiView<SaleByDigitalWalletCubit> {
+class DigitalWalletScreen extends StatefulApiView<SaleByDigitalWalletCubit> {
   final Function(String) onResponse;
   final Function() dismissDialog;
   final Function(String) log;
@@ -22,7 +22,7 @@ class SaleByApplePayScreen extends StatefulApiView<SaleByDigitalWalletCubit> {
   final int merchantId;
   final String transactionId;
 
-  const SaleByApplePayScreen({
+  const DigitalWalletScreen({
     Key? key,
     required this.onResponse,
     required this.dismissDialog,
@@ -36,10 +36,10 @@ class SaleByApplePayScreen extends StatefulApiView<SaleByDigitalWalletCubit> {
   }) : super(key: key);
 
   @override
-  State<SaleByApplePayScreen> createState() => _SaleByApplePayScreenState();
+  State<DigitalWalletScreen> createState() => _DigitalWalletScreenState();
 }
 
-class _SaleByApplePayScreenState extends State<SaleByApplePayScreen> {
+class _DigitalWalletScreenState extends State<DigitalWalletScreen> {
   late SaleByDigitalWalletCubit _cubit;
 
   @override
