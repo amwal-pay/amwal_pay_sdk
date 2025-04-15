@@ -8,6 +8,7 @@ import 'package:amwal_pay_sdk/core/apiview/api_view.dart';
 import 'package:amwal_pay_sdk/core/resources/color/colors.dart';
 import 'package:amwal_pay_sdk/features/digital_wallet/constants/digital_wallet_translations.dart';
 import 'package:amwal_pay_sdk/localization/locale_utils.dart';
+import 'dart:io' show Platform;
 
 import '../../wallet/dependency/injector.dart';
 
@@ -62,6 +63,8 @@ class _DigitalWalletScreenState extends State<DigitalWalletScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isAndroid = Platform.isAndroid;
+
     return Scaffold(
       backgroundColor: lightGeryColor,
       appBar: AppBar(
@@ -78,14 +81,16 @@ class _DigitalWalletScreenState extends State<DigitalWalletScreen> {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(
-              Icons.apple,
+            Icon(
+              isAndroid ? Icons.g_mobiledata : Icons.apple,
               color: blackColor,
               size: 24,
             ),
             const SizedBox(width: 8),
             Text(
-              DigitalWalletTranslations.applePay.translate(context),
+              isAndroid
+                  ? 'Google Pay'
+                  : DigitalWalletTranslations.applePay.translate(context),
               style: const TextStyle(
                 color: blackColor,
                 fontSize: 18,

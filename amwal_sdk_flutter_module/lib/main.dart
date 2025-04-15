@@ -70,7 +70,10 @@ Future<void> _initializeAmwalSdk(Config config) async {
       isMocked: false,
       transactionType: config.transactionType == 'nfc'
           ? TransactionType.nfc
-          : TransactionType.cardWallet,
+          : (config.transactionType.contains('google') ||
+                  config.transactionType.contains('apple'))
+              ? TransactionType.appleOrGooglePay
+              : TransactionType.cardWallet,
       customerCallback: _customerCallback,
       customerId: config.customerId,
       onResponse: _onResponse,

@@ -5,6 +5,7 @@ import android.util.Log
 import com.anwalpay.sdk.serializers.CurrencySerializer
 import com.anwalpay.sdk.serializers.EnvironmentSerializer
 import com.anwalpay.sdk.serializers.LocaleSerializer
+import com.anwalpay.sdk.serializers.TransactionTypeSerializer
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.android.FlutterActivityLaunchConfigs
 import io.flutter.embedding.engine.FlutterEngine
@@ -85,7 +86,8 @@ class AmwalSDK {
         val customerId: String?,
         @Serializable(with = LocaleSerializer::class)
         val locale: Locale,
-        val transactionType: String
+        @Serializable(with = TransactionTypeSerializer::class)
+        val transactionType: TransactionType
     ){
 
         fun toJsonString(): String {
@@ -94,18 +96,15 @@ class AmwalSDK {
 
         enum class Environment { UAT, SIT, PROD }
         enum class Currency(val value: String) { OMR("omr") }
-        
-        companion object {
-            // Map UI transaction type to SDK transaction type
-            fun mapTransactionType(uiTransactionType: String): String {
-                return when (uiTransactionType) {
-                    "NFC" -> "nfc"
-                    "CARD_WALLET" -> "cardWallet"
-                    "GOOGLE_PAY" -> "googlePay"
-                    else -> "nfc" // Default to NFC
-                }
-            }
+
+        enum class TransactionType(val value: String) {
+            NFC("nfc"),
+            CARD_WALLET("cardWallet"),
+            GOOGLE_PAY("googlePay");
+
+
         }
+
     }
 
 }

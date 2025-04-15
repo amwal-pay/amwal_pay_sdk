@@ -98,8 +98,7 @@ signing {
 }
 
 dependencies {
-    val compileFlutterModule: Boolean = gradle.extra["compileFlutterModule"] as Boolean
-
+    val compileFlutterModule: Boolean = gradle.extra.get("compileFlutterModule") as? Boolean ?: true
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -109,12 +108,13 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(project(":flutter"))
 
-//    if (compileFlutterModule) {
-//    }else {
-//        debugImplementation("com.amwal_pay.flutter:flutter_debug:1.0.1")
-//        add("profileImplementation", "com.amwal_pay.flutter:flutter_profile:1.0.1")
-//        releaseImplementation("com.amwal_pay.flutter:flutter_release:1.0.1")
-//    }
+    if (compileFlutterModule) {
+        implementation(project(":flutter"))
+
+    }else {
+        implementation ("com.amwal-pay:amwal_sdk:1.0.66")
+
+    }
 
 
 }

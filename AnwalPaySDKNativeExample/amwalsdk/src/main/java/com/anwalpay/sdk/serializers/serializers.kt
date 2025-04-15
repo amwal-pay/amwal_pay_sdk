@@ -2,6 +2,7 @@ package com.anwalpay.sdk.serializers;
 
 import com.anwalpay.sdk.AmwalSDK.Config.Currency
 import com.anwalpay.sdk.AmwalSDK.Config.Environment
+import com.anwalpay.sdk.AmwalSDK.Config.TransactionType
 import kotlinx.serialization.KSerializer
 import java.util.Locale;
 
@@ -33,6 +34,18 @@ object CurrencySerializer : KSerializer<Currency> {
 
     override fun deserialize(decoder: Decoder): Currency {
         return Currency.valueOf(decoder.decodeString())  // Convert back to Currency
+    }
+}
+
+object TransactionTypeSerializer : KSerializer<TransactionType> {
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("TransactionType", PrimitiveKind.STRING)
+
+    override fun serialize(encoder: Encoder, value: TransactionType) {
+        encoder.encodeString(value.value)  // Convert TransactionType to its string value
+    }
+
+    override fun deserialize(decoder: Decoder): TransactionType {
+        return TransactionType.valueOf(decoder.decodeString())  // Convert back to TransactionType
     }
 }
 

@@ -41,7 +41,7 @@ struct AnwalPaySDKNativeiOSExampleApp: App {
             merchantId: viewModel.merchantId,
             customerId: nil,
             secureHashValue: viewModel.secureHash
-        ) { [this] sessionToken in
+        ) { [self] sessionToken in
             if let token = sessionToken {
                 
                 print("Session token: \(token)")

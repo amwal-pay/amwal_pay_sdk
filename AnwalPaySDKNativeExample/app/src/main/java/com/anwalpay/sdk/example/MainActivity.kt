@@ -56,7 +56,11 @@ class MainActivity : ComponentActivity() {
                     terminalId = state.terminalId.value,
                     locale = Locale(state.language.value),
                     customerId = customerId,
-                    transactionType = state.transactionType.value
+                    transactionType = when (state.transactionType.value) {
+                        TransactionType.NFC -> AmwalSDK.Config.TransactionType.NFC
+                        TransactionType.CARD_WALLET -> AmwalSDK.Config.TransactionType.CARD_WALLET
+                        TransactionType.GOOGLE_PAY -> AmwalSDK.Config.TransactionType.GOOGLE_PAY
+                    }
                 )
                 amwalSDK.start(this@MainActivity,config , onResponse = {
                     Log.d("MainActivity", "Response: $it")
