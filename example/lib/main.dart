@@ -61,7 +61,6 @@ class _DemoScreenState extends State<DemoScreen> {
 
   late GlobalKey<FormState> _formKey;
   late Environment sdkEnv;
-  late String dropdownValue;
 
   Timer? _timer;
   bool _isLoading = false;
@@ -78,12 +77,11 @@ class _DemoScreenState extends State<DemoScreen> {
     _currencyController = TextEditingController(text: 'OMR');
     _languageController = TextEditingController(text: 'en');
     _transactionTypeController = TextEditingController(text: 'CARD || Wallet');
-    _terminalController = TextEditingController(text: '570480');
-    _merchantIdController = TextEditingController(text: '120288');
+    _merchantIdController = TextEditingController(text: '84131');
+    _terminalController = TextEditingController(text: '811018');
     _secureHashController = TextEditingController(
-      text: 'FA8BC1444E76C289EBA5870D99C36FB5E5F1FDF35101FB59EB6687895CD0F636',
+      text: '8570CEED656C8818E4A7CE04F22206358F272DAD5F0227D322B654675ABF8F83',
     );
-    dropdownValue = 'UAT';
     sdkEnv = Environment.UAT;
   }
 
@@ -94,11 +92,11 @@ class _DemoScreenState extends State<DemoScreen> {
   }) async {
     var webhookUrl = '';
 
-    if (dropdownValue == "SIT") {
+    if (sdkEnv == Environment.SIT) {
       webhookUrl = 'https://test.amwalpg.com:24443/';
-    } else if (dropdownValue == "UAT") {
+    } else if (sdkEnv == Environment.UAT) {
       webhookUrl = 'https://test.amwalpg.com:14443/';
-    } else if (dropdownValue == "PROD") {
+    } else if (sdkEnv == Environment.PROD) {
       webhookUrl = 'https://webhook.amwalpg.com/';
     }
 
@@ -122,7 +120,9 @@ class _DemoScreenState extends State<DemoScreen> {
         'merchantId': merchantId,
         'customerId': customerId,
       });
-
+      debugPrint('Request [POST] => URL: ${webhookUrl+SDKNetworkConstants.getSDKSessionToken}');
+      debugPrint('Request Headers: ${dio.options.headers}');
+      debugPrint('Request Data: {merchantId: $merchantId, secureHashValue: $sec, customerId: $customerId}');
       final response = await dio.post(
         SDKNetworkConstants.getSDKSessionToken,
         data: {
@@ -131,10 +131,16 @@ class _DemoScreenState extends State<DemoScreen> {
           'customerId': customerId,
         },
       );
+
+      debugPrint('Response [${response.statusCode}] => URL: ${SDKNetworkConstants.getSDKSessionToken}');
+      debugPrint('Response Data: ${response.data}');
+
       if (response.data['success']) {
         return response.data['data']['sessionToken'];
       }
     } on DioException catch (e) {
+      debugPrint('Full API Error: ${e.response}');
+
       final errorList = e.response?.data['errorList'];
       final errorMessage =
           (errorList != null) ? errorList.join(',') : 'Unknown error';
