@@ -10,3 +10,4 @@ publish.sh
 build_pub_dev.sh
 build_ios.sh
 AnwalPaySDKNativeiOSExample/amwalsdk.podspec
+AnwalPaySDKNativeiOSExample/amwalsdk/amwalsdk.podspec
