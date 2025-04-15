@@ -106,14 +106,12 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation(project(":flutter"))
 
     if (compileFlutterModule) {
         implementation(project(":flutter"))
 
     }else {
-        implementation ("com.amwal-pay:amwal_sdk:1.0.66")
-
+        implementation ("com.amwal-pay:amwal_sdk:+")
     }
 
 
