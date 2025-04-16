@@ -75,17 +75,21 @@ FLUTTER_ARTIFACTS_URL="https://storage.googleapis.com/flutter_infra_release/flut
 mkdir -p "$OUTPUT_DIR/Debug"
 mkdir -p "$OUTPUT_DIR/Release"
 
-# Download and uncompress for Debug
-echo "Processing Debug artifacts..."
-curl -L "$FLUTTER_ARTIFACTS_URL" -o "$OUTPUT_DIR/Debug/artifacts.zip"
-unzip -q "$OUTPUT_DIR/Debug/artifacts.zip" -d "$OUTPUT_DIR/Debug"
-rm "$OUTPUT_DIR/Debug/artifacts.zip"
+# Create temporary directory for extraction
+TEMP_DIR=$(mktemp -d)
 
-# Download and uncompress for Release
-echo "Processing Release artifacts..."
-curl -L "$FLUTTER_ARTIFACTS_URL" -o "$OUTPUT_DIR/Release/artifacts.zip"
-unzip -q "$OUTPUT_DIR/Release/artifacts.zip" -d "$OUTPUT_DIR/Release"
-rm "$OUTPUT_DIR/Release/artifacts.zip"
+# Download and process artifacts
+echo "Processing Flutter artifacts..."
+curl -L "$FLUTTER_ARTIFACTS_URL" -o "$TEMP_DIR/artifacts.zip"
+unzip -q "$TEMP_DIR/artifacts.zip" -d "$TEMP_DIR"
+
+# Move Flutter.xcframework to Debug and Release folders
+echo "Moving Flutter.xcframework to Debug and Release folders..."
+cp -R "$TEMP_DIR/artifacts/Flutter.xcframework" "$OUTPUT_DIR/Debug/"
+cp -R "$TEMP_DIR/artifacts/Flutter.xcframework" "$OUTPUT_DIR/Release/"
+
+# Clean up temporary files
+rm -rf "$TEMP_DIR"
 
 # Step 7: Compress the entire amwalsdk folder and the podspec file together
 echo "Compressing amwalsdk folder and podspec file..."
