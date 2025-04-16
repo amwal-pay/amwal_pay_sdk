@@ -39,3 +39,5 @@ Fix Issues
 Fix Issues
 ## 1.0.69
 Add google pay
+## 1.0.70
+Add google pay
