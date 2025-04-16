@@ -4,7 +4,7 @@ workflows:
     environment:
       groups:
         - A
-      flutter: 3.27.2 # Specified Flutter version 3.27.3
+      flutter: 3.27.3 # Specified Flutter version 3.27.3
       xcode: 16.0 # Specified Xcode 16
       vars:
         CUSTOM_ENV_VAR: "CustomValue"
