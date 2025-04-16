@@ -44,14 +44,6 @@ else
     exit 1
 fi
 
-# Step 3: Clean the Flutter project
-echo "Cleaning previous builds..."
-flutter clean
-flutter precache
-# Step 4: Get dependencies
-echo "Getting dependencies..."
-flutter pub get
-
 
 # Step 6: Download and extract Flutter.xcframework.zip
 echo "Downloading Flutter.xcframework.zip..."
@@ -68,13 +60,28 @@ unzip -q "$TEMP_ZIP" -d "$OUTPUT_DIR/Release"
 
 # Clean up the zip file
 rm "$TEMP_ZIP"
+
+rm -rf "$OUTPUT_DIR/Debug/__MACOSX"
+rm -rf "$OUTPUT_DIR/Release/__MACOSX"
+
+
 echo "Flutter.xcframework.zip downloaded, extracted and cleaned up successfully."
+
+
+# Step 3: Clean the Flutter project
+echo "Cleaning previous builds..."
+flutter clean
+# Step 4: Get dependencies
+echo "Getting dependencies..."
+flutter pub get
+
+
 
 
 
 # Step 5: Build the Flutter iOS framework in release mode
 echo "Building Flutter iOS framework in release mode..."
-flutter build ios-framework --xcframework --no-profile --ios-arch=arm64 --release --output="$OUTPUT_DIR" --force
+flutter build ios-framework --xcframework --no-profile --release --output="$OUTPUT_DIR"
 
 
 # Step 7: Compress the entire amwalsdk folder and the podspec file together
