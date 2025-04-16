@@ -55,6 +55,8 @@ flutter pub get
 # Add this before Step 5
 echo "Configuring build environment..."
 export FLUTTER_BUILD_MODE=release
+export FLUTTER_BUILD_TYPE=release
+export FLUTTER_RELEASE=true
 flutter config --enable-ios
 flutter config --build-mode=release
 
