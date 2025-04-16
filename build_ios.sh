@@ -48,19 +48,14 @@ fi
 echo "Cleaning previous builds..."
 flutter clean
 
-export FLUTTER_BUILD_MODE=release
-export FLUTTER_BUILD_RELEASE=true
-export FLUTTER_BUILD_DEBUG=false
-export FLUTTER_BUILD_PROFILE=false
-
-flutter precache --ios
 # Step 4: Get dependencies
 echo "Getting dependencies..."
 flutter pub get
+flutter build ios --release --no-codesign
 
 # Step 5: Build the Flutter iOS framework in release mode
 echo "Building Flutter iOS framework in release mode..."
-flutter build ios-framework --release --ios-arch=arm64 --xcframework --output="$OUTPUT_DIR" --verbose
+flutter build ios-framework --release --xcframework --no-debug --no-profile --ios-arch=arm64 --output="$OUTPUT_DIR"
 
 # Step 6: Ensure frameworks were built successfully
 RELEASE_DIR="$OUTPUT_DIR/Release"
