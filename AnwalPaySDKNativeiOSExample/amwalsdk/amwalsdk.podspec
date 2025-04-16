@@ -1,10 +1,10 @@
 Pod::Spec.new do |s|
   s.name             = 'amwalsdk'
-  s.version          = '1.0.66'
+  s.version          = '1.0.72'
   s.summary          = 'AMWAL SDK for iOS'
   s.description      = 'The AMWAL SDK provides features for payment integration in iOS applications.'
   s.homepage         = 'https://github.com/amwal-pay/AnwalPaySDKNativeiOSExample'
-  s.license          = { :type => 'MIT', :file => 'LICENSE' }
+  s.license          = { :type => 'MIT' }
   s.author           = { 'Amwal Pay' => 'amr.elskaan@amwal-pay.com' }
   s.platform         = :ios, '12.0'
   s.swift_version    = '5.0'
@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   # }
 
   s.source           = {
-    :http => "https://github.com/amwal-pay/AnwalPaySDKNativeiOSExample/releases/download/v#{s.version}/amwalsdk.zip"
+    :http => "https://github.com/amwal-pay/AnwalPaySDKNativeiOSExample/releases/download/v#{s.version}/amwalsdk-#{s.version}.zip"
   }
   s.source_files     = '*.{h,m,swift}'
   

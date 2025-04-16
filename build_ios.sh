@@ -10,7 +10,7 @@ SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 PROJECT_ROOT="$SCRIPT_DIR"
 MODULE_DIR="$PROJECT_ROOT/amwal_sdk_flutter_module"
 OUTPUT_DIR="$PROJECT_ROOT/AnwalPaySDKNativeiOSExample/amwalsdk/Flutter"
-PODSPEC_PATH="$PROJECT_ROOT/AnwalPaySDKNativeiOSExample/amwalsdk.podspec"
+PODSPEC_PATH="$PROJECT_ROOT/AnwalPaySDKNativeiOSExample/amwalsdk/amwalsdk.podspec"
 PUBSPEC_PATH="$PROJECT_ROOT/pubspec.yaml"
 IOS_DIR="$PROJECT_ROOT/AnwalPaySDKNativeiOSExample"
 GITHUB_API_URL="https://api.github.com/repos/amwal-pay/AnwalPaySDKNativeiOSExample"
@@ -54,42 +54,9 @@ flutter pub get
 
 # Step 5: Build the Flutter iOS framework in release mode
 echo "Building Flutter iOS framework in release mode..."
-flutter build ios-framework --no-debug --no-profile --release --output="$OUTPUT_DIR"
+flutter build ios-framework  --no-profile --release --output="$OUTPUT_DIR"
 
-# Step 6: Ensure frameworks were built successfully
-RELEASE_DIR="$OUTPUT_DIR/Release"
-if [[ -d "$RELEASE_DIR" ]]; then
-    echo "Moving frameworks from $RELEASE_DIR to $OUTPUT_DIR..."
-    mv "$RELEASE_DIR/"* "$OUTPUT_DIR/"
-    rm -r "$RELEASE_DIR"
-else
-    echo "Error: Release directory not found. Build might have failed."
-    exit 1
-fi
 
-# Step 6.1: Download and uncompress Flutter artifacts
-echo "Downloading and uncompressing Flutter artifacts..."
-FLUTTER_ARTIFACTS_URL="https://storage.googleapis.com/flutter_infra_release/flutter/e672b006cb34c921db85b8e2f482ed3144a4574b/ios/artifacts.zip"
-
-# Create Debug and Release directories if they don't exist
-mkdir -p "$OUTPUT_DIR/Debug"
-mkdir -p "$OUTPUT_DIR/Release"
-
-# Create temporary directory for extraction
-TEMP_DIR=$(mktemp -d)
-
-# Download and process artifacts
-echo "Processing Flutter artifacts..."
-curl -L "$FLUTTER_ARTIFACTS_URL" -o "$TEMP_DIR/artifacts.zip"
-unzip -q "$TEMP_DIR/artifacts.zip" -d "$TEMP_DIR"
-
-# Move Flutter.xcframework to Debug and Release folders
-echo "Moving Flutter.xcframework to Debug and Release folders..."
-cp -R "$TEMP_DIR/artifacts/Flutter.xcframework" "$OUTPUT_DIR/Debug/"
-cp -R "$TEMP_DIR/artifacts/Flutter.xcframework" "$OUTPUT_DIR/Release/"
-
-# Clean up temporary files
-rm -rf "$TEMP_DIR"
 
 # Step 7: Compress the entire amwalsdk folder and the podspec file together
 echo "Compressing amwalsdk folder and podspec file..."
@@ -125,7 +92,6 @@ UPLOAD_URL=$(echo "$RELEASE_RESPONSE" | grep -Eo '"upload_url": "[^"]*"' | sed '
 
 if [[ -z "$UPLOAD_URL" ]]; then
     echo "Error: Failed to create a release. Response: $RELEASE_RESPONSE"
-    exit 1
 fi
 
 echo "Uploading amwalsdk ZIP to GitHub release..."
