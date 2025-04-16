@@ -51,11 +51,11 @@ flutter clean
 # Step 4: Get dependencies
 echo "Getting dependencies..."
 flutter pub get
-flutter build ios --release --no-codesign
 
 # Step 5: Build the Flutter iOS framework in release mode
 echo "Building Flutter iOS framework in release mode..."
-flutter build ios-framework --no-debug --no-profile --release --output="$OUTPUT_DIR"
+flutter build ios-framework --release --xcframework --no-debug --no-profile --output="$OUTPUT_DIR"
+
 
 # Step 6: Ensure frameworks were built successfully
 RELEASE_DIR="$OUTPUT_DIR/Release"
