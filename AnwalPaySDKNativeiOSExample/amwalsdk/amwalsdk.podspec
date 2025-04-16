@@ -8,6 +8,7 @@ Pod::Spec.new do |s|
   s.author           = { 'Amwal Pay' => 'amr.elskaan@amwal-pay.com' }
   s.platform         = :ios, '12.0'
   s.swift_version    = '5.0'
+  s.dependency 'Flutter', '3.27.300'
 
   # s.source           = {
   #   :path => '.'
