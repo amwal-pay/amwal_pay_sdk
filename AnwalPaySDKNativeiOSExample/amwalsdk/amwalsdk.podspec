@@ -8,15 +8,6 @@ Pod::Spec.new do |s|
   s.author           = { 'Amwal Pay' => 'amr.elskaan@amwal-pay.com' }
   s.platform         = :ios, '12.0'
   s.swift_version    = '5.0'
-  
-  s.dependency 'Flutter'
-  s.preserve_paths = 'Flutter/*'
-  s.xcconfig = { 'FRAMEWORK_SEARCH_PATHS' => '${PODS_ROOT}/Flutter' }
-
-  # s.source           = {
-  #   :path => '.'
-  # }
-
   s.source           = {
     :http => "https://github.com/amwal-pay/AnwalPaySDKNativeiOSExample/releases/download/v#{s.version}/amwalsdk.zip"
   }
