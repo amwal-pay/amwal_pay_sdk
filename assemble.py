@@ -107,6 +107,7 @@ group_ids_to_replace = [
     "io.flutter.plugins.firebase.core",
     "com.amwal_pay.flutter",
     "com.amwalpay.sdk",
+    "io.flutter.plugins.pay_android"
 ]
 
 new_group_id = "com.amwal-pay"
