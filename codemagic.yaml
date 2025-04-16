@@ -5,7 +5,7 @@ workflows:
       groups:
         - A
       flutter: 3.27.2 # Specified Flutter version 3.27.3
-      xcode: 16.3 # Specified Xcode 16
+      xcode: 16.0 # Specified Xcode 16
       vars:
         CUSTOM_ENV_VAR: "CustomValue"
     scripts:
