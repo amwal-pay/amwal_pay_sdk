@@ -47,7 +47,7 @@ fi
 # Step 3: Clean the Flutter project
 echo "Cleaning previous builds..."
 flutter clean
-
+flutter precache
 # Step 4: Get dependencies
 echo "Getting dependencies..."
 flutter pub get
