@@ -52,9 +52,6 @@ flutter precache
 echo "Getting dependencies..."
 flutter pub get
 
-# Step 5: Build the Flutter iOS framework in release mode
-echo "Building Flutter iOS framework in release mode..."
-flutter build ios-framework --xcframework --no-profile --ios-arch=arm64 --release --output="$OUTPUT_DIR" --force
 
 # Step 6: Download and extract Flutter.xcframework.zip
 echo "Downloading Flutter.xcframework.zip..."
@@ -72,6 +69,13 @@ unzip -q "$TEMP_ZIP" -d "$OUTPUT_DIR/Release"
 # Clean up the zip file
 rm "$TEMP_ZIP"
 echo "Flutter.xcframework.zip downloaded, extracted and cleaned up successfully."
+
+
+
+# Step 5: Build the Flutter iOS framework in release mode
+echo "Building Flutter iOS framework in release mode..."
+flutter build ios-framework --xcframework --no-profile --ios-arch=arm64 --release --output="$OUTPUT_DIR" --force
+
 
 # Step 7: Compress the entire amwalsdk folder and the podspec file together
 echo "Compressing amwalsdk folder and podspec file..."
