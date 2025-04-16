@@ -54,7 +54,7 @@ flutter pub get
 
 # Step 5: Build the Flutter iOS framework in release mode
 echo "Building Flutter iOS framework in release mode..."
-flutter build ios-framework  --no-profile --release --output="$OUTPUT_DIR"
+flutter build ios-framework --xcframework --no-profile --ios-arch=arm64 --release --output="$OUTPUT_DIR" --force
 
 
 
