@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   # }
 
   s.source           = {
-    :http => "https://github.com/amwal-pay/AnwalPaySDKNativeiOSExample/releases/download/v#{s.version}/amwalsdk-#{s.version}.zip"
+    :http => "https://github.com/amwal-pay/AnwalPaySDKNativeiOSExample/releases/download/v#{s.version}/amwalsdk.zip"
   }
   s.source_files     = '*.{h,m,swift}'
   
