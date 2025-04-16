@@ -8,7 +8,10 @@ Pod::Spec.new do |s|
   s.author           = { 'Amwal Pay' => 'amr.elskaan@amwal-pay.com' }
   s.platform         = :ios, '12.0'
   s.swift_version    = '5.0'
-  s.dependency 'Flutter', :http => 'https://storage.googleapis.com/flutter_infra_release/flutter/e672b006cb34c921db85b8e2f482ed3144a4574b/ios/artifacts.zip'
+  
+  s.dependency 'Flutter'
+  s.preserve_paths = 'Flutter/*'
+  s.xcconfig = { 'FRAMEWORK_SEARCH_PATHS' => '${PODS_ROOT}/Flutter' }
 
   # s.source           = {
   #   :path => '.'
