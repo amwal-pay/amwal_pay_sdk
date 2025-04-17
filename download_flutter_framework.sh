@@ -10,6 +10,8 @@ SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 OUTPUT_DIR="$SCRIPT_DIR/AnwalPaySDKNativeiOSExample/amwalsdk/Flutter"
 FLUTTER_ZIP_URL="https://github.com/amwal-pay/AnwalPaySDKNativeiOSExample/releases/download/v1.0.75/Flutter.xcframework.zip"
 
+flutter precache --force --ios --verbose.
+
 # Create output directory if it doesn't exist
 mkdir -p "$OUTPUT_DIR"
 
