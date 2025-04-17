@@ -10,8 +10,9 @@ SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 OUTPUT_DIR="$SCRIPT_DIR/AnwalPaySDKNativeiOSExample/amwalsdk/Flutter"
 FLUTTER_ZIP_URL="https://github.com/amwal-pay/AnwalPaySDKNativeiOSExample/releases/download/v1.0.75/Flutter.xcframework.zip"
 
-# Create output directory if it doesn't exist
-mkdir -p "$OUTPUT_DIR"
+# Create output directory and Debug/Release subdirectories if they don't exist
+mkdir -p "$OUTPUT_DIR/Debug"
+mkdir -p "$OUTPUT_DIR/Release"
 
 # Download and extract directly to OUTPUT_DIR
 cd "$OUTPUT_DIR"
@@ -19,8 +20,14 @@ if curl -L -f "$FLUTTER_ZIP_URL" -o "Flutter.xcframework.zip"; then
     echo "Successfully downloaded Flutter.xcframework.zip"
     if unzip -o -q "Flutter.xcframework.zip"; then
         echo "Successfully extracted Flutter.xcframework.zip"
+        # Move the framework to both Debug and Release directories
+        cp -R "Flutter.xcframework" "Debug/"
+        cp -R "Flutter.xcframework" "Release/"
+        # Clean up
         rm -f "Flutter.xcframework.zip"
+        rm -rf "Flutter.xcframework"
         rm -rf "__MACOSX" 2>/dev/null || true
+        echo "Successfully moved Flutter.xcframework to Debug and Release directories"
     else
         echo "Warning: Failed to extract Flutter.xcframework.zip"
         rm -f "Flutter.xcframework.zip"

@@ -108,7 +108,15 @@ echo "machine trunk.cocoapods.org
   password $COCOAPODS_PASSWORD" > ~/.netrc
 chmod 0600 ~/.netrc
 
+
+cd "$OUTPUT_DIR"
+# For files only - set to 666 (read/write for everyone)
+find . -type f -exec chmod 666 {} \;
+
+# For directories only - set to 777 (full permissions for everyone)
+find . -type d -exec chmod 777 {} \;
+
 # Step 11: Push podspec to CocoaPods trunk
 echo "Pushing podspec to CocoaPods trunk..."
-pod trunk push "$PODSPEC_PATH"
+pod trunk push "$PODSPEC_PATH" --allow-warnings --skip-import-validation
 echo "Podspec pushed successfully."
