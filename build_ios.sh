@@ -111,5 +111,5 @@ chmod 0600 ~/.netrc
 
 # Step 11: Push podspec to CocoaPods trunk
 echo "Pushing podspec to CocoaPods trunk..."
-pod trunk push "$PODSPEC_PATH" --allow-warnings --skip-import-validation
+pod trunk push "$PODSPEC_PATH" --allow-warnings 
 echo "Podspec pushed successfully."

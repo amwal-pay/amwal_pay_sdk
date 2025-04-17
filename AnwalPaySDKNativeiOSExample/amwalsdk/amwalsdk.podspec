@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'amwalsdk'
-  s.version          = '1.0.72'
+  s.version          = '1.0.76'
   s.summary          = 'AMWAL SDK for iOS'
   s.description      = 'The AMWAL SDK provides features for payment integration in iOS applications.'
   s.homepage         = 'https://github.com/amwal-pay/AnwalPaySDKNativeiOSExample'
@@ -29,12 +29,9 @@ Pod::Spec.new do |s|
     debug.xcconfig = {
       'FRAMEWORK_SEARCH_PATHS' => '$(inherited) "${PODS_ROOT}/amwalsdk/Flutter/Debug"',
       'OTHER_LDFLAGS' => '$(inherited) -framework Flutter -framework FlutterPluginRegistrant',
-      'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES',
       'SWIFT_INCLUDE_PATHS' => '$(inherited) "${PODS_ROOT}/amwalsdk/Flutter/Debug"',
       'DEFINES_MODULE' => 'YES',
-      'SWIFT_INSTALL_OBJC_HEADER' => 'NO',
-      'VALID_ARCHS' => 'arm64 arm64e x86_64',
-      'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => ''
+      'SWIFT_INSTALL_OBJC_HEADER' => 'NO'
     }
   end
 
@@ -44,12 +41,9 @@ Pod::Spec.new do |s|
     release.xcconfig = {
       'FRAMEWORK_SEARCH_PATHS' => '$(inherited) "${PODS_ROOT}/amwalsdk/Flutter/Release"',
       'OTHER_LDFLAGS' => '$(inherited) -framework Flutter -framework FlutterPluginRegistrant',
-      'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES',
       'SWIFT_INCLUDE_PATHS' => '$(inherited) "${PODS_ROOT}/amwalsdk/Flutter/Release"',
       'DEFINES_MODULE' => 'YES',
-      'SWIFT_INSTALL_OBJC_HEADER' => 'NO',
-      'VALID_ARCHS' => 'arm64 arm64e x86_64',
-      'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => ''
+      'SWIFT_INSTALL_OBJC_HEADER' => 'NO'
     }
   end
 
