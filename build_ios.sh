@@ -59,23 +59,6 @@ flutter pub get
 echo "Building Flutter iOS framework in release mode..."
 flutter build ios-framework --xcframework --no-profile --release --output="$OUTPUT_DIR"
 
-
-
-
-cd "$OUTPUT_DIR"
-# For files only - set to 666 (read/write for everyone)
-find . -type f -exec chmod 666 {} \;
-
-# For directories only - set to 777 (full permissions for everyone)
-find . -type d -exec chmod 777 {} \;
-
-cp -R "Flutter.xcframework" "Debug/"
-cp -R "Flutter.xcframework" "Release/"
-# Clean up
-rm -f "Flutter.xcframework.zip"
-rm -rf "Flutter.xcframework"
-
-
 # Step 7: Compress the entire amwalsdk folder and the podspec file together
 echo "Compressing amwalsdk folder and podspec file..."
 cd "$IOS_DIR"
@@ -124,8 +107,6 @@ echo "machine trunk.cocoapods.org
   login $COCOAPODS_USERNAME
   password $COCOAPODS_PASSWORD" > ~/.netrc
 chmod 0600 ~/.netrc
-
-
 
 
 # Step 11: Push podspec to CocoaPods trunk

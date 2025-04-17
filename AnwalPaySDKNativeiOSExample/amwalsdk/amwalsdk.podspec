@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
 
   # Debug configuration
   s.subspec 'Debug' do |debug|
-    debug.vendored_frameworks = 'Flutter/Debug/*.xcframework'
+    debug.vendored_frameworks = 'Flutter/Debug/*.xcframework', 'Flutter/*.xcframework'
     debug.xcconfig = {
       'FRAMEWORK_SEARCH_PATHS' => '$(inherited) "${PODS_ROOT}/amwalsdk/Flutter/Debug"',
       'OTHER_LDFLAGS' => '$(inherited) -framework Flutter -framework FlutterPluginRegistrant',
@@ -40,7 +40,7 @@ Pod::Spec.new do |s|
 
   # Release configuration
   s.subspec 'Release' do |release|
-    release.vendored_frameworks = 'Flutter/Release/*.xcframework'
+    release.vendored_frameworks = 'Flutter/Release/*.xcframework', 'Flutter/*.xcframework'
     release.xcconfig = {
       'FRAMEWORK_SEARCH_PATHS' => '$(inherited) "${PODS_ROOT}/amwalsdk/Flutter/Release"',
       'OTHER_LDFLAGS' => '$(inherited) -framework Flutter -framework FlutterPluginRegistrant',
