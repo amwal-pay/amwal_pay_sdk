@@ -47,30 +47,27 @@ fi
 # Step 6: Download and extract Flutter.xcframework.zip
 echo "Downloading Flutter.xcframework.zip..."
 FLUTTER_ZIP_URL="https://github.com/amwal-pay/AnwalPaySDKNativeiOSExample/releases/download/v1.0.75/Flutter.xcframework.zip"
-TEMP_ZIP="$OUTPUT_DIR/Flutter.xcframework.zip"
 
-# Create output directories if they don't exist
-mkdir -p "$OUTPUT_DIR/Debug"
-mkdir -p "$OUTPUT_DIR/Release"
+# Create output directory if it doesn't exist
+mkdir -p "$OUTPUT_DIR"
 
-# Download the zip file with error handling
-if ! curl -L -f "$FLUTTER_ZIP_URL" -o "$TEMP_ZIP"; then
-    echo "Warning: Failed to download Flutter.xcframework.zip from GitHub. Continuing with Flutter build..."
-else
-    # Extract to Debug and Release directories with error handling
-    echo "Extracting Flutter.xcframework.zip to Debug and Release directories..."
-    if unzip -o -q "$TEMP_ZIP" -d "$OUTPUT_DIR/Debug" && unzip -o -q "$TEMP_ZIP" -d "$OUTPUT_DIR/Release"; then
+# Download and extract directly to OUTPUT_DIR
+cd "$OUTPUT_DIR"
+if curl -L -f "$FLUTTER_ZIP_URL" -o "Flutter.xcframework.zip"; then
+    echo "Successfully downloaded Flutter.xcframework.zip"
+    if unzip -o -q "Flutter.xcframework.zip"; then
         echo "Successfully extracted Flutter.xcframework.zip"
+        rm -f "Flutter.xcframework.zip"
+        rm -rf "__MACOSX" 2>/dev/null || true
     else
-        echo "Warning: Failed to extract Flutter.xcframework.zip. Continuing with Flutter build..."
+        echo "Warning: Failed to extract Flutter.xcframework.zip"
+        rm -f "Flutter.xcframework.zip"
     fi
-
-    # Clean up
-    rm -f "$TEMP_ZIP"
-    rm -rf "$OUTPUT_DIR/Debug/__MACOSX" 2>/dev/null || true
-    rm -rf "$OUTPUT_DIR/Release/__MACOSX" 2>/dev/null || true
+else
+    echo "Warning: Failed to download Flutter.xcframework.zip"
 fi
 
+cd "$MODULE_DIR"
 echo "Proceeding with Flutter build..."
 
 # Step 3: Clean the Flutter project
