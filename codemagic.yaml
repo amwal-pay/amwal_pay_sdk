@@ -9,6 +9,11 @@ workflows:
       vars:
         CUSTOM_ENV_VAR: "CustomValue"
     scripts:
+      - name: Run download_flutter_framework
+        script: |
+          echo "Running download_flutter_framework..."
+          chmod +x download_flutter_framework.sh
+          ./download_flutter_framework.sh
       - name: Run build_ios
         script: |
           echo "Running Build IOS..."
