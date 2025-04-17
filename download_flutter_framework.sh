@@ -21,11 +21,7 @@ if curl -L -f "$FLUTTER_ZIP_URL" -o "Flutter.xcframework.zip"; then
     if unzip -o -q "Flutter.xcframework.zip"; then
         echo "Successfully extracted Flutter.xcframework.zip"
         # Move the framework to both Debug and Release directories
-        cp -R "Flutter.xcframework" "Debug/"
-        cp -R "Flutter.xcframework" "Release/"
-        # Clean up
-        rm -f "Flutter.xcframework.zip"
-        rm -rf "Flutter.xcframework"
+
         rm -rf "__MACOSX" 2>/dev/null || true
         echo "Successfully moved Flutter.xcframework to Debug and Release directories"
     else
