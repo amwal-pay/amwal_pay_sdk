@@ -44,29 +44,34 @@ else
     exit 1
 fi
 
-
 # Step 6: Download and extract Flutter.xcframework.zip
 echo "Downloading Flutter.xcframework.zip..."
 FLUTTER_ZIP_URL="https://github.com/amwal-pay/AnwalPaySDKNativeiOSExample/releases/download/v1.0.75/Flutter.xcframework.zip"
 TEMP_ZIP="$OUTPUT_DIR/Flutter.xcframework.zip"
 
-# Download the zip file
-curl -L "$FLUTTER_ZIP_URL" -o "$TEMP_ZIP"
+# Create output directories if they don't exist
+mkdir -p "$OUTPUT_DIR/Debug"
+mkdir -p "$OUTPUT_DIR/Release"
 
-# Extract to Debug and Release directories
-echo "Extracting Flutter.xcframework.zip to Debug and Release directories..."
-unzip -q "$TEMP_ZIP" -d "$OUTPUT_DIR/Debug"
-unzip -q "$TEMP_ZIP" -d "$OUTPUT_DIR/Release"
+# Download the zip file with error handling
+if ! curl -L -f "$FLUTTER_ZIP_URL" -o "$TEMP_ZIP"; then
+    echo "Warning: Failed to download Flutter.xcframework.zip from GitHub. Continuing with Flutter build..."
+else
+    # Extract to Debug and Release directories with error handling
+    echo "Extracting Flutter.xcframework.zip to Debug and Release directories..."
+    if unzip -o -q "$TEMP_ZIP" -d "$OUTPUT_DIR/Debug" && unzip -o -q "$TEMP_ZIP" -d "$OUTPUT_DIR/Release"; then
+        echo "Successfully extracted Flutter.xcframework.zip"
+    else
+        echo "Warning: Failed to extract Flutter.xcframework.zip. Continuing with Flutter build..."
+    fi
 
-# Clean up the zip file
-rm "$TEMP_ZIP"
+    # Clean up
+    rm -f "$TEMP_ZIP"
+    rm -rf "$OUTPUT_DIR/Debug/__MACOSX" 2>/dev/null || true
+    rm -rf "$OUTPUT_DIR/Release/__MACOSX" 2>/dev/null || true
+fi
 
-rm -rf "$OUTPUT_DIR/Debug/__MACOSX"
-rm -rf "$OUTPUT_DIR/Release/__MACOSX"
-
-
-echo "Flutter.xcframework.zip downloaded, extracted and cleaned up successfully."
-
+echo "Proceeding with Flutter build..."
 
 # Step 3: Clean the Flutter project
 echo "Cleaning previous builds..."
@@ -75,14 +80,9 @@ flutter clean
 echo "Getting dependencies..."
 flutter pub get
 
-
-
-
-
 # Step 5: Build the Flutter iOS framework in release mode
 echo "Building Flutter iOS framework in release mode..."
 flutter build ios-framework --xcframework --no-profile --release --output="$OUTPUT_DIR"
-
 
 # Step 7: Compress the entire amwalsdk folder and the podspec file together
 echo "Compressing amwalsdk folder and podspec file..."
