@@ -12,7 +12,10 @@ echo "Building Flutter framework..."
 cd "$FLUTTER_PROJECT_PATH"
 flutter clean
 flutter pub get
-flutter build ios-framework --xcframework --no-profile --release --output="../$DEST_DIR/Flutter"
+flutter build ios-framework --no-profile --release \
+    --output="../$DEST_DIR/Flutter" --cocoapods
+
+# flutter build ios-framework --xcframework --no-profile --release --output="../$DEST_DIR/Flutter"
 
 cd ..
 
